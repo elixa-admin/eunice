@@ -144,6 +144,9 @@ export default function AssessmentForm() {
         { name: 'tool_whatsapp', label: 'WhatsApp' },
         { name: 'tool_sms', label: 'SMS' },
       ],
+      textfields: [
+        { name: 'tool_other', label: 'Other Tools & Systems', placeholder: 'Please describe any other tools or systems you use...' },
+      ],
     },
     {
       title: 'If We Build a Digital System, What Matters Most?',

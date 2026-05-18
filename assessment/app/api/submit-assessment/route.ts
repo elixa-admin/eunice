@@ -81,6 +81,7 @@ export async function POST(request: Request) {
           tool_outlook: formData.tool_outlook || false,
           tool_whatsapp: formData.tool_whatsapp || false,
           tool_sms: formData.tool_sms || false,
+          tool_other: formData.tool_other,
           future_reminders: formData.future_reminders || false,
           future_tracking: formData.future_tracking || false,
           future_dashboard: formData.future_dashboard || false,

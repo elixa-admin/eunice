@@ -1,4 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
+import { Resend } from 'resend';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
   try {
@@ -14,6 +17,13 @@ export async function POST(request: Request) {
       );
     }
 
+    if (!process.env.RESEND_API_KEY) {
+      return Response.json(
+        { error: 'Missing email configuration' },
+        { status: 500 }
+      );
+    }
+
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     const { data, error } = await supabase
@@ -22,6 +32,7 @@ export async function POST(request: Request) {
         {
           school_name: formData.school_name,
           contact_person: formData.contact_person,
+          contact_email: formData.contact_email,
           contact_role: formData.contact_role,
           intake_grades: formData.intake_grades,
           apps_per_year: formData.apps_per_year,
@@ -100,6 +111,65 @@ export async function POST(request: Request) {
       return Response.json(
         { error: `Failed to save assessment: ${error.message}` },
         { status: 400 }
+      );
+    }
+
+    // Send confirmation email to respondent
+    const confirmationEmail = await resend.emails.send({
+      from: 'Eunice <noreply@eunice-platform.com>',
+      to: formData.contact_email,
+      subject: 'Assessment Received – Thank You',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #333;">Thank You for Your Assessment</h2>
+          <p>Dear ${formData.contact_person},</p>
+          <p>We have successfully received your school intake workflow assessment for <strong>${formData.school_name}</strong>.</p>
+          <p>Our team will carefully review your responses and reach out within the next 7 days should we require any additional information.</p>
+          <p>We appreciate your time and detailed insights—they are invaluable in helping us build the right solution for your admissions process.</p>
+          <p style="color: #666; font-size: 14px; margin-top: 30px;">Best regards,<br/>The Eunice Team</p>
+        </div>
+      `,
+    });
+
+    // Send assessment summary to admin
+    const adminEmail = await resend.emails.send({
+      from: 'Eunice <noreply@eunice-platform.com>',
+      to: 'brandondienar@gmail.com',
+      subject: `New Assessment Submission: ${formData.school_name}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto;">
+          <h2>New Assessment Received</h2>
+          <h3>${formData.school_name}</h3>
+
+          <h4>School Information</h4>
+          <ul>
+            <li><strong>Contact Person:</strong> ${formData.contact_person}</li>
+            <li><strong>Email:</strong> ${formData.contact_email}</li>
+            <li><strong>Role:</strong> ${formData.contact_role || 'Not specified'}</li>
+            <li><strong>Intake Grades:</strong> ${formData.intake_grades || 'Not specified'}</li>
+            <li><strong>Applications/Year:</strong> ${formData.apps_per_year || 'Not specified'}</li>
+            <li><strong>Accepted/Year:</strong> ${formData.accepted_per_year || 'Not specified'}</li>
+            <li><strong>Intake Period:</strong> ${formData.intake_period || 'Not specified'}</li>
+          </ul>
+
+          <h4>Process Description</h4>
+          <p>${formData.process_description || 'Not provided'}</p>
+
+          <h4>Key Challenges</h4>
+          <p><strong>Time Sinks:</strong> ${formData.time_sinks || 'Not provided'}</p>
+          <p><strong>Infrastructure Limits:</strong> ${formData.infra_limits || 'Not provided'}</p>
+
+          <h4>Submitted By</h4>
+          <p>${formData.signoff_name} on ${formData.signoff_date}</p>
+        </div>
+      `,
+    });
+
+    if (confirmationEmail.error || adminEmail.error) {
+      console.error('Email errors:', { confirmationEmail: confirmationEmail.error, adminEmail: adminEmail.error });
+      return Response.json(
+        { error: 'Assessment saved but email delivery failed' },
+        { status: 200 }
       );
     }
 

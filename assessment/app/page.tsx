@@ -62,6 +62,7 @@ export default function AssessmentForm() {
       fields: [
         { name: 'school_name', label: 'School Name', required: true },
         { name: 'contact_person', label: 'Contact Person Name', required: true },
+        { name: 'contact_email', label: 'Contact Person Email', required: true },
         { name: 'contact_role', label: 'Contact Person Role', required: true },
         { name: 'intake_grades', label: 'Intake Grades (e.g., Grade 1-3)', required: true },
         { name: 'apps_per_year', label: 'Applications Received Per Year' },

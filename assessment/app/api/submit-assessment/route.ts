@@ -102,6 +102,7 @@ export async function POST(request: Request) {
           third_parties: formData.third_parties,
           time_sinks: formData.time_sinks,
           infra_limits: formData.infra_limits,
+          system_wishlist: formData.system_wishlist,
           final_comments: formData.final_comments,
           signoff_name: formData.signoff_name,
           signoff_date: formData.signoff_date,

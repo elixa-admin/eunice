@@ -176,6 +176,7 @@ export default function AssessmentForm() {
         { name: 'third_parties', label: 'Besides Parents, Which 3rd Parties Need to Be Notified of Application Status or Outcomes?', placeholder: 'e.g., Government bodies, external advisors, partner institutions, etc.' },
         { name: 'time_sinks', label: 'What Takes the Most Time in Your Current Process?' },
         { name: 'infra_limits', label: 'What Infrastructure/Budget Limitations Exist?' },
+        { name: 'system_wishlist', label: 'What Would You Like as Part of Your Wishlist for a Highly Effective System, Not Already Covered Here?', placeholder: 'What features or capabilities would make your admissions process ideal?' },
         { name: 'final_comments', label: 'Final Comments or Notes' },
       ],
     },

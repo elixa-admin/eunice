@@ -120,7 +120,7 @@ export async function POST(request: Request) {
 
     // Send confirmation email to respondent
     const confirmationEmail = await resend.emails.send({
-      from: 'Eunice <noreply@eunice-platform.com>',
+      from: 'Eunice <onboarding@resend.dev>',
       to: formData.contact_email,
       subject: 'Assessment Received – Thank You',
       html: `

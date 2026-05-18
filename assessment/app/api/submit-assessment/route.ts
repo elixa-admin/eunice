@@ -98,7 +98,7 @@ export async function POST(request: Request) {
     if (error) {
       console.error('Supabase error:', error);
       return Response.json(
-        { error: 'Failed to save assessment' },
+        { error: `Failed to save assessment: ${error.message}` },
         { status: 400 }
       );
     }

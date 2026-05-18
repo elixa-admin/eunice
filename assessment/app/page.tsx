@@ -29,7 +29,10 @@ export default function AssessmentForm() {
         body: JSON.stringify(formData),
       });
 
-      if (!response.ok) throw new Error('Failed to submit');
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to submit');
+      }
       setSubmitted(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Submission failed');
@@ -177,7 +180,7 @@ export default function AssessmentForm() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">School Intake Workflow Assessment</h1>
+          <h1 className="text-2xl font-bold text-black mb-2">School Intake Workflow Assessment</h1>
           <p className="text-gray-600 text-sm mb-4">
             Help us understand your current admissions process. Est. time: 15-20 minutes.
           </p>
@@ -194,7 +197,7 @@ export default function AssessmentForm() {
 
         <form onSubmit={handleSubmit}>
           <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">{section.title}</h2>
+            <h2 className="text-xl font-semibold text-black mb-6">{section.title}</h2>
 
             {section.fields && (
               <div className="space-y-4">
@@ -210,7 +213,7 @@ export default function AssessmentForm() {
                       onChange={e => handleInputChange(field.name, e.target.value)}
                       placeholder={field.label}
                       required={field.required}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black"
                     />
                   </div>
                 ))}
@@ -249,7 +252,7 @@ export default function AssessmentForm() {
                       onChange={e => handleInputChange(field.name, e.target.value)}
                       placeholder={field.placeholder}
                       rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black"
                     />
                   </div>
                 ))}
@@ -265,7 +268,7 @@ export default function AssessmentForm() {
                       onChange={e => handleInputChange('signoff_name', e.target.value)}
                       placeholder="Your name"
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black"
                     />
                   </div>
                   <div>
@@ -278,7 +281,7 @@ export default function AssessmentForm() {
                       value={formData.signoff_date || ''}
                       onChange={e => handleInputChange('signoff_date', e.target.value)}
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-black"
                     />
                   </div>
                 </div>

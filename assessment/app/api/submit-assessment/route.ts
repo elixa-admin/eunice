@@ -99,6 +99,7 @@ export async function POST(request: Request) {
           role_docs: formData.role_docs,
           role_approval: formData.role_approval,
           role_comms: formData.role_comms,
+          third_parties: formData.third_parties,
           time_sinks: formData.time_sinks,
           infra_limits: formData.infra_limits,
           final_comments: formData.final_comments,

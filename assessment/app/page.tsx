@@ -93,6 +93,9 @@ export default function AssessmentForm() {
         { name: 'info_boarding', label: 'Boarding Status' },
         { name: 'info_sibling', label: 'Sibling Information' },
       ],
+      textfields: [
+        { name: 'info_other', label: 'Other Information Collected', placeholder: 'Please describe any other information you collect...' },
+      ],
     },
     {
       title: 'What Issues Do You Face With Documents?',

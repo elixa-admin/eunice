@@ -52,6 +52,7 @@ export async function POST(request: Request) {
           info_medical: formData.info_medical || false,
           info_boarding: formData.info_boarding || false,
           info_sibling: formData.info_sibling || false,
+          info_other: formData.info_other,
           issue_missing: formData.issue_missing || false,
           issue_incorrect: formData.issue_incorrect || false,
           issue_blurry: formData.issue_blurry || false,

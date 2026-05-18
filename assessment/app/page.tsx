@@ -210,7 +210,7 @@ export default function AssessmentForm() {
                       onChange={e => handleInputChange(field.name, e.target.value)}
                       placeholder={field.label}
                       required={field.required}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
                     />
                   </div>
                 ))}
@@ -249,7 +249,7 @@ export default function AssessmentForm() {
                       onChange={e => handleInputChange(field.name, e.target.value)}
                       placeholder={field.placeholder}
                       rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
                     />
                   </div>
                 ))}
@@ -278,7 +278,7 @@ export default function AssessmentForm() {
                       value={formData.signoff_date || ''}
                       onChange={e => handleInputChange('signoff_date', e.target.value)}
                       required
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-gray-900"
                     />
                   </div>
                 </div>

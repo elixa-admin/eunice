@@ -1,0 +1,7 @@
+{
+  "buildCommand": "cd assessment && npm run build",
+  "devCommand": "cd assessment && npm run dev",
+  "installCommand": "cd assessment && npm install",
+  "framework": "nextjs",
+  "outputDirectory": "assessment/.next"
+}

@@ -119,31 +119,121 @@ export async function POST(request: Request) {
         },
       });
 
-      // Admin notification with full assessment
+      // Helper: render checked items
+      const renderChecks = (keys: string[], labels: string[]) => {
+        return keys
+          .map((key, idx) => formData[key] ? `<li>${labels[idx]}</li>` : '')
+          .filter(Boolean)
+          .join('');
+      };
+
+      // Admin notification with FULL assessment
       await transporter.sendMail({
         from: `"Eunice Assessment" <${process.env.GMAIL_USER}>`,
         to: 'brandondienar@gmail.com',
         subject: `New Assessment: ${formData.school_name}`,
         html: `
-          <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto;">
-            <h2 style="color: #4338ca;">New Assessment Received</h2>
-            <h3>${formData.school_name}</h3>
-            <table style="width:100%; border-collapse: collapse; font-size:14px;">
-              <tr style="background:#f3f4f6;"><td style="padding:8px; font-weight:bold; width:200px;">Contact Person</td><td style="padding:8px;">${formData.contact_person || '—'}</td></tr>
-              <tr><td style="padding:8px; font-weight:bold;">Email</td><td style="padding:8px;">${formData.contact_email || '—'}</td></tr>
-              <tr style="background:#f3f4f6;"><td style="padding:8px; font-weight:bold;">Role</td><td style="padding:8px;">${formData.contact_role || '—'}</td></tr>
-              <tr><td style="padding:8px; font-weight:bold;">Intake Grades</td><td style="padding:8px;">${formData.intake_grades || '—'}</td></tr>
-              <tr style="background:#f3f4f6;"><td style="padding:8px; font-weight:bold;">Applications/Year</td><td style="padding:8px;">${formData.apps_per_year || '—'}</td></tr>
-              <tr><td style="padding:8px; font-weight:bold;">Accepted/Year</td><td style="padding:8px;">${formData.accepted_per_year || '—'}</td></tr>
-              <tr style="background:#f3f4f6;"><td style="padding:8px; font-weight:bold;">Intake Period</td><td style="padding:8px;">${formData.intake_period || '—'}</td></tr>
-              <tr><td style="padding:8px; font-weight:bold;">Process Description</td><td style="padding:8px;">${formData.process_description || '—'}</td></tr>
-              <tr style="background:#f3f4f6;"><td style="padding:8px; font-weight:bold;">Time Sinks</td><td style="padding:8px;">${formData.time_sinks || '—'}</td></tr>
-              <tr><td style="padding:8px; font-weight:bold;">Infrastructure Limits</td><td style="padding:8px;">${formData.infra_limits || '—'}</td></tr>
-              <tr style="background:#f3f4f6;"><td style="padding:8px; font-weight:bold;">System Wishlist</td><td style="padding:8px;">${formData.system_wishlist || '—'}</td></tr>
-              <tr><td style="padding:8px; font-weight:bold;">Third Parties</td><td style="padding:8px;">${formData.third_parties || '—'}</td></tr>
-              <tr style="background:#f3f4f6;"><td style="padding:8px; font-weight:bold;">Final Comments</td><td style="padding:8px;">${formData.final_comments || '—'}</td></tr>
-              <tr><td style="padding:8px; font-weight:bold;">Submitted By</td><td style="padding:8px;">${formData.signoff_name || '—'} on ${formData.signoff_date || '—'}</td></tr>
+          <div style="font-family: Arial, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px;">
+            <h2 style="color: #4338ca; border-bottom: 2px solid #4338ca; padding-bottom: 10px;">New Assessment Received</h2>
+            <h3 style="margin-bottom: 20px;">${formData.school_name}</h3>
+
+            <!-- SCHOOL INFORMATION -->
+            <h4 style="background:#f3f4f6; padding:10px; margin-top:20px;">School Information</h4>
+            <table style="width:100%; border-collapse: collapse; font-size:13px;">
+              <tr><td style="padding:6px; font-weight:bold; width:200px;">School Name</td><td style="padding:6px;">${formData.school_name || '—'}</td></tr>
+              <tr style="background:#fafafa;"><td style="padding:6px; font-weight:bold;">Contact Person</td><td style="padding:6px;">${formData.contact_person || '—'}</td></tr>
+              <tr><td style="padding:6px; font-weight:bold;">Email</td><td style="padding:6px;">${formData.contact_email || '—'}</td></tr>
+              <tr style="background:#fafafa;"><td style="padding:6px; font-weight:bold;">Role</td><td style="padding:6px;">${formData.contact_role || '—'}</td></tr>
+              <tr><td style="padding:6px; font-weight:bold;">Intake Grades</td><td style="padding:6px;">${formData.intake_grades || '—'}</td></tr>
+              <tr style="background:#fafafa;"><td style="padding:6px; font-weight:bold;">Applications/Year</td><td style="padding:6px;">${formData.apps_per_year || '—'}</td></tr>
+              <tr><td style="padding:6px; font-weight:bold;">Accepted/Year</td><td style="padding:6px;">${formData.accepted_per_year || '—'}</td></tr>
+              <tr style="background:#fafafa;"><td style="padding:6px; font-weight:bold;">Intake Period</td><td style="padding:6px;">${formData.intake_period || '—'}</td></tr>
             </table>
+
+            <!-- PARENT ACCESS -->
+            <h4 style="background:#f3f4f6; padding:10px; margin-top:20px;">How Parents Access Admissions</h4>
+            <ul style="margin: 10px 0 10px 20px; font-size:13px;">
+              ${renderChecks(['access_website', 'access_google_forms', 'access_pdf', 'access_email', 'access_whatsapp', 'access_social', 'access_physical'],
+                ['Website', 'Google Forms', 'PDF Forms', 'Email', 'WhatsApp', 'Social Media', 'Physical Office Visit'])}
+            </ul>
+
+            <!-- INFORMATION COLLECTED -->
+            <h4 style="background:#f3f4f6; padding:10px; margin-top:20px;">Information Collected</h4>
+            <ul style="margin: 10px 0 10px 20px; font-size:13px;">
+              ${renderChecks(['info_parent', 'info_learner', 'info_prev_school', 'info_academic', 'info_medical', 'info_boarding', 'info_sibling'],
+                ['Parent/Guardian Information', 'Learner Information', 'Previous School Information', 'Academic Records', 'Medical/Health Information', 'Boarding Status', 'Sibling Information'])}
+            </ul>
+            ${formData.info_other ? `<p style="margin: 5px 0; font-size:13px;"><strong>Other:</strong> ${formData.info_other}</p>` : ''}
+
+            <!-- DOCUMENT ISSUES -->
+            <h4 style="background:#f3f4f6; padding:10px; margin-top:20px;">Document Issues</h4>
+            <ul style="margin: 10px 0 10px 20px; font-size:13px;">
+              ${renderChecks(['issue_missing', 'issue_incorrect', 'issue_blurry', 'issue_duplicate', 'issue_incomplete', 'issue_contact', 'issue_late', 'issue_confusion'],
+                ['Missing Documents', 'Incorrect Documents', 'Blurry/Unreadable', 'Duplicate Submissions', 'Incomplete Applications', 'Difficulty Contacting Parents', 'Late Submissions', 'Parent Confusion'])}
+            </ul>
+
+            <!-- STORAGE -->
+            <h4 style="background:#f3f4f6; padding:10px; margin-top:20px;">Application Storage</h4>
+            <ul style="margin: 10px 0 10px 20px; font-size:13px;">
+              ${renderChecks(['store_drive', 'store_network', 'store_local', 'store_email', 'store_printed'],
+                ['Google Drive', 'Network Drive', 'Local Computer', 'Email', 'Printed Files'])}
+            </ul>
+
+            <!-- IMPROVEMENT AREAS -->
+            <h4 style="background:#f3f4f6; padding:10px; margin-top:20px;">Improvement Priorities</h4>
+            <ul style="margin: 10px 0 10px 20px; font-size:13px;">
+              ${renderChecks(['improve_admin', 'improve_docs', 'improve_reminders', 'improve_comms', 'improve_visibility', 'improve_speed', 'improve_tracking', 'improve_records', 'improve_compliance'],
+                ['Reduce Admin Work', 'Document Management', 'Automated Reminders', 'Communication with Parents', 'Workflow Visibility', 'Speed of Process', 'Application Tracking', 'Record Keeping', 'Compliance/Audit Trail'])}
+            </ul>
+
+            <!-- CURRENT TOOLS -->
+            <h4 style="background:#f3f4f6; padding:10px; margin-top:20px;">Current Tools & Systems</h4>
+            <ul style="margin: 10px 0 10px 20px; font-size:13px;">
+              ${renderChecks(['tool_gforms', 'tool_excel', 'tool_gsheets', 'tool_outlook', 'tool_whatsapp', 'tool_sms'],
+                ['Google Forms', 'Excel', 'Google Sheets', 'Outlook', 'WhatsApp', 'SMS'])}
+            </ul>
+            ${formData.tool_other ? `<p style="margin: 5px 0; font-size:13px;"><strong>Other:</strong> ${formData.tool_other}</p>` : ''}
+
+            <!-- FUTURE FEATURES -->
+            <h4 style="background:#f3f4f6; padding:10px; margin-top:20px;">Future System Priorities</h4>
+            <ul style="margin: 10px 0 10px 20px; font-size:13px;">
+              ${renderChecks(['future_reminders', 'future_tracking', 'future_dashboard', 'future_ai', 'future_whatsapp', 'future_analytics', 'future_multiuser', 'future_multicampus'],
+                ['Automated Reminders', 'Application Tracking', 'Admin Dashboard', 'AI/Automation', 'WhatsApp Integration', 'Analytics & Reporting', 'Multi-User Access', 'Multi-Campus Support'])}
+            </ul>
+
+            <!-- DETAILED NARRATIVE -->
+            <h4 style="background:#f3f4f6; padding:10px; margin-top:20px;">Process Details</h4>
+            <table style="width:100%; border-collapse: collapse; font-size:13px;">
+              ${formData.process_description ? `<tr><td style="padding:6px; font-weight:bold; vertical-align:top; width:200px;">Current Process</td><td style="padding:6px;">${formData.process_description}</td></tr>` : ''}
+              ${formData.naming_explain ? `<tr style="background:#fafafa;"><td style="padding:6px; font-weight:bold; vertical-align:top;">Document Naming</td><td style="padding:6px;">${formData.naming_explain}</td></tr>` : ''}
+              ${formData.parent_questions ? `<tr><td style="padding:6px; font-weight:bold; vertical-align:top;">Common Parent Questions</td><td style="padding:6px;">${formData.parent_questions}</td></tr>` : ''}
+              ${formData.parent_confusion ? `<tr style="background:#fafafa;"><td style="padding:6px; font-weight:bold; vertical-align:top;">Parent Confusion Points</td><td style="padding:6px;">${formData.parent_confusion}</td></tr>` : ''}
+              ${formData.statuses ? `<tr><td style="padding:6px; font-weight:bold; vertical-align:top;">Application Statuses</td><td style="padding:6px;">${formData.statuses}</td></tr>` : ''}
+            </table>
+
+            <!-- ROLES & STAKEHOLDERS -->
+            <h4 style="background:#f3f4f6; padding:10px; margin-top:20px;">Roles & Stakeholders</h4>
+            <table style="width:100%; border-collapse: collapse; font-size:13px;">
+              ${formData.role_initial ? `<tr><td style="padding:6px; font-weight:bold; width:200px;">Initial Review</td><td style="padding:6px;">${formData.role_initial}</td></tr>` : ''}
+              ${formData.role_docs ? `<tr style="background:#fafafa;"><td style="padding:6px; font-weight:bold;">Document Verification</td><td style="padding:6px;">${formData.role_docs}</td></tr>` : ''}
+              ${formData.role_approval ? `<tr><td style="padding:6px; font-weight:bold;">Final Approval</td><td style="padding:6px;">${formData.role_approval}</td></tr>` : ''}
+              ${formData.role_comms ? `<tr style="background:#fafafa;"><td style="padding:6px; font-weight:bold;">Parent Communication</td><td style="padding:6px;">${formData.role_comms}</td></tr>` : ''}
+              ${formData.third_parties ? `<tr><td style="padding:6px; font-weight:bold;">Third Parties Notified</td><td style="padding:6px;">${formData.third_parties}</td></tr>` : ''}
+            </table>
+
+            <!-- CONSTRAINTS & WISHLIST -->
+            <h4 style="background:#f3f4f6; padding:10px; margin-top:20px;">Constraints & Vision</h4>
+            <table style="width:100%; border-collapse: collapse; font-size:13px;">
+              ${formData.time_sinks ? `<tr><td style="padding:6px; font-weight:bold; vertical-align:top; width:200px;">Time Sinks</td><td style="padding:6px;">${formData.time_sinks}</td></tr>` : ''}
+              ${formData.infra_limits ? `<tr style="background:#fafafa;"><td style="padding:6px; font-weight:bold; vertical-align:top;">Infrastructure Limits</td><td style="padding:6px;">${formData.infra_limits}</td></tr>` : ''}
+              ${formData.system_wishlist ? `<tr><td style="padding:6px; font-weight:bold; vertical-align:top;">System Wishlist</td><td style="padding:6px;">${formData.system_wishlist}</td></tr>` : ''}
+              ${formData.final_comments ? `<tr style="background:#fafafa;"><td style="padding:6px; font-weight:bold; vertical-align:top;">Final Comments</td><td style="padding:6px;">${formData.final_comments}</td></tr>` : ''}
+            </table>
+
+            <!-- SUBMISSION -->
+            <div style="background:#f3f4f6; padding:10px; margin-top:20px; font-size:13px;">
+              <strong>Submitted by:</strong> ${formData.signoff_name || '—'} on ${formData.signoff_date || '—'}
+            </div>
           </div>
         `,
       });

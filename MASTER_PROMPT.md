@@ -56,6 +56,18 @@ Build a digital school admissions platform for Eunice High School (MVP). Goal: R
 
 **Philosophy:** Managed services only. No Docker, Kubernetes, or custom DevOps. Lightweight, fast iteration, low operational burden.
 
+### 🌍 Environment & Deployment Strategy
+To protect live data and allow safe testing, we use a strict 3-tier system:
+1. **Development (Dev):** Local coding and testing. Uses a **Dev Supabase DB** with dummy data. No fear of breaking things.
+2. **Staging / Preview:** Hosted on Vercel preview URLs. Uses the Dev DB. This is the "dress rehearsal" where stakeholders (like Eunice staff) review and approve features before they go live.
+3. **Production (Prod):** The live platform (`eunice.yourdomain.com`). Uses a completely isolated **Prod Supabase DB**. Code only reaches here once approved in Staging.
+
+### 🏢 Scalability & Multi-Tenancy
+While Eunice is **School #1** (the MVP), the platform architecture is fundamentally designed to be a multi-tenant SaaS. 
+- All database records contain a `school_id`.
+- Eunice's setup is simply `school_id = 1`.
+- The commercial model and roll-out to other schools will reuse this identical codebase, isolated by Row-Level Security (RLS) in Supabase to ensure School A cannot see School B's data.
+
 ---
 
 ## 🗂️ Project Structure

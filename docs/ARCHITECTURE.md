@@ -161,18 +161,36 @@ admin_notes
 
 ---
 
-## Deployment Pipeline
+## Deployment & Environment Strategy
 
-```
-Local Development (Claude Code)
+To ensure zero risk to live parent data and maintain a professional testing lifecycle, we enforce a strict 3-tier environment strategy:
+
+### 1. Development (Dev)
+- **Environment:** Local machines (or Claude Code sandboxes).
+- **Database:** Supabase Dev Project (dummy data only).
+- **Purpose:** Rapid iteration, building features, breaking things safely without affecting stakeholders or users.
+
+### 2. Staging / Preview
+- **Environment:** Vercel Preview URLs (auto-generated on GitHub pull requests/commits).
+- **Database:** Connected to the Supabase Dev Project (or a dedicated Staging DB).
+- **Purpose:** The "dress rehearsal." This environment is used for stakeholder reviews (e.g., Eunice staff testing the workflow) and QA before code goes live.
+
+### 3. Production (Prod)
+- **Environment:** Vercel Production Environment (eunice.yourdomain.com).
+- **Database:** Supabase Prod Project (strictly real applicant data).
+- **Purpose:** The live stage. Code is only merged here after passing Staging. No direct code edits occur here.
+
+### Pipeline Flow
+```text
+Local Development (Dev DB)
     ↓
-GitHub Push
+GitHub Push (Branch)
     ↓
-Vercel Auto-Deploy (Preview + Production)
+Vercel Auto-Deploy Preview (Staging DB) → Stakeholder QA
     ↓
-Supabase Migrations (versioned)
+Merge to Main
     ↓
-Live at eunice.yourdom.com
+Vercel Auto-Deploy Production (Prod DB)
 ```
 
 ---

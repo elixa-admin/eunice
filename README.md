@@ -3,7 +3,13 @@
 A modern digital admissions and learner intake workflow platform for Eunice High School, with foundations for broader South African school adoption.
 
 ## Project Status
-🔄 **Phase 0** — Discovery & Workflow Mapping
+🔄 **Phase 1** — Design Planning (Sprint 3: May 20–25)
+
+**Latest (May 19):**
+- ✅ Assessment form complete & live at http://localhost:3000
+- ✅ Local dev environment fixed (auto port-finding, Chrome extension support)
+- ✅ Sprint 3 design work ready to start
+- 📅 Deadline: June 1 (Phase 1 complete) → July 1 (MVP launch)
 
 ## Quick Links
 - [Project Brief](./docs/PROJECT_BRIEF.md)

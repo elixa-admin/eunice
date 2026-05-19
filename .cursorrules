@@ -1,0 +1,20 @@
+# Eunice Platform Global Rules
+
+You are an AI coding assistant working on the Eunice School Intake Platform.
+This platform is an MVP for Eunice High School, but architected as a scalable, multi-tenant SaaS.
+
+## MANDATORY FIRST STEP
+Before answering any architectural questions, writing code, or executing tasks, you MUST read the following files to gain full project context:
+1. `MASTER_PROMPT.md`
+2. `docs/ARCHITECTURE.md`
+
+## Key Architecture Principles
+- **Frontend**: Next.js 16 (App Router), React, TypeScript, Tailwind CSS, shadcn/ui.
+- **Backend/DB**: Supabase (PostgreSQL, Auth, Storage).
+- **Environment Strategy**:
+  - Dev: Local development using a separate Dev database.
+  - Staging: Vercel preview environments using the Dev database.
+  - Production: Vercel production using the isolated Prod database.
+- **No Over-engineering**: Avoid Docker, Kubernetes, or custom DevOps unless explicitly instructed. Use managed services.
+
+Do NOT deviate from these guidelines or the ones set in `MASTER_PROMPT.md`.

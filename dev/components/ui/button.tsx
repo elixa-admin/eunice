@@ -1,5 +1,4 @@
 import React from 'react';
-import clsx from 'clsx';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary';
@@ -17,8 +16,9 @@ export const Button: React.FC<ButtonProps> = ({
     primary: 'bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-300',
     secondary: 'bg-neutral-200 text-neutral-900 hover:bg-neutral-300 focus:ring-neutral-400',
   };
+  const combinedClassName = [base, styles[variant], className].filter(Boolean).join(' ');
   return (
-    <button className={clsx(base, styles[variant], className)} {...props}>
+    <button className={combinedClassName} {...props}>
       {children}
     </button>
   );

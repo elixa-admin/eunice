@@ -1,5 +1,4 @@
 import React from 'react';
-import clsx from 'clsx';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -7,8 +6,9 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const Input: React.FC<InputProps> = ({ label, className, ...props }) => {
+  const wrapperClassName = ['flex flex-col space-y-1', className].filter(Boolean).join(' ');
   return (
-    <div className={clsx('flex flex-col space-y-1', className)}>
+    <div className={wrapperClassName}>
       {label && (
         <label className="text-sm font-medium text-neutral-700 dark:text-neutral-300">{label}</label>
       )}

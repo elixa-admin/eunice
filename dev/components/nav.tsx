@@ -3,7 +3,6 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import clsx from 'clsx';
 
 export const NavBar: React.FC = () => {
   const pathname = usePathname();
@@ -43,24 +42,22 @@ export const NavBar: React.FC = () => {
             <Link
               id="nav-parent"
               href="/parent"
-              className={clsx(
-                'px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200',
+              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
                 isActive('/parent')
                   ? 'bg-white text-primary-950 shadow-md'
                   : 'text-primary-100 hover:bg-white/10 hover:text-white'
-              )}
+              }`}
             >
               Parent Portal
             </Link>
             <Link
               id="nav-admin"
               href="/admin"
-              className={clsx(
-                'px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200',
+              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
                 isActive('/admin')
                   ? 'bg-white/20 text-white border border-white/20'
                   : 'text-primary-200 hover:bg-white/5 hover:text-white'
-              )}
+              }`}
             >
               Admin Dashboard
             </Link>

@@ -1,0 +1,232 @@
+[
+  {
+    "id": "e305e94b-cd8c-4a11-b0db-5ebff804e183",
+    "school_id": "8b51d8b9-52e6-42d4-bb0b-54d6d6a2f91b",
+    "parent_id": "4bc4db79-0c6a-4a25-a1c1-4bceb768e192",
+    "parent_name": "Thabo Nkosi",
+    "parent_phone": "+27 82 555 1234",
+    "parent_email": "thabo.nkosi@gmail.com",
+    "learner_first_name": "Sibongile",
+    "learner_last_name": "Nkosi",
+    "grade_applying_for": "Grade 8",
+    "status": "accepted",
+    "created_at": "2026-05-10T08:30:00Z",
+    "submitted_at": "2026-05-10T09:15:00Z",
+    "documents": [
+      {
+        "id": "doc-01",
+        "doc_type": "birth_cert",
+        "status": "verified",
+        "storage_path": "schools/8b51d8b9/e305e94b/birth_cert.pdf",
+        "uploaded_at": "2026-05-10T08:45:00Z"
+      },
+      {
+        "id": "doc-02",
+        "doc_type": "school_report",
+        "status": "verified",
+        "storage_path": "schools/8b51d8b9/e305e94b/report_q1.pdf",
+        "uploaded_at": "2026-05-10T08:50:00Z"
+      },
+      {
+        "id": "doc-03",
+        "doc_type": "proof_residence",
+        "status": "verified",
+        "storage_path": "schools/8b51d8b9/e305e94b/utility_bill.pdf",
+        "uploaded_at": "2026-05-10T09:00:00Z"
+      },
+      {
+        "id": "doc-04",
+        "doc_type": "id_copy",
+        "status": "verified",
+        "storage_path": "schools/8b51d8b9/e305e94b/parent_id.pdf",
+        "uploaded_at": "2026-05-10T09:10:00Z"
+      }
+    ],
+    "timeline": [
+      { "status": "draft", "changed_at": "2026-05-10T08:30:00Z", "note": "Application created by parent" },
+      { "status": "submitted", "changed_at": "2026-05-10T09:15:00Z", "note": "All required documents uploaded" },
+      { "status": "under_review", "changed_at": "2026-05-11T14:20:00Z", "note": "Documents verified by admissions officer" },
+      { "status": "accepted", "changed_at": "2026-05-14T10:00:00Z", "note": "Official acceptance offer issued by School Principal" }
+    ]
+  },
+  {
+    "id": "d04a62c4-3329-4780-bb67-55e1db87aaef",
+    "school_id": "8b51d8b9-52e6-42d4-bb0b-54d6d6a2f91b",
+    "parent_id": "9ac4d123-1c3a-4a25-a1c1-4bceb768e185",
+    "parent_name": "Annelise Fourie",
+    "parent_phone": "+27 71 555 6789",
+    "parent_email": "afourie@webmail.co.za",
+    "learner_first_name": "Liam",
+    "learner_last_name": "Fourie",
+    "grade_applying_for": "Grade 8",
+    "status": "under_review",
+    "created_at": "2026-05-12T10:15:00Z",
+    "submitted_at": "2026-05-12T11:00:00Z",
+    "documents": [
+      {
+        "id": "doc-05",
+        "doc_type": "birth_cert",
+        "status": "verified",
+        "storage_path": "schools/8b51d8b9/d04a62c4/birth_cert.pdf",
+        "uploaded_at": "2026-05-12T10:20:00Z"
+      },
+      {
+        "id": "doc-06",
+        "doc_type": "school_report",
+        "status": "rejected",
+        "storage_path": "schools/8b51d8b9/d04a62c4/bad_scan_report.jpg",
+        "uploaded_at": "2026-05-12T10:30:00Z",
+        "rejection_reason": "Page 2 of the Q1 report is blurry and unreadable. Please re-upload a clear scan."
+      },
+      {
+        "id": "doc-07",
+        "doc_type": "proof_residence",
+        "status": "verified",
+        "storage_path": "schools/8b51d8b9/d04a62c4/lease_agreement.pdf",
+        "uploaded_at": "2026-05-12T10:45:00Z"
+      },
+      {
+        "id": "doc-08",
+        "doc_type": "id_copy",
+        "status": "verified",
+        "storage_path": "schools/8b51d8b9/d04a62c4/parent_id.jpg",
+        "uploaded_at": "2026-05-12T10:55:00Z"
+      }
+    ],
+    "timeline": [
+      { "status": "draft", "changed_at": "2026-05-12T10:15:00Z", "note": "Application created by parent" },
+      { "status": "submitted", "changed_at": "2026-05-12T11:00:00Z", "note": "Application submitted with documents" },
+      { "status": "under_review", "changed_at": "2026-05-13T09:00:00Z", "note": "School staff flagged school report scan as unreadable. Notified parent." }
+    ]
+  },
+  {
+    "id": "fa2bb97f-442c-47bc-bb39-51fd83cb22cf",
+    "school_id": "8b51d8b9-52e6-42d4-bb0b-54d6d6a2f91b",
+    "parent_id": "3dc2cc90-1c3a-4a25-a1c1-4bceb768e174",
+    "parent_name": "Amina Patel",
+    "parent_phone": "+27 83 555 9876",
+    "parent_email": "amina.patel@outlook.com",
+    "learner_first_name": "Zahra",
+    "learner_last_name": "Patel",
+    "grade_applying_for": "Grade 9",
+    "status": "submitted",
+    "created_at": "2026-05-18T14:00:00Z",
+    "submitted_at": "2026-05-18T15:20:00Z",
+    "documents": [
+      {
+        "id": "doc-09",
+        "doc_type": "birth_cert",
+        "status": "uploaded",
+        "storage_path": "schools/8b51d8b9/fa2bb97f/birth_cert.pdf",
+        "uploaded_at": "2026-05-18T14:15:00Z"
+      },
+      {
+        "id": "doc-10",
+        "doc_type": "school_report",
+        "status": "uploaded",
+        "storage_path": "schools/8b51d8b9/fa2bb97f/report_final.pdf",
+        "uploaded_at": "2026-05-18T14:30:00Z"
+      },
+      {
+        "id": "doc-11",
+        "doc_type": "proof_residence",
+        "status": "uploaded",
+        "storage_path": "schools/8b51d8b9/fa2bb97f/bank_statement.pdf",
+        "uploaded_at": "2026-05-18T14:50:00Z"
+      },
+      {
+        "id": "doc-12",
+        "doc_type": "id_copy",
+        "status": "uploaded",
+        "storage_path": "schools/8b51d8b9/fa2bb97f/id_card.pdf",
+        "uploaded_at": "2026-05-18T15:10:00Z"
+      }
+    ],
+    "timeline": [
+      { "status": "draft", "changed_at": "2026-05-18T14:00:00Z", "note": "Application created by parent" },
+      { "status": "submitted", "changed_at": "2026-05-18T15:20:00Z", "note": "Application submitted for queue" }
+    ]
+  },
+  {
+    "id": "ca1aa8e0-1129-4aa8-bb88-33e1db87aaf0",
+    "school_id": "8b51d8b9-52e6-42d4-bb0b-54d6d6a2f91b",
+    "parent_id": "7bc3dd44-2c6a-4a25-a1c1-4bceb768e183",
+    "parent_name": "Jean du Toit",
+    "parent_phone": "+27 84 555 4321",
+    "parent_email": "jdutoit@mweb.co.za",
+    "learner_first_name": "Francois",
+    "learner_last_name": "du Toit",
+    "grade_applying_for": "Grade 10",
+    "status": "draft",
+    "created_at": "2026-05-19T09:00:00Z",
+    "documents": [
+      {
+        "id": "doc-13",
+        "doc_type": "birth_cert",
+        "status": "uploaded",
+        "storage_path": "schools/8b51d8b9/ca1aa8e0/birth_cert.pdf",
+        "uploaded_at": "2026-05-19T09:15:00Z"
+      },
+      {
+        "id": "doc-14",
+        "doc_type": "school_report",
+        "status": "uploaded",
+        "storage_path": "schools/8b51d8b9/ca1aa8e0/report.pdf",
+        "uploaded_at": "2026-05-19T09:30:00Z"
+      }
+    ],
+    "timeline": [
+      { "status": "draft", "changed_at": "2026-05-19T09:00:00Z", "note": "Application started by parent. Missing Proof of Residence and ID copy." }
+    ]
+  },
+  {
+    "id": "b18cc2d4-cc8c-4a88-bb77-55e2db87aac1",
+    "school_id": "8b51d8b9-52e6-42d4-bb0b-54d6d6a2f91b",
+    "parent_id": "2ac4dd99-0c6a-4a25-a1c1-4bceb768e188",
+    "parent_name": "Chidi Adebayo",
+    "parent_phone": "+27 60 555 0011",
+    "parent_email": "chidi@adebayo.co.za",
+    "learner_first_name": "Amara",
+    "learner_last_name": "Adebayo",
+    "grade_applying_for": "Grade 8",
+    "status": "rejected",
+    "created_at": "2026-05-08T11:00:00Z",
+    "submitted_at": "2026-05-08T12:00:00Z",
+    "documents": [
+      {
+        "id": "doc-15",
+        "doc_type": "birth_cert",
+        "status": "verified",
+        "storage_path": "schools/8b51d8b9/b18cc2d4/birth_cert.pdf",
+        "uploaded_at": "2026-05-08T11:15:00Z"
+      },
+      {
+        "id": "doc-16",
+        "doc_type": "school_report",
+        "status": "verified",
+        "storage_path": "schools/8b51d8b9/b18cc2d4/report.pdf",
+        "uploaded_at": "2026-05-08T11:30:00Z"
+      },
+      {
+        "id": "doc-17",
+        "doc_type": "proof_residence",
+        "status": "verified",
+        "storage_path": "schools/8b51d8b9/b18cc2d4/residence.pdf",
+        "uploaded_at": "2026-05-08T11:45:00Z"
+      },
+      {
+        "id": "doc-18",
+        "doc_type": "id_copy",
+        "status": "verified",
+        "storage_path": "schools/8b51d8b9/b18cc2d4/id.pdf",
+        "uploaded_at": "2026-05-08T11:55:00Z"
+      }
+    ],
+    "timeline": [
+      { "status": "draft", "changed_at": "2026-05-08T11:00:00Z", "note": "Application created by parent" },
+      { "status": "submitted", "changed_at": "2026-05-08T12:00:00Z", "note": "Application submitted for queue" },
+      { "status": "under_review", "changed_at": "2026-05-09T10:00:00Z", "note": "All documents verified by staff" },
+      { "status": "rejected", "changed_at": "2026-05-13T16:30:00Z", "note": "Grade 8 enrollment cap reached. Applicant does not reside in the primary school zoning area." }
+    ]
+  }
+]

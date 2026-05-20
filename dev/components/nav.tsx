@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 
 export const NavBar: React.FC = () => {
   const pathname = usePathname();
+  const isDevSurface = pathname.startsWith('/dev');
 
   // Highlight active links
   const isActive = (path: string) => pathname === path;
@@ -41,9 +42,10 @@ export const NavBar: React.FC = () => {
           <div className="flex items-center gap-4">
             <Link
               id="nav-parent"
-              href="/parent"
+              href={isDevSurface ? '/dev/parent' : '/parent'}
               className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
                 isActive('/parent')
+                  || isActive('/dev/parent')
                   ? 'bg-white text-primary-950 shadow-md'
                   : 'text-primary-100 hover:bg-white/10 hover:text-white'
               }`}
@@ -52,9 +54,10 @@ export const NavBar: React.FC = () => {
             </Link>
             <Link
               id="nav-admin"
-              href="/admin"
+              href={isDevSurface ? '/dev/admin' : '/admin'}
               className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
                 isActive('/admin')
+                  || isActive('/dev/admin')
                   ? 'bg-white/20 text-white border border-white/20'
                   : 'text-primary-200 hover:bg-white/5 hover:text-white'
               }`}

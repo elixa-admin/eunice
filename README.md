@@ -10,6 +10,8 @@ A modern digital admissions and learner intake workflow platform for Eunice High
 - [Architecture & Tech Stack](./docs/ARCHITECTURE.md)
 - [Development Phases](./docs/PHASES.md)
 - [Workflow & Requirements](./docs/REQUIREMENTS.md)
+- [Engineering Guardrails](./docs/ENGINEERING_GUARDRAILS.md)
+- [Pre-Merge Checklist](./docs/PRE_MERGE_CHECKLIST.md)
 
 ## Core Vision
 **Not** an online form.  

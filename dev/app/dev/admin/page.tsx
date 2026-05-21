@@ -1,5 +1,8 @@
 import { PreviewShell } from '@/components/preview-shell';
-import { previewApplications, previewStatusClasses } from '@/lib/dev-preview-data';
+import { SectionHeading } from '@/components/section-heading';
+import { StatusBadge } from '@/components/status-badge';
+import { SurfaceCard } from '@/components/surface-card';
+import { previewApplications } from '@/lib/dev-preview-data';
 
 const totals = {
   total: previewApplications.length,
@@ -25,87 +28,103 @@ export default function DevAdminPage() {
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,2fr)_360px]">
-        <section className="overflow-hidden rounded-3xl border border-white/10 bg-white/5">
-          <div className="flex items-center justify-between border-b border-white/10 px-6 py-5">
-            <div>
-              <h2 className="text-lg font-semibold">Application queue</h2>
-              <p className="text-sm text-slate-300">Preview records modeled on the current admissions workflow.</p>
-            </div>
-            <div className="rounded-full bg-blue-500/15 px-3 py-1 text-xs font-medium text-blue-100">Dev only</div>
+        <SurfaceCard className="overflow-hidden">
+          <div className="border-b border-primary-100 px-6 py-5">
+            <SectionHeading
+              title="Application queue"
+              description="Preview records modeled on the current admissions workflow."
+              action={(
+                <div className="rounded-full bg-primary-50 px-3 py-1 text-xs font-medium text-primary-700">Dev only</div>
+              )}
+            />
           </div>
           <div className="overflow-x-auto">
             <table className="min-w-full text-left text-sm">
-              <thead className="bg-white/5 text-xs uppercase tracking-[0.16em] text-slate-400">
+              <thead className="bg-primary-50/70 text-xs uppercase tracking-[0.16em] text-slate-500">
                 <tr>
                   <th className="px-6 py-4">Reference</th>
                   <th className="px-6 py-4">Learner</th>
                   <th className="px-6 py-4">Parent</th>
                   <th className="px-6 py-4">Grade</th>
                   <th className="px-6 py-4">Status</th>
+                  <th className="px-6 py-4">Assigned</th>
                   <th className="px-6 py-4">Submitted</th>
                   <th className="px-6 py-4">Updated</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/10">
+              <tbody className="divide-y divide-primary-100">
                 {previewApplications.map((app) => (
-                  <tr key={app.id} className="hover:bg-white/5">
-                    <td className="px-6 py-4 font-medium text-slate-200">{app.ref}</td>
-                    <td className="px-6 py-4 text-white">{app.learnerName}</td>
-                    <td className="px-6 py-4 text-slate-300">{app.parentName}</td>
-                    <td className="px-6 py-4 text-slate-300">{app.grade}</td>
-                    <td className="px-6 py-4">
-                      <span
-                        className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${previewStatusClasses[app.status]}`}
-                      >
-                        {app.status.replace('_', ' ')}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-slate-300">{app.submittedAt}</td>
-                    <td className="px-6 py-4 text-slate-400">{app.updatedAt}</td>
+                  <tr key={app.id} className="hover:bg-primary-50/60">
+                    <td className="px-6 py-4 font-medium text-slate-800">{app.ref}</td>
+                    <td className="px-6 py-4 text-slate-950">{app.learnerName}</td>
+                    <td className="px-6 py-4 text-slate-600">{app.parentName}</td>
+                    <td className="px-6 py-4 text-slate-600">{app.grade}</td>
+                    <td className="px-6 py-4"><StatusBadge status={app.status} /></td>
+                    <td className="px-6 py-4 text-slate-600">{app.assignedTo}</td>
+                    <td className="px-6 py-4 text-slate-600">{app.submittedAt}</td>
+                    <td className="px-6 py-4 text-slate-500">{app.updatedAt}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-        </section>
+        </SurfaceCard>
 
-        <aside className="rounded-3xl border border-white/10 bg-white/5 p-6">
+        <SurfaceCard className="p-6">
           <div className="mb-5">
             <p className="text-xs uppercase tracking-[0.16em] text-slate-400">Selected application</p>
-            <h2 className="mt-2 text-xl font-semibold">{featured.learnerName}</h2>
-            <p className="text-sm text-slate-300">
+            <h2 className="mt-2 text-xl font-semibold text-slate-950">{featured.learnerName}</h2>
+            <p className="text-sm text-slate-600">
               {featured.parentName} · {featured.grade}
             </p>
+          </div>
+
+          <div className="mb-6 grid grid-cols-2 gap-3">
+            <div className="rounded-2xl border border-primary-100 bg-primary-50/50 p-4">
+              <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Completion</div>
+              <div className="mt-2 text-2xl font-semibold text-slate-950">{featured.completion}%</div>
+            </div>
+            <div className="rounded-2xl border border-primary-100 bg-primary-50/50 p-4">
+              <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Assigned</div>
+              <div className="mt-2 text-sm font-semibold text-slate-950">{featured.assignedTo}</div>
+            </div>
           </div>
 
           <div className="mb-6 space-y-3">
             {featured.documents.map((document) => (
               <div
                 key={document.label}
-                className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/10 px-4 py-3"
+                className="flex items-center justify-between rounded-2xl border border-primary-100 bg-primary-50/40 px-4 py-3"
               >
-                <span className="text-sm text-slate-200">{document.label}</span>
-                <span className="text-xs font-medium capitalize text-slate-300">{document.status}</span>
+                <div>
+                  <div className="text-sm text-slate-700">{document.label}</div>
+                  <div className="text-xs text-slate-500">{document.uploadedAt ?? 'Not uploaded yet'}</div>
+                </div>
+                <span className="text-xs font-medium capitalize text-slate-500">{document.status}</span>
               </div>
             ))}
           </div>
 
-          <div className="mb-6 rounded-2xl border border-blue-400/20 bg-blue-500/10 p-4">
-            <div className="text-xs uppercase tracking-[0.16em] text-blue-200/80">Admin note</div>
-            <p className="mt-2 text-sm leading-6 text-slate-200">{featured.note}</p>
+          <div className="mb-6 rounded-2xl border border-primary-100 bg-primary-50 p-4">
+            <div className="text-xs uppercase tracking-[0.16em] text-primary-700/80">Admin note</div>
+            <p className="mt-2 text-sm leading-6 text-slate-700">{featured.note}</p>
           </div>
 
           <div>
-            <div className="mb-3 text-sm font-semibold text-white">Timeline</div>
+            <div className="mb-3 text-sm font-semibold text-slate-950">Timeline</div>
             <div className="space-y-3">
               {featured.timeline.map((entry) => (
-                <div key={entry} className="rounded-2xl border border-white/10 bg-black/10 px-4 py-3 text-sm text-slate-300">
-                  {entry}
+                <div key={`${entry.at}-${entry.title}`} className="rounded-2xl border border-primary-100 bg-primary-50/40 px-4 py-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="text-sm font-semibold text-slate-950">{entry.title}</div>
+                    <div className="text-xs text-slate-500">{entry.at}</div>
+                  </div>
+                  <div className="mt-1 text-sm text-slate-600">{entry.detail}</div>
                 </div>
               ))}
             </div>
           </div>
-        </aside>
+        </SurfaceCard>
       </div>
     </PreviewShell>
   );
@@ -113,9 +132,9 @@ export default function DevAdminPage() {
 
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
-      <div className="text-xs uppercase tracking-[0.16em] text-slate-400">{label}</div>
-      <div className="mt-3 text-3xl font-semibold">{value}</div>
-    </div>
+    <SurfaceCard className="p-5">
+      <div className="text-xs uppercase tracking-[0.16em] text-slate-500">{label}</div>
+      <div className="mt-3 text-3xl font-semibold text-slate-950">{value}</div>
+    </SurfaceCard>
   );
 }

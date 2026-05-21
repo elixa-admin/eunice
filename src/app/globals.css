@@ -2,6 +2,7 @@
 
 /* ─── Eunice Design System — Base Tokens ─────────────────────────────────── */
 :root {
+  /* Brand colours (aligned with tailwind.config.ts) */
   --color-primary-50:  #f0f9ff;
   --color-primary-100: #e0f2fe;
   --color-primary-500: #0ea5e9;
@@ -21,12 +22,22 @@
   /* Glassmorphism */
   --glass-bg:     rgba(255, 255, 255, 0.15);
   --glass-border: rgba(255, 255, 255, 0.25);
-  --glass-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
+  --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 
   /* Semantic aliases */
   --background: var(--color-neutral-50);
   --foreground: var(--color-neutral-900);
   --surface:    #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --glass-bg:     rgba(0, 0, 0, 0.25);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --background: var(--color-neutral-900);
+    --foreground: var(--color-neutral-50);
+    --surface:    var(--color-neutral-800);
+  }
 }
 
 @theme inline {

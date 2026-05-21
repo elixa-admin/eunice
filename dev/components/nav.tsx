@@ -12,17 +12,17 @@ export const NavBar: React.FC = () => {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-white/10 bg-primary-950/80 backdrop-blur-md">
+    <nav className="sticky top-0 z-50 w-full border-b border-primary-100/80 bg-white/90 backdrop-blur-md">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo and Brand */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center gap-2 group">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 border border-white/20 transition-all group-hover:bg-primary-500/20 group-hover:border-primary-500/30">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-primary-100 bg-primary-50 transition-all group-hover:bg-primary-100 group-hover:border-primary-200">
                 <svg
                   viewBox="0 0 32 32"
                   fill="none"
-                  className="w-5 h-5 stroke-white"
+                  className="h-5 w-5 stroke-primary-800"
                   aria-hidden="true"
                 >
                   <path
@@ -32,7 +32,7 @@ export const NavBar: React.FC = () => {
                   />
                 </svg>
               </div>
-              <span className="font-bold text-white text-lg tracking-tight transition-colors group-hover:text-primary-300">
+              <span className="text-lg font-bold tracking-tight text-slate-950 transition-colors group-hover:text-primary-700">
                 Eunice Admissions
               </span>
             </Link>
@@ -46,8 +46,8 @@ export const NavBar: React.FC = () => {
               className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
                 isActive('/parent')
                   || isActive('/dev/parent')
-                  ? 'bg-white text-primary-950 shadow-md'
-                  : 'text-primary-100 hover:bg-white/10 hover:text-white'
+                  ? 'bg-primary-900 text-white shadow-md'
+                  : 'text-slate-700 hover:bg-primary-50 hover:text-primary-800'
               }`}
             >
               Parent Portal
@@ -58,8 +58,8 @@ export const NavBar: React.FC = () => {
               className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
                 isActive('/admin')
                   || isActive('/dev/admin')
-                  ? 'bg-white/20 text-white border border-white/20'
-                  : 'text-primary-200 hover:bg-white/5 hover:text-white'
+                  ? 'border border-primary-200 bg-primary-50 text-primary-900'
+                  : 'text-slate-600 hover:bg-primary-50 hover:text-primary-800'
               }`}
             >
               Admin Dashboard

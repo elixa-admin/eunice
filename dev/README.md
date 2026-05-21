@@ -1,4 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Dev Workspace
+
+This workspace is the product preview surface for the Eunice admissions platform. It is intentionally separate from the assessment flow and is where we shape the parent and admin experience before wiring up real backend data.
+
+## Workspace Dependency Plan
+
+The dev workspace should stay lightweight, but it needs a dependable local toolchain.
+
+### Core runtime
+- `next`
+- `react`
+- `react-dom`
+- `typescript`
+
+### Styling
+- `tailwindcss`
+- `@tailwindcss/postcss`
+
+### Verification
+- `eslint`
+- `eslint-config-next`
+- `@types/node`
+- `@types/react`
+- `@types/react-dom`
+
+### Current verify commands
+- `npm run lint`
+- `npm run typecheck`
+- `npm run check`
 
 ## Getting Started
 
@@ -14,11 +42,16 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Install dependencies first, then open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+You can start editing the preview routes under `app/dev/`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Sprint Focus
+
+The current sprint focus is:
+- richer preview application data
+- stronger application detail surfaces
+- clearer admin and parent review states
 
 ## Learn More
 

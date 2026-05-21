@@ -1,3 +1,14 @@
+import {
+  DOCUMENT_TYPE_LABELS,
+  DOCUMENT_VALIDATION_LABELS,
+  REQUIRED_DOCUMENT_TYPES,
+  isDocumentStateBlocking,
+  isDocumentStateReviewOnly,
+  isDocumentStateSubmissionReady,
+  type DocumentType,
+  type DocumentValidationState,
+} from '@eunice-shared/documents/contracts';
+
 export type PreviewStatus =
   | 'draft'
   | 'submitted'
@@ -7,9 +18,8 @@ export type PreviewStatus =
   | 'rejected';
 
 export type PreviewDocument = {
-  type: 'birth_cert' | 'school_report' | 'proof_residence' | 'id_copy';
-  label: string;
-  status: 'verified' | 'pending' | 'missing';
+  type: DocumentType;
+  status: DocumentValidationState;
   uploadedAt?: string;
   note?: string;
 };
@@ -41,6 +51,8 @@ export type PreviewApplication = {
   timeline: PreviewTimelineEntry[];
 };
 
+export type PreviewReviewState = 'blocked' | 'review' | 'ready' | 'complete';
+
 export const previewApplications: PreviewApplication[] = [
   {
     id: 'app-001',
@@ -57,12 +69,12 @@ export const previewApplications: PreviewApplication[] = [
     updatedAt: '2026-05-19',
     assignedTo: 'A. van Wyk',
     completion: 92,
-    missingItems: ['Proof of residence verification'],
+    missingItems: ['Proof of residence flagged for manual review'],
     documents: [
-      { type: 'birth_cert', label: 'Birth Certificate', status: 'verified', uploadedAt: '2026-05-14', note: 'Certified copy received.' },
-      { type: 'school_report', label: 'School Report', status: 'verified', uploadedAt: '2026-05-14', note: 'Term 1 report accepted.' },
-      { type: 'proof_residence', label: 'Proof of Residence', status: 'pending', uploadedAt: '2026-05-15', note: 'Utility bill visible but address needs confirmation.' },
-      { type: 'id_copy', label: 'Parent ID', status: 'verified', uploadedAt: '2026-05-14', note: 'ID number captured.' },
+      { type: 'birth_cert', status: 'verified', uploadedAt: '2026-05-14', note: 'Certified copy received.' },
+      { type: 'school_report', status: 'verified', uploadedAt: '2026-05-14', note: 'Term 1 report accepted.' },
+      { type: 'proof_residence', status: 'manual_review', uploadedAt: '2026-05-15', note: 'Utility bill visible but address needs confirmation.' },
+      { type: 'id_copy', status: 'verified', uploadedAt: '2026-05-14', note: 'ID number captured.' },
     ],
     note: 'Proof of residence uploaded, waiting for final verification.',
     timeline: [
@@ -86,12 +98,12 @@ export const previewApplications: PreviewApplication[] = [
     updatedAt: '2026-05-18',
     assignedTo: 'N. Jacobs',
     completion: 74,
-    missingItems: ['Previous school report'],
+    missingItems: ['Previous school report needs re-upload'],
     documents: [
-      { type: 'birth_cert', label: 'Birth Certificate', status: 'verified', uploadedAt: '2026-05-12', note: 'Accepted.' },
-      { type: 'school_report', label: 'School Report', status: 'missing', note: 'Parent said report will follow after term close.' },
-      { type: 'proof_residence', label: 'Proof of Residence', status: 'verified', uploadedAt: '2026-05-12', note: 'Municipal statement accepted.' },
-      { type: 'id_copy', label: 'Parent ID', status: 'verified', uploadedAt: '2026-05-12', note: 'Readable copy received.' },
+      { type: 'birth_cert', status: 'verified', uploadedAt: '2026-05-12', note: 'Accepted.' },
+      { type: 'school_report', status: 'needs_reupload', note: 'Parent said report will follow after term close.' },
+      { type: 'proof_residence', status: 'verified', uploadedAt: '2026-05-12', note: 'Municipal statement accepted.' },
+      { type: 'id_copy', status: 'verified', uploadedAt: '2026-05-12', note: 'Readable copy received.' },
     ],
     note: 'Reminder sent for missing previous school report.',
     timeline: [
@@ -117,10 +129,10 @@ export const previewApplications: PreviewApplication[] = [
     completion: 100,
     missingItems: [],
     documents: [
-      { type: 'birth_cert', label: 'Birth Certificate', status: 'verified', uploadedAt: '2026-05-08', note: 'Accepted.' },
-      { type: 'school_report', label: 'School Report', status: 'verified', uploadedAt: '2026-05-08', note: 'Strong academic record captured.' },
-      { type: 'proof_residence', label: 'Proof of Residence', status: 'verified', uploadedAt: '2026-05-08', note: 'Address matches catchment rules.' },
-      { type: 'id_copy', label: 'Parent ID', status: 'verified', uploadedAt: '2026-05-08', note: 'Verified against form details.' },
+      { type: 'birth_cert', status: 'verified', uploadedAt: '2026-05-08', note: 'Accepted.' },
+      { type: 'school_report', status: 'verified', uploadedAt: '2026-05-08', note: 'Strong academic record captured.' },
+      { type: 'proof_residence', status: 'verified', uploadedAt: '2026-05-08', note: 'Address matches catchment rules.' },
+      { type: 'id_copy', status: 'verified', uploadedAt: '2026-05-08', note: 'Verified against form details.' },
     ],
     note: 'All checks complete. Offer ready for parent collection.',
     timeline: [
@@ -146,10 +158,10 @@ export const previewApplications: PreviewApplication[] = [
     completion: 86,
     missingItems: ['Queue assignment', 'Document review'],
     documents: [
-      { type: 'birth_cert', label: 'Birth Certificate', status: 'pending', uploadedAt: '2026-05-20', note: 'Awaiting reviewer check.' },
-      { type: 'school_report', label: 'School Report', status: 'pending', uploadedAt: '2026-05-20', note: 'Awaiting reviewer check.' },
-      { type: 'proof_residence', label: 'Proof of Residence', status: 'pending', uploadedAt: '2026-05-20', note: 'Awaiting reviewer check.' },
-      { type: 'id_copy', label: 'Parent ID', status: 'pending', uploadedAt: '2026-05-20', note: 'Awaiting reviewer check.' },
+      { type: 'birth_cert', status: 'accepted', uploadedAt: '2026-05-20', note: 'Awaiting reviewer check.' },
+      { type: 'school_report', status: 'accepted', uploadedAt: '2026-05-20', note: 'Awaiting reviewer check.' },
+      { type: 'proof_residence', status: 'accepted', uploadedAt: '2026-05-20', note: 'Awaiting reviewer check.' },
+      { type: 'id_copy', status: 'accepted', uploadedAt: '2026-05-20', note: 'Awaiting reviewer check.' },
     ],
     note: 'Fresh submission awaiting queue assignment.',
     timeline: [
@@ -168,7 +180,102 @@ export const previewStatusClasses: Record<PreviewStatus, string> = {
 };
 
 export const previewDocumentClasses = {
+  accepted: 'border border-sky-200 bg-sky-50 text-sky-700',
   verified: 'border border-emerald-200 bg-emerald-50 text-emerald-700',
-  pending: 'border border-amber-200 bg-amber-50 text-amber-700',
+  wrong_format: 'border border-rose-200 bg-rose-50 text-rose-700',
+  too_large: 'border border-rose-200 bg-rose-50 text-rose-700',
+  corrupted: 'border border-rose-200 bg-rose-50 text-rose-700',
+  blurry: 'border border-amber-200 bg-amber-50 text-amber-700',
+  low_confidence_ocr: 'border border-amber-200 bg-amber-50 text-amber-700',
+  needs_reupload: 'border border-rose-200 bg-rose-50 text-rose-700',
+  manual_review: 'border border-amber-200 bg-amber-50 text-amber-700',
   missing: 'border border-rose-200 bg-rose-50 text-rose-700',
+} satisfies Record<DocumentValidationState, string>;
+
+export function getPreviewDocumentLabel(type: DocumentType) {
+  return DOCUMENT_TYPE_LABELS[type];
+}
+
+export function getPreviewDocumentStatusLabel(status: DocumentValidationState) {
+  return DOCUMENT_VALIDATION_LABELS[status];
+}
+
+export function getPreviewDocumentCounts(application: PreviewApplication) {
+  const requiredDocuments = application.documents.filter((document) =>
+    REQUIRED_DOCUMENT_TYPES.includes(document.type),
+  );
+
+  return requiredDocuments.reduce(
+    (counts, document) => {
+      if (isDocumentStateBlocking(document.status)) counts.blocking += 1;
+      else if (isDocumentStateReviewOnly(document.status)) counts.reviewOnly += 1;
+      else if (isDocumentStateSubmissionReady(document.status)) counts.ready += 1;
+
+      return counts;
+    },
+    {
+      blocking: 0,
+      reviewOnly: 0,
+      ready: 0,
+      total: requiredDocuments.length,
+    },
+  );
+}
+
+export function getPreviewReviewState(application: PreviewApplication): PreviewReviewState {
+  const counts = getPreviewDocumentCounts(application);
+
+  if (application.status === 'accepted' || application.status === 'rejected') {
+    return 'complete';
+  }
+
+  if (counts.blocking > 0) {
+    return 'blocked';
+  }
+
+  if (counts.reviewOnly > 0 || application.status === 'under_review') {
+    return 'review';
+  }
+
+  return 'ready';
+}
+
+export const PREVIEW_REVIEW_STATE_LABELS: Record<PreviewReviewState, string> = {
+  blocked: 'Blocked',
+  review: 'Needs review',
+  ready: 'Ready',
+  complete: 'Complete',
 };
+
+export const PREVIEW_REVIEW_STATE_CLASSES: Record<PreviewReviewState, string> = {
+  blocked: 'border border-rose-200 bg-rose-50 text-rose-700',
+  review: 'border border-amber-200 bg-amber-50 text-amber-700',
+  ready: 'border border-sky-200 bg-sky-50 text-sky-700',
+  complete: 'border border-emerald-200 bg-emerald-50 text-emerald-700',
+};
+
+export function getPreviewNextAction(application: PreviewApplication) {
+  const counts = getPreviewDocumentCounts(application);
+
+  if (application.status === 'accepted') {
+    return 'Prepare the offer release and parent handoff.';
+  }
+
+  if (application.status === 'rejected') {
+    return 'Finalize the outcome record and communication.';
+  }
+
+  if (counts.blocking > 0) {
+    return 'Request replacement documents before the file can progress.';
+  }
+
+  if (counts.reviewOnly > 0) {
+    return 'Review flagged documents and confirm whether a re-upload is needed.';
+  }
+
+  if (application.status === 'submitted') {
+    return 'Assign a reviewer and start admissions review.';
+  }
+
+  return 'Continue the admissions review and prepare the next decision.';
+}

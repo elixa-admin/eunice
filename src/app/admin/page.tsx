@@ -3,7 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import supabase from '@/lib/supabase';
-import type { ApplicationStatus } from '@/lib/domain/applications';
+import {
+  APPLICATION_STATUS_LABELS,
+  type ApplicationStatus,
+} from '@/lib/domain/applications';
 
 interface Profile {
   first_name: string;
@@ -23,6 +26,48 @@ interface Application {
     first_name: string;
     last_name: string;
   } | null;
+}
+
+function getAdminQueueTone(status: ApplicationStatus) {
+  switch (status) {
+    case 'accepted':
+      return 'bg-emerald-500/20 text-emerald-300';
+    case 'rejected':
+      return 'bg-rose-500/20 text-rose-300';
+    case 'submitted':
+      return 'bg-blue-500/20 text-blue-300';
+    case 'under_review':
+      return 'bg-amber-500/20 text-amber-300';
+    case 'awaiting_documents':
+      return 'bg-rose-500/20 text-rose-300';
+    case 'ready_for_review':
+      return 'bg-sky-500/20 text-sky-300';
+    case 'decision_pending':
+      return 'bg-fuchsia-500/20 text-fuchsia-200';
+    default:
+      return 'bg-white/10 text-white/80';
+  }
+}
+
+function getAdminNextAction(status: ApplicationStatus) {
+  switch (status) {
+    case 'submitted':
+      return 'Assign reviewer';
+    case 'awaiting_documents':
+      return 'Request documents';
+    case 'ready_for_review':
+      return 'Start review';
+    case 'under_review':
+      return 'Continue review';
+    case 'decision_pending':
+      return 'Record decision';
+    case 'accepted':
+      return 'Prepare outcome';
+    case 'rejected':
+      return 'Finalize outcome';
+    default:
+      return 'Review file';
+  }
 }
 
 export default function AdminDashboard() {
@@ -148,7 +193,7 @@ export default function AdminDashboard() {
 
   // Stats computation
   const total = applications.length;
-  const pending = applications.filter(app => app.status === 'submitted' || app.status === 'under_review').length;
+  const activeQueue = applications.filter(app => app.status !== 'accepted' && app.status !== 'rejected').length;
   const accepted = applications.filter(app => app.status === 'accepted').length;
   const rejected = applications.filter(app => app.status === 'rejected').length;
 
@@ -189,8 +234,8 @@ export default function AdminDashboard() {
             <p className="text-3xl font-bold mt-2 text-white">{total}</p>
           </div>
           <div className="glass p-5 rounded-2xl border border-white/10 text-center">
-            <p className="text-primary-300 text-xs font-semibold uppercase tracking-wider">Pending Review</p>
-            <p className="text-3xl font-bold mt-2 text-amber-300">{pending}</p>
+            <p className="text-primary-300 text-xs font-semibold uppercase tracking-wider">Active Queue</p>
+            <p className="text-3xl font-bold mt-2 text-amber-300">{activeQueue}</p>
           </div>
           <div className="glass p-5 rounded-2xl border border-white/10 text-center">
             <p className="text-primary-300 text-xs font-semibold uppercase tracking-wider">Accepted</p>
@@ -199,6 +244,20 @@ export default function AdminDashboard() {
           <div className="glass p-5 rounded-2xl border border-white/10 text-center">
             <p className="text-primary-300 text-xs font-semibold uppercase tracking-wider">Rejected</p>
             <p className="text-3xl font-bold mt-2 text-rose-400">{rejected}</p>
+          </div>
+        </section>
+
+        <section className="glass p-5 rounded-2xl border border-white/10">
+          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-white">Queue focus</h2>
+              <p className="mt-1 text-sm text-primary-200">
+                Use the current status to decide whether a file needs review, documents, or a final outcome.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-primary-100">
+              Prioritize submitted and under-review files first, then complete outcomes.
+            </div>
           </div>
         </section>
 
@@ -219,6 +278,7 @@ export default function AdminDashboard() {
                     <th className="py-4 px-4">Grade</th>
                     <th className="py-4 px-4">Parent Name</th>
                     <th className="py-4 px-4">Status</th>
+                    <th className="py-4 px-4">Next action</th>
                     <th className="py-4 px-4 text-right">Actions</th>
                   </tr>
                 </thead>
@@ -234,14 +294,13 @@ export default function AdminDashboard() {
                       </td>
                       <td className="py-4 px-4">
                         <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${
-                          app.status === 'accepted' ? 'bg-emerald-500/20 text-emerald-300' :
-                          app.status === 'rejected' ? 'bg-rose-500/20 text-rose-300' :
-                          app.status === 'submitted' ? 'bg-blue-500/20 text-blue-300' :
-                          app.status === 'under_review' ? 'bg-amber-500/20 text-amber-300' :
-                          'bg-white/10 text-white/80'
+                          getAdminQueueTone(app.status)
                         }`}>
-                          {app.status.replace('_', ' ')}
+                          {APPLICATION_STATUS_LABELS[app.status]}
                         </span>
+                      </td>
+                      <td className="py-4 px-4 text-primary-200">
+                        {getAdminNextAction(app.status)}
                       </td>
                       <td className="py-4 px-4 text-right">
                         {actioningId === app.id ? (

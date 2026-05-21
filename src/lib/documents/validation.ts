@@ -29,19 +29,19 @@ export function validateDocumentUpload({
   const contract = DOCUMENT_CONTRACTS[documentType];
   const extension = fileName.includes('.') ? `.${fileName.split('.').pop()?.toLowerCase()}` : '';
 
-  if (!ACCEPTED_DOCUMENT_EXTENSIONS.includes(extension as (typeof ACCEPTED_DOCUMENT_EXTENSIONS)[number])) {
+  if (!contract.acceptedExtensions.includes(extension)) {
     return {
       ok: false,
       state: 'wrong_format',
-      message: 'Only PDF, JPG, JPEG, and PNG files are supported.',
+      message: 'Please upload this document as a PDF, JPG, or PNG file.',
     };
   }
 
-  if (!ACCEPTED_DOCUMENT_MIME_TYPES.includes(mimeType as (typeof ACCEPTED_DOCUMENT_MIME_TYPES)[number])) {
+  if (!contract.acceptedMimeTypes.includes(mimeType as (typeof ACCEPTED_DOCUMENT_MIME_TYPES)[number])) {
     return {
       ok: false,
       state: 'wrong_format',
-      message: 'The uploaded file type does not match a supported document format.',
+      message: 'This file does not match a supported document format. Please try a PDF, JPG, or PNG version instead.',
     };
   }
 
@@ -49,13 +49,13 @@ export function validateDocumentUpload({
     return {
       ok: false,
       state: 'too_large',
-      message: 'This file is larger than the 5 MB upload limit.',
+      message: 'This file is too large. Please upload a version smaller than 5 MB.',
     };
   }
 
   return {
     ok: true,
     state: 'accepted',
-    message: 'Document passed initial upload validation.',
+    message: 'Uploaded successfully. The school will review this document after you submit.',
   };
 }

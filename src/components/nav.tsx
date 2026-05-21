@@ -5,10 +5,8 @@ import { usePathname } from 'next/navigation';
 
 export function NavBar() {
   const pathname = usePathname();
-  const isDevSurface = pathname.startsWith('/dev');
-
-  const parentHref = isDevSurface ? '/dev/parent' : '/parent';
-  const adminHref = isDevSurface ? '/dev/admin' : '/admin';
+  const parentHref = '/parent';
+  const adminHref = '/admin';
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-white/10 bg-primary-950/80 backdrop-blur-md">

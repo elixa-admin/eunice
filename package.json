@@ -8,6 +8,8 @@
     "start": "npm --prefix src run start",
     "lint": "npm --prefix src run lint",
     "typecheck": "npm --prefix src run typecheck",
-    "check": "npm --prefix src run check"
+    "check": "npm --prefix src run check",
+    "verify:src": "node scripts/verify-workspace.mjs src",
+    "verify:dev": "node scripts/verify-workspace.mjs dev"
   }
 }

@@ -8,6 +8,7 @@ src/README.md
 
 # Generated Supabase CLI state
 supabase/.temp/
+.codex-home-supabase/
 
 # Common editor and build artifacts
 .DS_Store

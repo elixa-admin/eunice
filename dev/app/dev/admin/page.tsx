@@ -2,7 +2,17 @@ import { PreviewShell } from '@/components/preview-shell';
 import { SectionHeading } from '@/components/section-heading';
 import { StatusBadge } from '@/components/status-badge';
 import { SurfaceCard } from '@/components/surface-card';
-import { previewApplications } from '@/lib/dev-preview-data';
+import {
+  PREVIEW_REVIEW_STATE_CLASSES,
+  PREVIEW_REVIEW_STATE_LABELS,
+  getPreviewDocumentCounts,
+  getPreviewDocumentLabel,
+  getPreviewNextAction,
+  getPreviewReviewState,
+  getPreviewDocumentStatusLabel,
+  previewApplications,
+} from '@/lib/dev-preview-data';
+import Link from 'next/link';
 
 const totals = {
   total: previewApplications.length,
@@ -12,6 +22,8 @@ const totals = {
 };
 
 const featured = previewApplications[0];
+const featuredReviewState = getPreviewReviewState(featured);
+const featuredCounts = getPreviewDocumentCounts(featured);
 
 export default function DevAdminPage() {
   return (
@@ -47,24 +59,53 @@ export default function DevAdminPage() {
                   <th className="px-6 py-4">Parent</th>
                   <th className="px-6 py-4">Grade</th>
                   <th className="px-6 py-4">Status</th>
+                  <th className="px-6 py-4">Document health</th>
                   <th className="px-6 py-4">Assigned</th>
                   <th className="px-6 py-4">Submitted</th>
                   <th className="px-6 py-4">Updated</th>
+                  <th className="px-6 py-4 text-right">Review</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-primary-100">
-                {previewApplications.map((app) => (
-                  <tr key={app.id} className="hover:bg-primary-50/60">
-                    <td className="px-6 py-4 font-medium text-slate-800">{app.ref}</td>
-                    <td className="px-6 py-4 text-slate-950">{app.learnerName}</td>
-                    <td className="px-6 py-4 text-slate-600">{app.parentName}</td>
-                    <td className="px-6 py-4 text-slate-600">{app.grade}</td>
-                    <td className="px-6 py-4"><StatusBadge status={app.status} /></td>
-                    <td className="px-6 py-4 text-slate-600">{app.assignedTo}</td>
-                    <td className="px-6 py-4 text-slate-600">{app.submittedAt}</td>
-                    <td className="px-6 py-4 text-slate-500">{app.updatedAt}</td>
-                  </tr>
-                ))}
+                {previewApplications.map((app) => {
+                  const reviewState = getPreviewReviewState(app);
+                  const counts = getPreviewDocumentCounts(app);
+
+                  return (
+                    <tr key={app.id} className="hover:bg-primary-50/60">
+                      <td className="px-6 py-4 font-medium text-slate-800">{app.ref}</td>
+                      <td className="px-6 py-4 text-slate-950">{app.learnerName}</td>
+                      <td className="px-6 py-4 text-slate-600">{app.parentName}</td>
+                      <td className="px-6 py-4 text-slate-600">{app.grade}</td>
+                      <td className="px-6 py-4"><StatusBadge status={app.status} /></td>
+                      <td className="px-6 py-4">
+                        <div className="space-y-2">
+                          <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${PREVIEW_REVIEW_STATE_CLASSES[reviewState]}`}>
+                            {PREVIEW_REVIEW_STATE_LABELS[reviewState]}
+                          </span>
+                          <div className="text-xs text-slate-500">
+                            {counts.blocking > 0
+                              ? `${counts.blocking} blocking`
+                              : counts.reviewOnly > 0
+                                ? `${counts.reviewOnly} flagged`
+                                : `${counts.ready} ready`}
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-slate-600">{app.assignedTo}</td>
+                      <td className="px-6 py-4 text-slate-600">{app.submittedAt}</td>
+                      <td className="px-6 py-4 text-slate-500">{app.updatedAt}</td>
+                      <td className="px-6 py-4 text-right">
+                        <Link
+                          href={`/dev/application/${app.id}`}
+                          className="inline-flex rounded-xl border border-primary-200 bg-white px-3 py-2 text-xs font-semibold text-primary-900 transition hover:bg-primary-50"
+                        >
+                          Review file
+                        </Link>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -90,17 +131,36 @@ export default function DevAdminPage() {
             </div>
           </div>
 
+          <div className="mb-6 rounded-2xl border border-primary-100 bg-white p-4">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Review state</div>
+                <div className="mt-2">
+                  <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${PREVIEW_REVIEW_STATE_CLASSES[featuredReviewState]}`}>
+                    {PREVIEW_REVIEW_STATE_LABELS[featuredReviewState]}
+                  </span>
+                </div>
+              </div>
+              <div className="text-right text-xs text-slate-500">
+                <div>{featuredCounts.ready} ready</div>
+                <div>{featuredCounts.reviewOnly} flagged</div>
+                <div>{featuredCounts.blocking} blocking</div>
+              </div>
+            </div>
+            <p className="mt-3 text-sm leading-6 text-slate-600">{getPreviewNextAction(featured)}</p>
+          </div>
+
           <div className="mb-6 space-y-3">
             {featured.documents.map((document) => (
               <div
-                key={document.label}
+                key={`${document.type}-${document.uploadedAt ?? 'missing'}`}
                 className="flex items-center justify-between rounded-2xl border border-primary-100 bg-primary-50/40 px-4 py-3"
               >
                 <div>
-                  <div className="text-sm text-slate-700">{document.label}</div>
+                  <div className="text-sm text-slate-700">{getPreviewDocumentLabel(document.type)}</div>
                   <div className="text-xs text-slate-500">{document.uploadedAt ?? 'Not uploaded yet'}</div>
                 </div>
-                <span className="text-xs font-medium capitalize text-slate-500">{document.status}</span>
+                <span className="text-xs font-medium text-slate-500">{getPreviewDocumentStatusLabel(document.status)}</span>
               </div>
             ))}
           </div>

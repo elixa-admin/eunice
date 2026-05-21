@@ -9,12 +9,16 @@ import {
 } from '@/lib/domain/applications';
 import {
   DOCUMENT_CONTRACTS,
+  DOCUMENT_VALIDATION_LABELS,
   DOCUMENT_TYPE_LABELS,
   REQUIRED_DOCUMENT_TYPES,
+  isDocumentStateBlocking,
+  isDocumentStateReviewOnly,
+  isDocumentStateSubmissionReady,
   type DocumentType,
   type DocumentValidationState,
 } from '@/lib/documents/contracts';
-import { validateDocumentUpload } from '@/lib/documents/validation';
+import { uploadDocumentDraft } from '@/lib/documents/upload';
 
 const STEP_KEYS = ['parent', 'learner', 'school', 'documents'] as const;
 type StepKey = (typeof STEP_KEYS)[number];
@@ -23,6 +27,9 @@ type DocumentDraft = {
   fileName: string;
   validationState: DocumentValidationState;
   message: string;
+  storagePath: string | null;
+  uploadedAt: string | null;
+  uploadStatus: 'idle' | 'saved' | 'error';
 };
 
 type ApplicationDraft = {
@@ -80,26 +87,41 @@ function createInitialDocumentDrafts(): Record<DocumentType, DocumentDraft> {
       fileName: '',
       validationState: 'missing',
       message: 'Birth certificate is still required.',
+      storagePath: null,
+      uploadedAt: null,
+      uploadStatus: 'idle',
     },
     school_report: {
       fileName: '',
       validationState: 'missing',
       message: 'Previous school report is still required.',
+      storagePath: null,
+      uploadedAt: null,
+      uploadStatus: 'idle',
     },
     proof_residence: {
       fileName: '',
       validationState: 'missing',
       message: 'Proof of residence is still required.',
+      storagePath: null,
+      uploadedAt: null,
+      uploadStatus: 'idle',
     },
     id_copy: {
       fileName: '',
       validationState: 'missing',
       message: 'Parent ID or passport copy is still required.',
+      storagePath: null,
+      uploadedAt: null,
+      uploadStatus: 'idle',
     },
     other: {
       fileName: '',
       validationState: 'missing',
       message: 'Optional supporting document can be added later.',
+      storagePath: null,
+      uploadedAt: null,
+      uploadStatus: 'idle',
     },
   };
 }
@@ -148,11 +170,39 @@ function getValidationTone(state: DocumentValidationState) {
   }
 }
 
+function getDocumentStateGuidance(state: DocumentValidationState) {
+  switch (state) {
+    case 'accepted':
+      return 'Uploaded successfully. Admissions will review this after you submit.';
+    case 'verified':
+      return 'Admissions have already confirmed this document is usable.';
+    case 'wrong_format':
+      return 'This file cannot be used yet. Please upload a PDF, JPG, or PNG version before you submit.';
+    case 'too_large':
+      return 'This file is too large to use. Please upload a smaller version before you submit.';
+    case 'corrupted':
+      return 'We could not read this file. Please upload a fresh copy before you submit.';
+    case 'blurry':
+      return 'This upload may be hard to read. You can continue, but the school may ask for a clearer copy.';
+    case 'low_confidence_ocr':
+      return 'This upload may need a manual check. You can continue and the school will review it later.';
+    case 'needs_reupload':
+      return 'Please replace this document before you submit so the school can review your application properly.';
+    case 'manual_review':
+      return 'You can continue. The school will double-check this document during review.';
+    case 'missing':
+      return 'This document is still required before you can submit.';
+    default:
+      return 'The school will review this document after submission.';
+  }
+}
+
 export default function ParentApplicationWorkflow() {
   const [activeStep, setActiveStep] = useState<StepKey>('parent');
   const [draft, setDraft] = useState<ApplicationDraft>(createInitialDraft);
   const [lastSavedAt, setLastSavedAt] = useState('Not saved yet');
   const [mounted, setMounted] = useState(false);
+  const [uploadingDocument, setUploadingDocument] = useState<DocumentType | null>(null);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -208,7 +258,13 @@ export default function ParentApplicationWorkflow() {
   );
   const schoolComplete = Boolean(draft.previousSchool.trim() && draft.intakeYear.trim());
   const requiredDocsAccepted = REQUIRED_DOCUMENT_TYPES.every((documentType) =>
-    ['accepted', 'verified'].includes(draft.documents[documentType].validationState),
+    isDocumentStateSubmissionReady(draft.documents[documentType].validationState),
+  );
+  const blockingRequiredDocuments = REQUIRED_DOCUMENT_TYPES.filter((documentType) =>
+    isDocumentStateBlocking(draft.documents[documentType].validationState),
+  );
+  const reviewOnlyRequiredDocuments = REQUIRED_DOCUMENT_TYPES.filter((documentType) =>
+    isDocumentStateReviewOnly(draft.documents[documentType].validationState),
   );
 
   const stepStates: Record<StepKey, boolean> = {
@@ -242,21 +298,28 @@ export default function ParentApplicationWorkflow() {
     }));
   }
 
-  function handleFileSelect(documentType: DocumentType, file: File | null) {
+  async function handleFileSelect(documentType: DocumentType, file: File | null) {
     if (!file) return;
 
-    const validation = validateDocumentUpload({
+    setUploadingDocument(documentType);
+
+    const uploadedDocument = await uploadDocumentDraft({
+      schoolId: 'eunice',
+      applicationId: 'parent-portal-draft',
       documentType,
-      fileName: file.name,
-      mimeType: file.type || 'application/octet-stream',
-      fileSizeBytes: file.size,
+      file,
     });
 
     updateDocument(documentType, {
-      fileName: file.name,
-      validationState: validation.state,
-      message: validation.message,
+      fileName: uploadedDocument.fileName,
+      validationState: uploadedDocument.validationState,
+      message: uploadedDocument.message,
+      storagePath: uploadedDocument.storagePath,
+      uploadedAt: uploadedDocument.uploadedAt,
+      uploadStatus: uploadedDocument.uploadStatus,
     });
+
+    setUploadingDocument((current) => (current === documentType ? null : current));
   }
 
   function loadSampleDocument(documentType: DocumentType) {
@@ -264,6 +327,9 @@ export default function ParentApplicationWorkflow() {
       fileName: `sample-${documentType}.pdf`,
       validationState: 'accepted',
       message: 'Sample document attached for the preview flow.',
+      storagePath: `preview/${documentType}/sample-${documentType}.pdf`,
+      uploadedAt: new Date().toISOString(),
+      uploadStatus: 'saved',
     });
   }
 
@@ -272,6 +338,9 @@ export default function ParentApplicationWorkflow() {
       fileName: '',
       validationState: 'missing',
       message: 'Document removed from the draft.',
+      storagePath: null,
+      uploadedAt: null,
+      uploadStatus: 'idle',
     });
   }
 
@@ -371,7 +440,7 @@ export default function ParentApplicationWorkflow() {
             })}
           </div>
 
-          <div className="rounded-3xl border border-slate-200 bg-slate-50/80 p-5 sm:p-6">
+              <div className="rounded-3xl border border-slate-200 bg-slate-50/80 p-5 sm:p-6">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary-700">
@@ -477,6 +546,14 @@ export default function ParentApplicationWorkflow() {
 
             {activeStep === 'documents' && (
               <div className="mt-6 space-y-4">
+                <div className="rounded-2xl border border-primary-100 bg-primary-50/70 p-4">
+                  <div className="text-sm font-semibold text-slate-950">How document checks work</div>
+                  <div className="mt-2 space-y-2 text-sm leading-6 text-slate-600">
+                    <p>Some document issues must be fixed before you submit, like the wrong file type or a file that is too large.</p>
+                    <p>Other documents can still go forward and be checked by the school later if a manual review is needed.</p>
+                  </div>
+                </div>
+
                 <div className="grid gap-4">
                   {REQUIRED_DOCUMENT_TYPES.map((documentType) => {
                     const document = draft.documents[documentType];
@@ -493,21 +570,32 @@ export default function ParentApplicationWorkflow() {
                             </div>
                             <p className="mt-1 text-sm leading-6 text-slate-600">
                               Accepted formats: {DOCUMENT_CONTRACTS[documentType].acceptedMimeTypes.join(', ')}.
-                              Maximum size: 5 MB.
+                              Maximum size: {Math.round(DOCUMENT_CONTRACTS[documentType].maxFileSizeBytes / (1024 * 1024))} MB.
                             </p>
-                            <p className="mt-1 text-sm leading-6 text-slate-600">{document.message}</p>
+                            <p className="mt-1 text-sm leading-6 text-slate-600">{getDocumentStateGuidance(document.validationState)}</p>
+                            {document.message !== getDocumentStateGuidance(document.validationState) ? (
+                              <p className="mt-1 text-xs leading-5 text-slate-500">{document.message}</p>
+                            ) : null}
                             {document.fileName ? (
                               <p className="mt-1 text-xs font-medium text-slate-500">Selected file: {document.fileName}</p>
                             ) : null}
+                            {document.uploadedAt ? (
+                              <p className="mt-1 text-xs text-slate-500">
+                                Saved to draft on {new Date(document.uploadedAt).toLocaleDateString()}.
+                              </p>
+                            ) : null}
+                            {document.storagePath ? (
+                              <p className="mt-1 truncate text-[11px] leading-5 text-slate-400">Storage path: {document.storagePath}</p>
+                            ) : null}
                           </div>
                           <div className={`rounded-2xl border px-3 py-2 text-sm font-medium ${getValidationTone(document.validationState)}`}>
-                            {document.validationState.replaceAll('_', ' ')}
+                            {DOCUMENT_VALIDATION_LABELS[document.validationState]}
                           </div>
                         </div>
 
                         <div className="mt-4 flex flex-wrap gap-3">
                           <label className="inline-flex cursor-pointer items-center rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-primary-200 hover:bg-primary-50">
-                            Choose file
+                            {uploadingDocument === documentType ? 'Saving...' : 'Choose file'}
                             <input
                               type="file"
                               className="sr-only"
@@ -558,9 +646,13 @@ export default function ParentApplicationWorkflow() {
 
             <div className="mt-6 flex flex-col gap-3 border-t border-slate-200 pt-5 sm:flex-row sm:items-center sm:justify-between">
               <div className="text-sm text-slate-600">
-                {isReadyToSubmit
-                  ? 'The draft is ready to submit.'
-                  : 'Complete the highlighted sections and required documents to unlock submission.'}
+                {blockingRequiredDocuments.length > 0
+                  ? `Please fix ${blockingRequiredDocuments.length} required document${blockingRequiredDocuments.length === 1 ? '' : 's'} before you submit.`
+                  : reviewOnlyRequiredDocuments.length > 0
+                    ? `You can submit now. The school will manually review ${reviewOnlyRequiredDocuments.length} document${reviewOnlyRequiredDocuments.length === 1 ? '' : 's'} later.`
+                    : isReadyToSubmit
+                      ? 'The draft is ready to submit.'
+                      : 'Complete the highlighted sections and required documents to unlock submission.'}
               </div>
               <div className="flex flex-wrap gap-3">
                 <button
@@ -607,6 +699,13 @@ export default function ParentApplicationWorkflow() {
 
           <div className="mt-5 rounded-3xl border border-primary-100 bg-white p-5 shadow-sm">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary-700">Required documents</p>
+            {reviewOnlyRequiredDocuments.length > 0 ? (
+              <div className="mt-3 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+                {reviewOnlyRequiredDocuments.length === 1
+                  ? 'One uploaded document can still be submitted and will be checked manually by the school later.'
+                  : `${reviewOnlyRequiredDocuments.length} uploaded documents can still be submitted and will be checked manually by the school later.`}
+              </div>
+            ) : null}
             <div className="mt-4 space-y-3">
               {REQUIRED_DOCUMENT_TYPES.map((documentType) => {
                 const document = draft.documents[documentType];
@@ -614,11 +713,14 @@ export default function ParentApplicationWorkflow() {
                   <div key={documentType} className="flex items-start justify-between gap-3 rounded-2xl bg-slate-50 px-4 py-3">
                     <div>
                       <div className="text-sm font-semibold text-slate-950">{DOCUMENT_TYPE_LABELS[documentType]}</div>
-                      <div className="mt-1 text-xs leading-5 text-slate-500">{document.message}</div>
+                      <div className="mt-1 text-xs leading-5 text-slate-500">{getDocumentStateGuidance(document.validationState)}</div>
+                      {document.storagePath ? (
+                        <div className="mt-1 text-[11px] leading-5 text-slate-400">Draft saved</div>
+                      ) : null}
                     </div>
                     <div className="text-right">
                       <span className={`rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] ${getValidationTone(document.validationState)}`}>
-                        {document.validationState.replaceAll('_', ' ')}
+                        {DOCUMENT_VALIDATION_LABELS[document.validationState]}
                       </span>
                     </div>
                   </div>

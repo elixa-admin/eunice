@@ -4,6 +4,7 @@ import { SurfaceCard } from '@/components/surface-card';
 import { SectionHeading } from '@/components/section-heading';
 import { StatusBadge } from '@/components/status-badge';
 import { previewApplications } from '@/lib/dev-preview-data';
+import { isDocumentStateSubmissionReady } from '@eunice-shared/documents/contracts';
 
 export default function DevParentPage() {
   const featuredApplication = previewApplications[0];
@@ -66,7 +67,7 @@ export default function DevParentPage() {
               <div>Submitted: {app.submittedAt}</div>
               <div>Last updated: {app.updatedAt}</div>
               <div>Parent contact: {app.parentEmail}</div>
-              <div>{app.documents.filter((item) => item.status === 'verified').length} of {app.documents.length} documents checked</div>
+              <div>{app.documents.filter((item) => isDocumentStateSubmissionReady(item.status)).length} of {app.documents.length} documents checked</div>
             </div>
             <div className="mt-5">
               <Link

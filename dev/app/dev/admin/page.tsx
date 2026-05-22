@@ -35,6 +35,64 @@ const totals = {
 const featured = previewApplications[0];
 const featuredReviewState = getPreviewReviewState(featured);
 const featuredCounts = getPreviewDocumentCounts(featured);
+const featuredLane =
+  featuredReviewState === 'blocked'
+    ? 'blocking'
+    : featuredReviewState === 'review'
+      ? 'review'
+      : featuredReviewState === 'ready'
+        ? 'ready'
+        : 'decision';
+const adminLaneMeta = {
+  blocking: {
+    label: 'Blocking',
+    helper: 'Missing documents or hard stops',
+    cardClass: 'border-rose-200 bg-rose-50/80 text-rose-950 shadow-[0_16px_36px_rgba(225,29,72,0.08)]',
+    chipClass: 'border-rose-200 bg-white text-rose-700',
+    rowClass: 'border-l-rose-300 bg-rose-50/35 hover:bg-rose-50/65',
+    barClass: 'bg-rose-500',
+    progressClass: 'bg-rose-100',
+  },
+  review: {
+    label: 'Needs review',
+    helper: 'Waiting on a staff decision',
+    cardClass: 'border-amber-200 bg-amber-50/80 text-amber-950 shadow-[0_16px_36px_rgba(217,119,6,0.08)]',
+    chipClass: 'border-amber-200 bg-white text-amber-700',
+    rowClass: 'border-l-amber-300 bg-amber-50/30 hover:bg-amber-50/60',
+    barClass: 'bg-amber-500',
+    progressClass: 'bg-amber-100',
+  },
+  ready: {
+    label: 'Ready',
+    helper: 'Clear for the next step',
+    cardClass: 'border-emerald-200 bg-emerald-50/80 text-emerald-950 shadow-[0_16px_36px_rgba(16,185,129,0.08)]',
+    chipClass: 'border-emerald-200 bg-white text-emerald-700',
+    rowClass: 'border-l-emerald-300 bg-emerald-50/30 hover:bg-emerald-50/60',
+    barClass: 'bg-emerald-500',
+    progressClass: 'bg-emerald-100',
+  },
+  decision: {
+    label: 'Decision',
+    helper: 'Accepted or rejected outcomes',
+    cardClass: 'border-slate-200 bg-slate-50/80 text-slate-950 shadow-[0_16px_36px_rgba(71,85,105,0.08)]',
+    chipClass: 'border-slate-200 bg-white text-slate-600',
+    rowClass: 'border-l-slate-300 bg-slate-50/30 hover:bg-slate-50/60',
+    barClass: 'bg-slate-500',
+    progressClass: 'bg-slate-100',
+  },
+} satisfies Record<
+  'blocking' | 'review' | 'ready' | 'decision',
+  {
+    label: string;
+    helper: string;
+    cardClass: string;
+    chipClass: string;
+    rowClass: string;
+    barClass: string;
+    progressClass: string;
+  }
+>;
+const laneTotal = totals.total || 1;
 
 export default function DevAdminPage() {
   return (
@@ -75,6 +133,37 @@ export default function DevAdminPage() {
         </SurfaceCard>
       </div>
 
+      <div className="mb-6 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+        {(Object.keys(adminLaneMeta) as Array<keyof typeof adminLaneMeta>).map((lane) => {
+          const meta = adminLaneMeta[lane];
+          const count = laneCounts[lane];
+          const progress = Math.max(4, Math.round((count / laneTotal) * 100));
+
+          return (
+            <SurfaceCard key={lane} className={`overflow-hidden border p-0 ${meta.cardClass}`}>
+              <div className="h-1.5 bg-white/60">
+                <div className={`h-full ${meta.barClass}`} style={{ width: `${progress}%` }} />
+              </div>
+              <div className="p-5">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="type-label text-current/60">{meta.label}</p>
+                    <h3 className="type-title mt-2 text-current">{count}</h3>
+                  </div>
+                  <span className={`rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] ${meta.chipClass}`}>
+                    {progress}%
+                  </span>
+                </div>
+                <p className="mt-3 text-sm leading-6 text-current/75">{meta.helper}</p>
+                <div className={`mt-4 h-2 w-full overflow-hidden rounded-full ${meta.progressClass}`}>
+                  <div className={`h-full rounded-full ${meta.barClass}`} style={{ width: `${progress}%` }} />
+                </div>
+              </div>
+            </SurfaceCard>
+          );
+        })}
+      </div>
+
       <div className="grid gap-6 xl:grid-cols-[minmax(0,2fr)_360px]">
         <SurfaceCard className="overflow-hidden border-primary-200 shadow-[0_24px_70px_rgba(15,23,42,0.12)]">
           <div className="border-b border-primary-100 bg-[linear-gradient(180deg,#f4f9f2,#edf5ea)] px-6 py-5">
@@ -104,12 +193,19 @@ export default function DevAdminPage() {
               </thead>
               <tbody className="divide-y divide-primary-100 bg-white">
                 {previewApplications.map((app) => {
+                  const lane = getAdminQueueLane(app);
+                  const laneMeta = adminLaneMeta[lane];
                   const reviewState = getPreviewReviewState(app);
                   const counts = getPreviewDocumentCounts(app);
 
                   return (
-                    <tr key={app.id} className="transition hover:bg-emerald-50/40">
-                      <td className="px-6 py-4 font-medium text-slate-800">{app.ref}</td>
+                    <tr key={app.id} className={`border-l-4 border-transparent transition ${laneMeta.rowClass}`}>
+                      <td className="px-6 py-4 font-medium text-slate-800">
+                        <div className="flex items-center gap-3">
+                          <span className={`inline-flex h-2.5 w-2.5 rounded-full ${laneMeta.barClass}`} />
+                          {app.ref}
+                        </div>
+                      </td>
                       <td className="px-6 py-4 text-slate-950">{app.learnerName}</td>
                       <td className="px-6 py-4 text-slate-600">{app.parentName}</td>
                       <td className="px-6 py-4 text-slate-600">{app.grade}</td>
@@ -119,7 +215,20 @@ export default function DevAdminPage() {
                           <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${PREVIEW_REVIEW_STATE_CLASSES[reviewState]}`}>
                             {PREVIEW_REVIEW_STATE_LABELS[reviewState]}
                           </span>
-                          <div className="text-xs text-slate-500">
+                          <div className="flex items-center gap-2 text-xs text-slate-500">
+                            <span className={`inline-flex h-1.5 w-16 overflow-hidden rounded-full ${laneMeta.progressClass}`}>
+                              <span
+                                className={`h-full rounded-full ${laneMeta.barClass}`}
+                                style={{
+                                  width: `${Math.max(
+                                    12,
+                                    Math.round(
+                                      ((counts.ready + counts.reviewOnly) / Math.max(counts.total, 1)) * 100,
+                                    ),
+                                  )}%`,
+                                }}
+                              />
+                            </span>
                             {counts.blocking > 0
                               ? `${counts.blocking} blocking`
                               : counts.reviewOnly > 0
@@ -134,7 +243,7 @@ export default function DevAdminPage() {
                       <td className="px-6 py-4 text-right">
                         <Link
                           href={`/dev/application/${app.id}`}
-                          className="inline-flex rounded-xl bg-primary-900 px-3 py-2 text-xs font-semibold text-white shadow-[0_10px_24px_rgba(13,50,28,0.28)] transition hover:bg-primary-700"
+                          className={`inline-flex rounded-xl px-3 py-2 text-xs font-semibold text-white shadow-[0_10px_24px_rgba(13,50,28,0.22)] transition ${lane === 'blocking' ? 'bg-rose-700 hover:bg-rose-600' : lane === 'review' ? 'bg-amber-700 hover:bg-amber-600' : lane === 'ready' ? 'bg-emerald-700 hover:bg-emerald-600' : 'bg-slate-700 hover:bg-slate-600'}`}
                         >
                           Review file
                         </Link>
@@ -157,7 +266,7 @@ export default function DevAdminPage() {
           </div>
 
           <div className="mb-6 grid grid-cols-2 gap-3">
-            <div className="rounded-2xl border border-primary-200 bg-white p-4 shadow-sm">
+            <div className={`rounded-2xl border p-4 shadow-sm ${adminLaneMeta[featuredLane].cardClass}`}>
               <div className="type-label text-slate-500">Completion</div>
               <div className="type-metric mt-2 text-slate-950">{featured.completion}%</div>
             </div>
@@ -167,7 +276,7 @@ export default function DevAdminPage() {
             </div>
           </div>
 
-          <div className="mb-6 rounded-2xl border border-primary-100 bg-white p-4 shadow-[0_12px_30px_rgba(22,163,74,0.06)]">
+          <div className={`mb-6 rounded-2xl border p-4 shadow-[0_12px_30px_rgba(22,163,74,0.06)] ${adminLaneMeta[featuredLane].cardClass}`}>
             <div className="flex items-center justify-between gap-3">
               <div>
                 <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Review state</div>
@@ -190,18 +299,20 @@ export default function DevAdminPage() {
             {featured.documents.map((document) => (
               <div
                 key={`${document.type}-${document.uploadedAt ?? 'missing'}`}
-                className="flex items-center justify-between rounded-2xl border border-primary-100 bg-primary-50/40 px-4 py-3"
+                className={`flex items-center justify-between rounded-2xl border px-4 py-3 ${document.status === 'missing' || document.status === 'needs_reupload' ? 'border-rose-200 bg-rose-50/60' : document.status === 'manual_review' || document.status === 'low_confidence_ocr' || document.status === 'blurry' ? 'border-amber-200 bg-amber-50/60' : 'border-emerald-200 bg-emerald-50/50'}`}
               >
                 <div>
                   <div className="text-sm text-slate-700">{getPreviewDocumentLabel(document.type)}</div>
                   <div className="text-xs text-slate-500">{document.uploadedAt ?? 'Not uploaded yet'}</div>
                 </div>
-                <span className="text-xs font-medium text-slate-500">{getPreviewDocumentStatusLabel(document.status)}</span>
+                <span className={`text-xs font-medium ${document.status === 'missing' || document.status === 'needs_reupload' ? 'text-rose-700' : document.status === 'manual_review' || document.status === 'low_confidence_ocr' || document.status === 'blurry' ? 'text-amber-700' : 'text-emerald-700'}`}>
+                  {getPreviewDocumentStatusLabel(document.status)}
+                </span>
               </div>
             ))}
           </div>
 
-          <div className="mb-6 rounded-2xl border border-primary-100 bg-primary-50 p-4">
+          <div className={`mb-6 rounded-2xl border p-4 ${featuredReviewState === 'blocked' ? 'border-rose-200 bg-rose-50/60' : featuredReviewState === 'review' ? 'border-amber-200 bg-amber-50/60' : 'border-emerald-200 bg-emerald-50/60'}`}>
             <div className="text-xs uppercase tracking-[0.16em] text-primary-700/80">Admin note</div>
             <p className="mt-2 text-sm leading-6 text-slate-700">{featured.note}</p>
           </div>
@@ -210,7 +321,7 @@ export default function DevAdminPage() {
             <div className="mb-3 text-sm font-semibold text-slate-950">Timeline</div>
             <div className="space-y-3">
               {featured.timeline.map((entry) => (
-                <div key={`${entry.at}-${entry.title}`} className="rounded-2xl border border-primary-100 bg-primary-50/40 px-4 py-3">
+                <div key={`${entry.at}-${entry.title}`} className="rounded-2xl border border-primary-100 bg-white/80 px-4 py-3 shadow-[0_10px_22px_rgba(15,23,42,0.04)]">
                   <div className="flex items-center justify-between gap-3">
                     <div className="text-sm font-semibold text-slate-950">{entry.title}</div>
                     <div className="text-xs text-slate-500">{entry.at}</div>

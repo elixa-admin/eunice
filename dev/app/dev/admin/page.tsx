@@ -34,27 +34,27 @@ export default function DevAdminPage() {
       surface="admin"
     >
       <div className="mb-6 grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
-        <SurfaceCard className="overflow-hidden bg-[linear-gradient(135deg,rgba(31,109,58,0.10),rgba(184,137,7,0.10))] p-7">
-          <p className="text-xs uppercase tracking-[0.18em] text-primary-700/75">Operations at a glance</p>
-          <h2 className="display-serif mt-3 text-3xl font-semibold text-slate-950">Admissions queue with stronger visual hierarchy</h2>
-          <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-            The admin view stays operational, but it should feel polished, confident, and easier to scan in a busy review session.
+        <SurfaceCard className="overflow-hidden bg-[linear-gradient(135deg,#0d321c,#124828_38%,#9a730f)] p-7 text-white">
+          <p className="text-xs uppercase tracking-[0.18em] text-white/80">Operations at a glance</p>
+          <h2 className="display-serif mt-3 text-3xl font-semibold text-white">Admissions queue with stronger visual hierarchy</h2>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-white/90">
+            This surface should feel like a real operations cockpit, with immediate clarity on risk, volume, and next decisions.
           </p>
           <div className="mt-6 grid gap-3 sm:grid-cols-3">
-            <StatCard label="Total Applications" value={totals.total.toString()} />
-            <StatCard label="Pending Review" value={totals.pending.toString()} />
-            <StatCard label="Incomplete" value={totals.incomplete.toString()} />
+            <StatCard label="Total Applications" value={totals.total.toString()} tone="emerald" />
+            <StatCard label="Pending Review" value={totals.pending.toString()} tone="amber" />
+            <StatCard label="Incomplete" value={totals.incomplete.toString()} tone="slate" />
           </div>
         </SurfaceCard>
 
-        <SurfaceCard className="p-7">
+        <SurfaceCard className="bg-[linear-gradient(180deg,#fffef9,#f7f2e3)] p-7">
           <p className="text-xs uppercase tracking-[0.18em] text-primary-700/75">Queue health</p>
           <div className="mt-4 space-y-3">
-            <div className="rounded-2xl border border-primary-100 bg-primary-50/55 px-4 py-3 shadow-sm">
+            <div className="rounded-2xl border border-primary-200 bg-white px-4 py-3 shadow-[0_12px_28px_rgba(15,23,42,0.08)]">
               <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Accepted</div>
               <div className="mt-2 text-3xl font-semibold text-slate-950">{totals.accepted}</div>
             </div>
-            <div className="rounded-2xl border border-accent-100 bg-accent-50/70 px-4 py-3 shadow-sm">
+            <div className="rounded-2xl border border-accent-200 bg-[linear-gradient(145deg,#fef8e7,#f7e2a0)] px-4 py-3 shadow-[0_12px_28px_rgba(184,137,7,0.18)]">
               <div className="text-xs uppercase tracking-[0.16em] text-accent-700">Dev only</div>
               <div className="mt-2 text-sm font-semibold text-slate-950">Review states now use Eunice green and gold accents.</div>
             </div>
@@ -63,8 +63,8 @@ export default function DevAdminPage() {
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,2fr)_360px]">
-        <SurfaceCard className="overflow-hidden shadow-[0_24px_60px_rgba(22,163,74,0.08)]">
-          <div className="border-b border-primary-100 px-6 py-5">
+        <SurfaceCard className="overflow-hidden border-primary-200 shadow-[0_24px_70px_rgba(15,23,42,0.12)]">
+          <div className="border-b border-primary-100 bg-[linear-gradient(180deg,#f4f9f2,#edf5ea)] px-6 py-5">
             <SectionHeading
               title="Application queue"
               description="Preview records modeled on the current admissions workflow."
@@ -75,7 +75,7 @@ export default function DevAdminPage() {
           </div>
           <div className="overflow-x-auto">
             <table className="min-w-full text-left text-sm">
-              <thead className="bg-primary-50/70 text-xs uppercase tracking-[0.16em] text-slate-500">
+              <thead className="bg-primary-900 text-xs uppercase tracking-[0.16em] text-white/80">
                 <tr>
                   <th className="px-6 py-4">Reference</th>
                   <th className="px-6 py-4">Learner</th>
@@ -89,13 +89,13 @@ export default function DevAdminPage() {
                   <th className="px-6 py-4 text-right">Review</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-primary-100">
+              <tbody className="divide-y divide-primary-100 bg-white">
                 {previewApplications.map((app) => {
                   const reviewState = getPreviewReviewState(app);
                   const counts = getPreviewDocumentCounts(app);
 
                   return (
-                    <tr key={app.id} className="hover:bg-primary-50/60">
+                    <tr key={app.id} className="transition hover:bg-emerald-50/40">
                       <td className="px-6 py-4 font-medium text-slate-800">{app.ref}</td>
                       <td className="px-6 py-4 text-slate-950">{app.learnerName}</td>
                       <td className="px-6 py-4 text-slate-600">{app.parentName}</td>
@@ -121,7 +121,7 @@ export default function DevAdminPage() {
                       <td className="px-6 py-4 text-right">
                         <Link
                           href={`/dev/application/${app.id}`}
-                          className="inline-flex rounded-xl border border-primary-200 bg-white px-3 py-2 text-xs font-semibold text-primary-900 transition hover:bg-primary-50"
+                          className="inline-flex rounded-xl bg-primary-900 px-3 py-2 text-xs font-semibold text-white shadow-[0_10px_24px_rgba(13,50,28,0.28)] transition hover:bg-primary-700"
                         >
                           Review file
                         </Link>
@@ -134,7 +134,7 @@ export default function DevAdminPage() {
           </div>
         </SurfaceCard>
 
-        <SurfaceCard className="p-6">
+        <SurfaceCard className="bg-[linear-gradient(180deg,#fffef9,#f6f0df)] p-6">
           <div className="mb-5">
             <p className="text-xs uppercase tracking-[0.16em] text-slate-400">Selected application</p>
             <h2 className="display-serif mt-2 text-2xl font-semibold text-slate-950">{featured.learnerName}</h2>
@@ -144,11 +144,11 @@ export default function DevAdminPage() {
           </div>
 
           <div className="mb-6 grid grid-cols-2 gap-3">
-            <div className="rounded-2xl border border-primary-100 bg-primary-50/50 p-4">
+            <div className="rounded-2xl border border-primary-200 bg-white p-4 shadow-sm">
               <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Completion</div>
               <div className="mt-2 text-2xl font-semibold text-slate-950">{featured.completion}%</div>
             </div>
-            <div className="rounded-2xl border border-primary-100 bg-primary-50/50 p-4">
+            <div className="rounded-2xl border border-primary-200 bg-white p-4 shadow-sm">
               <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Assigned</div>
               <div className="mt-2 text-sm font-semibold text-slate-950">{featured.assignedTo}</div>
             </div>
@@ -213,11 +213,25 @@ export default function DevAdminPage() {
   );
 }
 
-function StatCard({ label, value }: { label: string; value: string }) {
+function StatCard({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: string;
+  tone: 'emerald' | 'amber' | 'slate';
+}) {
+  const toneClasses: Record<'emerald' | 'amber' | 'slate', string> = {
+    emerald: 'bg-[linear-gradient(160deg,#1f6d3a,#144d2b)] text-white border-white/20 shadow-[0_14px_28px_rgba(9,48,27,0.35)]',
+    amber: 'bg-[linear-gradient(160deg,#c08a08,#8f6906)] text-white border-white/20 shadow-[0_14px_28px_rgba(143,105,6,0.35)]',
+    slate: 'bg-[linear-gradient(160deg,#2f3a4b,#1f2838)] text-white border-white/20 shadow-[0_14px_28px_rgba(31,40,56,0.35)]',
+  };
+
   return (
-    <SurfaceCard className="p-5">
-      <div className="text-xs uppercase tracking-[0.16em] text-slate-500">{label}</div>
-      <div className="mt-3 text-3xl font-semibold text-slate-950">{value}</div>
+    <SurfaceCard className={`border p-5 ${toneClasses[tone]}`}>
+      <div className="text-xs uppercase tracking-[0.16em] text-white/75">{label}</div>
+      <div className="mt-3 text-3xl font-semibold text-white">{value}</div>
     </SurfaceCard>
   );
 }

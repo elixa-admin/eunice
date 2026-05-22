@@ -14,6 +14,7 @@ If this is a resumed session or work is being transferred from another platform,
 
 1. Confirm the repo is clean enough to work in.
    - `git status --short`
+   - Confirm `.env.example` and `.env.local` are aligned for required keys, including `NEXT_PUBLIC_THEME_FONT_UI_FALLBACK`
 2. Confirm GitHub CLI access.
    - `gh auth status`
 3. Confirm Vercel CLI access.

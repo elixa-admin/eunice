@@ -14,7 +14,7 @@ If chat context is lost, a platform changes, or a new developer joins, start her
 - Local repo root: `/Users/brandondienar/Documents/Codex/Projects/Eunice`
 - GitHub repo: `elixa-admin/eunice`
 - Active branch: `codex/vercel-project-separation`
-- Latest aligned commit: `d7aaa14 feat: elevate dev admissions theme`
+- Latest aligned commit: see `git log -1 --oneline` on branch `codex/vercel-project-separation`
 
 ## Canonical Surfaces
 
@@ -50,6 +50,7 @@ Expected environment variables:
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `RESEND_API_KEY`
+- `NEXT_PUBLIC_THEME_FONT_UI_FALLBACK`
 
 Reference docs:
 
@@ -57,6 +58,7 @@ Reference docs:
 - `docs/REQUIREMENTS.md`
 - `docs/PROJECT_BRIEF.md`
 - `docs/PHASES.md`
+- `docs/UI_THEME_SPEC.md`
 
 ## Integration Alignment State
 

@@ -20,6 +20,7 @@ A modern digital admissions and learner intake workflow platform for Eunice High
 The phase docs remain the baseline plan, but the current working state is more advanced than the original “not started” markers in the older planning docs.
 
 ## Quick Links
+- [Single Source Of Truth](./docs/SOURCE_OF_TRUTH.md)
 - [Project Brief](./docs/PROJECT_BRIEF.md)
 - [Architecture & Tech Stack](./docs/ARCHITECTURE.md)
 - [Development Phases](./docs/PHASES.md)

@@ -16,18 +16,19 @@ Keep one clear path back into the project so a new session can recover the curre
 
 ## What A New Session Should Read First
 
-1. [README.md](../README.md)
-2. [SESSION_MANIFEST.md](./SESSION_MANIFEST.md)
-3. [SESSION_CONTINUITY.md](./SESSION_CONTINUITY.md)
-4. [SESSION_BOOTSTRAP.md](./SESSION_BOOTSTRAP.md)
-5. [TOOLING_POLICY.md](./TOOLING_POLICY.md)
-6. [AUTOMATION_POLICY.md](./AUTOMATION_POLICY.md)
-7. [RELAY_PLAYBOOK.md](./RELAY_PLAYBOOK.md)
-8. [automation-routines/plan.md](./automation-routines/plan.md)
-9. [FAILURE_TRIAGE.md](./FAILURE_TRIAGE.md)
-10. [QUICKFIX_KB.md](./QUICKFIX_KB.md)
-11. The current phase or feature docs for the active workstream
-12. The active Linear project or issue thread for the workstream
+1. [SOURCE_OF_TRUTH.md](./SOURCE_OF_TRUTH.md)
+2. [README.md](../README.md)
+3. [SESSION_MANIFEST.md](./SESSION_MANIFEST.md)
+4. [SESSION_CONTINUITY.md](./SESSION_CONTINUITY.md)
+5. [SESSION_BOOTSTRAP.md](./SESSION_BOOTSTRAP.md)
+6. [TOOLING_POLICY.md](./TOOLING_POLICY.md)
+7. [AUTOMATION_POLICY.md](./AUTOMATION_POLICY.md)
+8. [RELAY_PLAYBOOK.md](./RELAY_PLAYBOOK.md)
+9. [automation-routines/plan.md](./automation-routines/plan.md)
+10. [FAILURE_TRIAGE.md](./FAILURE_TRIAGE.md)
+11. [QUICKFIX_KB.md](./QUICKFIX_KB.md)
+12. The current phase or feature docs for the active workstream
+13. The active Linear project or issue thread for the workstream
 
 ## Minimum Recovery Checklist
 

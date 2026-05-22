@@ -15,20 +15,21 @@ This is the shortest possible starting point for a new assistant session.
 
 ## Read First
 
-1. [README.md](../README.md)
-2. [SESSION_MANIFEST.md](./SESSION_MANIFEST.md)
-3. [SESSION_CONTINUITY.md](./SESSION_CONTINUITY.md)
-4. [SESSION_BOOTSTRAP.md](./SESSION_BOOTSTRAP.md)
-5. [TOOLING_POLICY.md](./TOOLING_POLICY.md)
-6. [AUTOMATION_POLICY.md](./AUTOMATION_POLICY.md)
-7. [COMMAND_DIALECT.md](./COMMAND_DIALECT.md)
-8. [ARCHITECTURE_REVIEW_CADENCE.md](./ARCHITECTURE_REVIEW_CADENCE.md)
-9. [USAGE_BUDGET_POLICY.md](./USAGE_BUDGET_POLICY.md)
-10. [RELAY_PLAYBOOK.md](./RELAY_PLAYBOOK.md)
-11. [FAILURE_TRIAGE.md](./FAILURE_TRIAGE.md)
-12. [QUICKFIX_KB.md](./QUICKFIX_KB.md)
-13. The current phase or feature docs for the active workstream
-14. The active Linear project or issue thread for the workstream
+1. [SOURCE_OF_TRUTH.md](./SOURCE_OF_TRUTH.md)
+2. [README.md](../README.md)
+3. [SESSION_MANIFEST.md](./SESSION_MANIFEST.md)
+4. [SESSION_CONTINUITY.md](./SESSION_CONTINUITY.md)
+5. [SESSION_BOOTSTRAP.md](./SESSION_BOOTSTRAP.md)
+6. [TOOLING_POLICY.md](./TOOLING_POLICY.md)
+7. [AUTOMATION_POLICY.md](./AUTOMATION_POLICY.md)
+8. [COMMAND_DIALECT.md](./COMMAND_DIALECT.md)
+9. [ARCHITECTURE_REVIEW_CADENCE.md](./ARCHITECTURE_REVIEW_CADENCE.md)
+10. [USAGE_BUDGET_POLICY.md](./USAGE_BUDGET_POLICY.md)
+11. [RELAY_PLAYBOOK.md](./RELAY_PLAYBOOK.md)
+12. [FAILURE_TRIAGE.md](./FAILURE_TRIAGE.md)
+13. [QUICKFIX_KB.md](./QUICKFIX_KB.md)
+14. The current phase or feature docs for the active workstream
+15. The active Linear project or issue thread for the workstream
 
 ## Source Of Truth Map
 

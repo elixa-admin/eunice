@@ -46,13 +46,13 @@ export default function ParentPortalPage() {
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(14,165,233,0.08),_transparent_34%),radial-gradient(circle_at_bottom_right,_rgba(124,58,237,0.06),_transparent_26%)] text-slate-950">
       <div className="mx-auto max-w-6xl px-6 py-12">
-        <div className="mb-10 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-          <section className="rounded-[2rem] border border-slate-200/80 bg-white/90 p-8 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl flex flex-col justify-between">
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary-100 bg-primary-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary-900">
+        <div className="mb-10 grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
+          <section className="overflow-hidden rounded-[2.25rem] border border-slate-200/80 bg-white/90 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl">
+            <div className="border-b border-slate-100 bg-gradient-to-r from-primary-50 via-white to-accent-50 px-8 py-6">
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary-100 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary-900">
                 Parent Portal
               </div>
-              <h1 className="mt-4 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
+              <h1 className="mt-4 max-w-3xl text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
                 {loading ? (
                   'Manage your Eunice application'
                 ) : user ? (
@@ -68,32 +68,61 @@ export default function ParentPortalPage() {
               </p>
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              {loading ? (
-                <div className="h-10 w-24 animate-pulse rounded-xl bg-slate-100" />
-              ) : user ? (
-                <button
-                  onClick={handleSignOut}
-                  className="inline-flex rounded-xl bg-slate-950 hover:bg-slate-800 px-5 py-3 text-sm font-semibold text-white transition cursor-pointer"
-                >
-                  Sign Out
-                </button>
-              ) : (
-                <>
-                  <Link
-                    href="/auth/signup"
-                    className="inline-flex rounded-xl bg-primary-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary-800"
-                  >
-                    Start new application
-                  </Link>
-                  <Link
-                    href="/auth/signin"
-                    className="inline-flex rounded-xl border border-primary-200 bg-primary-50 px-5 py-3 text-sm font-semibold text-primary-900 transition hover:bg-primary-100"
-                  >
-                    Sign in
-                  </Link>
-                </>
-              )}
+            <div className="grid gap-0 border-b border-slate-100 lg:grid-cols-[1.1fr_0.9fr]">
+              <div className="border-b border-slate-100 px-8 py-6 lg:border-b-0 lg:border-r lg:border-slate-100">
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Status at a glance</div>
+                <div className="mt-3 grid gap-3">
+                  {statusHighlights.map((status) => (
+                    <div key={status} className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 shadow-sm">
+                      <div className="text-sm font-semibold text-slate-950">{APPLICATION_STATUS_LABELS[status]}</div>
+                      <p className="mt-1 text-sm leading-6 text-slate-600">
+                        {APPLICATION_STATUS_DESCRIPTIONS[status]}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="px-8 py-6">
+                <div className="rounded-[1.5rem] border border-slate-200 bg-slate-950 p-5 text-white shadow-[0_14px_40px_rgba(15,23,42,0.18)]">
+                  <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Your next move</div>
+                  <div className="mt-2 text-lg font-semibold text-white">
+                    {user ? 'Continue your saved application' : 'Sign in or start a new application'}
+                  </div>
+                  <p className="mt-2 text-sm leading-6 text-slate-300">
+                    {user
+                      ? 'Pick up exactly where you left off with progress saved in the portal.'
+                      : 'Create an account to keep your application, uploads, and status in one place.'}
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    {loading ? (
+                      <div className="h-10 w-24 animate-pulse rounded-xl bg-white/10" />
+                    ) : user ? (
+                      <button
+                        onClick={handleSignOut}
+                        className="inline-flex rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-100 cursor-pointer"
+                      >
+                        Sign Out
+                      </button>
+                    ) : (
+                      <>
+                        <Link
+                          href="/auth/signup"
+                          className="inline-flex rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-slate-100"
+                        >
+                          Start new application
+                        </Link>
+                        <Link
+                          href="/auth/signin"
+                          className="inline-flex rounded-xl border border-white/20 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+                        >
+                          Sign in
+                        </Link>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
 

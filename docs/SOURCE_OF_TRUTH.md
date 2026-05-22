@@ -37,6 +37,7 @@ If chat context is lost, a platform changes, or a new developer joins, start her
   - Drive admin visibility from workflow state, not static cards
   - Lightly color cards and lane summaries by blocking / review / ready / decision state
   - Keep the parent-facing workflow aligned to the same shared document logic
+  - Compress the current 13-page Eunice application pattern into a guided 4-5 step parent journey with upfront document preparation
 
 ## Delivered Outcome Snapshot
 
@@ -44,6 +45,7 @@ If chat context is lost, a platform changes, or a new developer joins, start her
 - Public preview shell, parent portal, admin dashboard, and application detail brought into a common polished theme
 - Commit published to GitHub and branch-aligned with Vercel preview
 - Admin dashboard now includes lane-aware heatmap cards and row tinting so progress, waiting, and blocking states are visible at a glance
+- Guided application flow direction documented in `docs/GUIDED_APPLICATION_FLOW_PLAN.md`
 
 ## Environment And Configuration
 
@@ -64,6 +66,7 @@ Reference docs:
 - `docs/PROJECT_BRIEF.md`
 - `docs/PHASES.md`
 - `docs/UI_THEME_SPEC.md`
+- `docs/GUIDED_APPLICATION_FLOW_PLAN.md`
 
 ## Integration Alignment State
 
@@ -111,12 +114,12 @@ Repo root: /Users/brandondienar/Documents/Codex/Projects/Eunice
 Branch: codex/vercel-project-separation
 Commit: current branch head (see `git log -1 --oneline`)
 Primary surface now: dev/
-Sprint intent: professional admissions UI uplift, brand-aligned, workflow-visible admin cards
+Sprint intent: guided parent application flow, brand-aligned UI, workflow-visible admin cards
 GitHub: aligned at branch head
 Vercel: aligned to eunice-dev preview
 Linear: update status from SOURCE_OF_TRUTH.md after each coherent slice
 Known local note: .claude/ remains untracked and excluded
-Next slice: validate the live branch preview, then keep refining workflow visibility only if needed
+Next slice: implement the guided 5-step parent preview from docs/GUIDED_APPLICATION_FLOW_PLAN.md
 ```
 
 ## Non-Negotiable Working Rules

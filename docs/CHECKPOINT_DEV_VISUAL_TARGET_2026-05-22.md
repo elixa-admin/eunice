@@ -12,6 +12,7 @@
   - parent step chips and submission gate use a shared workflow snapshot
   - admin queue health counts use derived workflow lanes (`blocking`, `review`, `ready`, `decision`)
 - The admin dashboard now adds lane-colored cards, row tinting, and progress strips so stuck, waiting, and ready states are visible at a glance.
+- The next parent-flow direction is documented in `docs/GUIDED_APPLICATION_FLOW_PLAN.md`: compress the 13-page form pattern into a guided orientation plus five clear sections.
 
 ## Visual Target
 - External-facing pages should feel academic, calm, and Eunice-specific.
@@ -27,9 +28,10 @@
 - Use screenshots/preview review as the main validation path once the branch is comfortable, not local render loops.
 
 ## Next Slice
-1. Review the live preview after the admin heatmap pass lands.
-2. If the direction holds, continue only with narrow workflow-visibility refinements.
-3. Stop and reassess before widening scope again.
+1. Implement the guided parent application preview from `docs/GUIDED_APPLICATION_FLOW_PLAN.md`.
+2. Keep the visible journey to orientation plus five parent-facing steps.
+3. Reuse the current role and document logic rather than adding a new data model.
+4. Stop after the parent preview changes land and review the live dev site.
 
 ## Open Notes
 - Linear auth still needs a refresh before tracker updates can resume cleanly.

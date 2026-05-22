@@ -62,6 +62,7 @@ Expected environment variables:
 Reference docs:
 
 - `docs/HANDOVER_BOOTSTRAP_PROMPT.md`
+- `docs/PLATFORM_RELAY_PROTOCOL.md`
 - `docs/ARCHITECTURE.md`
 - `docs/REQUIREMENTS.md`
 - `docs/PROJECT_BRIEF.md`
@@ -80,27 +81,27 @@ Reference docs:
 ### GitHub
 
 - Remote: `origin https://github.com/elixa-admin/eunice.git`
-- Remote branch head verified at current branch head
+- Remote branch head verified at `469307abbbf01502c2c5bdc6691c752f4799004a` on 2026-05-22
 - PR workflow remains branch-based on `codex/vercel-project-separation`
 
 ### Vercel
 
 - Project: `eunice-dev`
 - Root directory: `dev`
-- Latest ready preview (at update time): previous ready preview remains the last confirmed validation target while the new `17ce8f3` deployment settles
-- Most recent deployment status check: after the admin lane-heatmap push, verify the newest branch deployment in Vercel before treating the preview as final
+- Latest ready preview at update time: `https://eunice-qtexo1v1f-elixa-admins-projects.vercel.app`
+- Most recent deployment status check: Vercel reports `Ready` for the latest `eunice-dev` preview
 
 ### Linear
 
 - Project name: `Eunice Admissions Platform`
 - Source of truth role: planning, ownership, status narration
 - Action for every coherent slice: post or update project status against this same document state
-- Current blocker at update time: connector returned `401 Reauthentication required`, including the 2026-05-22 handover status sync attempt, so status sync must resume after reconnect
+- Current blocker at update time: connector returned `401 Reauthentication required`, including the 2026-05-22 handover and platform-relay status sync attempts, so status sync must resume after reconnect
 
 ## Execution Instructions For Any New Developer
 
 1. Read this file first.
-2. Read `docs/HANDOVER_BOOTSTRAP_PROMPT.md`, `docs/SESSION_MANIFEST.md`, `docs/SESSION_BOOTSTRAP.md`, and `docs/SESSION_CONTINUITY.md`.
+2. Read `docs/HANDOVER_BOOTSTRAP_PROMPT.md`, `docs/PLATFORM_RELAY_PROTOCOL.md`, `docs/SESSION_MANIFEST.md`, `docs/SESSION_BOOTSTRAP.md`, and `docs/SESSION_CONTINUITY.md`.
 3. Confirm branch, commit, remote, and active surface.
 4. Confirm GitHub, Vercel, and Linear auth/connectivity.
 5. Continue from the next smallest coherent slice, not from chat history.
@@ -122,6 +123,7 @@ Linear: update status from SOURCE_OF_TRUTH.md after each coherent slice
 Known local note: .claude/ remains untracked and excluded
 Next slice: implement the guided 5-step parent preview from docs/GUIDED_APPLICATION_FLOW_PLAN.md
 Bootstrap prompt: docs/HANDOVER_BOOTSTRAP_PROMPT.md
+Relay protocol: docs/PLATFORM_RELAY_PROTOCOL.md
 ```
 
 ## Non-Negotiable Working Rules
@@ -131,3 +133,4 @@ Bootstrap prompt: docs/HANDOVER_BOOTSTRAP_PROMPT.md
 - Keep Vercel alignment branch-driven (push -> deploy).
 - If auth/connectors fail, record blocker and fallback in docs before ending session.
 - Prefer small deterministic slices and explicit checkpoints over long conversational context.
+- Treat `docs/PLATFORM_RELAY_PROTOCOL.md` as the rule for moving work between agents, platforms, GitHub, Vercel, and Linear.

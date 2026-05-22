@@ -30,13 +30,14 @@ supabase/ contains schema and migrations.
 Read first:
 1. docs/SOURCE_OF_TRUTH.md
 2. docs/HANDOVER_BOOTSTRAP_PROMPT.md
-3. docs/SESSION_MANIFEST.md
-4. docs/SESSION_BOOTSTRAP.md
-5. docs/SESSION_CONTINUITY.md
-6. docs/GUIDED_APPLICATION_FLOW_PLAN.md
-7. docs/UI_THEME_SPEC.md
-8. docs/QUICKFIX_KB.md
-9. docs/FAILURE_TRIAGE.md
+3. docs/PLATFORM_RELAY_PROTOCOL.md
+4. docs/SESSION_MANIFEST.md
+5. docs/SESSION_BOOTSTRAP.md
+6. docs/SESSION_CONTINUITY.md
+7. docs/GUIDED_APPLICATION_FLOW_PLAN.md
+8. docs/UI_THEME_SPEC.md
+9. docs/QUICKFIX_KB.md
+10. docs/FAILURE_TRIAGE.md
 
 Current intent:
 Build a modern admissions workflow platform for Eunice that replaces the current 13-page Google Form with a guided, parent-friendly application journey while preserving the school's required data and document needs.
@@ -72,6 +73,7 @@ Current state:
 - The preview surface has a green-and-gold Eunice-aligned theme.
 - Parent and admin previews now use shared workflow/document logic.
 - Admin dashboard has lane-aware cards for blocking, review, ready, and decision states.
+- Platform relay rules are captured in `docs/PLATFORM_RELAY_PROTOCOL.md`.
 - The next priority is the guided parent application workflow, not more broad theme work.
 
 ## Product Direction
@@ -156,6 +158,7 @@ Current note:
 
 - Repo: `elixa-admin/eunice`
 - Active branch: `codex/vercel-project-separation`
+- Verified remote head on 2026-05-22: `469307abbbf01502c2c5bdc6691c752f4799004a`
 - Use Git CLI for commits and pushes.
 - Use GitHub connector or `gh` for PR metadata and CI when available.
 - Known issue: Codex sandbox may show GitHub CLI unavailable while unrestricted keychain-backed `gh` works. See `docs/QUICKFIX_KB.md`.
@@ -164,6 +167,7 @@ Current note:
 
 - Project: `eunice-dev`
 - Root directory: `dev`
+- Latest ready preview on 2026-05-22: `https://eunice-qtexo1v1f-elixa-admins-projects.vercel.app`
 - Deploy model: push branch to GitHub, Vercel builds preview automatically.
 - Validate user-facing changes on the live branch preview after commit/push.
 - Avoid local preview loops unless a local-only UI bug needs browser inspection.
@@ -198,6 +202,7 @@ Current note:
 - Keep `.claude/` untracked unless the user explicitly asks otherwise.
 - Update durable docs at coherent milestones, not after every small edit.
 - If token or credit headroom is low, update this file and `docs/SOURCE_OF_TRUTH.md` before starting new feature work.
+- Use `docs/PLATFORM_RELAY_PROTOCOL.md` when moving work between agents, coding platforms, GitHub, Vercel, Linear, or a human developer.
 
 ## Suggested Startup Commands
 
@@ -252,4 +257,5 @@ Next slice: implement Start Checklist + 5-step parent preview
 Vercel: eunice-dev, root dev/
 Linear: Eunice Admissions Platform, currently needs connector reauth if 401 appears
 Read first: docs/SOURCE_OF_TRUTH.md and docs/HANDOVER_BOOTSTRAP_PROMPT.md
+Relay rules: docs/PLATFORM_RELAY_PROTOCOL.md
 ```

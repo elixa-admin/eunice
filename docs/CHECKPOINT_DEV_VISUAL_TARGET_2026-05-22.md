@@ -20,9 +20,9 @@
 - Use screenshots/preview review as the main validation path, not local render loops.
 
 ## Next Slice
-1. Review the updated parent portal in the preview branch.
-2. If the website/form feel is closer to the target, move to one small admin-dashboard polish slice next.
-3. Keep every follow-on change narrow enough to fit in a single screenshot.
+1. Run the public site shell punch first.
+2. Then do the parent portal form-feel pass.
+3. Stop after those two slices and reassess before touching admin or application detail.
 
 ## Open Notes
 - Linear auth still needs a refresh before tracker updates can resume cleanly.

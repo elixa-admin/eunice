@@ -15,7 +15,11 @@ import {
   type DocumentType,
   type DocumentValidationState,
 } from '@/lib/documents/contracts';
-import { getRequiredDocumentTypes } from '@/lib/domain/application-requirements';
+import {
+  getApplicationDocumentRequirements,
+  getRequiredDocumentTypes,
+  type ApplicationDocumentRequirement,
+} from '@/lib/domain/application-requirements';
 
 interface Profile {
   id: string;
@@ -56,20 +60,39 @@ type DocumentSummary = {
   verified: number;
 };
 
-type TriageLane = 'missing_documents' | 'ready_for_review' | 'under_review' | 'decision_pending' | 'closed' | 'incomplete';
+type TriageLane = 'missing_documents' | 'review_ready' | 'under_review' | 'decision_pending' | 'closed' | 'incomplete';
 
 const ADMIN_REQUIRED_DOCUMENT_TYPES = getRequiredDocumentTypes();
+const ADMIN_DOCUMENT_REQUIREMENTS = getApplicationDocumentRequirements();
+const ADMIN_DOCUMENT_CATEGORY_ORDER: ApplicationDocumentRequirement['category'][] = [
+  'identity',
+  'school',
+  'family',
+  'medical',
+  'financial',
+  'legal',
+  'supporting',
+];
+const ADMIN_DOCUMENT_CATEGORY_LABELS: Record<ApplicationDocumentRequirement['category'], string> = {
+  identity: 'Identity',
+  school: 'School',
+  family: 'Family',
+  medical: 'Medical',
+  financial: 'Financial',
+  legal: 'Legal',
+  supporting: 'Supporting',
+};
 
 const TRIAGE_LANE_LABELS: Record<TriageLane, string> = {
   missing_documents: 'Missing docs',
-  ready_for_review: 'Ready review',
+  review_ready: 'Review ready',
   under_review: 'Under review',
   decision_pending: 'Decision pending',
   closed: 'Closed',
   incomplete: 'Incomplete',
 };
 
-const TRIAGE_FILTERS: TriageLane[] = ['missing_documents', 'ready_for_review', 'under_review', 'decision_pending'];
+const TRIAGE_FILTERS: TriageLane[] = ['missing_documents', 'review_ready', 'under_review', 'decision_pending'];
 
 function summarizeDocumentsForApp(applicationId: string, docs: DocumentRecord[]): DocumentSummary {
   const documentByType = new Map(
@@ -106,9 +129,10 @@ function getTriageLane(app: Application): TriageLane {
   if (app.documentSummary.blocking > 0 || app.documentSummary.missingRequired > 0 || app.status === 'awaiting_documents') {
     return 'missing_documents';
   }
+  if (app.documentSummary.reviewOnly > 0) return 'review_ready';
   if (app.status === 'under_review') return 'under_review';
   if (app.status === 'decision_pending') return 'decision_pending';
-  if (app.status === 'submitted' || app.status === 'ready_for_review') return 'ready_for_review';
+  if (app.status === 'submitted' || app.status === 'ready_for_review') return 'review_ready';
   return 'incomplete';
 }
 
@@ -539,7 +563,7 @@ export default function AdminDashboard() {
   const total = applications.length;
   const activeQueue = applications.filter(app => app.status !== 'accepted' && app.status !== 'rejected').length;
   const missingDocuments = applications.filter(app => getTriageLane(app) === 'missing_documents').length;
-  const readyForReview = applications.filter(app => getTriageLane(app) === 'ready_for_review').length;
+  const readyForReview = applications.filter(app => getTriageLane(app) === 'review_ready').length;
   const accepted = applications.filter(app => app.status === 'accepted').length;
 
   if (loading) {
@@ -901,115 +925,138 @@ export default function AdminDashboard() {
                       <span className="inline-block w-6 h-6 border-2 border-white/20 border-t-white rounded-full animate-spin" />
                     </div>
                   ) : (
-                    <div className="space-y-3.5">
-                      {ADMIN_REQUIRED_DOCUMENT_TYPES.map((docType) => {
-                        // Find matching document in state
-                        const doc = documents.find(d => d.document_type === docType);
+                    <div className="space-y-4">
+                      {ADMIN_DOCUMENT_CATEGORY_ORDER.map((category) => {
+                        const categoryRequirements = ADMIN_DOCUMENT_REQUIREMENTS.filter((requirement) => requirement.category === category);
+
+                        if (categoryRequirements.length === 0) return null;
 
                         return (
-                          <div key={docType} className="bg-white/5 border border-white/5 rounded-2xl p-4 space-y-3.5">
-                            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
-                              <div>
-                                <div className="flex items-center gap-2">
-                                  <h4 className="text-sm font-semibold text-white">
-                                    {DOCUMENT_TYPE_LABELS[docType]}
-                                  </h4>
-                                  <span className="text-[10px] bg-white/10 text-white/60 px-2 py-0.5 rounded-full uppercase tracking-wider">
-                                    Required
-                                  </span>
-                                </div>
-
-                                {doc ? (
-                                  <div className="mt-1 text-xs text-white/60 space-y-1">
-                                    <p className="truncate font-medium text-white/70">File: {doc.file_name}</p>
-                                    <p className="text-[10px] text-white/40">
-                                      Uploaded: {new Date(doc.uploaded_at).toLocaleString()} · Size: {Math.round(doc.file_size / 1024)} KB
-                                    </p>
-                                    {doc.review_notes && (
-                                      <p className="bg-amber-500/10 border border-amber-500/20 text-amber-200 text-[11px] p-2 rounded-xl mt-2 max-w-xl">
-                                        <span className="font-semibold">Review note:</span> {doc.review_notes}
-                                      </p>
-                                    )}
-                                  </div>
-                                ) : (
-                                  <p className="text-xs text-white/40 mt-1">This document has not been uploaded by the parent yet.</p>
-                                )}
-                              </div>
-
-                              <div>
-                                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border ${
-                                  getDocumentStatusTone(doc ? doc.upload_status : 'missing')
-                                }`}>
-                                  {doc ? DOCUMENT_VALIDATION_LABELS[doc.upload_status as DocumentValidationState] : 'Missing'}
-                                </span>
-                              </div>
+                          <div key={category} className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <h4 className="text-xs font-semibold uppercase tracking-wider text-primary-200">
+                                {ADMIN_DOCUMENT_CATEGORY_LABELS[category]}
+                              </h4>
+                              <span className="text-[10px] rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-white/50">
+                                {categoryRequirements.length} items
+                              </span>
                             </div>
 
-                            {doc && (
-                              <div className="flex flex-wrap gap-2 pt-2 border-t border-white/5">
-                                <button
-                                  onClick={() => handlePreviewFile(doc)}
-                                  className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-xs text-white border border-white/5 transition-all cursor-pointer"
-                                >
-                                  Preview File
-                                </button>
-                                
-                                {doc.upload_status !== 'verified' && (
-                                  <button
-                                    onClick={() => handleVerifyDoc(doc.id)}
-                                    className="px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs border border-emerald-500/20 transition-all cursor-pointer"
-                                  >
-                                    Verify Document
-                                  </button>
-                                )}
+                            <div className="space-y-3.5">
+                              {categoryRequirements.map((requirement) => {
+                                const doc = documents.find((d) => d.document_type === requirement.documentType);
 
-                                {doc.upload_status !== 'needs_reupload' && flaggingDocId !== doc.id && (
-                                  <button
-                                    onClick={() => {
-                                      setFlaggingDocId(doc.id);
-                                      setReuploadReason('');
-                                    }}
-                                    className="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs border border-amber-500/20 transition-all cursor-pointer"
-                                  >
-                                    Request Re-upload
-                                  </button>
-                                )}
-                              </div>
-                            )}
+                                return (
+                                  <div key={requirement.id} className="bg-white/5 border border-white/5 rounded-2xl p-4 space-y-3.5">
+                                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                                      <div>
+                                        <div className="flex items-center gap-2 flex-wrap">
+                                          <h5 className="text-sm font-semibold text-white">
+                                            {DOCUMENT_TYPE_LABELS[requirement.documentType]}
+                                          </h5>
+                                          <span className="text-[10px] bg-white/10 text-white/60 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                                            {ADMIN_DOCUMENT_CATEGORY_LABELS[requirement.category]}
+                                          </span>
+                                          <span className="text-[10px] bg-white/10 text-white/60 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                                            {requirement.required ? 'Required' : 'Conditional'}
+                                          </span>
+                                        </div>
+                                        <p className="mt-1 text-xs text-white/50 max-w-2xl">{requirement.reason}</p>
 
-                            {/* Inline flagging request form */}
-                            {flaggingDocId === (doc ? doc.id : null) && (
-                              <div className="bg-amber-500/10 border border-amber-500/20 p-3.5 rounded-xl space-y-3 mt-3">
-                                <div>
-                                  <label className="block text-xs font-semibold text-amber-200 uppercase tracking-wider mb-1">
-                                    Why does this document need to be re-uploaded?
-                                  </label>
-                                  <textarea
-                                    value={reuploadReason}
-                                    onChange={(e) => setReuploadReason(e.target.value)}
-                                    placeholder="Explain clearly to the parent (e.g. 'The image of your birth certificate is blurry and the text cannot be read.')"
-                                    className="w-full bg-neutral-900 border border-amber-500/30 rounded-xl p-3 text-xs text-white placeholder-white/35 focus:outline-none focus:border-amber-400 min-h-[70px]"
-                                  />
-                                </div>
-                                <div className="flex gap-2">
-                                  <button
-                                    onClick={() => handleFlagDoc(doc.id)}
-                                    className="bg-amber-500 hover:bg-amber-600 text-neutral-950 font-bold px-3 py-1.5 rounded-lg text-xs transition-all cursor-pointer"
-                                  >
-                                    Send Request
-                                  </button>
-                                  <button
-                                    onClick={() => {
-                                      setFlaggingDocId(null);
-                                      setReuploadReason('');
-                                    }}
-                                    className="bg-white/10 hover:bg-white/15 text-white px-3 py-1.5 rounded-lg text-xs border border-white/5 transition-all cursor-pointer"
-                                  >
-                                    Cancel
-                                  </button>
-                                </div>
-                              </div>
-                            )}
+                                        {doc ? (
+                                          <div className="mt-2 text-xs text-white/60 space-y-1">
+                                            <p className="truncate font-medium text-white/70">File: {doc.file_name}</p>
+                                            <p className="text-[10px] text-white/40">
+                                              Uploaded: {new Date(doc.uploaded_at).toLocaleString()} · Size: {Math.round(doc.file_size / 1024)} KB
+                                            </p>
+                                            {doc.review_notes && (
+                                              <p className="bg-amber-500/10 border border-amber-500/20 text-amber-200 text-[11px] p-2 rounded-xl mt-2 max-w-xl">
+                                                <span className="font-semibold">Review note:</span> {doc.review_notes}
+                                              </p>
+                                            )}
+                                          </div>
+                                        ) : (
+                                          <p className="text-xs text-white/40 mt-2">This document has not been uploaded by the parent yet.</p>
+                                        )}
+                                      </div>
+
+                                      <div>
+                                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border ${
+                                          getDocumentStatusTone(doc ? doc.upload_status : 'missing')
+                                        }`}>
+                                          {doc ? DOCUMENT_VALIDATION_LABELS[doc.upload_status as DocumentValidationState] : 'Missing'}
+                                        </span>
+                                      </div>
+                                    </div>
+
+                                    {doc && (
+                                      <div className="flex flex-wrap gap-2 pt-2 border-t border-white/5">
+                                        <button
+                                          onClick={() => handlePreviewFile(doc)}
+                                          className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-xs text-white border border-white/5 transition-all cursor-pointer"
+                                        >
+                                          Preview File
+                                        </button>
+
+                                        {doc.upload_status !== 'verified' && (
+                                          <button
+                                            onClick={() => handleVerifyDoc(doc.id)}
+                                            className="px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs border border-emerald-500/20 transition-all cursor-pointer"
+                                          >
+                                            Verify Document
+                                          </button>
+                                        )}
+
+                                        {doc.upload_status !== 'needs_reupload' && flaggingDocId !== doc.id && (
+                                          <button
+                                            onClick={() => {
+                                              setFlaggingDocId(doc.id);
+                                              setReuploadReason('');
+                                            }}
+                                            className="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs border border-amber-500/20 transition-all cursor-pointer"
+                                          >
+                                            Request Re-upload
+                                          </button>
+                                        )}
+                                      </div>
+                                    )}
+
+                                    {flaggingDocId === (doc ? doc.id : null) && (
+                                      <div className="bg-amber-500/10 border border-amber-500/20 p-3.5 rounded-xl space-y-3 mt-3">
+                                        <div>
+                                          <label className="block text-xs font-semibold text-amber-200 uppercase tracking-wider mb-1">
+                                            Why does this document need to be re-uploaded?
+                                          </label>
+                                          <textarea
+                                            value={reuploadReason}
+                                            onChange={(e) => setReuploadReason(e.target.value)}
+                                            placeholder="Explain clearly to the parent (e.g. 'The image of your birth certificate is blurry and the text cannot be read.')"
+                                            className="w-full bg-neutral-900 border border-amber-500/30 rounded-xl p-3 text-xs text-white placeholder-white/35 focus:outline-none focus:border-amber-400 min-h-[70px]"
+                                          />
+                                        </div>
+                                        <div className="flex gap-2">
+                                          <button
+                                            onClick={() => handleFlagDoc(doc.id)}
+                                            className="bg-amber-500 hover:bg-amber-600 text-neutral-950 font-bold px-3 py-1.5 rounded-lg text-xs transition-all cursor-pointer"
+                                          >
+                                            Send Request
+                                          </button>
+                                          <button
+                                            onClick={() => {
+                                              setFlaggingDocId(null);
+                                              setReuploadReason('');
+                                            }}
+                                            className="bg-white/10 hover:bg-white/15 text-white px-3 py-1.5 rounded-lg text-xs border border-white/5 transition-all cursor-pointer"
+                                          >
+                                            Cancel
+                                          </button>
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                );
+                              })}
+                            </div>
                           </div>
                         );
                       })}

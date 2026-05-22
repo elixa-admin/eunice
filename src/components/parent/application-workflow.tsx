@@ -57,6 +57,8 @@ type ApplicationDraft = {
   citizenshipStatus: string;
   boardingStatus: string;
   financialStatus: string;
+  feePayerSameAsParent: boolean;
+  legalGuardianApplicable: boolean;
   notes: string;
   status: ApplicationStatus;
   submittedAt: string | null;
@@ -260,6 +262,8 @@ function createInitialDraft(): ApplicationDraft {
     citizenshipStatus: 'South African',
     boardingStatus: 'Daygirl',
     financialStatus: 'Employed',
+    feePayerSameAsParent: true,
+    legalGuardianApplicable: false,
     notes: '',
     status: 'draft',
     submittedAt: null,
@@ -403,6 +407,8 @@ export default function ParentApplicationWorkflow() {
               citizenshipStatus: 'South African',
               boardingStatus: 'Daygirl',
               financialStatus: 'Employed',
+              feePayerSameAsParent: true,
+              legalGuardianApplicable: false,
               notes: '',
               status: appData.status as ApplicationStatus,
               submittedAt: appData.submitted_at,
@@ -573,11 +579,11 @@ export default function ParentApplicationWorkflow() {
     draft.learnerFirstName.trim() && draft.learnerLastName.trim() && draft.learnerGrade.trim(),
   );
     const schoolComplete = Boolean(draft.previousSchool.trim() && draft.intakeYear.trim());
-    const roleComplete = Boolean(
-      draft.roles.submitter.fullName.trim() &&
-        draft.roles.parent.fullName.trim() &&
-        draft.roles.feePayer.fullName.trim(),
-    );
+  const roleComplete = Boolean(
+    draft.roles.submitter.fullName.trim() &&
+      draft.roles.parent.fullName.trim() &&
+      (draft.feePayerSameAsParent || draft.roles.feePayer.fullName.trim()),
+  );
   const requirementInput = {
     citizenshipStatus: draft.citizenshipStatus,
     boardingStatus: draft.boardingStatus,
@@ -587,6 +593,24 @@ export default function ParentApplicationWorkflow() {
   const documentRequirements = getApplicationDocumentRequirements(requirementInput);
   const readinessChecklist = getReadinessChecklist(requirementInput);
   const requiredDocumentTypes = getRequiredDocumentTypes(requirementInput);
+  const documentCategoryOrder: Array<'identity' | 'school' | 'family' | 'medical' | 'financial' | 'legal' | 'supporting'> = [
+    'identity',
+    'school',
+    'family',
+    'medical',
+    'financial',
+    'legal',
+    'supporting',
+  ];
+  const documentCategoryLabels: Record<(typeof documentCategoryOrder)[number], string> = {
+    identity: 'Identity',
+    school: 'School',
+    family: 'Family',
+    medical: 'Medical',
+    financial: 'Financial',
+    legal: 'Legal',
+    supporting: 'Supporting',
+  };
   const requiredDocsAccepted = requiredDocumentTypes.every((documentType) =>
     isDocumentStateSubmissionReady(draft.documents[documentType].validationState),
   );
@@ -635,6 +659,52 @@ export default function ParentApplicationWorkflow() {
           [field]: value,
         },
       },
+    }));
+  }
+
+  function syncFeePayerFromParent(nextValue: boolean) {
+    setDraft((current) => {
+      if (!nextValue) {
+        return {
+          ...current,
+          feePayerSameAsParent: false,
+        };
+      }
+
+      return {
+        ...current,
+        feePayerSameAsParent: true,
+        roles: {
+          ...current.roles,
+          feePayer: {
+            ...current.roles.feePayer,
+            fullName: `${current.parentFirstName} ${current.parentLastName}`.trim(),
+            emailAddress: current.parentEmail,
+            phoneNumber: current.parentPhone,
+          },
+        },
+      };
+    });
+  }
+
+  function syncLegalGuardianToggle(nextValue: boolean) {
+    setDraft((current) => ({
+      ...current,
+      legalGuardianApplicable: nextValue,
+      roles: nextValue
+        ? current.roles
+        : {
+            ...current.roles,
+            legalGuardian: {
+              ...current.roles.legalGuardian,
+              fullName: '',
+              identityNumber: '',
+              phoneNumber: '',
+              emailAddress: '',
+              address: '',
+              notes: 'Optional unless a legal guardian is involved',
+            },
+          },
     }));
   }
 
@@ -1006,6 +1076,24 @@ export default function ParentApplicationWorkflow() {
                   onChange={(value) => updateField('financialStatus', value)}
                   options={['Employed', 'Self-employed', 'Other']}
                 />
+                <label className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 sm:col-span-2">
+                  <input
+                    type="checkbox"
+                    checked={draft.feePayerSameAsParent}
+                    onChange={(event) => syncFeePayerFromParent(event.target.checked)}
+                    className="mt-0.5 h-4 w-4 rounded border-slate-300 text-primary-700 focus:ring-primary-300"
+                  />
+                  <span>School fees will be paid by the submitting parent</span>
+                </label>
+                <label className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 sm:col-span-2">
+                  <input
+                    type="checkbox"
+                    checked={draft.legalGuardianApplicable}
+                    onChange={(event) => syncLegalGuardianToggle(event.target.checked)}
+                    className="mt-0.5 h-4 w-4 rounded border-slate-300 text-primary-700 focus:ring-primary-300"
+                  />
+                  <span>A separate legal guardian needs to be captured</span>
+                </label>
                 <Field
                   label="Submitting parent full name"
                   value={draft.roles.submitter.fullName}
@@ -1013,42 +1101,66 @@ export default function ParentApplicationWorkflow() {
                   placeholder="Nicolette Dienar"
                 />
                 <Field
+                  label="Submitting parent email"
+                  value={draft.roles.submitter.emailAddress}
+                  onChange={(value) => updateRoleField('submitter', 'emailAddress', value)}
+                  placeholder="parent@example.com"
+                  type="email"
+                />
+                <Field
+                  label="Submitting parent phone"
+                  value={draft.roles.submitter.phoneNumber}
+                  onChange={(value) => updateRoleField('submitter', 'phoneNumber', value)}
+                  placeholder="+27 82 123 4567"
+                />
+                <Field
+                  label="Submitting parent address"
+                  value={draft.roles.submitter.address}
+                  onChange={(value) => updateRoleField('submitter', 'address', value)}
+                  placeholder="Home address"
+                />
+                <Field
                   label="Fee-payer full name"
                   value={draft.roles.feePayer.fullName}
                   onChange={(value) => updateRoleField('feePayer', 'fullName', value)}
                   placeholder="Account holder or debtor"
+                  disabled={draft.feePayerSameAsParent}
                 />
                 <Field
                   label="Fee-payer email"
                   value={draft.roles.feePayer.emailAddress}
                   onChange={(value) => updateRoleField('feePayer', 'emailAddress', value)}
                   placeholder="finance@example.com"
+                  disabled={draft.feePayerSameAsParent}
                 />
                 <Field
                   label="Fee-payer phone"
                   value={draft.roles.feePayer.phoneNumber}
                   onChange={(value) => updateRoleField('feePayer', 'phoneNumber', value)}
                   placeholder="+27 82 123 4567"
+                  disabled={draft.feePayerSameAsParent}
                 />
                 <Field
                   label="Legal guardian name"
                   value={draft.roles.legalGuardian.fullName}
                   onChange={(value) => updateRoleField('legalGuardian', 'fullName', value)}
                   placeholder="Optional"
+                  disabled={!draft.legalGuardianApplicable}
                 />
                 <Field
                   label="Legal guardian notes"
                   value={draft.roles.legalGuardian.notes}
                   onChange={(value) => updateRoleField('legalGuardian', 'notes', value)}
                   placeholder="Only if applicable"
+                  disabled={!draft.legalGuardianApplicable}
                 />
                 <div className="rounded-2xl border border-dashed border-primary-200 bg-primary-50 p-4 text-sm leading-6 text-slate-700 sm:col-span-2">
                   <div className="font-semibold text-slate-950">Role summary</div>
                   <div className="mt-2 grid gap-3 md:grid-cols-2">
                     <SummaryRow label={INTAKE_ROLE_LABELS.submitter} value={draft.roles.submitter.fullName || 'Not captured yet'} />
                     <SummaryRow label={INTAKE_ROLE_LABELS.parent} value={draft.roles.parent.fullName || 'Not captured yet'} />
-                    <SummaryRow label={INTAKE_ROLE_LABELS.legal_guardian} value={draft.roles.legalGuardian.fullName || 'Optional'} />
-                    <SummaryRow label={INTAKE_ROLE_LABELS.fee_payer} value={draft.roles.feePayer.fullName || 'Not captured yet'} />
+                    <SummaryRow label={INTAKE_ROLE_LABELS.legal_guardian} value={draft.legalGuardianApplicable ? (draft.roles.legalGuardian.fullName || 'Not captured yet') : 'Not applicable'} />
+                    <SummaryRow label={INTAKE_ROLE_LABELS.fee_payer} value={draft.feePayerSameAsParent ? 'Same as submitting parent' : (draft.roles.feePayer.fullName || 'Not captured yet')} />
                   </div>
                 </div>
               </div>
@@ -1064,71 +1176,93 @@ export default function ParentApplicationWorkflow() {
                   </div>
                 </div>
 
-                <div className="grid gap-4">
-                  {documentRequirements.map((requirement) => {
-                    const documentType = requirement.documentType;
-                    const document = draft.documents[documentType];
+                <div className="space-y-5">
+                  {documentCategoryOrder.map((category) => {
+                    const categoryRequirements = documentRequirements.filter((requirement) => requirement.category === category);
+                    if (categoryRequirements.length === 0) return null;
 
                     return (
-                      <div key={requirement.id} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <h4 className="text-sm font-semibold text-slate-950">{requirement.label}</h4>
-                              <span className="rounded-full bg-primary-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-primary-700">
-                                {requirement.required ? 'Required' : 'Optional'}
-                              </span>
-                            </div>
-                            <p className="mt-1 text-sm leading-6 text-slate-600">{requirement.reason}</p>
-                            <p className="mt-1 text-sm leading-6 text-slate-600">
-                              Accepted formats: {DOCUMENT_CONTRACTS[documentType].acceptedMimeTypes.join(', ')}.
-                              Maximum size: {Math.round(DOCUMENT_CONTRACTS[documentType].maxFileSizeBytes / (1024 * 1024))} MB.
-                            </p>
-                            <p className="mt-1 text-sm leading-6 text-slate-600">{getDocumentStateGuidance(document.validationState)}</p>
-                            {document.message !== getDocumentStateGuidance(document.validationState) ? (
-                              <p className="mt-1 text-xs leading-5 text-slate-500">{document.message}</p>
-                            ) : null}
-                            {document.fileName ? (
-                              <p className="mt-1 text-xs font-medium text-slate-500">Selected file: {document.fileName}</p>
-                            ) : null}
-                            {document.uploadedAt ? (
-                              <p className="mt-1 text-xs text-slate-500">
-                                Saved to draft on {new Date(document.uploadedAt).toLocaleDateString()}.
-                              </p>
-                            ) : null}
-                            {document.storagePath ? (
-                              <p className="mt-1 truncate text-[11px] leading-5 text-slate-400">Storage path: {document.storagePath}</p>
-                            ) : null}
-                          </div>
-                          <div className={`rounded-2xl border px-3 py-2 text-sm font-medium ${getValidationTone(document.validationState)}`}>
-                            {DOCUMENT_VALIDATION_LABELS[document.validationState]}
-                          </div>
+                      <div key={category} className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                            {documentCategoryLabels[category]}
+                          </h4>
+                          <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                            {categoryRequirements.length} items
+                          </span>
                         </div>
+                        <div className="grid gap-4">
+                          {categoryRequirements.map((requirement) => {
+                            const documentType = requirement.documentType;
+                            const document = draft.documents[documentType];
 
-                        <div className="mt-4 flex flex-wrap gap-3">
-                          <label className="inline-flex cursor-pointer items-center rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-primary-200 hover:bg-primary-50">
-                            {uploadingDocument === documentType ? 'Saving...' : 'Choose file'}
-                            <input
-                              type="file"
-                              className="sr-only"
-                              accept={DOCUMENT_CONTRACTS[documentType].acceptedMimeTypes.join(',')}
-                              onChange={(event) => handleFileSelect(documentType, event.target.files?.[0] ?? null)}
-                            />
-                          </label>
-                          <button
-                            type="button"
-                            onClick={() => loadSampleDocument(documentType)}
-                            className="rounded-xl border border-primary-200 bg-primary-50 px-3 py-2 text-sm font-semibold text-primary-900 transition hover:bg-primary-100"
-                          >
-                            Load sample
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => clearDocument(documentType)}
-                            className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
-                          >
-                            Clear
-                          </button>
+                            return (
+                              <div key={requirement.id} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                                  <div>
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                      <h5 className="text-sm font-semibold text-slate-950">{requirement.label}</h5>
+                                      <span className="rounded-full bg-primary-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-primary-700">
+                                        {requirement.required ? 'Required' : 'Conditional'}
+                                      </span>
+                                      <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                                        {documentCategoryLabels[category]}
+                                      </span>
+                                    </div>
+                                    <p className="mt-1 text-sm leading-6 text-slate-600">{requirement.reason}</p>
+                                    <p className="mt-1 text-sm leading-6 text-slate-600">
+                                      Accepted formats: {DOCUMENT_CONTRACTS[documentType].acceptedMimeTypes.join(', ')}.
+                                      Maximum size: {Math.round(DOCUMENT_CONTRACTS[documentType].maxFileSizeBytes / (1024 * 1024))} MB.
+                                    </p>
+                                    <p className="mt-1 text-sm leading-6 text-slate-600">{getDocumentStateGuidance(document.validationState)}</p>
+                                    {document.message !== getDocumentStateGuidance(document.validationState) ? (
+                                      <p className="mt-1 text-xs leading-5 text-slate-500">{document.message}</p>
+                                    ) : null}
+                                    {document.fileName ? (
+                                      <p className="mt-1 text-xs font-medium text-slate-500">Selected file: {document.fileName}</p>
+                                    ) : null}
+                                    {document.uploadedAt ? (
+                                      <p className="mt-1 text-xs text-slate-500">
+                                        Saved to draft on {new Date(document.uploadedAt).toLocaleDateString()}.
+                                      </p>
+                                    ) : null}
+                                    {document.storagePath ? (
+                                      <p className="mt-1 truncate text-[11px] leading-5 text-slate-400">Storage path: {document.storagePath}</p>
+                                    ) : null}
+                                  </div>
+                                  <div className={`rounded-2xl border px-3 py-2 text-sm font-medium ${getValidationTone(document.validationState)}`}>
+                                    {DOCUMENT_VALIDATION_LABELS[document.validationState]}
+                                  </div>
+                                </div>
+
+                                <div className="mt-4 flex flex-wrap gap-3">
+                                  <label className="inline-flex cursor-pointer items-center rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-primary-200 hover:bg-primary-50">
+                                    {uploadingDocument === documentType ? 'Saving...' : 'Choose file'}
+                                    <input
+                                      type="file"
+                                      className="sr-only"
+                                      accept={DOCUMENT_CONTRACTS[documentType].acceptedMimeTypes.join(',')}
+                                      onChange={(event) => handleFileSelect(documentType, event.target.files?.[0] ?? null)}
+                                    />
+                                  </label>
+                                  <button
+                                    type="button"
+                                    onClick={() => loadSampleDocument(documentType)}
+                                    className="rounded-xl border border-primary-200 bg-primary-50 px-3 py-2 text-sm font-semibold text-primary-900 transition hover:bg-primary-100"
+                                  >
+                                    Load sample
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => clearDocument(documentType)}
+                                    className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+                                  >
+                                    Clear
+                                  </button>
+                                </div>
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
                     );
@@ -1176,7 +1310,7 @@ export default function ParentApplicationWorkflow() {
                       return (
                         <ChecklistRow
                           key={requirement.id}
-                          label={`${requirement.label}: ${DOCUMENT_VALIDATION_LABELS[document.validationState]}`}
+                          label={`${documentCategoryLabels[requirement.category]} · ${requirement.label}: ${DOCUMENT_VALIDATION_LABELS[document.validationState]}`}
                           passed={isDocumentStateSubmissionReady(document.validationState)}
                         />
                       );
@@ -1286,12 +1420,14 @@ function Field({
   onChange,
   placeholder,
   type = 'text',
+  disabled = false,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   placeholder: string;
   type?: string;
+  disabled?: boolean;
 }) {
   return (
     <label className="flex flex-col gap-1.5">
@@ -1301,6 +1437,7 @@ function Field({
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
+        disabled={disabled}
         className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-primary-300 focus:ring-4 focus:ring-primary-100"
       />
     </label>

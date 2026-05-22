@@ -2,7 +2,7 @@
 
 ## Current State
 - The branch is `codex/vercel-project-separation`.
-- The latest published commit is `d07e010 docs: align source of truth to admin heatmap slice`.
+- The latest published commit is the current branch head.
 - The `dev/` surface is the Vercel preview the team is reviewing.
 - `src/` remains the product app surface and should not be pulled into preview styling work unless the logic itself is changing.
 - The parent portal has now been tightened with a clearer admissions-specific status band and a more explicit "what happens next" panel.

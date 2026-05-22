@@ -70,13 +70,13 @@ Reference docs:
 ### Local Source
 
 - Branch: `codex/vercel-project-separation`
-- Latest commit: `d07e010`
+- Latest commit: current branch head (see `git log -1 --oneline`)
 - Working tree note: untracked `.claude/` exists and is intentionally excluded
 
 ### GitHub
 
 - Remote: `origin https://github.com/elixa-admin/eunice.git`
-- Remote branch head verified at `d07e010`
+- Remote branch head verified at current branch head
 - PR workflow remains branch-based on `codex/vercel-project-separation`
 
 ### Vercel
@@ -109,7 +109,7 @@ Use this exact packet when relaying to another platform or engineer:
 Project: Eunice School Intake Platform
 Repo root: /Users/brandondienar/Documents/Codex/Projects/Eunice
 Branch: codex/vercel-project-separation
-Commit: 17ce8f3
+Commit: current branch head (see `git log -1 --oneline`)
 Primary surface now: dev/
 Sprint intent: professional admissions UI uplift, brand-aligned, workflow-visible admin cards
 GitHub: aligned at branch head

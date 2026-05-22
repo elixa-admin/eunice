@@ -578,7 +578,7 @@ export default function ParentApplicationWorkflow() {
   const learnerComplete = Boolean(
     draft.learnerFirstName.trim() && draft.learnerLastName.trim() && draft.learnerGrade.trim(),
   );
-    const schoolComplete = Boolean(draft.previousSchool.trim() && draft.intakeYear.trim());
+  const schoolComplete = Boolean(draft.previousSchool.trim() && draft.intakeYear.trim());
   const roleComplete = Boolean(
     draft.roles.submitter.fullName.trim() &&
       draft.roles.parent.fullName.trim() &&
@@ -860,7 +860,7 @@ export default function ParentApplicationWorkflow() {
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary-700">Application workspace</p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">Complete your application in 4 clear stages</h2>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">Complete your application in 4 clear stages</h2>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
               We guide families upfront on everything required to avoid mid-form surprises and unnecessary backtracking.
             </p>
@@ -905,7 +905,7 @@ export default function ParentApplicationWorkflow() {
                       : 'border-slate-200 bg-white hover:border-primary-200 hover:bg-primary-50/60'
                   }`}
                 >
-              <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
                     {meta.eyebrow}
                   </div>
                   <div className="mt-1 flex items-center justify-between gap-2">

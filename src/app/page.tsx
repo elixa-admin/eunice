@@ -1,77 +1,77 @@
 import Link from 'next/link';
 
+const featureTiles = [
+  'Parent-friendly application flow',
+  'Admin review and document triage',
+  'Live preview aligned to Vercel',
+];
+
 export default function Home() {
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-primary-900 via-primary-800 to-accent-600">
-      {/* Ambient background blobs */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-primary-500 opacity-20 blur-3xl"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-40 -right-40 w-[500px] h-[500px] rounded-full bg-accent-500 opacity-20 blur-3xl"
-      />
+    <div className="relative min-h-[calc(100vh-4rem)] overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(14,165,233,0.12),_transparent_30%),radial-gradient(circle_at_bottom_right,_rgba(124,58,237,0.10),_transparent_28%)]" />
+      <div className="relative mx-auto flex min-h-[calc(100vh-4rem)] max-w-7xl items-center px-4 py-12 sm:px-6 lg:px-8">
+        <div className="grid w-full gap-8 lg:grid-cols-[1.15fr_0.85fr]">
+          <section className="rounded-[2rem] border border-slate-200/80 bg-white/90 p-8 shadow-[0_25px_90px_rgba(15,23,42,0.08)] backdrop-blur-xl sm:p-10">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary-100 bg-primary-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-primary-900">
+              Eunice Admissions Platform
+            </div>
 
-      {/* Card */}
-      <main className="relative z-10 glass rounded-3xl p-10 sm:p-14 max-w-lg w-full mx-4 flex flex-col items-center gap-8 text-center shadow-2xl">
-        {/* Logo mark */}
-        <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-white/10 border border-white/20">
-          <svg
-            viewBox="0 0 32 32"
-            fill="none"
-            className="w-9 h-9"
-            aria-hidden="true"
-          >
-            <path
-              d="M6 8h20M6 16h14M6 24h8"
-              stroke="white"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-            />
-          </svg>
-        </div>
+            <h1 className="mt-6 max-w-2xl text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
+              A calmer, more guided way to handle school admissions.
+            </h1>
 
-        {/* Heading */}
-        <div className="flex flex-col gap-2">
-          <h1 className="text-4xl font-bold text-white tracking-tight">
-            Eunice Admissions
-          </h1>
-          <p className="text-primary-200 text-lg leading-relaxed">
-            The smart way to manage school applications — for parents and staff alike.
-          </p>
-        </div>
+            <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
+              Built for parents, reviewers, and admissions teams who need a clearer intake experience, smarter document handling, and a more trustworthy workflow.
+            </p>
 
-        {/* CTAs */}
-        <div className="flex flex-col sm:flex-row gap-4 w-full">
-          <Link
-            id="cta-parent-portal"
-            href="/parent"
-            className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-white text-primary-700 font-semibold py-3 px-6 text-base hover:bg-primary-50 transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5"
-          >
-            Parent Portal
-            <svg viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4" aria-hidden="true">
-              <path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" />
-            </svg>
-          </Link>
-          <Link
-            id="cta-admin-login"
-            href="/admin"
-            className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-white/10 border border-white/20 text-white font-semibold py-3 px-6 text-base hover:bg-white/20 transition-all duration-200 hover:-translate-y-0.5"
-          >
-            Admin Login
-            <svg viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4" aria-hidden="true">
-              <path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" />
-            </svg>
-          </Link>
-        </div>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                id="cta-parent-portal"
+                href="/parent"
+                className="inline-flex items-center justify-center rounded-xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"
+              >
+                Parent Portal
+              </Link>
+              <Link
+                id="cta-admin-login"
+                href="/admin"
+                className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:border-slate-300 hover:bg-slate-50"
+              >
+                Admin Dashboard
+              </Link>
+            </div>
 
-        {/* Status strip */}
-        <div className="flex items-center gap-2 text-primary-300 text-sm">
-          <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          Platform is live · Phase 1 in progress
+            <div className="mt-10 grid gap-3 sm:grid-cols-3">
+              {featureTiles.map((tile) => (
+                <div key={tile} className="rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-4 text-sm font-medium text-slate-700">
+                  {tile}
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <aside className="space-y-4 rounded-[2rem] border border-slate-200/80 bg-slate-950 p-8 text-white shadow-[0_25px_90px_rgba(15,23,42,0.18)]">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Platform snapshot</p>
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+              <div className="text-sm font-semibold text-white">Current phase</div>
+              <div className="mt-1 text-sm leading-6 text-slate-300">Phase B: product feel and trust layer</div>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+              <div className="text-sm font-semibold text-white">What’s live</div>
+              <div className="mt-1 text-sm leading-6 text-slate-300">
+                Intake role model, document orchestration, parent workflow, admin triage, and Vercel preview alignment.
+              </div>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+              <div className="text-sm font-semibold text-white">Next upgrade</div>
+              <div className="mt-1 text-sm leading-6 text-slate-300">
+                Stronger visual hierarchy, better guidance, and a more polished admissions experience.
+              </div>
+            </div>
+          </aside>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

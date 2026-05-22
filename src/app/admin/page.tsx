@@ -575,50 +575,49 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-neutral-950 via-primary-950 to-neutral-900 py-10 px-4 sm:px-6 lg:px-8 text-white">
-      <div className="max-w-7xl mx-auto space-y-8">
-        
-        {/* Header strip */}
-        <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 glass p-6 rounded-2xl border border-white/10">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-white via-primary-100 to-primary-300 bg-clip-text text-transparent">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(14,165,233,0.08),_transparent_32%),radial-gradient(circle_at_bottom_right,_rgba(124,58,237,0.07),_transparent_28%),linear-gradient(180deg,_#f8fafc,_#eef2ff_100%)] py-10 px-4 text-slate-950 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl space-y-8">
+        <header className="flex flex-col gap-5 rounded-[2rem] border border-white/70 bg-white/85 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary-100 bg-primary-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary-900">
               Admin Dashboard
+            </div>
+            <h1 className="text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
+              Admissions review, sharpened for fast decisions.
             </h1>
-            <p className="text-primary-200 text-sm mt-1">
-              Logged in as <span className="text-white font-semibold">{profile?.first_name} {profile?.last_name}</span> · Admissions Management Portal
+            <p className="text-sm text-slate-600">
+              Logged in as <span className="font-semibold text-slate-900">{profile?.first_name} {profile?.last_name}</span> · Admissions management portal
             </p>
           </div>
-          <div>
-            <button
-              onClick={handleSignOut}
-              className="bg-white/10 hover:bg-white/20 text-white font-semibold px-5 py-2.5 rounded-xl transition-all text-sm border border-white/10 w-full sm:w-auto cursor-pointer"
-            >
-              Sign Out
-            </button>
-          </div>
+          <button
+            onClick={handleSignOut}
+            className="inline-flex w-full cursor-pointer items-center justify-center rounded-xl bg-slate-950 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 sm:w-auto"
+          >
+            Sign Out
+          </button>
         </header>
 
         {/* Stats Cards */}
         <section className="grid grid-cols-2 lg:grid-cols-5 gap-4">
-          <div className="glass p-5 rounded-2xl border border-white/10 text-center">
-            <p className="text-primary-300 text-xs font-semibold uppercase tracking-wider">Total Apps</p>
-            <p className="text-3xl font-bold mt-2 text-white">{total}</p>
+          <div className="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Apps</p>
+            <p className="mt-2 text-3xl font-semibold text-slate-950">{total}</p>
           </div>
-          <div className="glass p-5 rounded-2xl border border-white/10 text-center">
-            <p className="text-primary-300 text-xs font-semibold uppercase tracking-wider">Active Queue</p>
-            <p className="text-3xl font-bold mt-2 text-amber-300">{activeQueue}</p>
+          <div className="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Active Queue</p>
+            <p className="mt-2 text-3xl font-semibold text-amber-700">{activeQueue}</p>
           </div>
-          <div className="glass p-5 rounded-2xl border border-white/10 text-center">
-            <p className="text-primary-300 text-xs font-semibold uppercase tracking-wider">Missing Docs</p>
-            <p className="text-3xl font-bold mt-2 text-rose-300">{missingDocuments}</p>
+          <div className="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Missing Docs</p>
+            <p className="mt-2 text-3xl font-semibold text-rose-700">{missingDocuments}</p>
           </div>
-          <div className="glass p-5 rounded-2xl border border-white/10 text-center">
-            <p className="text-primary-300 text-xs font-semibold uppercase tracking-wider">Ready Review</p>
-            <p className="text-3xl font-bold mt-2 text-sky-300">{readyForReview}</p>
+          <div className="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Ready Review</p>
+            <p className="mt-2 text-3xl font-semibold text-sky-700">{readyForReview}</p>
           </div>
-          <div className="glass p-5 rounded-2xl border border-white/10 text-center">
-            <p className="text-primary-300 text-xs font-semibold uppercase tracking-wider">Accepted</p>
-            <p className="text-3xl font-bold mt-2 text-emerald-400">{accepted}</p>
+          <div className="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm">
+            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Accepted</p>
+            <p className="mt-2 text-3xl font-semibold text-emerald-700">{accepted}</p>
           </div>
         </section>
 
@@ -626,10 +625,10 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-6 items-start">
           
           {/* Left Panel - Queue list */}
-          <aside className="glass p-5 rounded-3xl border border-white/10 flex flex-col gap-4 max-h-[800px]">
+          <aside className="flex max-h-[800px] flex-col gap-4 rounded-[2rem] border border-white/70 bg-white/85 p-5 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl">
             <div>
-              <h2 className="text-lg font-semibold text-white">Admissions Queue</h2>
-              <p className="text-xs text-primary-200 mt-0.5">Filter and select an applicant</p>
+              <h2 className="text-lg font-semibold text-slate-950">Admissions Queue</h2>
+              <p className="mt-0.5 text-xs text-slate-500">Filter and select an applicant</p>
             </div>
 
             {/* Search Input */}
@@ -639,7 +638,7 @@ export default function AdminDashboard() {
                 placeholder="Search name, grade, ref..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white placeholder-white/30 focus:outline-none focus:border-primary-500 transition-all"
+                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-950 placeholder:text-slate-400 focus:border-primary-500 focus:outline-none transition-all"
               />
             </div>
 
@@ -649,8 +648,8 @@ export default function AdminDashboard() {
                 onClick={() => setStatusFilter('all')}
                 className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all cursor-pointer ${
                   statusFilter === 'all'
-                    ? 'bg-white/20 border-white/30 text-white'
-                    : 'bg-white/5 border-white/5 text-white/55 hover:bg-white/10 hover:border-white/10'
+                    ? 'bg-slate-950 border-slate-950 text-white'
+                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300'
                 }`}
               >
                 All
@@ -661,8 +660,8 @@ export default function AdminDashboard() {
                   onClick={() => setStatusFilter(`triage:${lane}`)}
                   className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all cursor-pointer ${
                     statusFilter === `triage:${lane}`
-                      ? 'bg-white/20 border-white/30 text-white'
-                      : 'bg-white/5 border-white/5 text-white/55 hover:bg-white/10 hover:border-white/10'
+                    ? 'bg-slate-950 border-slate-950 text-white'
+                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300'
                   }`}
                 >
                   {TRIAGE_LANE_LABELS[lane]}
@@ -674,8 +673,8 @@ export default function AdminDashboard() {
                   onClick={() => setStatusFilter(status)}
                   className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all cursor-pointer ${
                     statusFilter === status
-                      ? 'bg-white/20 border-white/30 text-white'
-                      : 'bg-white/5 border-white/5 text-white/55 hover:bg-white/10 hover:border-white/10'
+                    ? 'bg-slate-950 border-slate-950 text-white'
+                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300'
                   }`}
                 >
                   {APPLICATION_STATUS_LABELS[status]}
@@ -686,7 +685,7 @@ export default function AdminDashboard() {
             {/* Applicants List cards */}
             <div className="flex-1 overflow-y-auto space-y-2.5 max-h-[500px] pr-1">
               {filteredApplications.length === 0 ? (
-                <div className="text-center py-10 text-primary-200 text-sm">
+                <div className="py-10 text-center text-sm text-slate-500">
                   No applicants matching criteria.
                 </div>
               ) : (
@@ -698,12 +697,12 @@ export default function AdminDashboard() {
                       onClick={() => handleSelectApplication(app)}
                       className={`w-full text-left p-4 rounded-2xl border transition-all cursor-pointer ${
                         isSelected
-                          ? 'bg-primary-950/45 border-primary-500 shadow-md'
-                          : 'bg-white/5 border-white/5 hover:border-white/10 hover:bg-white/10'
+                        ? 'bg-primary-50 border-primary-200 shadow-md'
+                        : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50'
                       }`}
                     >
                       <div className="flex justify-between items-start">
-                        <span className="text-[10px] font-mono tracking-wider text-primary-300 uppercase">
+                        <span className="text-[10px] font-mono tracking-wider text-slate-400 uppercase">
                           {app.reference_number}
                         </span>
                         <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-semibold border ${
@@ -712,17 +711,17 @@ export default function AdminDashboard() {
                           {APPLICATION_STATUS_LABELS[app.status]}
                         </span>
                       </div>
-                      <h3 className="text-sm font-semibold text-white mt-1">
+                      <h3 className="mt-1 text-sm font-semibold text-slate-950">
                         {app.learner_first_name} {app.learner_last_name}
                       </h3>
-                      <p className="text-xs text-primary-200 mt-1">{app.grade_applying_for}</p>
+                      <p className="mt-1 text-xs text-slate-500">{app.grade_applying_for}</p>
                       <div className="mt-2 flex flex-wrap items-center gap-1.5">
-                        <span className="rounded-full border border-white/5 bg-white/5 px-2 py-0.5 text-[10px] font-semibold text-white/55">
-                          {TRIAGE_LANE_LABELS[getTriageLane(app)]}
-                        </span>
-                        <span className="rounded-full border border-white/5 bg-white/5 px-2 py-0.5 text-[10px] font-semibold text-white/55">
-                          Docs {app.documentSummary.verified}/{app.documentSummary.totalRequired}
-                        </span>
+                          <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold text-slate-600">
+                            {TRIAGE_LANE_LABELS[getTriageLane(app)]}
+                          </span>
+                          <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold text-slate-600">
+                            Docs {app.documentSummary.verified}/{app.documentSummary.totalRequired}
+                          </span>
                         {app.documentSummary.blocking > 0 ? (
                           <span className="rounded-full border border-rose-500/20 bg-rose-500/10 px-2 py-0.5 text-[10px] font-semibold text-rose-200">
                             {app.documentSummary.blocking} blocking
@@ -735,10 +734,10 @@ export default function AdminDashboard() {
                         ) : null}
                       </div>
                       <div className="flex justify-between items-center mt-3 border-t border-white/5 pt-2">
-                        <span className="text-[10px] text-white/40">
+                        <span className="text-[10px] text-slate-400">
                           Parent: {app.parent ? `${app.parent.first_name} ${app.parent.last_name}` : 'Unknown'}
                         </span>
-                        <span className="text-[10px] text-white/30">
+                        <span className="text-[10px] text-slate-400">
                           {new Date(app.created_at).toLocaleDateString()}
                         </span>
                       </div>
@@ -752,13 +751,13 @@ export default function AdminDashboard() {
           {/* Right Panel - Detail Triage Workspace */}
           <main className="min-h-[600px] flex flex-col gap-6">
             {!selectedApp ? (
-              <div className="glass rounded-3xl border border-white/10 p-12 text-center text-primary-200 flex flex-col items-center justify-center min-h-[500px]">
-                <div className="w-16 h-16 rounded-full bg-primary-900/30 flex items-center justify-center text-primary-400 mb-4 border border-primary-500/20">
+              <div className="flex min-h-[500px] flex-col items-center justify-center rounded-[2rem] border border-white/70 bg-white/85 p-12 text-center text-slate-500 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl">
+                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full border border-primary-100 bg-primary-50 text-primary-700">
                   <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold text-white">Admissions Workspace</h3>
+                <h3 className="text-xl font-semibold text-slate-950">Admissions Workspace</h3>
                 <p className="mt-2 text-sm max-w-sm">
                   Select an applicant card from the queue on the left to review documentation, verify uploads, write notes, and decide outcomes.
                 </p>
@@ -767,19 +766,19 @@ export default function AdminDashboard() {
               <div className="space-y-6">
                 
                 {/* Header card with status changer */}
-                <div className="glass p-6 rounded-3xl border border-white/10 space-y-4">
+                <div className="space-y-4 rounded-[2rem] border border-white/70 bg-white/85 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                      <span className="text-xs font-mono text-primary-300 bg-primary-950/60 border border-primary-800/30 px-3 py-1 rounded-full">
+                      <span className="rounded-full border border-primary-100 bg-primary-50 px-3 py-1 text-xs font-mono text-primary-900">
                         {selectedApp.reference_number}
                       </span>
-                      <h2 className="text-2xl font-bold text-white mt-2">
+                      <h2 className="mt-2 text-2xl font-semibold text-slate-950">
                         {selectedApp.learner_first_name} {selectedApp.learner_last_name}
                       </h2>
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-white/50">Current:</span>
+                      <span className="text-xs text-slate-500">Current:</span>
                       <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border ${
                         getAdminQueueTone(selectedApp.status)
                       }`}>
@@ -789,9 +788,9 @@ export default function AdminDashboard() {
                   </div>
 
                   {/* Action bar */}
-                  <div className="flex flex-col gap-3 md:flex-row md:items-center justify-between border-t border-white/10 pt-4 mt-2">
+                  <div className="mt-2 flex flex-col justify-between gap-3 border-t border-slate-200 pt-4 md:flex-row md:items-center">
                     <div className="flex flex-wrap gap-2 items-center">
-                      <span className="text-xs font-semibold uppercase tracking-wider text-primary-300 mr-2">
+                      <span className="mr-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
                         Transition Status:
                       </span>
                       {actioningId === selectedApp.id ? (
@@ -802,8 +801,8 @@ export default function AdminDashboard() {
                             onClick={() => handleUpdateStatus(selectedApp.id, 'under_review')}
                             className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
                               selectedApp.status === 'under_review'
-                                ? 'bg-amber-500/20 text-amber-300 border-amber-500/30'
-                                : 'bg-white/5 text-white/70 border-white/10 hover:bg-white/10'
+                                ? 'bg-amber-100 text-amber-800 border-amber-200'
+                                : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
                             }`}
                           >
                             Under Review
@@ -812,8 +811,8 @@ export default function AdminDashboard() {
                             onClick={() => handleUpdateStatus(selectedApp.id, 'decision_pending')}
                             className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
                               selectedApp.status === 'decision_pending'
-                                ? 'bg-fuchsia-500/20 text-fuchsia-300 border-fuchsia-500/30'
-                                : 'bg-white/5 text-white/70 border-white/10 hover:bg-white/10'
+                                ? 'bg-fuchsia-100 text-fuchsia-800 border-fuchsia-200'
+                                : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
                             }`}
                           >
                             Pending

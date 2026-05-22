@@ -20,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={inter.variable}>
       <head />
-      <body className="font-sans min-h-screen flex flex-col bg-neutral-50 dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100">
+      <body className="font-sans min-h-screen flex flex-col bg-background text-foreground">
         <NavBar />
         <main className="flex-1 w-full">{children}</main>
       </body>

@@ -81,15 +81,15 @@ Reference docs:
 ### GitHub
 
 - Remote: `origin https://github.com/elixa-admin/eunice.git`
-- Remote branch head verified at `469307abbbf01502c2c5bdc6691c752f4799004a` on 2026-05-22
+- Remote branch head should match current branch head; verify with `git ls-remote origin codex/vercel-project-separation`
 - PR workflow remains branch-based on `codex/vercel-project-separation`
 
 ### Vercel
 
 - Project: `eunice-dev`
 - Root directory: `dev`
-- Latest ready preview at update time: `https://eunice-qtexo1v1f-elixa-admins-projects.vercel.app`
-- Most recent deployment status check: Vercel reports `Ready` for the latest `eunice-dev` preview
+- Latest ready preview at final protocol check: `https://eunice-3kklwbn5q-elixa-admins-projects.vercel.app`
+- Most recent deployment status check: Vercel reports `Ready` for the latest checked `eunice-dev` preview; confirm newest preview with `vercel ls eunice-dev --scope elixa-admins-projects`
 
 ### Linear
 

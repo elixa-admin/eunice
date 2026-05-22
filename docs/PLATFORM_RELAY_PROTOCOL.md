@@ -68,10 +68,11 @@ Agents must ask before:
 
 - GitHub remote: `https://github.com/elixa-admin/eunice.git`
 - Active branch: `codex/vercel-project-separation`
-- Latest verified remote head at protocol update: `469307abbbf01502c2c5bdc6691c752f4799004a`
+- Latest verified remote head: current branch head. Confirm with `git ls-remote origin codex/vercel-project-separation`.
 - Vercel project: `eunice-dev`
 - Vercel root directory: `dev`
-- Latest ready Vercel preview at protocol update: `https://eunice-qtexo1v1f-elixa-admins-projects.vercel.app`
+- Latest ready Vercel preview at final protocol check: `https://eunice-3kklwbn5q-elixa-admins-projects.vercel.app`
+- Confirm newest preview with `vercel ls eunice-dev --scope elixa-admins-projects` from `dev/`.
 - Linear project: `Eunice Admissions Platform`
 - Linear status: connector blocked by `401 Reauthentication required`; latest project-status sync attempt on 2026-05-22 returned the same error
 

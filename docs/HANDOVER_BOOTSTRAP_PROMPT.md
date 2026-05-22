@@ -158,7 +158,7 @@ Current note:
 
 - Repo: `elixa-admin/eunice`
 - Active branch: `codex/vercel-project-separation`
-- Verified remote head on 2026-05-22: `469307abbbf01502c2c5bdc6691c752f4799004a`
+- Verified remote head should match the current branch head. Confirm with `git ls-remote origin codex/vercel-project-separation`.
 - Use Git CLI for commits and pushes.
 - Use GitHub connector or `gh` for PR metadata and CI when available.
 - Known issue: Codex sandbox may show GitHub CLI unavailable while unrestricted keychain-backed `gh` works. See `docs/QUICKFIX_KB.md`.
@@ -167,7 +167,8 @@ Current note:
 
 - Project: `eunice-dev`
 - Root directory: `dev`
-- Latest ready preview on 2026-05-22: `https://eunice-qtexo1v1f-elixa-admins-projects.vercel.app`
+- Latest ready preview at final protocol check: `https://eunice-3kklwbn5q-elixa-admins-projects.vercel.app`
+- Confirm newest preview with `vercel ls eunice-dev --scope elixa-admins-projects`.
 - Deploy model: push branch to GitHub, Vercel builds preview automatically.
 - Validate user-facing changes on the live branch preview after commit/push.
 - Avoid local preview loops unless a local-only UI bug needs browser inspection.

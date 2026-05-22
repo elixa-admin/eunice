@@ -38,6 +38,7 @@ export default async function DevApplicationDetailPage({
       eyebrow="Application Preview"
       title={application.learnerName}
       description={`${application.parentName} · ${application.ref}`}
+      surface="detail"
       backHref="/dev/admin"
       backLabel="Back to admin"
     >
@@ -56,6 +57,20 @@ export default async function DevApplicationDetailPage({
               <div className="text-xs uppercase tracking-[0.16em] text-accent-700">Grade</div>
               <div className="mt-2 text-2xl font-semibold text-slate-950">{application.grade}</div>
               <div className="mt-3 text-sm leading-6 text-slate-600">Review-ready profile for the admissions team.</div>
+            </div>
+          </div>
+          <div className="mt-6 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-2xl border border-primary-100 bg-white/85 px-4 py-3">
+              <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Application form</div>
+              <div className="mt-2 text-sm font-semibold text-slate-950">Learner record summary</div>
+            </div>
+            <div className="rounded-2xl border border-primary-100 bg-white/85 px-4 py-3">
+              <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Review focus</div>
+              <div className="mt-2 text-sm font-semibold text-slate-950">{counts.blocking > 0 ? 'Resolve blockers' : 'Confirm readiness'}</div>
+            </div>
+            <div className="rounded-2xl border border-accent-200 bg-white/85 px-4 py-3">
+              <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Next action</div>
+              <div className="mt-2 text-sm font-semibold text-slate-950">School review and document check</div>
             </div>
           </div>
         </SurfaceCard>

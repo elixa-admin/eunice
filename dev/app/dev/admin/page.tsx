@@ -31,6 +31,7 @@ export default function DevAdminPage() {
       eyebrow="Dev Preview"
       title="Admissions Operations Dashboard"
       description="Operational admissions queue with status tracking, document review states, and lightweight preview data."
+      surface="admin"
     >
       <div className="mb-6 grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
         <SurfaceCard className="overflow-hidden bg-[linear-gradient(135deg,rgba(22,163,74,0.08),rgba(202,138,4,0.10))] p-7">

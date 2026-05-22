@@ -14,6 +14,7 @@ export default function DevParentPage() {
       eyebrow="Dev Preview"
       title="Parent admissions dashboard"
       description="Calm, clear status tracking so parents can follow progress without chasing the school for updates."
+      surface="parent"
       backLabel="Back to preview hub"
     >
       <div className="mb-6 grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
@@ -26,6 +27,20 @@ export default function DevParentPage() {
                 Parents should never have to wonder what happens next. This dashboard is designed to make progress,
                 missing items, and school updates easy to understand at a glance.
               </p>
+              <div className="mt-6 flex flex-wrap gap-2">
+                {['Profile', 'Family', 'Documents', 'Review'].map((step, index) => (
+                  <div
+                    key={step}
+                    className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] ${
+                      index === 0
+                        ? 'border-primary-200 bg-primary-900 text-white'
+                        : 'border-primary-100 bg-white/85 text-slate-600'
+                    }`}
+                  >
+                    {index + 1}. {step}
+                  </div>
+                ))}
+              </div>
               <div className="mt-6 grid gap-3 sm:grid-cols-3">
                 <div className="rounded-2xl border border-primary-100 bg-white/85 px-4 py-3">
                   <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Current stage</div>
@@ -82,7 +97,7 @@ export default function DevParentPage() {
 
       <SectionHeading
         title="Applications"
-        description="Each card should feel trustworthy, readable, and easy to revisit on mobile."
+        description="Each card should feel trustworthy, readable, and like a real form summary instead of a placeholder tile."
       />
 
       <div className="mt-5 grid gap-5 md:grid-cols-3">

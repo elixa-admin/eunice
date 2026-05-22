@@ -9,9 +9,10 @@
 
 ## Visual Target
 - External-facing pages should feel academic, calm, and Eunice-specific.
-- The preview should look like a real admissions platform, not a generic card dashboard.
+- The preview should look like a real admissions website/form, not a generic card dashboard.
 - The parent portal should be the clearest place to test this tone first.
 - Keep the green and gold brand direction, but use it sparingly and deliberately.
+- Use form-like structure, section labels, and clear preview framing so the interface reads as a finished site.
 
 ## Decisions
 - Work in small slices, one surface at a time.
@@ -20,7 +21,7 @@
 
 ## Next Slice
 1. Review the updated parent portal in the preview branch.
-2. If the tone feels right, move to one small admin-dashboard polish slice next.
+2. If the website/form feel is closer to the target, move to one small admin-dashboard polish slice next.
 3. Keep every follow-on change narrow enough to fit in a single screenshot.
 
 ## Open Notes

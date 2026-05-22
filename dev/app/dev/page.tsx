@@ -27,6 +27,7 @@ export default function DevIndexPage() {
       eyebrow="Eunice Platform Preview"
       title="Admissions product preview"
       description="A focused product sandbox for the Eunice platform. This is where we shape the parent and staff experience while keeping it separate from the assessment workflow."
+      surface="hub"
       meta={(
         <div className="rounded-3xl border border-primary-100 bg-white px-5 py-4 text-sm text-slate-700 shadow-[0_16px_40px_rgba(22,163,74,0.10)]">
           <div className="text-xs uppercase tracking-[0.18em] text-primary-700/70">Preview sandbox</div>
@@ -50,6 +51,20 @@ export default function DevIndexPage() {
             <div className="rounded-full border border-accent-200 bg-accent-50 px-4 py-2 text-xs font-medium uppercase tracking-[0.16em] text-accent-700">
               Active lane
             </div>
+          </div>
+          <div className="mb-5 grid gap-3 sm:grid-cols-4">
+            {[
+              ['Discover', 'Website entry point', 'Homepage and admissions routes'],
+              ['Apply', 'Form-led journey', 'Parents submit and save progress'],
+              ['Review', 'Admissions workspace', 'Staff check documents and decisions'],
+              ['Decide', 'Outcome and next step', 'Clear status updates for families'],
+            ].map(([label, title, detail]) => (
+              <div key={label} className="rounded-3xl border border-primary-100 bg-white/85 px-4 py-4">
+                <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary-700/75">{label}</div>
+                <div className="mt-2 text-sm font-semibold text-slate-950">{title}</div>
+                <div className="mt-1 text-xs leading-5 text-slate-500">{detail}</div>
+              </div>
+            ))}
           </div>
           <div className="grid gap-3 sm:grid-cols-3">
             <div className="rounded-2xl border border-primary-100 bg-white/80 px-4 py-3">

@@ -28,3 +28,4 @@
 ## Open Notes
 - Linear auth still needs a refresh before tracker updates can resume cleanly.
 - The repo should stay free of broad theme churn until the parent slice is approved.
+- Health-check automation is active for light code sweeps every 4 hours during heavy coding sessions, but it should skip itself if no code changed in the last hour.

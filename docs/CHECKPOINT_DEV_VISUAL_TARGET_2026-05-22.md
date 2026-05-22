@@ -2,7 +2,7 @@
 
 ## Current State
 - The branch is `codex/vercel-project-separation`.
-- The latest published commit before this visual punch pass was `ab940e8 feat: refine dev preview admissions theme`.
+- The latest published commit is `17ce8f3 feat: color admin queue by workflow lane`.
 - The `dev/` surface is the Vercel preview the team is reviewing.
 - `src/` remains the product app surface and should not be pulled into preview styling work unless the logic itself is changing.
 - The parent portal has now been tightened with a clearer admissions-specific status band and a more explicit "what happens next" panel.
@@ -11,6 +11,7 @@
 - Parent and admin preview workflow now derives from computed document state:
   - parent step chips and submission gate use a shared workflow snapshot
   - admin queue health counts use derived workflow lanes (`blocking`, `review`, `ready`, `decision`)
+- The admin dashboard now adds lane-colored cards, row tinting, and progress strips so stuck, waiting, and ready states are visible at a glance.
 
 ## Visual Target
 - External-facing pages should feel academic, calm, and Eunice-specific.
@@ -26,8 +27,8 @@
 - Use screenshots/preview review as the main validation path once the branch is comfortable, not local render loops.
 
 ## Next Slice
-1. Review the live preview after the shared theme pass lands.
-2. If the direction holds, do one narrower admin/detail polish pass.
+1. Review the live preview after the admin heatmap pass lands.
+2. If the direction holds, continue only with narrow workflow-visibility refinements.
 3. Stop and reassess before widening scope again.
 
 ## Open Notes

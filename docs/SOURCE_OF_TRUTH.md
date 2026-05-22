@@ -33,12 +33,17 @@ If chat context is lost, a platform changes, or a new developer joins, start her
 - Scope discipline:
   - Prioritize coherent visual slices
   - Avoid broad architecture churn during UI sprint
+- Current functional focus:
+  - Drive admin visibility from workflow state, not static cards
+  - Lightly color cards and lane summaries by blocking / review / ready / decision state
+  - Keep the parent-facing workflow aligned to the same shared document logic
 
 ## Delivered Outcome Snapshot
 
 - Shared visual foundation updated across the `dev/` surface
 - Public preview shell, parent portal, admin dashboard, and application detail brought into a common polished theme
 - Commit published to GitHub and branch-aligned with Vercel preview
+- Admin dashboard now includes lane-aware heatmap cards and row tinting so progress, waiting, and blocking states are visible at a glance
 
 ## Environment And Configuration
 
@@ -65,21 +70,21 @@ Reference docs:
 ### Local Source
 
 - Branch: `codex/vercel-project-separation`
-- Latest commit: `d7aaa14`
+- Latest commit: `17ce8f3`
 - Working tree note: untracked `.claude/` exists and is intentionally excluded
 
 ### GitHub
 
 - Remote: `origin https://github.com/elixa-admin/eunice.git`
-- Remote branch head verified at `d7aaa14`
+- Remote branch head verified at `17ce8f3`
 - PR workflow remains branch-based on `codex/vercel-project-separation`
 
 ### Vercel
 
 - Project: `eunice-dev`
 - Root directory: `dev`
-- Latest ready preview (at update time): `https://eunice-k1ypbtcs3-elixa-admins-projects.vercel.app`
-- Most recent deployment status check: newest attempt `https://eunice-pskvq6t9n-elixa-admins-projects.vercel.app` showed `Error`, so use the latest ready preview URL above as the validation target until the next successful deploy
+- Latest ready preview (at update time): previous ready preview remains the last confirmed validation target while the new `17ce8f3` deployment settles
+- Most recent deployment status check: after the admin lane-heatmap push, verify the newest branch deployment in Vercel before treating the preview as final
 
 ### Linear
 
@@ -104,14 +109,14 @@ Use this exact packet when relaying to another platform or engineer:
 Project: Eunice School Intake Platform
 Repo root: /Users/brandondienar/Documents/Codex/Projects/Eunice
 Branch: codex/vercel-project-separation
-Commit: d7aaa14
+Commit: 17ce8f3
 Primary surface now: dev/
-Sprint intent: professional admissions UI uplift, brand-aligned
+Sprint intent: professional admissions UI uplift, brand-aligned, workflow-visible admin cards
 GitHub: aligned at branch head
 Vercel: aligned to eunice-dev preview
 Linear: update status from SOURCE_OF_TRUTH.md after each coherent slice
 Known local note: .claude/ remains untracked and excluded
-Next slice: narrow visual refinement only after live preview review
+Next slice: validate the live branch preview, then keep refining workflow visibility only if needed
 ```
 
 ## Non-Negotiable Working Rules

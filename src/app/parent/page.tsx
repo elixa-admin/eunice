@@ -44,17 +44,17 @@ export default function ParentPortalPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(88,28,135,0.09),_transparent_34%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.06),_transparent_26%)] text-slate-950">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(22,163,74,0.09),_transparent_34%),radial-gradient(circle_at_bottom_right,_rgba(202,138,4,0.06),_transparent_26%)] text-slate-950">
       <div className="mx-auto max-w-6xl px-6 py-12">
-        <div className="mb-6 rounded-full border border-purple-100/80 bg-white/85 px-4 py-3 text-sm text-slate-600 shadow-[0_12px_30px_rgba(15,23,42,0.05)] backdrop-blur">
+        <div className="mb-6 rounded-full border border-emerald-100/80 bg-white/85 px-4 py-3 text-sm text-slate-600 shadow-[0_12px_30px_rgba(15,23,42,0.05)] backdrop-blur">
           <span className="font-semibold text-slate-900">Admissions journey:</span> enquiry, profile, documents, review, decision.
-          <span className="ml-2 text-purple-800">Guided. Saved. Trackable.</span>
+          <span className="ml-2 text-emerald-800">Guided. Saved. Trackable.</span>
         </div>
 
         <div className="mb-10 grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
-          <section className="overflow-hidden rounded-[2.25rem] border border-purple-100/80 bg-white/92 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl">
-            <div className="border-b border-slate-100 bg-gradient-to-r from-purple-50 via-white to-slate-50 px-8 py-6">
-              <div className="inline-flex items-center gap-2 rounded-full border border-purple-100 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-purple-950">
+          <section className="overflow-hidden rounded-[2.25rem] border border-emerald-100/80 bg-white/92 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl">
+            <div className="border-b border-slate-100 bg-gradient-to-r from-emerald-50 via-white to-amber-50 px-8 py-6">
+              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-emerald-950">
                 Parent Portal
               </div>
               <h1 className="display-serif mt-4 max-w-3xl text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
@@ -77,7 +77,7 @@ export default function ParentPortalPage() {
               <div className="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
                 <span className="rounded-full bg-white px-3 py-1 text-slate-800 shadow-sm">1 Enquiry</span>
                 <span className="rounded-full bg-white px-3 py-1 text-slate-800 shadow-sm">2 Profile</span>
-                <span className="rounded-full bg-purple-800 px-3 py-1 text-white shadow-sm">3 Documents</span>
+                <span className="rounded-full bg-emerald-800 px-3 py-1 text-white shadow-sm">3 Documents</span>
                 <span className="rounded-full bg-white px-3 py-1 text-slate-800 shadow-sm">4 Review</span>
                 <span className="rounded-full bg-white px-3 py-1 text-slate-800 shadow-sm">5 Decision</span>
               </div>

@@ -49,10 +49,10 @@
 - The new planning reference is `docs/PHASE_C_THEME_SPLIT_PLAN.md`.
 
 ## Latest Theme Cycle
-- Public pages now lean more academic and formal with a serif-led headline treatment and a more restrained Eunice-purple palette.
-- The admin dashboard now has a richer, more colorful operational tone so staff can get a more expressive workspace without exposing that language publicly.
+- Public pages now lean more academic and formal with a serif-led headline treatment and a restrained Eunice green-and-gold palette.
+- The admin dashboard now has a richer, more colorful operational tone while still staying rooted in Eunice's actual brand direction.
 - This cycle was intentionally kept to the theme split only; no intake logic changed.
-- TypeScript verification still has not completed cleanly in this environment, so the next session should recheck if needed before any bigger structural follow-up.
+- TypeScript verification still has not completed cleanly in this environment, and the local build check was still running when this cycle was closed, so the next session should recheck before any bigger structural follow-up.
 
 ## Cross-School Research Notes
 - Compare Eunice against SPARK, Reddam House Constantia, Michaelhouse, and St Stithians before finalizing Phase B UX.

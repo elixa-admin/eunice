@@ -575,11 +575,11 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(124,58,237,0.14),_transparent_26%),radial-gradient(circle_at_top_right,_rgba(14,165,233,0.10),_transparent_24%),radial-gradient(circle_at_bottom_left,_rgba(245,158,11,0.09),_transparent_22%),linear-gradient(180deg,_#f8fafc,_#eef2ff_100%)] py-10 px-4 text-slate-950 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(22,163,74,0.12),_transparent_26%),radial-gradient(circle_at_top_right,_rgba(202,138,4,0.10),_transparent_24%),radial-gradient(circle_at_bottom_left,_rgba(14,165,233,0.06),_transparent_22%),linear-gradient(180deg,_#f8fafc,_#eef2ff_100%)] py-10 px-4 text-slate-950 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl space-y-8">
         <header className="overflow-hidden rounded-[2rem] border border-white/70 bg-white/85 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl">
           <div className="grid gap-0 lg:grid-cols-[1.15fr_0.85fr]">
-            <div className="border-b border-slate-100 bg-gradient-to-r from-slate-950 via-purple-950 to-slate-900 px-6 py-6 text-white lg:border-b-0 lg:border-r lg:border-slate-800 sm:px-8">
+            <div className="border-b border-slate-100 bg-gradient-to-r from-slate-950 via-emerald-950 to-slate-900 px-6 py-6 text-white lg:border-b-0 lg:border-r lg:border-slate-800 sm:px-8">
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/80">
                 Admin Dashboard
               </div>
@@ -609,9 +609,9 @@ export default function AdminDashboard() {
                   <p className="mt-2 text-3xl font-semibold text-slate-950">{activeQueue}</p>
                   <p className="mt-1 text-sm text-slate-500">Applications still moving through review</p>
                 </div>
-                <div className="bg-purple-50/70 p-6">
+                <div className="bg-emerald-50/70 p-6">
                   <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Ready review</p>
-                  <p className="mt-2 text-3xl font-semibold text-purple-700">{readyForReview}</p>
+                  <p className="mt-2 text-3xl font-semibold text-emerald-700">{readyForReview}</p>
                   <p className="mt-1 text-sm text-slate-500">Applications ready for human review</p>
                 </div>
               </div>
@@ -633,7 +633,7 @@ export default function AdminDashboard() {
 
         {/* Stats Cards */}
         <section className="grid grid-cols-2 gap-4 lg:grid-cols-5">
-          <div className="rounded-2xl border border-purple-100 bg-white p-5 text-center shadow-sm">
+          <div className="rounded-2xl border border-emerald-100 bg-white p-5 text-center shadow-sm">
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Apps</p>
             <p className="mt-2 text-3xl font-semibold text-slate-950">{total}</p>
           </div>

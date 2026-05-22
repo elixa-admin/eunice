@@ -54,6 +54,9 @@ Compress the 13-page application into an upfront preparation screen plus a guide
 Current next slice:
 Implement the guided parent preview in dev/ using docs/GUIDED_APPLICATION_FLOW_PLAN.md.
 
+At the start of a new session, run:
+npm run session:start
+
 Do not restart discovery from scratch.
 Do not redesign the whole app.
 Continue in small deterministic slices.
@@ -210,6 +213,7 @@ Current note:
 Run from repo root:
 
 ```bash
+npm run session:start
 git branch --show-current
 git status --short
 git log -1 --oneline

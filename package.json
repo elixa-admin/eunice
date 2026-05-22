@@ -9,6 +9,7 @@
     "lint": "npm --prefix src run lint",
     "typecheck": "npm --prefix src run typecheck",
     "check": "npm --prefix src run check",
+    "session:start": "node scripts/session-start.mjs",
     "verify:src": "node scripts/verify-workspace.mjs src",
     "verify:dev": "node scripts/verify-workspace.mjs dev"
   }

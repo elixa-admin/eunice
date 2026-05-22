@@ -58,9 +58,9 @@ Reduce re-prompting, keep sessions recoverable, and avoid wasting tokens on chec
 
 ## First Routines
 
-The first routines to build are:
+The first routines are:
 
-1. Session bootstrap.
+1. Session bootstrap: `npm run session:start`.
 2. Session handoff packet.
 
 Those two give us the best restart and recovery value for the smallest amount of automation.

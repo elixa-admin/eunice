@@ -4,6 +4,14 @@ Run this at the start of a new coding session to make sure the repo, CLIs, and k
 
 For a fresh start or a relay from another platform, read [SOURCE_OF_TRUTH.md](./SOURCE_OF_TRUTH.md) first, then [HANDOVER_BOOTSTRAP_PROMPT.md](./HANDOVER_BOOTSTRAP_PROMPT.md), then [PLATFORM_RELAY_PROTOCOL.md](./PLATFORM_RELAY_PROTOCOL.md), then [SESSION_MANIFEST.md](./SESSION_MANIFEST.md), and then use this checklist to confirm the workspace is actually ready.
 
+Agents should run the repo-native bootstrap command automatically at session start:
+
+```bash
+npm run session:start
+```
+
+This command prints the branch, latest commit, GitHub remote, remote branch head, working tree state, environment key coverage, Vercel preview hint, connector notes, and next slice. The user should not be expected to remember or manually perform the startup ritual.
+
 ## Goal
 
 Confirm that the local workspace and the connected services are ready for a smooth session.
@@ -12,7 +20,9 @@ If this is a resumed session or work is being transferred from another platform,
 
 ## Check Order
 
-1. Confirm the repo is clean enough to work in.
+0. Run the automated startup command.
+   - `npm run session:start`
+1. Confirm the repo is clean enough to work in if the automated report shows changes.
    - `git status --short`
    - Confirm `.env.example` and `.env.local` are aligned for required keys, including `NEXT_PUBLIC_THEME_FONT_UI_FALLBACK`
 2. Confirm GitHub CLI access.

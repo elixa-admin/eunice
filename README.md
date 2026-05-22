@@ -76,6 +76,7 @@ To:
 - `shared/` for contracts reused across `src/` and `dev/`
 
 ## Verification Path
+- Run `npm run session:start` at the beginning of a new agent or developer session to print the current branch, remote state, environment key coverage, Vercel preview hint, connector notes, and next slice.
 - Prefer `npm run verify:src` for the real app and `npm run verify:dev` for the preview app.
 - These bounded checks are the default because they fail clearly if lint or typecheck quietly stall in this environment.
 

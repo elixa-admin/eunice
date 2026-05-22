@@ -10,15 +10,16 @@ The rule is simple: every platform may work, but the repo docs remain the portab
 
 ## Canonical Flow
 
-1. Read `docs/SOURCE_OF_TRUTH.md`.
-2. Read `docs/HANDOVER_BOOTSTRAP_PROMPT.md`.
-3. Confirm local branch, remote branch, and deployment target.
-4. Do one small coherent slice.
-5. Update the relevant source-of-truth docs.
-6. Commit and push to GitHub.
-7. Let Vercel deploy from GitHub.
-8. Update Linear if available.
-9. If Linear or another connector fails, document the blocker once and continue from local/GitHub truth.
+1. Run `npm run session:start` from the repo root.
+2. Read `docs/SOURCE_OF_TRUTH.md`.
+3. Read `docs/HANDOVER_BOOTSTRAP_PROMPT.md`.
+4. Confirm local branch, remote branch, and deployment target from the automated report.
+5. Do one small coherent slice.
+6. Update the relevant source-of-truth docs.
+7. Commit and push to GitHub.
+8. Let Vercel deploy from GitHub.
+9. Update Linear if available.
+10. If Linear or another connector fails, document the blocker once and continue from local/GitHub truth.
 
 ## Source-Of-Truth Priority
 
@@ -48,6 +49,7 @@ Autonomous agents may:
 
 - read and edit repo files
 - run local checks
+- run `npm run session:start` without asking the user
 - commit coherent slices
 - push the active branch
 - query GitHub and Vercel state

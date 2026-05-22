@@ -245,6 +245,31 @@ The forms taught us where parents get stuck. We should add the cheapest useful i
 - The current PR is the working GitHub surface for this sprint.
 - Linear should now treat this sprint as complete and move focus to the next phase.
 
+## Eunice Synthesis
+The other schools give us useful shape, but Eunice should stay distinct.
+
+### What we should adopt
+- A staged admissions journey with visible progress.
+- A clear support path with named admissions contact cues.
+- A live sense of "what happens next" after each action.
+- Role-aware intake for submitter, parent, guardian, and fee payer.
+- Conditional documents that adapt to the family's situation.
+- A tour / interview / review handoff where appropriate, instead of treating all applications as identical.
+
+### What we should avoid
+- Turning the first step into a heavy admin checklist.
+- Asking for every possible document up front.
+- Making fee collection the visual centre of the experience.
+- Copying boarding-school or prestige-school patterns that do not fit Eunice's intake reality.
+
+### What remains provisional
+- Final weighting of non-academic factors.
+- The exact interview / assessment flow once the school’s second assessment arrives.
+- Any final policy-driven wording that should be confirmed by Eunice before release.
+
+### Working principle
+- We are using initiative now, but every decision should remain easy to revise once the school gives the next round of input.
+
 ## Next Phase: Product Feel + Trust Layer
 The platform is now structurally smart enough. The next phase makes it feel like a real admissions product.
 

@@ -35,3 +35,21 @@
 - Prefer short deterministic implementation cycles.
 - Persist architecture decisions and unresolved issues in markdown checkpoints.
 - Recommend a fresh session after each major implementation milestone.
+
+## Latest Cycle
+- Parent portal now has a clearer admissions journey strip and a more explicit "what happens next" cue.
+- This was intentionally kept as a contained visual hierarchy pass, not a backend or logic change.
+- Verification started with TypeScript but did not return a clean result yet in this environment.
+- Next step should be either a browser preview check or the admin polish slice, depending on what feels most visually urgent.
+
+## Cross-School Research Notes
+- Compare Eunice against SPARK, Reddam House Constantia, Michaelhouse, and St Stithians before finalizing Phase B UX.
+- Carry forward the useful patterns: staged journey, expectation-setting, human support, role separation, and conditional documents.
+- Avoid copying any school’s first-step burden directly; keep Eunice’s unique intake requirements but present them as a guided admissions journey.
+- Use `docs/INTAKE_COMPARISON_SA_SCHOOLS.md` as the durable reference for later UI and workflow decisions.
+
+## Eunice Synthesis
+- Adopt: staged journey, support cues, expectation-setting, role-aware intake, conditional docs, and interview/review handoff.
+- Avoid: front-loading every possible requirement, making fees the visual centre, or importing boarding-school patterns that do not fit Eunice.
+- Keep provisional until Eunice confirms: final weighting of non-academic factors, exact interview flow, and any policy-specific wording.
+- Treat current work as initiative-led, but easy to revise once the school's second assessment arrives.

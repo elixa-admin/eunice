@@ -46,6 +46,11 @@ export default function ParentPortalPage() {
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(14,165,233,0.08),_transparent_34%),radial-gradient(circle_at_bottom_right,_rgba(124,58,237,0.06),_transparent_26%)] text-slate-950">
       <div className="mx-auto max-w-6xl px-6 py-12">
+        <div className="mb-6 rounded-full border border-slate-200/80 bg-white/80 px-4 py-3 text-sm text-slate-600 shadow-[0_12px_30px_rgba(15,23,42,0.05)] backdrop-blur">
+          <span className="font-semibold text-slate-900">Admissions journey:</span> enquiry, profile, documents, review, decision.
+          <span className="ml-2 text-primary-700">Guided. Saved. Trackable.</span>
+        </div>
+
         <div className="mb-10 grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
           <section className="overflow-hidden rounded-[2.25rem] border border-slate-200/80 bg-white/90 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl">
             <div className="border-b border-slate-100 bg-gradient-to-r from-primary-50 via-white to-accent-50 px-8 py-6">
@@ -68,12 +73,22 @@ export default function ParentPortalPage() {
               </p>
             </div>
 
+            <div className="border-b border-slate-100 bg-slate-50/80 px-8 py-4">
+              <div className="flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+                <span className="rounded-full bg-white px-3 py-1 text-slate-800 shadow-sm">1 Enquiry</span>
+                <span className="rounded-full bg-white px-3 py-1 text-slate-800 shadow-sm">2 Profile</span>
+                <span className="rounded-full bg-primary-700 px-3 py-1 text-white shadow-sm">3 Documents</span>
+                <span className="rounded-full bg-white px-3 py-1 text-slate-800 shadow-sm">4 Review</span>
+                <span className="rounded-full bg-white px-3 py-1 text-slate-800 shadow-sm">5 Decision</span>
+              </div>
+            </div>
+
             <div className="grid gap-0 border-b border-slate-100 lg:grid-cols-[1.1fr_0.9fr]">
               <div className="border-b border-slate-100 px-8 py-6 lg:border-b-0 lg:border-r lg:border-slate-100">
                 <div className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Status at a glance</div>
                 <div className="mt-3 grid gap-3">
                   {statusHighlights.map((status) => (
-                    <div key={status} className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 shadow-sm">
+                    <div key={status} className="rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm">
                       <div className="text-sm font-semibold text-slate-950">{APPLICATION_STATUS_LABELS[status]}</div>
                       <p className="mt-1 text-sm leading-6 text-slate-600">
                         {APPLICATION_STATUS_DESCRIPTIONS[status]}
@@ -128,6 +143,12 @@ export default function ParentPortalPage() {
 
           <aside className="rounded-[2rem] border border-slate-200/80 bg-slate-950 p-6 text-white shadow-[0_20px_60px_rgba(15,23,42,0.12)]">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Current focus</p>
+            <div className="mt-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-4">
+              <div className="text-sm font-semibold text-white">What happens next</div>
+              <p className="mt-1 text-sm leading-6 text-slate-300">
+                Complete the current stage, then the portal will show the next required action clearly.
+              </p>
+            </div>
             <div className="mt-4 space-y-3">
               {statusHighlights.map((status) => (
                 <div key={status} className="rounded-2xl border border-white/10 bg-white/5 p-4">

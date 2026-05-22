@@ -12,13 +12,14 @@ export const NavBar: React.FC = () => {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-primary-100/80 bg-white/90 backdrop-blur-md">
+    <nav className="sticky top-0 z-50 w-full border-b border-primary-100/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(249,250,248,0.94))] backdrop-blur-md shadow-[0_8px_24px_rgba(15,23,42,0.04)]">
+      <div className="h-1 w-full bg-[linear-gradient(90deg,rgba(22,163,74,0.95),rgba(202,138,4,0.95))]" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-[68px] items-center justify-between">
           {/* Logo and Brand */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center gap-2 group">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-primary-100 bg-primary-50 transition-all group-hover:bg-primary-100 group-hover:border-primary-200">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-primary-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(240,253,244,0.92))] transition-all group-hover:border-primary-200 group-hover:shadow-[0_10px_24px_rgba(22,163,74,0.10)]">
                 <svg
                   viewBox="0 0 32 32"
                   fill="none"
@@ -32,9 +33,12 @@ export const NavBar: React.FC = () => {
                   />
                 </svg>
               </div>
-              <span className="display-serif text-lg font-bold tracking-tight text-slate-950 transition-colors group-hover:text-primary-700">
-                Eunice Admissions
-              </span>
+              <div className="leading-tight">
+                <span className="display-serif block text-lg font-bold tracking-tight text-slate-950 transition-colors group-hover:text-primary-700">
+                  Eunice Admissions
+                </span>
+                <span className="text-[11px] uppercase tracking-[0.22em] text-slate-500">School admissions platform</span>
+              </div>
             </Link>
           </div>
 
@@ -46,7 +50,7 @@ export const NavBar: React.FC = () => {
               className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
                 isActive('/parent')
                   || isActive('/dev/parent')
-                  ? 'bg-primary-900 text-white shadow-md'
+                  ? 'bg-primary-900 text-white shadow-[0_12px_24px_rgba(22,163,74,0.18)]'
                   : 'text-slate-700 hover:bg-primary-50 hover:text-primary-800'
               }`}
             >
@@ -58,7 +62,7 @@ export const NavBar: React.FC = () => {
               className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
                 isActive('/admin')
                   || isActive('/dev/admin')
-                  ? 'border border-primary-200 bg-primary-50 text-primary-900'
+                  ? 'border border-accent-200 bg-accent-50 text-accent-900 shadow-[0_10px_24px_rgba(202,138,4,0.12)]'
                   : 'text-slate-600 hover:bg-primary-50 hover:text-primary-800'
               }`}
             >

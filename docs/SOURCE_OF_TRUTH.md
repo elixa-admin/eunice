@@ -98,7 +98,7 @@ Reference docs:
 - Project name: `Eunice Admissions Platform`
 - Source of truth role: planning, ownership, status narration
 - Action for every coherent slice: post or update project status against this same document state
-- Current blocker at update time: connector returned `401 Reauthentication required`, including the 2026-05-22 handover and platform-relay status sync attempts, so status sync must resume after reconnect
+- Current blocker at update time: connector returned `401 Reauthentication required`, including the 2026-05-22 handover, platform-relay status sync attempts, and the micro-slice sprint status sync attempt; status sync must resume after reconnect
 
 ## Execution Instructions For Any New Developer
 

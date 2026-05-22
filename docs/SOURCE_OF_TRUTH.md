@@ -70,13 +70,13 @@ Reference docs:
 ### Local Source
 
 - Branch: `codex/vercel-project-separation`
-- Latest commit: `17ce8f3`
+- Latest commit: `d07e010`
 - Working tree note: untracked `.claude/` exists and is intentionally excluded
 
 ### GitHub
 
 - Remote: `origin https://github.com/elixa-admin/eunice.git`
-- Remote branch head verified at `17ce8f3`
+- Remote branch head verified at `d07e010`
 - PR workflow remains branch-based on `codex/vercel-project-separation`
 
 ### Vercel

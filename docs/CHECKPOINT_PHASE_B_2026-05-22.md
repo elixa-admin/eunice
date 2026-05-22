@@ -42,6 +42,18 @@
 - Verification started with TypeScript but did not return a clean result yet in this environment.
 - Next step should be either a browser preview check or the admin polish slice, depending on what feels most visually urgent.
 
+## Next Phase Direction
+- External public pages should move toward a more academic, structured, Eunice-faithful visual language.
+- Internal admin surfaces can be more expressive, interactive, and visually adventurous because they are not public-facing.
+- Keep one product family, but vary the intensity by audience.
+- The new planning reference is `docs/PHASE_C_THEME_SPLIT_PLAN.md`.
+
+## Latest Theme Cycle
+- Public pages now lean more academic and formal with a serif-led headline treatment and a more restrained Eunice-purple palette.
+- The admin dashboard now has a richer, more colorful operational tone so staff can get a more expressive workspace without exposing that language publicly.
+- This cycle was intentionally kept to the theme split only; no intake logic changed.
+- TypeScript verification still has not completed cleanly in this environment, so the next session should recheck if needed before any bigger structural follow-up.
+
 ## Cross-School Research Notes
 - Compare Eunice against SPARK, Reddam House Constantia, Michaelhouse, and St Stithians before finalizing Phase B UX.
 - Carry forward the useful patterns: staged journey, expectation-setting, human support, role separation, and conditional documents.

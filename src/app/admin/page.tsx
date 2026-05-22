@@ -575,15 +575,15 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(14,165,233,0.08),_transparent_32%),radial-gradient(circle_at_bottom_right,_rgba(124,58,237,0.07),_transparent_28%),linear-gradient(180deg,_#f8fafc,_#eef2ff_100%)] py-10 px-4 text-slate-950 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(124,58,237,0.14),_transparent_26%),radial-gradient(circle_at_top_right,_rgba(14,165,233,0.10),_transparent_24%),radial-gradient(circle_at_bottom_left,_rgba(245,158,11,0.09),_transparent_22%),linear-gradient(180deg,_#f8fafc,_#eef2ff_100%)] py-10 px-4 text-slate-950 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl space-y-8">
         <header className="overflow-hidden rounded-[2rem] border border-white/70 bg-white/85 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl">
           <div className="grid gap-0 lg:grid-cols-[1.15fr_0.85fr]">
-            <div className="border-b border-slate-100 bg-gradient-to-r from-slate-950 via-slate-900 to-primary-950 px-6 py-6 text-white lg:border-b-0 lg:border-r lg:border-slate-800 sm:px-8">
+            <div className="border-b border-slate-100 bg-gradient-to-r from-slate-950 via-purple-950 to-slate-900 px-6 py-6 text-white lg:border-b-0 lg:border-r lg:border-slate-800 sm:px-8">
               <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/80">
                 Admin Dashboard
               </div>
-              <h1 className="mt-4 max-w-2xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              <h1 className="display-serif mt-4 max-w-2xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">
                 Admissions review, sharpened for fast decisions.
               </h1>
               <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
@@ -604,24 +604,24 @@ export default function AdminDashboard() {
 
             <div className="grid gap-0">
               <div className="grid grid-cols-2 gap-0 border-b border-slate-100">
-                <div className="border-r border-slate-100 p-6">
+                <div className="border-r border-slate-100 bg-white/70 p-6">
                   <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Active queue</p>
                   <p className="mt-2 text-3xl font-semibold text-slate-950">{activeQueue}</p>
                   <p className="mt-1 text-sm text-slate-500">Applications still moving through review</p>
                 </div>
-                <div className="p-6">
+                <div className="bg-purple-50/70 p-6">
                   <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Ready review</p>
-                  <p className="mt-2 text-3xl font-semibold text-sky-700">{readyForReview}</p>
+                  <p className="mt-2 text-3xl font-semibold text-purple-700">{readyForReview}</p>
                   <p className="mt-1 text-sm text-slate-500">Applications ready for human review</p>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-0">
-                <div className="border-r border-slate-100 p-6">
+                <div className="border-r border-slate-100 bg-rose-50/70 p-6">
                   <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Missing docs</p>
                   <p className="mt-2 text-3xl font-semibold text-rose-700">{missingDocuments}</p>
                   <p className="mt-1 text-sm text-slate-500">Require follow-up before submission</p>
                 </div>
-                <div className="p-6">
+                <div className="bg-emerald-50/70 p-6">
                   <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Accepted</p>
                   <p className="mt-2 text-3xl font-semibold text-emerald-700">{accepted}</p>
                   <p className="mt-1 text-sm text-slate-500">Closed admissions decisions</p>
@@ -633,23 +633,23 @@ export default function AdminDashboard() {
 
         {/* Stats Cards */}
         <section className="grid grid-cols-2 gap-4 lg:grid-cols-5">
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm">
+          <div className="rounded-2xl border border-purple-100 bg-white p-5 text-center shadow-sm">
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Apps</p>
             <p className="mt-2 text-3xl font-semibold text-slate-950">{total}</p>
           </div>
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm">
+          <div className="rounded-2xl border border-amber-100 bg-amber-50/70 p-5 text-center shadow-sm">
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Active Queue</p>
             <p className="mt-2 text-3xl font-semibold text-amber-700">{activeQueue}</p>
           </div>
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm">
+          <div className="rounded-2xl border border-rose-100 bg-rose-50/70 p-5 text-center shadow-sm">
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Missing Docs</p>
             <p className="mt-2 text-3xl font-semibold text-rose-700">{missingDocuments}</p>
           </div>
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm">
+          <div className="rounded-2xl border border-sky-100 bg-sky-50/70 p-5 text-center shadow-sm">
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Ready Review</p>
             <p className="mt-2 text-3xl font-semibold text-sky-700">{readyForReview}</p>
           </div>
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm">
+          <div className="rounded-2xl border border-emerald-100 bg-emerald-50/70 p-5 text-center shadow-sm">
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Accepted</p>
             <p className="mt-2 text-3xl font-semibold text-emerald-700">{accepted}</p>
           </div>

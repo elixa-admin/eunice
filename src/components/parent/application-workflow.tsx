@@ -870,24 +870,24 @@ export default function ParentApplicationWorkflow() {
   }
 
   return (
-    <section className="rounded-[2rem] border border-primary-100 bg-white shadow-[0_28px_80px_rgba(15,23,42,0.08)]">
-      <div className="border-b border-primary-100 px-6 py-5 sm:px-8">
+    <section className="rounded-[2rem] border border-purple-100 bg-white shadow-[0_28px_80px_rgba(15,23,42,0.08)]">
+      <div className="border-b border-purple-100 bg-gradient-to-r from-purple-50 via-white to-slate-50 px-6 py-5 sm:px-8">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary-700">Application workspace</p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">Complete your application in 4 clear stages</h2>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-purple-800">Application workspace</p>
+            <h2 className="display-serif mt-2 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">Complete your application in 4 clear stages</h2>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
               We guide families upfront on everything required to avoid mid-form surprises and unnecessary backtracking.
             </p>
           </div>
 
-          <div className="rounded-2xl border border-primary-100 bg-primary-50 px-4 py-3 text-sm text-slate-700 shadow-sm">
+          <div className="rounded-2xl border border-purple-100 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary-700">Application status</div>
+                <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-purple-800">Application status</div>
                 <div className="mt-1 font-semibold text-slate-950">{APPLICATION_STATUS_LABELS[draft.status]}</div>
               </div>
-              <div className="rounded-full border border-primary-100 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-primary-800">
+              <div className="rounded-full border border-purple-100 bg-purple-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-purple-900">
                 {completion}% complete
               </div>
             </div>
@@ -908,9 +908,9 @@ export default function ParentApplicationWorkflow() {
           </div>
         </div>
 
-        <div className="mt-6 grid gap-3 md:grid-cols-3">
+          <div className="mt-6 grid gap-3 md:grid-cols-3">
           {WORKFLOW_HIGHLIGHTS.map((item) => (
-            <div key={item.title} className="rounded-2xl border border-primary-100 bg-white px-4 py-4 shadow-sm">
+            <div key={item.title} className="rounded-2xl border border-purple-100 bg-white px-4 py-4 shadow-sm">
               <div className="text-sm font-semibold text-slate-950">{item.title}</div>
               <p className="mt-1 text-sm leading-6 text-slate-600">{item.body}</p>
             </div>

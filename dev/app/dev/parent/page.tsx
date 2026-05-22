@@ -26,6 +26,20 @@ export default function DevParentPage() {
                 Parents should never have to wonder what happens next. This dashboard is designed to make progress,
                 missing items, and school updates easy to understand at a glance.
               </p>
+              <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                <div className="rounded-2xl border border-primary-100 bg-white/85 px-4 py-3">
+                  <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Current stage</div>
+                  <div className="mt-2 text-sm font-semibold text-slate-950">{featuredApplication.status.replace('_', ' ')}</div>
+                </div>
+                <div className="rounded-2xl border border-primary-100 bg-white/85 px-4 py-3">
+                  <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Next update</div>
+                  <div className="mt-2 text-sm font-semibold text-slate-950">After school review</div>
+                </div>
+                <div className="rounded-2xl border border-accent-200 bg-white/85 px-4 py-3">
+                  <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Open items</div>
+                  <div className="mt-2 text-sm font-semibold text-slate-950">{featuredApplication.missingItems.length} item{featuredApplication.missingItems.length === 1 ? '' : 's'}</div>
+                </div>
+              </div>
             </div>
 
             <div className="rounded-3xl border border-accent-200 bg-white/85 p-4 shadow-[0_18px_45px_rgba(202,138,4,0.10)]">
@@ -55,13 +69,13 @@ export default function DevParentPage() {
 
         <SurfaceCard className="p-6">
           <SectionHeading
-            title="Parent priorities"
+            title="What happens next"
             description="The UI should answer the first three questions a parent has without effort."
           />
           <div className="mt-5 space-y-3 text-sm text-slate-600">
-            <div className="rounded-2xl border border-primary-100 bg-primary-50/50 px-4 py-3">What is my child’s current status?</div>
-            <div className="rounded-2xl border border-primary-100 bg-primary-50/50 px-4 py-3">Are any documents still missing?</div>
-            <div className="rounded-2xl border border-primary-100 bg-primary-50/50 px-4 py-3">When did the school last act on this application?</div>
+            <div className="rounded-2xl border border-primary-100 bg-primary-50/50 px-4 py-3">The application is under review and moving through admissions checks.</div>
+            <div className="rounded-2xl border border-primary-100 bg-primary-50/50 px-4 py-3">One document still needs manual attention before the file can move cleanly forward.</div>
+            <div className="rounded-2xl border border-primary-100 bg-primary-50/50 px-4 py-3">The next school update should follow once that review step is complete.</div>
           </div>
         </SurfaceCard>
       </div>

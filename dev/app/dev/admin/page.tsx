@@ -32,21 +32,43 @@ export default function DevAdminPage() {
       title="Admissions Operations Dashboard"
       description="Operational admissions queue with status tracking, document review states, and lightweight preview data."
     >
-      <div className="mb-6 grid gap-4 md:grid-cols-4">
-        <StatCard label="Total Applications" value={totals.total.toString()} />
-        <StatCard label="Pending Review" value={totals.pending.toString()} />
-        <StatCard label="Incomplete" value={totals.incomplete.toString()} />
-        <StatCard label="Accepted" value={totals.accepted.toString()} />
+      <div className="mb-6 grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+        <SurfaceCard className="overflow-hidden bg-[linear-gradient(135deg,rgba(22,163,74,0.08),rgba(202,138,4,0.10))] p-7">
+          <p className="text-xs uppercase tracking-[0.18em] text-primary-700/75">Operations at a glance</p>
+          <h2 className="display-serif mt-3 text-3xl font-semibold text-slate-950">Admissions queue with stronger visual hierarchy</h2>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
+            The admin view stays operational, but it should feel polished, confident, and easier to scan in a busy review session.
+          </p>
+          <div className="mt-6 grid gap-3 sm:grid-cols-3">
+            <StatCard label="Total Applications" value={totals.total.toString()} />
+            <StatCard label="Pending Review" value={totals.pending.toString()} />
+            <StatCard label="Incomplete" value={totals.incomplete.toString()} />
+          </div>
+        </SurfaceCard>
+
+        <SurfaceCard className="p-7">
+          <p className="text-xs uppercase tracking-[0.18em] text-primary-700/75">Queue health</p>
+          <div className="mt-4 space-y-3">
+            <div className="rounded-2xl border border-primary-100 bg-primary-50/50 px-4 py-3">
+              <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Accepted</div>
+              <div className="mt-2 text-3xl font-semibold text-slate-950">{totals.accepted}</div>
+            </div>
+            <div className="rounded-2xl border border-accent-200 bg-accent-50/70 px-4 py-3">
+              <div className="text-xs uppercase tracking-[0.16em] text-accent-700">Dev only</div>
+              <div className="mt-2 text-sm font-semibold text-slate-950">Review states now use Eunice green and gold accents.</div>
+            </div>
+          </div>
+        </SurfaceCard>
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,2fr)_360px]">
-        <SurfaceCard className="overflow-hidden">
+        <SurfaceCard className="overflow-hidden shadow-[0_24px_60px_rgba(22,163,74,0.08)]">
           <div className="border-b border-primary-100 px-6 py-5">
             <SectionHeading
               title="Application queue"
               description="Preview records modeled on the current admissions workflow."
               action={(
-                <div className="rounded-full bg-primary-50 px-3 py-1 text-xs font-medium text-primary-700">Dev only</div>
+                <div className="rounded-full bg-accent-50 px-3 py-1 text-xs font-medium text-accent-700">Dev only</div>
               )}
             />
           </div>
@@ -114,7 +136,7 @@ export default function DevAdminPage() {
         <SurfaceCard className="p-6">
           <div className="mb-5">
             <p className="text-xs uppercase tracking-[0.16em] text-slate-400">Selected application</p>
-            <h2 className="mt-2 text-xl font-semibold text-slate-950">{featured.learnerName}</h2>
+            <h2 className="display-serif mt-2 text-2xl font-semibold text-slate-950">{featured.learnerName}</h2>
             <p className="text-sm text-slate-600">
               {featured.parentName} · {featured.grade}
             </p>
@@ -131,7 +153,7 @@ export default function DevAdminPage() {
             </div>
           </div>
 
-          <div className="mb-6 rounded-2xl border border-primary-100 bg-white p-4">
+          <div className="mb-6 rounded-2xl border border-primary-100 bg-white p-4 shadow-[0_12px_30px_rgba(22,163,74,0.06)]">
             <div className="flex items-center justify-between gap-3">
               <div>
                 <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Review state</div>

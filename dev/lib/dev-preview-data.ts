@@ -172,23 +172,23 @@ export const previewApplications: PreviewApplication[] = [
 
 export const previewStatusClasses: Record<PreviewStatus, string> = {
   draft: 'border border-slate-200 bg-slate-100 text-slate-700',
-  submitted: 'border border-sky-200 bg-sky-50 text-sky-700',
-  under_review: 'border border-amber-200 bg-amber-50 text-amber-700',
+  submitted: 'border border-primary-200 bg-primary-50 text-primary-800',
+  under_review: 'border border-accent-200 bg-accent-50 text-accent-700',
   incomplete: 'border border-rose-200 bg-rose-50 text-rose-700',
-  accepted: 'border border-emerald-200 bg-emerald-50 text-emerald-700',
+  accepted: 'border border-primary-200 bg-primary-50 text-primary-800',
   rejected: 'border border-neutral-200 bg-neutral-100 text-neutral-700',
 };
 
 export const previewDocumentClasses = {
-  accepted: 'border border-sky-200 bg-sky-50 text-sky-700',
-  verified: 'border border-emerald-200 bg-emerald-50 text-emerald-700',
+  accepted: 'border border-primary-200 bg-primary-50 text-primary-800',
+  verified: 'border border-primary-200 bg-primary-50 text-primary-800',
   wrong_format: 'border border-rose-200 bg-rose-50 text-rose-700',
   too_large: 'border border-rose-200 bg-rose-50 text-rose-700',
   corrupted: 'border border-rose-200 bg-rose-50 text-rose-700',
-  blurry: 'border border-amber-200 bg-amber-50 text-amber-700',
-  low_confidence_ocr: 'border border-amber-200 bg-amber-50 text-amber-700',
+  blurry: 'border border-accent-200 bg-accent-50 text-accent-700',
+  low_confidence_ocr: 'border border-accent-200 bg-accent-50 text-accent-700',
   needs_reupload: 'border border-rose-200 bg-rose-50 text-rose-700',
-  manual_review: 'border border-amber-200 bg-amber-50 text-amber-700',
+  manual_review: 'border border-accent-200 bg-accent-50 text-accent-700',
   missing: 'border border-rose-200 bg-rose-50 text-rose-700',
 } satisfies Record<DocumentValidationState, string>;
 
@@ -249,9 +249,9 @@ export const PREVIEW_REVIEW_STATE_LABELS: Record<PreviewReviewState, string> = {
 
 export const PREVIEW_REVIEW_STATE_CLASSES: Record<PreviewReviewState, string> = {
   blocked: 'border border-rose-200 bg-rose-50 text-rose-700',
-  review: 'border border-amber-200 bg-amber-50 text-amber-700',
-  ready: 'border border-sky-200 bg-sky-50 text-sky-700',
-  complete: 'border border-emerald-200 bg-emerald-50 text-emerald-700',
+  review: 'border border-accent-200 bg-accent-50 text-accent-700',
+  ready: 'border border-primary-200 bg-primary-50 text-primary-800',
+  complete: 'border border-primary-200 bg-primary-50 text-primary-800',
 };
 
 export function getPreviewNextAction(application: PreviewApplication) {

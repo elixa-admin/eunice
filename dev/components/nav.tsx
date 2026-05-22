@@ -32,7 +32,7 @@ export const NavBar: React.FC = () => {
                   />
                 </svg>
               </div>
-              <span className="text-lg font-bold tracking-tight text-slate-950 transition-colors group-hover:text-primary-700">
+              <span className="display-serif text-lg font-bold tracking-tight text-slate-950 transition-colors group-hover:text-primary-700">
                 Eunice Admissions
               </span>
             </Link>

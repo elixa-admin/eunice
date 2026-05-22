@@ -2,7 +2,7 @@
 
 Run this at the start of a new coding session to make sure the repo, CLIs, and key connectors are healthy before code changes begin.
 
-For a fresh start or a relay from another platform, read [SOURCE_OF_TRUTH.md](./SOURCE_OF_TRUTH.md) first, then [SESSION_MANIFEST.md](./SESSION_MANIFEST.md), and then use this checklist to confirm the workspace is actually ready.
+For a fresh start or a relay from another platform, read [SOURCE_OF_TRUTH.md](./SOURCE_OF_TRUTH.md) first, then [HANDOVER_BOOTSTRAP_PROMPT.md](./HANDOVER_BOOTSTRAP_PROMPT.md), then [SESSION_MANIFEST.md](./SESSION_MANIFEST.md), and then use this checklist to confirm the workspace is actually ready.
 
 ## Goal
 

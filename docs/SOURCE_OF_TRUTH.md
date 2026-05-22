@@ -61,6 +61,7 @@ Expected environment variables:
 
 Reference docs:
 
+- `docs/HANDOVER_BOOTSTRAP_PROMPT.md`
 - `docs/ARCHITECTURE.md`
 - `docs/REQUIREMENTS.md`
 - `docs/PROJECT_BRIEF.md`
@@ -94,12 +95,12 @@ Reference docs:
 - Project name: `Eunice Admissions Platform`
 - Source of truth role: planning, ownership, status narration
 - Action for every coherent slice: post or update project status against this same document state
-- Current blocker at update time: connector returned `401 Reauthentication required`, so status sync must resume after reconnect
+- Current blocker at update time: connector returned `401 Reauthentication required`, including the 2026-05-22 handover status sync attempt, so status sync must resume after reconnect
 
 ## Execution Instructions For Any New Developer
 
 1. Read this file first.
-2. Read `docs/SESSION_MANIFEST.md`, `docs/SESSION_BOOTSTRAP.md`, and `docs/SESSION_CONTINUITY.md`.
+2. Read `docs/HANDOVER_BOOTSTRAP_PROMPT.md`, `docs/SESSION_MANIFEST.md`, `docs/SESSION_BOOTSTRAP.md`, and `docs/SESSION_CONTINUITY.md`.
 3. Confirm branch, commit, remote, and active surface.
 4. Confirm GitHub, Vercel, and Linear auth/connectivity.
 5. Continue from the next smallest coherent slice, not from chat history.
@@ -120,6 +121,7 @@ Vercel: aligned to eunice-dev preview
 Linear: update status from SOURCE_OF_TRUTH.md after each coherent slice
 Known local note: .claude/ remains untracked and excluded
 Next slice: implement the guided 5-step parent preview from docs/GUIDED_APPLICATION_FLOW_PLAN.md
+Bootstrap prompt: docs/HANDOVER_BOOTSTRAP_PROMPT.md
 ```
 
 ## Non-Negotiable Working Rules

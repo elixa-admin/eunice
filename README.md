@@ -21,6 +21,7 @@ The phase docs remain the baseline plan, but the current working state is more a
 
 ## Quick Links
 - [Single Source Of Truth](./docs/SOURCE_OF_TRUTH.md)
+- [Handover Bootstrap Prompt](./docs/HANDOVER_BOOTSTRAP_PROMPT.md)
 - [UI Theme Spec](./docs/UI_THEME_SPEC.md)
 - [Project Brief](./docs/PROJECT_BRIEF.md)
 - [Architecture & Tech Stack](./docs/ARCHITECTURE.md)

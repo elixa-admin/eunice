@@ -17,18 +17,19 @@ Keep one clear path back into the project so a new session can recover the curre
 ## What A New Session Should Read First
 
 1. [SOURCE_OF_TRUTH.md](./SOURCE_OF_TRUTH.md)
-2. [README.md](../README.md)
-3. [SESSION_MANIFEST.md](./SESSION_MANIFEST.md)
-4. [SESSION_CONTINUITY.md](./SESSION_CONTINUITY.md)
-5. [SESSION_BOOTSTRAP.md](./SESSION_BOOTSTRAP.md)
-6. [TOOLING_POLICY.md](./TOOLING_POLICY.md)
-7. [AUTOMATION_POLICY.md](./AUTOMATION_POLICY.md)
-8. [RELAY_PLAYBOOK.md](./RELAY_PLAYBOOK.md)
-9. [automation-routines/plan.md](./automation-routines/plan.md)
-10. [FAILURE_TRIAGE.md](./FAILURE_TRIAGE.md)
-11. [QUICKFIX_KB.md](./QUICKFIX_KB.md)
-12. The current phase or feature docs for the active workstream
-13. The active Linear project or issue thread for the workstream
+2. [HANDOVER_BOOTSTRAP_PROMPT.md](./HANDOVER_BOOTSTRAP_PROMPT.md)
+3. [README.md](../README.md)
+4. [SESSION_MANIFEST.md](./SESSION_MANIFEST.md)
+5. [SESSION_CONTINUITY.md](./SESSION_CONTINUITY.md)
+6. [SESSION_BOOTSTRAP.md](./SESSION_BOOTSTRAP.md)
+7. [TOOLING_POLICY.md](./TOOLING_POLICY.md)
+8. [AUTOMATION_POLICY.md](./AUTOMATION_POLICY.md)
+9. [RELAY_PLAYBOOK.md](./RELAY_PLAYBOOK.md)
+10. [automation-routines/plan.md](./automation-routines/plan.md)
+11. [FAILURE_TRIAGE.md](./FAILURE_TRIAGE.md)
+12. [QUICKFIX_KB.md](./QUICKFIX_KB.md)
+13. The current phase or feature docs for the active workstream
+14. The active Linear project or issue thread for the workstream
 
 ## Minimum Recovery Checklist
 
@@ -59,7 +60,7 @@ Active work: <one sentence>
 Integrations: GitHub ok / Supabase ok / Vercel ok / Linear ok
 Known blockers: <if any>
 Next slice: <one sentence>
-Read first: README, SESSION_CONTINUITY, SESSION_BOOTSTRAP, TOOLING_POLICY, FAILURE_TRIAGE, QUICKFIX_KB
+Read first: SOURCE_OF_TRUTH, HANDOVER_BOOTSTRAP_PROMPT, README, SESSION_CONTINUITY, SESSION_BOOTSTRAP, TOOLING_POLICY, FAILURE_TRIAGE, QUICKFIX_KB
 ```
 
 ## Update Cadence

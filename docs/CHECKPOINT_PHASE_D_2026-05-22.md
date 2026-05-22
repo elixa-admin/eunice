@@ -19,6 +19,7 @@
 - TypeScript verification is still running slowly in this environment, so the next session should recheck if needed.
 - The next Phase D slice should focus on workflow state alignment, not more persistence restructuring.
 - The preview uplift needs to be pushed and confirmed on the branch preview so the visible instance catches up with the code changes.
+- Linear status updates are currently blocked by a reauthentication requirement in the connected app, so the tracker needs a fresh auth pass before the next project update can land there.
 
 ## Next Slice
 1. Confirm the draft merge behavior stays stable in the current preview branch.

@@ -54,6 +54,11 @@
 - This cycle was intentionally kept to the theme split only; no intake logic changed.
 - TypeScript verification still has not completed cleanly in this environment, and the local build check was still running when this cycle was closed, so the next session should recheck before any bigger structural follow-up.
 
+## Next Two Phases
+- Phase D: data and flow hardening, focusing on canonical roles, persistence, state alignment, and preview/product boundary hygiene.
+- Phase E: pilot readiness and launch stability, focusing on parent comms, admin readiness, deployment reliability, and support handoff.
+- The new phase docs are `docs/PHASE_D_DATA_AND_FLOW_HARDENING_PLAN.md` and `docs/PHASE_E_PILOT_READINESS_PLAN.md`.
+
 ## Cross-School Research Notes
 - Compare Eunice against SPARK, Reddam House Constantia, Michaelhouse, and St Stithians before finalizing Phase B UX.
 - Carry forward the useful patterns: staged journey, expectation-setting, human support, role separation, and conditional documents.

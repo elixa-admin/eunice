@@ -2,16 +2,21 @@
 
 import type { FormEvent } from 'react';
 import { useEffect, useMemo, useState } from 'react';
+import supabase from '@/lib/supabase';
 import {
   APPLICATION_STATUS_DESCRIPTIONS,
   APPLICATION_STATUS_LABELS,
   type ApplicationStatus,
 } from '@/lib/domain/applications';
 import {
+  getApplicationDocumentRequirements,
+  getReadinessChecklist,
+  getRequiredDocumentTypes,
+} from '@/lib/domain/application-requirements';
+import {
   DOCUMENT_CONTRACTS,
   DOCUMENT_VALIDATION_LABELS,
   DOCUMENT_TYPE_LABELS,
-  REQUIRED_DOCUMENT_TYPES,
   isDocumentStateBlocking,
   isDocumentStateReviewOnly,
   isDocumentStateSubmissionReady,
@@ -20,7 +25,7 @@ import {
 } from '@/lib/documents/contracts';
 import { uploadDocumentDraft } from '@/lib/documents/upload';
 
-const STEP_KEYS = ['parent', 'learner', 'school', 'documents'] as const;
+const STEP_KEYS = ['readiness', 'profile', 'documents', 'review'] as const;
 type StepKey = (typeof STEP_KEYS)[number];
 
 type DocumentDraft = {
@@ -44,6 +49,9 @@ type ApplicationDraft = {
   intakeYear: string;
   siblingAtSchool: string;
   coParentContext: string;
+  citizenshipStatus: string;
+  boardingStatus: string;
+  financialStatus: string;
   notes: string;
   status: ApplicationStatus;
   submittedAt: string | null;
@@ -57,29 +65,38 @@ type StepMeta = {
 };
 
 const STEP_META: Record<StepKey, StepMeta> = {
-  parent: {
+  readiness: {
     eyebrow: 'Step 1',
-    title: 'Parent details',
-    description: 'Start with the person responsible for the application.',
+    title: 'Readiness and eligibility',
+    description: 'Confirm you have the required documents and know what the full process needs.',
   },
-  learner: {
+  profile: {
     eyebrow: 'Step 2',
-    title: 'Learner details',
-    description: 'Capture the learner identity and current school context.',
-  },
-  school: {
-    eyebrow: 'Step 3',
-    title: 'School context',
-    description: 'Add the grade, intake year, and family context Eunice needs.',
+    title: 'Parent and learner profile',
+    description: 'Capture parent contact, learner identity, and school context in one focused stage.',
   },
   documents: {
+    eyebrow: 'Step 3',
+    title: 'Document uploads',
+    description: 'Upload required files with format checks and clear quality guidance.',
+  },
+  review: {
     eyebrow: 'Step 4',
-    title: 'Documents and review',
-    description: 'Check the required documents before you submit the draft.',
+    title: 'Review and submit',
+    description: 'Confirm everything is complete before final submission.',
   },
 };
 
 const STORAGE_KEY = 'eunice-parent-application-draft-v1';
+const READINESS_KEY = 'eunice-parent-readiness-confirmed-v1';
+const PROCESS_ESTIMATE = '25-35 minutes';
+
+const QUALITY_TIPS = [
+  'Use PDF, JPG, or PNG files only.',
+  'Each file must be under 5 MB.',
+  'Capture full pages, not cropped edges.',
+  'Retake blurry or dark photos before upload.',
+] as const;
 
 function createInitialDocumentDrafts(): Record<DocumentType, DocumentDraft> {
   return {
@@ -87,6 +104,22 @@ function createInitialDocumentDrafts(): Record<DocumentType, DocumentDraft> {
       fileName: '',
       validationState: 'missing',
       message: 'Birth certificate is still required.',
+      storagePath: null,
+      uploadedAt: null,
+      uploadStatus: 'idle',
+    },
+    learner_photo: {
+      fileName: '',
+      validationState: 'missing',
+      message: 'Learner photograph is still required.',
+      storagePath: null,
+      uploadedAt: null,
+      uploadStatus: 'idle',
+    },
+    motivation_letter: {
+      fileName: '',
+      validationState: 'missing',
+      message: 'Motivation letter is still required.',
       storagePath: null,
       uploadedAt: null,
       uploadStatus: 'idle',
@@ -115,6 +148,54 @@ function createInitialDocumentDrafts(): Record<DocumentType, DocumentDraft> {
       uploadedAt: null,
       uploadStatus: 'idle',
     },
+    income_proof: {
+      fileName: '',
+      validationState: 'missing',
+      message: 'Proof of employment or income is still required.',
+      storagePath: null,
+      uploadedAt: null,
+      uploadStatus: 'idle',
+    },
+    medical_aid_card: {
+      fileName: '',
+      validationState: 'missing',
+      message: 'Medical aid card is still required.',
+      storagePath: null,
+      uploadedAt: null,
+      uploadStatus: 'idle',
+    },
+    immunisation_record: {
+      fileName: '',
+      validationState: 'missing',
+      message: 'Immunisation or health record is still required.',
+      storagePath: null,
+      uploadedAt: null,
+      uploadStatus: 'idle',
+    },
+    fee_payer_id_copy: {
+      fileName: '',
+      validationState: 'missing',
+      message: 'Fee-payer or debtor ID copy is still required.',
+      storagePath: null,
+      uploadedAt: null,
+      uploadStatus: 'idle',
+    },
+    residency_permit: {
+      fileName: '',
+      validationState: 'missing',
+      message: 'Residency or permit document will be required if applicable.',
+      storagePath: null,
+      uploadedAt: null,
+      uploadStatus: 'idle',
+    },
+    custody_order: {
+      fileName: '',
+      validationState: 'missing',
+      message: 'Custody or court order will be required if applicable.',
+      storagePath: null,
+      uploadedAt: null,
+      uploadStatus: 'idle',
+    },
     other: {
       fileName: '',
       validationState: 'missing',
@@ -139,6 +220,9 @@ function createInitialDraft(): ApplicationDraft {
     intakeYear: '2026',
     siblingAtSchool: 'No',
     coParentContext: 'No',
+    citizenshipStatus: 'South African',
+    boardingStatus: 'Daygirl',
+    financialStatus: 'Employed',
     notes: '',
     status: 'draft',
     submittedAt: null,
@@ -198,42 +282,148 @@ function getDocumentStateGuidance(state: DocumentValidationState) {
 }
 
 export default function ParentApplicationWorkflow() {
-  const [activeStep, setActiveStep] = useState<StepKey>('parent');
+  const [activeStep, setActiveStep] = useState<StepKey>('readiness');
   const [draft, setDraft] = useState<ApplicationDraft>(createInitialDraft);
   const [lastSavedAt, setLastSavedAt] = useState('Not saved yet');
   const [mounted, setMounted] = useState(false);
+  const [readinessConfirmed, setReadinessConfirmed] = useState(false);
   const [uploadingDocument, setUploadingDocument] = useState<DocumentType | null>(null);
+  const [user, setUser] = useState<any>(null);
+  const [profile, setProfile] = useState<any>(null);
+  const [appId, setAppId] = useState<string | null>(null);
+  const [schoolId, setSchoolId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    async function checkAuthAndLoadData() {
+      try {
+        if (typeof window !== 'undefined' && window.localStorage.getItem(READINESS_KEY) === 'true') {
+          setReadinessConfirmed(true);
+        }
 
-    try {
-      const stored = window.localStorage.getItem(STORAGE_KEY);
-      if (!stored) {
+        const { data: { user: authUser } } = await supabase.auth.getUser();
+        if (authUser) {
+          setUser(authUser);
+          
+          // Load profile details
+          const { data: profileData, error: profileErr } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', authUser.id)
+            .single();
+            
+          if (profileErr) throw profileErr;
+          setProfile(profileData);
+          
+          const defaultSchoolId = profileData.school_id || '00000000-0000-0000-0000-000000000000';
+          setSchoolId(defaultSchoolId);
+          
+          // Load active application draft
+          const { data: appData, error: appErr } = await supabase
+            .from('applications')
+            .select('*')
+            .eq('parent_id', authUser.id)
+            .maybeSingle();
+            
+          if (appData) {
+            setAppId(appData.id);
+            
+            // Load associated documents
+            const { data: docsData } = await supabase
+              .from('documents')
+              .select('*')
+              .eq('application_id', appData.id);
+              
+            const documentsDraft = createInitialDocumentDrafts();
+            if (docsData) {
+              docsData.forEach((doc: any) => {
+                const type = doc.document_type as DocumentType;
+                if (documentsDraft[type]) {
+                  documentsDraft[type] = {
+                    fileName: doc.file_name,
+                    validationState: doc.upload_status as DocumentValidationState,
+                    message: doc.review_notes || getDocumentStateGuidance(doc.upload_status as DocumentValidationState),
+                    storagePath: doc.file_path,
+                    uploadedAt: doc.uploaded_at,
+                    uploadStatus: 'saved',
+                  };
+                }
+              });
+            }
+            
+            setDraft({
+              parentFirstName: profileData.first_name,
+              parentLastName: profileData.last_name,
+              parentEmail: authUser.email || '',
+              parentPhone: profileData.phone_number || '',
+              learnerFirstName: appData.learner_first_name,
+              learnerLastName: appData.learner_last_name,
+              learnerGrade: appData.grade_applying_for,
+              previousSchool: appData.previous_school_name || '',
+              intakeYear: '2026',
+              siblingAtSchool: 'No',
+              coParentContext: 'No',
+              citizenshipStatus: 'South African',
+              boardingStatus: 'Daygirl',
+              financialStatus: 'Employed',
+              notes: '',
+              status: appData.status as ApplicationStatus,
+              submittedAt: appData.submitted_at,
+              documents: documentsDraft,
+            });
+            
+            setLastSavedAt(new Date(appData.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+          } else {
+            // Setup fresh draft using parent profile info
+            setDraft((current) => ({
+              ...current,
+              parentFirstName: profileData.first_name,
+              parentLastName: profileData.last_name,
+              parentEmail: authUser.email || '',
+              parentPhone: profileData.phone_number || '',
+            }));
+          }
+        } else {
+          loadGuestDraft();
+        }
+      } catch (err) {
+        console.warn('Error loading parent database application:', err);
+        loadGuestDraft();
+      } finally {
         setMounted(true);
-        return;
       }
-
-      const parsed = JSON.parse(stored) as Partial<ApplicationDraft> & { activeStep?: StepKey };
-      setDraft((current) => ({
-        ...current,
-        ...parsed,
-        documents: {
-          ...current.documents,
-          ...(parsed.documents ?? {}),
-        },
-      }));
-
-      if (parsed.activeStep && STEP_KEYS.includes(parsed.activeStep)) {
-        setActiveStep(parsed.activeStep);
-      }
-    } catch {
-      window.localStorage.removeItem(STORAGE_KEY);
-    } finally {
-      setMounted(true);
     }
+
+    function loadGuestDraft() {
+      try {
+        const stored = window.localStorage.getItem(STORAGE_KEY);
+        if (!stored) return;
+
+        const parsed = JSON.parse(stored);
+        setDraft((current) => ({
+          ...current,
+          ...parsed,
+          documents: {
+            ...current.documents,
+            ...(parsed.documents ?? {}),
+          },
+        }));
+
+        if (parsed.activeStep && STEP_KEYS.includes(parsed.activeStep)) {
+          setActiveStep(parsed.activeStep);
+        }
+        const savedReadiness = window.localStorage.getItem(READINESS_KEY);
+        if (savedReadiness === 'true') {
+          setReadinessConfirmed(true);
+        }
+      } catch {
+        window.localStorage.removeItem(STORAGE_KEY);
+      }
+    }
+
+    checkAuthAndLoadData();
   }, []);
 
+  // Write to localStorage for guest backups or offline states
   useEffect(() => {
     if (!mounted || typeof window === 'undefined') return;
 
@@ -244,8 +434,95 @@ export default function ParentApplicationWorkflow() {
         activeStep,
       }),
     );
-    setLastSavedAt(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-  }, [activeStep, draft, mounted]);
+    if (!user) {
+      setLastSavedAt(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    }
+  }, [activeStep, draft, mounted, user]);
+
+  useEffect(() => {
+    if (!mounted || typeof window === 'undefined') return;
+    window.localStorage.setItem(READINESS_KEY, readinessConfirmed ? 'true' : 'false');
+  }, [mounted, readinessConfirmed]);
+
+  async function saveApplicationState(updatedDraft = draft) {
+    if (!user || !schoolId) return;
+
+    try {
+      const isInsert = !appId;
+      const refNum = isInsert
+        ? `EUN-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`
+        : undefined;
+
+      const payload = {
+        school_id: schoolId,
+        parent_id: user.id,
+        learner_first_name: updatedDraft.learnerFirstName,
+        learner_last_name: updatedDraft.learnerLastName,
+        grade_applying_for: updatedDraft.learnerGrade || 'Grade 1',
+        previous_school_name: updatedDraft.previousSchool,
+        status: updatedDraft.status,
+        updated_at: new Date().toISOString(),
+      };
+
+      if (isInsert) {
+        const { data, error } = await supabase
+          .from('applications')
+          .insert({
+            ...payload,
+            reference_number: refNum,
+          })
+          .select('id')
+          .single();
+
+        if (error) throw error;
+        if (data) {
+          setAppId(data.id);
+        }
+      } else {
+        const { error } = await supabase
+          .from('applications')
+          .update(payload)
+          .eq('id', appId);
+
+        if (error) throw error;
+      }
+
+      setLastSavedAt(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    } catch (err) {
+      console.error('Error auto-saving parent application draft:', err);
+    }
+  }
+
+  async function ensureApplicationExists(): Promise<string> {
+    if (appId) return appId;
+    if (!user || !schoolId) throw new Error('Auth session required to save draft data.');
+
+    const refNum = `EUN-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+    const { data, error } = await supabase
+      .from('applications')
+      .insert({
+        school_id: schoolId,
+        parent_id: user.id,
+        reference_number: refNum,
+        learner_first_name: draft.learnerFirstName || 'Draft',
+        learner_last_name: draft.learnerLastName || 'Draft',
+        grade_applying_for: draft.learnerGrade || 'Grade 1',
+        previous_school_name: draft.previousSchool || '',
+        status: 'draft',
+      })
+      .select('id')
+      .single();
+
+    if (error) throw error;
+    setAppId(data.id);
+    return data.id;
+  }
+
+  async function handleSignOut() {
+    await supabase.auth.signOut();
+    window.localStorage.removeItem(STORAGE_KEY);
+    window.location.reload();
+  }
 
   const parentComplete = Boolean(
     draft.parentFirstName.trim() &&
@@ -257,21 +534,34 @@ export default function ParentApplicationWorkflow() {
     draft.learnerFirstName.trim() && draft.learnerLastName.trim() && draft.learnerGrade.trim(),
   );
   const schoolComplete = Boolean(draft.previousSchool.trim() && draft.intakeYear.trim());
-  const requiredDocsAccepted = REQUIRED_DOCUMENT_TYPES.every((documentType) =>
+  const requirementInput = {
+    citizenshipStatus: draft.citizenshipStatus,
+    boardingStatus: draft.boardingStatus,
+    coParentContext: draft.coParentContext,
+    financialStatus: draft.financialStatus,
+  };
+  const documentRequirements = getApplicationDocumentRequirements(requirementInput);
+  const readinessChecklist = getReadinessChecklist(requirementInput);
+  const requiredDocumentTypes = getRequiredDocumentTypes(requirementInput);
+  const requiredDocsAccepted = requiredDocumentTypes.every((documentType) =>
     isDocumentStateSubmissionReady(draft.documents[documentType].validationState),
   );
-  const blockingRequiredDocuments = REQUIRED_DOCUMENT_TYPES.filter((documentType) =>
+  const blockingRequiredDocuments = requiredDocumentTypes.filter((documentType) =>
     isDocumentStateBlocking(draft.documents[documentType].validationState),
   );
-  const reviewOnlyRequiredDocuments = REQUIRED_DOCUMENT_TYPES.filter((documentType) =>
+  const reviewOnlyRequiredDocuments = requiredDocumentTypes.filter((documentType) =>
     isDocumentStateReviewOnly(draft.documents[documentType].validationState),
   );
 
+  const profileComplete = parentComplete && learnerComplete && schoolComplete;
+
+  const isReadyToSubmit = readinessConfirmed && profileComplete && requiredDocsAccepted;
+
   const stepStates: Record<StepKey, boolean> = {
-    parent: parentComplete,
-    learner: learnerComplete,
-    school: schoolComplete,
+    readiness: readinessConfirmed,
+    profile: profileComplete,
     documents: requiredDocsAccepted,
+    review: isReadyToSubmit,
   };
 
   const completion = useMemo(() => {
@@ -279,13 +569,12 @@ export default function ParentApplicationWorkflow() {
     return Math.round((completedSections / STEP_KEYS.length) * 100);
   }, [stepStates]);
 
-  const isReadyToSubmit = parentComplete && learnerComplete && schoolComplete && requiredDocsAccepted;
-
   function updateField<K extends keyof ApplicationDraft>(key: K, value: ApplicationDraft[K]) {
-    setDraft((current) => ({
-      ...current,
+    const updated = {
+      ...draft,
       [key]: value,
-    }));
+    };
+    setDraft(updated);
   }
 
   function updateDocument(documentType: DocumentType, nextDocument: DocumentDraft) {
@@ -303,23 +592,48 @@ export default function ParentApplicationWorkflow() {
 
     setUploadingDocument(documentType);
 
-    const uploadedDocument = await uploadDocumentDraft({
-      schoolId: 'eunice',
-      applicationId: 'parent-portal-draft',
-      documentType,
-      file,
-    });
+    try {
+      const activeAppId = user ? await ensureApplicationExists() : 'parent-portal-draft';
 
-    updateDocument(documentType, {
-      fileName: uploadedDocument.fileName,
-      validationState: uploadedDocument.validationState,
-      message: uploadedDocument.message,
-      storagePath: uploadedDocument.storagePath,
-      uploadedAt: uploadedDocument.uploadedAt,
-      uploadStatus: uploadedDocument.uploadStatus,
-    });
+      const uploadedDocument = await uploadDocumentDraft({
+        schoolId: schoolId || 'eunice',
+        applicationId: activeAppId,
+        documentType,
+        file,
+      });
 
-    setUploadingDocument((current) => (current === documentType ? null : current));
+      const nextDoc: DocumentDraft = {
+        fileName: uploadedDocument.fileName,
+        validationState: uploadedDocument.validationState,
+        message: uploadedDocument.message,
+        storagePath: uploadedDocument.storagePath,
+        uploadedAt: uploadedDocument.uploadedAt,
+        uploadStatus: uploadedDocument.uploadStatus,
+      };
+
+      updateDocument(documentType, nextDoc);
+
+      if (user && activeAppId && uploadedDocument.uploadStatus === 'saved' && uploadedDocument.storagePath) {
+        const { error } = await supabase.from('documents').upsert({
+          application_id: activeAppId,
+          document_type: documentType,
+          file_path: uploadedDocument.storagePath,
+          file_name: uploadedDocument.fileName,
+          mime_type: file.type || 'application/octet-stream',
+          file_size: file.size,
+          upload_status: uploadedDocument.validationState,
+          uploaded_at: new Date().toISOString(),
+        }, {
+          onConflict: 'application_id,document_type'
+        });
+
+        if (error) throw error;
+      }
+    } catch (err) {
+      console.error('Error uploading or saving document meta:', err);
+    } finally {
+      setUploadingDocument(null);
+    }
   }
 
   function loadSampleDocument(documentType: DocumentType) {
@@ -333,7 +647,7 @@ export default function ParentApplicationWorkflow() {
     });
   }
 
-  function clearDocument(documentType: DocumentType) {
+  async function clearDocument(documentType: DocumentType) {
     updateDocument(documentType, {
       fileName: '',
       validationState: 'missing',
@@ -342,30 +656,71 @@ export default function ParentApplicationWorkflow() {
       uploadedAt: null,
       uploadStatus: 'idle',
     });
+
+    if (user && appId) {
+      try {
+        const { error } = await supabase
+          .from('documents')
+          .delete()
+          .eq('application_id', appId)
+          .eq('document_type', documentType);
+
+        if (error) throw error;
+      } catch (err) {
+        console.error('Error removing database document metadata:', err);
+      }
+    }
   }
 
   function goToNextStep() {
     const currentIndex = getStepIndex(activeStep);
     const nextStep = STEP_KEYS[currentIndex + 1];
-    if (nextStep) setActiveStep(nextStep);
+    if (nextStep) {
+      setActiveStep(nextStep);
+      saveApplicationState();
+    }
   }
 
   function goToPreviousStep() {
     const currentIndex = getStepIndex(activeStep);
     const previousStep = STEP_KEYS[currentIndex - 1];
-    if (previousStep) setActiveStep(previousStep);
+    if (previousStep) {
+      setActiveStep(previousStep);
+      saveApplicationState();
+    }
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!isReadyToSubmit) return;
 
-    setDraft((current) => ({
-      ...current,
-      status: 'submitted',
-      submittedAt: new Date().toISOString(),
-    }));
-    setActiveStep('documents');
+    const submittedDate = new Date().toISOString();
+    const updatedDraft = {
+      ...draft,
+      status: 'submitted' as ApplicationStatus,
+      submittedAt: submittedDate,
+    };
+
+    setDraft(updatedDraft);
+
+    if (user && appId) {
+      try {
+        const { error } = await supabase
+          .from('applications')
+          .update({
+            status: 'submitted',
+            submitted_at: submittedDate,
+            updated_at: submittedDate,
+          })
+          .eq('id', appId);
+
+        if (error) throw error;
+      } catch (err) {
+        console.error('Error updating application submission state:', err);
+      }
+    }
+
+    setActiveStep('review');
   }
 
   return (
@@ -374,12 +729,9 @@ export default function ParentApplicationWorkflow() {
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary-700">Application workspace</p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">
-              Draft your Eunice application step by step
-            </h2>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">Complete your application in 4 clear stages</h2>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-              This preview keeps the parent journey, status language, and document rules aligned while we build the
-              real intake flow.
+              We guide families upfront on everything required to avoid mid-form surprises and unnecessary backtracking.
             </p>
           </div>
 
@@ -422,7 +774,7 @@ export default function ParentApplicationWorkflow() {
                       : 'border-slate-200 bg-white hover:border-primary-200 hover:bg-primary-50/60'
                   }`}
                 >
-                  <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
                     {meta.eyebrow}
                   </div>
                   <div className="mt-1 flex items-center justify-between gap-2">
@@ -455,7 +807,52 @@ export default function ParentApplicationWorkflow() {
               </div>
             </div>
 
-            {activeStep === 'parent' && (
+            {activeStep === 'readiness' && (
+              <div className="mt-6 space-y-5">
+                <div className="rounded-2xl border border-primary-200 bg-primary-50 p-4">
+                  <div className="text-sm font-semibold text-slate-950">Before you start</div>
+                  <p className="mt-1 text-sm leading-6 text-slate-700">
+                    Estimated completion time: <span className="font-semibold">{PROCESS_ESTIMATE}</span>
+                  </p>
+                  <p className="mt-1 text-sm leading-6 text-slate-700">
+                    You can save and return later, but having these documents ready will make the process much faster.
+                  </p>
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                    <div className="text-sm font-semibold text-slate-950">Required documents checklist</div>
+                    <ul className="mt-2 space-y-2 text-sm leading-6 text-slate-600">
+                      {readinessChecklist.map((item) => (
+                        <li key={item}>• {item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                    <div className="text-sm font-semibold text-slate-950">Upload quality rules</div>
+                    <ul className="mt-2 space-y-2 text-sm leading-6 text-slate-600">
+                      {QUALITY_TIPS.map((tip) => (
+                        <li key={tip}>• {tip}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                <label className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700">
+                  <input
+                    type="checkbox"
+                    checked={readinessConfirmed}
+                    onChange={(event) => setReadinessConfirmed(event.target.checked)}
+                    className="mt-0.5 h-4 w-4 rounded border-slate-300 text-primary-700 focus:ring-primary-300"
+                  />
+                  <span>
+                    I understand the full requirements and I am ready to continue with the application stages.
+                  </span>
+                </label>
+              </div>
+            )}
+
+            {activeStep === 'profile' && (
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <Field
                   label="First name"
@@ -482,11 +879,6 @@ export default function ParentApplicationWorkflow() {
                   onChange={(value) => updateField('parentPhone', value)}
                   placeholder="+27 82 123 4567"
                 />
-              </div>
-            )}
-
-            {activeStep === 'learner' && (
-              <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <Field
                   label="Learner first name"
                   value={draft.learnerFirstName}
@@ -506,39 +898,51 @@ export default function ParentApplicationWorkflow() {
                   placeholder="Grade 1"
                 />
                 <Field
-                  label="Current/previous school"
+                  label="Current or previous school"
                   value={draft.previousSchool}
                   onChange={(value) => updateField('previousSchool', value)}
                   placeholder="Current school or nursery"
                 />
-              </div>
-            )}
-
-            {activeStep === 'school' && (
-              <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <Field
                   label="Intake year"
                   value={draft.intakeYear}
                   onChange={(value) => updateField('intakeYear', value)}
                   placeholder="2026"
                 />
-                <Field
+                <SelectField
                   label="Sibling at Eunice?"
                   value={draft.siblingAtSchool}
                   onChange={(value) => updateField('siblingAtSchool', value)}
-                  placeholder="Yes or no"
+                  options={['No', 'Yes']}
                 />
-                <Field
+                <SelectField
                   label="Co-parent context"
                   value={draft.coParentContext}
                   onChange={(value) => updateField('coParentContext', value)}
-                  placeholder="Yes or no"
+                  options={['No', 'Yes']}
+                />
+                <SelectField
+                  label="Citizenship status"
+                  value={draft.citizenshipStatus}
+                  onChange={(value) => updateField('citizenshipStatus', value)}
+                  options={['South African', 'Non-South African']}
+                />
+                <SelectField
+                  label="Application type"
+                  value={draft.boardingStatus}
+                  onChange={(value) => updateField('boardingStatus', value)}
+                  options={['Daygirl', 'Boarder']}
+                />
+                <SelectField
+                  label="Financial context"
+                  value={draft.financialStatus}
+                  onChange={(value) => updateField('financialStatus', value)}
+                  options={['Employed', 'Self-employed', 'Other']}
                 />
                 <div className="rounded-2xl border border-dashed border-primary-200 bg-primary-50 p-4 text-sm leading-6 text-slate-700">
                   <div className="font-semibold text-slate-950">Helpful note</div>
                   <p className="mt-1">
-                    We will add richer household context, sibling links, and admissions flags in later slices once the
-                    workflow is confirmed.
+                    You can continue with basic context now. Any additional admissions detail can still be requested during review.
                   </p>
                 </div>
               </div>
@@ -555,19 +959,21 @@ export default function ParentApplicationWorkflow() {
                 </div>
 
                 <div className="grid gap-4">
-                  {REQUIRED_DOCUMENT_TYPES.map((documentType) => {
+                  {documentRequirements.map((requirement) => {
+                    const documentType = requirement.documentType;
                     const document = draft.documents[documentType];
 
                     return (
-                      <div key={documentType} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                      <div key={requirement.id} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
                         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                           <div>
                             <div className="flex items-center gap-2">
-                              <h4 className="text-sm font-semibold text-slate-950">{DOCUMENT_TYPE_LABELS[documentType]}</h4>
+                              <h4 className="text-sm font-semibold text-slate-950">{requirement.label}</h4>
                               <span className="rounded-full bg-primary-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-primary-700">
-                                Required
+                                {requirement.required ? 'Required' : 'Optional'}
                               </span>
                             </div>
+                            <p className="mt-1 text-sm leading-6 text-slate-600">{requirement.reason}</p>
                             <p className="mt-1 text-sm leading-6 text-slate-600">
                               Accepted formats: {DOCUMENT_CONTRACTS[documentType].acceptedMimeTypes.join(', ')}.
                               Maximum size: {Math.round(DOCUMENT_CONTRACTS[documentType].maxFileSizeBytes / (1024 * 1024))} MB.
@@ -623,23 +1029,56 @@ export default function ParentApplicationWorkflow() {
                   })}
                 </div>
 
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                  <div className="text-sm font-semibold text-slate-950">Optional supporting document</div>
-                  <p className="mt-1 text-sm leading-6 text-slate-600">
-                    Add a sibling letter, custody document, or any extra supporting file if needed.
-                  </p>
-                  <div className="mt-3 flex items-center gap-3">
-                    <button
-                      type="button"
-                      onClick={() => loadSampleDocument('other')}
-                      className="rounded-xl border border-primary-200 bg-white px-3 py-2 text-sm font-semibold text-primary-900 transition hover:bg-primary-50"
-                    >
-                      Add sample supporting file
-                    </button>
-                    <span className="text-xs text-slate-500">
-                      Optional documents can be reviewed later by admissions staff.
-                    </span>
+                {!requiredDocumentTypes.includes('other') ? (
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                    <div className="text-sm font-semibold text-slate-950">Optional supporting document</div>
+                    <p className="mt-1 text-sm leading-6 text-slate-600">
+                      Add a sibling letter or any extra supporting file if admissions asks for it.
+                    </p>
+                    <div className="mt-3 flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => loadSampleDocument('other')}
+                        className="rounded-xl border border-primary-200 bg-white px-3 py-2 text-sm font-semibold text-primary-900 transition hover:bg-primary-50"
+                      >
+                        Add sample supporting file
+                      </button>
+                      <span className="text-xs text-slate-500">
+                        Optional documents can be reviewed later by admissions staff.
+                      </span>
+                    </div>
                   </div>
+                ) : null}
+              </div>
+            )}
+
+            {activeStep === 'review' && (
+              <div className="mt-6 space-y-4">
+                <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                  <div className="text-sm font-semibold text-slate-950">Pre-submit checklist</div>
+                  <div className="mt-3 grid gap-2 text-sm text-slate-700">
+                    <ChecklistRow label="Readiness confirmed" passed={readinessConfirmed} />
+                    <ChecklistRow label="Profile stage complete" passed={profileComplete} />
+                    <ChecklistRow label="Required documents uploaded" passed={requiredDocsAccepted} />
+                  </div>
+                </div>
+                <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                  <div className="text-sm font-semibold text-slate-950">Submission requirements</div>
+                  <div className="mt-3 space-y-2 text-sm text-slate-700">
+                    {documentRequirements.map((requirement) => {
+                      const document = draft.documents[requirement.documentType];
+                      return (
+                        <ChecklistRow
+                          key={requirement.id}
+                          label={`${requirement.label}: ${DOCUMENT_VALIDATION_LABELS[document.validationState]}`}
+                          passed={isDocumentStateSubmissionReady(document.validationState)}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+                <div className="rounded-2xl border border-primary-100 bg-primary-50 p-4 text-sm leading-6 text-slate-700">
+                  Final tip: if any uploaded document is unclear, replace it now to prevent admissions follow-up delays.
                 </div>
               </div>
             )}
@@ -658,15 +1097,16 @@ export default function ParentApplicationWorkflow() {
                 <button
                   type="button"
                   onClick={goToPreviousStep}
-                  disabled={activeStep === 'parent'}
+                  disabled={activeStep === 'readiness'}
                   className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Back
                 </button>
-                {activeStep !== 'documents' ? (
+                {activeStep !== 'review' ? (
                   <button
                     type="button"
                     onClick={goToNextStep}
+                    disabled={activeStep === 'readiness' && !readinessConfirmed}
                     className="rounded-xl bg-primary-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-800"
                   >
                     Continue
@@ -707,7 +1147,7 @@ export default function ParentApplicationWorkflow() {
               </div>
             ) : null}
             <div className="mt-4 space-y-3">
-              {REQUIRED_DOCUMENT_TYPES.map((documentType) => {
+              {requiredDocumentTypes.map((documentType) => {
                 const document = draft.documents[documentType];
                 return (
                   <div key={documentType} className="flex items-start justify-between gap-3 rounded-2xl bg-slate-50 px-4 py-3">
@@ -761,11 +1201,55 @@ function Field({
   );
 }
 
+function SelectField({
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  options: string[];
+}) {
+  return (
+    <label className="flex flex-col gap-1.5">
+      <span className="text-sm font-medium text-slate-700">{label}</span>
+      <select
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-950 outline-none transition focus:border-primary-300 focus:ring-4 focus:ring-primary-100"
+      >
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
 function SummaryRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-start justify-between gap-4 border-b border-slate-100 pb-3 last:border-b-0 last:pb-0">
       <span className="text-slate-500">{label}</span>
       <span className="max-w-[65%] text-right font-medium text-slate-950">{value}</span>
+    </div>
+  );
+}
+
+function ChecklistRow({ label, passed }: { label: string; passed: boolean }) {
+  return (
+    <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
+      <span>{label}</span>
+      <span
+        className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] ${
+          passed ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-700'
+        }`}
+      >
+        {passed ? 'Ready' : 'Missing'}
+      </span>
     </div>
   );
 }

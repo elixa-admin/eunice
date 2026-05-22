@@ -104,7 +104,7 @@ applicants (parent + learner combined)
 documents
 ├── id
 ├── application_id
-├── document_type (birth_cert, school_report, proof_residence, etc.)
+├── document_type (birth_cert, learner_photo, motivation_letter, school_report, proof_residence, id_copy, income_proof, medical_aid_card, immunisation_record, fee_payer_id_copy, residency_permit, custody_order, other)
 ├── file_url
 ├── uploaded_at
 ├── verified_at

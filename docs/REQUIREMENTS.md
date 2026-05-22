@@ -253,7 +253,7 @@ users (Supabase Auth + custom fields)
 documents
 ├── id (UUID, PK)
 ├── application_id (FK → applications)
-├── document_type (enum: birth_cert, school_report, proof_residence, id_copy, other)
+├── document_type (enum: birth_cert, learner_photo, motivation_letter, school_report, proof_residence, id_copy, income_proof, medical_aid_card, immunisation_record, fee_payer_id_copy, residency_permit, custody_order, other)
 ├── file_path (path in Supabase Storage)
 ├── file_name (original uploaded name)
 ├── file_size (bytes)

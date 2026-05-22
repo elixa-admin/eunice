@@ -3,13 +3,29 @@
 A modern digital admissions and learner intake workflow platform for Eunice High School, with foundations for broader South African school adoption.
 
 ## Project Status
-🔄 **Phase 0** — Discovery & Workflow Mapping
+🔄 **Baseline phase plan:** Phase 0 — Discovery & Workflow Mapping
+
+### Working Status Snapshot
+- Discovery is underway, with live workflow inspection captured in [Current State Scratchpad](./docs/CURRENT_STATE_SCRATCHPAD.md).
+- The latest live-form walkthrough confirmed the real Eunice intake shape and is captured in [Live Form Discovery Report](./docs/DISCOVERY_REPORT_LIVE_FORM.md).
+- Design and planning prep are active through the sprint and task-board docs in `docs/`.
+- Early Phase 2 foundation work has started in the repo, including the real `src/` app surface, the `dev/` preview surface, and initial Supabase migration work.
+- Linear is the planning source of truth for the active workstream when a slice is being tracked there.
+
+### Tracker Alignment
+- Linear project: `Eunice Admissions Platform`
+- GitHub repo: `elixa-admin/eunice`
+- Vercel project currently linked in this workspace: `eunice-dev` with root directory `dev`
+
+The phase docs remain the baseline plan, but the current working state is more advanced than the original “not started” markers in the older planning docs.
 
 ## Quick Links
 - [Project Brief](./docs/PROJECT_BRIEF.md)
 - [Architecture & Tech Stack](./docs/ARCHITECTURE.md)
 - [Development Phases](./docs/PHASES.md)
 - [Workflow & Requirements](./docs/REQUIREMENTS.md)
+- [Current State Scratchpad](./docs/CURRENT_STATE_SCRATCHPAD.md)
+- [Live Form Discovery Report](./docs/DISCOVERY_REPORT_LIVE_FORM.md)
 - [Engineering Guardrails](./docs/ENGINEERING_GUARDRAILS.md)
 - [Pre-Merge Checklist](./docs/PRE_MERGE_CHECKLIST.md)
 - [Tooling Policy](./docs/TOOLING_POLICY.md)

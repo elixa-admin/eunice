@@ -1,8 +1,16 @@
 export const DOCUMENT_TYPES = [
   'birth_cert',
+  'learner_photo',
+  'motivation_letter',
   'school_report',
   'proof_residence',
   'id_copy',
+  'income_proof',
+  'medical_aid_card',
+  'immunisation_record',
+  'fee_payer_id_copy',
+  'residency_permit',
+  'custody_order',
   'other',
 ] as const;
 
@@ -10,16 +18,30 @@ export type DocumentType = (typeof DOCUMENT_TYPES)[number];
 
 export const REQUIRED_DOCUMENT_TYPES: DocumentType[] = [
   'birth_cert',
+  'learner_photo',
+  'motivation_letter',
   'school_report',
   'proof_residence',
   'id_copy',
+  'income_proof',
+  'medical_aid_card',
+  'immunisation_record',
+  'fee_payer_id_copy',
 ];
 
 export const DOCUMENT_TYPE_LABELS: Record<DocumentType, string> = {
   birth_cert: 'Birth certificate',
+  learner_photo: 'Learner photograph',
+  motivation_letter: 'Motivation letter to the principal',
   school_report: 'Previous school report',
   proof_residence: 'Proof of residence',
-  id_copy: 'Parent ID or passport copy',
+  id_copy: 'Parent or guardian ID copy',
+  income_proof: 'Proof of employment or income',
+  medical_aid_card: 'Medical aid card',
+  immunisation_record: 'Immunisation or health record',
+  fee_payer_id_copy: 'Fee-payer or debtor ID copy',
+  residency_permit: 'Passport, study permit, or permanent residence document',
+  custody_order: 'Divorce, custody, or court order',
   other: 'Other supporting document',
 };
 
@@ -95,6 +117,20 @@ export const DOCUMENT_CONTRACTS: Record<DocumentType, DocumentContract> = {
     acceptedExtensions: ACCEPTED_DOCUMENT_EXTENSIONS,
     maxFileSizeBytes: MAX_DOCUMENT_FILE_SIZE_BYTES,
   },
+  learner_photo: {
+    type: 'learner_photo',
+    required: true,
+    acceptedMimeTypes: ACCEPTED_DOCUMENT_MIME_TYPES,
+    acceptedExtensions: ACCEPTED_DOCUMENT_EXTENSIONS,
+    maxFileSizeBytes: MAX_DOCUMENT_FILE_SIZE_BYTES,
+  },
+  motivation_letter: {
+    type: 'motivation_letter',
+    required: true,
+    acceptedMimeTypes: ACCEPTED_DOCUMENT_MIME_TYPES,
+    acceptedExtensions: ACCEPTED_DOCUMENT_EXTENSIONS,
+    maxFileSizeBytes: MAX_DOCUMENT_FILE_SIZE_BYTES,
+  },
   school_report: {
     type: 'school_report',
     required: true,
@@ -112,6 +148,48 @@ export const DOCUMENT_CONTRACTS: Record<DocumentType, DocumentContract> = {
   id_copy: {
     type: 'id_copy',
     required: true,
+    acceptedMimeTypes: ACCEPTED_DOCUMENT_MIME_TYPES,
+    acceptedExtensions: ACCEPTED_DOCUMENT_EXTENSIONS,
+    maxFileSizeBytes: MAX_DOCUMENT_FILE_SIZE_BYTES,
+  },
+  income_proof: {
+    type: 'income_proof',
+    required: true,
+    acceptedMimeTypes: ACCEPTED_DOCUMENT_MIME_TYPES,
+    acceptedExtensions: ACCEPTED_DOCUMENT_EXTENSIONS,
+    maxFileSizeBytes: MAX_DOCUMENT_FILE_SIZE_BYTES,
+  },
+  medical_aid_card: {
+    type: 'medical_aid_card',
+    required: true,
+    acceptedMimeTypes: ACCEPTED_DOCUMENT_MIME_TYPES,
+    acceptedExtensions: ACCEPTED_DOCUMENT_EXTENSIONS,
+    maxFileSizeBytes: MAX_DOCUMENT_FILE_SIZE_BYTES,
+  },
+  immunisation_record: {
+    type: 'immunisation_record',
+    required: true,
+    acceptedMimeTypes: ACCEPTED_DOCUMENT_MIME_TYPES,
+    acceptedExtensions: ACCEPTED_DOCUMENT_EXTENSIONS,
+    maxFileSizeBytes: MAX_DOCUMENT_FILE_SIZE_BYTES,
+  },
+  fee_payer_id_copy: {
+    type: 'fee_payer_id_copy',
+    required: true,
+    acceptedMimeTypes: ACCEPTED_DOCUMENT_MIME_TYPES,
+    acceptedExtensions: ACCEPTED_DOCUMENT_EXTENSIONS,
+    maxFileSizeBytes: MAX_DOCUMENT_FILE_SIZE_BYTES,
+  },
+  residency_permit: {
+    type: 'residency_permit',
+    required: false,
+    acceptedMimeTypes: ACCEPTED_DOCUMENT_MIME_TYPES,
+    acceptedExtensions: ACCEPTED_DOCUMENT_EXTENSIONS,
+    maxFileSizeBytes: MAX_DOCUMENT_FILE_SIZE_BYTES,
+  },
+  custody_order: {
+    type: 'custody_order',
+    required: false,
     acceptedMimeTypes: ACCEPTED_DOCUMENT_MIME_TYPES,
     acceptedExtensions: ACCEPTED_DOCUMENT_EXTENSIONS,
     maxFileSizeBytes: MAX_DOCUMENT_FILE_SIZE_BYTES,

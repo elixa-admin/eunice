@@ -6,7 +6,7 @@ import { NavBar } from '@/components/nav';
 const plexSans = IBM_Plex_Sans({
   subsets: ['latin'],
   variable: '--font-sans-ui',
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
 });
 

@@ -15,7 +15,8 @@ import {
 } from '@/lib/domain/application-requirements';
 import {
   INTAKE_ROLE_LABELS,
-  createEmptyIntakeRoleState,
+  createDefaultIntakeRoleState,
+  type IntakeRoleProfileField,
   type IntakeRoleState,
 } from '@/lib/domain/intake-roles';
 import {
@@ -120,37 +121,6 @@ const WORKFLOW_HIGHLIGHTS = [
     body: 'Parents can quickly see what is complete, what still needs action, and what is under review.',
   },
 ] as const;
-
-function createInitialRoleDraft(): IntakeRoleState {
-  const roles = createEmptyIntakeRoleState();
-  return {
-    ...roles,
-    submitter: {
-      ...roles.submitter,
-      fullName: '',
-      emailAddress: '',
-      phoneNumber: '',
-      address: '',
-      notes: 'Submitting parent',
-    },
-    parent: {
-      ...roles.parent,
-      fullName: '',
-      emailAddress: '',
-      phoneNumber: '',
-      address: '',
-      notes: 'Primary parent or guardian',
-    },
-    legalGuardian: {
-      ...roles.legalGuardian,
-      notes: 'Optional unless a legal guardian is involved',
-    },
-    feePayer: {
-      ...roles.feePayer,
-      notes: 'Person responsible for school fees',
-    },
-  };
-}
 
 function createInitialDocumentDrafts(): Record<DocumentType, DocumentDraft> {
   return {
@@ -283,7 +253,7 @@ function createInitialDraft(): ApplicationDraft {
     status: 'draft',
     submittedAt: null,
     documents: createInitialDocumentDrafts(),
-    roles: createInitialRoleDraft(),
+    roles: createDefaultIntakeRoleState(),
   };
 }
 
@@ -428,7 +398,7 @@ export default function ParentApplicationWorkflow() {
               status: appData.status as ApplicationStatus,
               submittedAt: appData.submitted_at,
               documents: documentsDraft,
-              roles: createInitialRoleDraft(),
+              roles: createDefaultIntakeRoleState(),
             });
             
             setLastSavedAt(new Date(appData.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
@@ -662,7 +632,7 @@ export default function ParentApplicationWorkflow() {
 
   function updateRoleField(
     roleKey: keyof IntakeRoleState,
-    field: keyof IntakeRoleState[keyof IntakeRoleState],
+    field: IntakeRoleProfileField,
     value: string,
   ) {
     setDraft((current) => ({

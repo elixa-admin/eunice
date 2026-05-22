@@ -24,12 +24,21 @@ export type IntakeRoleProfile = {
   notes: string;
 };
 
+export type IntakeRoleProfileField = Exclude<keyof IntakeRoleProfile, 'role'>;
+
 export type IntakeRoleState = {
   submitter: IntakeRoleProfile;
   parent: IntakeRoleProfile;
   legalGuardian: IntakeRoleProfile;
   feePayer: IntakeRoleProfile;
 };
+
+export const INTAKE_ROLE_STATE_KEYS = [
+  'submitter',
+  'parent',
+  'legalGuardian',
+  'feePayer',
+] as const satisfies ReadonlyArray<keyof IntakeRoleState>;
 
 export const EMPTY_INTAKE_ROLE_PROFILE: IntakeRoleProfile = {
   role: 'parent',
@@ -41,12 +50,39 @@ export const EMPTY_INTAKE_ROLE_PROFILE: IntakeRoleProfile = {
   notes: '',
 };
 
-export function createEmptyIntakeRoleState(): IntakeRoleState {
+export function createIntakeRoleProfile(
+  role: IntakeRole,
+  overrides: Partial<Omit<IntakeRoleProfile, 'role'>> = {},
+): IntakeRoleProfile {
   return {
-    submitter: { ...EMPTY_INTAKE_ROLE_PROFILE, role: 'submitter' },
-    parent: { ...EMPTY_INTAKE_ROLE_PROFILE, role: 'parent' },
-    legalGuardian: { ...EMPTY_INTAKE_ROLE_PROFILE, role: 'legal_guardian' },
-    feePayer: { ...EMPTY_INTAKE_ROLE_PROFILE, role: 'fee_payer' },
+    ...EMPTY_INTAKE_ROLE_PROFILE,
+    ...overrides,
+    role,
   };
 }
 
+export function createEmptyIntakeRoleState(): IntakeRoleState {
+  return {
+    submitter: createIntakeRoleProfile('submitter'),
+    parent: createIntakeRoleProfile('parent'),
+    legalGuardian: createIntakeRoleProfile('legal_guardian'),
+    feePayer: createIntakeRoleProfile('fee_payer'),
+  };
+}
+
+export function createDefaultIntakeRoleState(): IntakeRoleState {
+  return {
+    submitter: createIntakeRoleProfile('submitter', {
+      notes: 'Submitting parent',
+    }),
+    parent: createIntakeRoleProfile('parent', {
+      notes: 'Primary parent or guardian',
+    }),
+    legalGuardian: createIntakeRoleProfile('legal_guardian', {
+      notes: 'Optional unless a legal guardian is involved',
+    }),
+    feePayer: createIntakeRoleProfile('fee_payer', {
+      notes: 'Person responsible for school fees',
+    }),
+  };
+}

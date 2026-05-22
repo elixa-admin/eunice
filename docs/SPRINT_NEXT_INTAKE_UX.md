@@ -254,9 +254,11 @@ The platform is now structurally smart enough. The next phase makes it feel like
 3. Parent experience polish: better upload states, review summaries, confirmation surfaces, and stage context.
 4. Admin dashboard polish: queue density, operational status, summary blocks, and action clarity.
 5. Brand treatment: Eunice-specific color, tone, and polish so the platform feels intentional, not generic.
+6. Expectation setting: show parents when they can expect the next action, reply, or decision so the portal answers "what happens next?" instead of only showing static status.
 
 ### Phase B outcomes
 - A warmer, more finished-looking parent portal.
 - An admin dashboard that feels operational.
 - A coherent visual system across both surfaces.
 - A platform that looks like a real product, not a scaffold.
+- Clearer expectation-setting for parents around next action timing.

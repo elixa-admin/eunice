@@ -34,10 +34,10 @@ export const NavBar: React.FC = () => {
                 </svg>
               </div>
               <div className="leading-tight">
-                <span className="display-serif block text-lg font-bold tracking-tight text-slate-950 transition-colors group-hover:text-primary-700">
+                <span className="display-serif block text-[1.42rem] font-bold tracking-tight text-slate-950 transition-colors group-hover:text-primary-700">
                   Eunice Admissions
                 </span>
-                <span className="text-[11px] uppercase tracking-[0.22em] text-slate-500">Admissions platform preview</span>
+                <span className="type-label text-slate-500">Admissions platform preview</span>
               </div>
             </Link>
           </div>

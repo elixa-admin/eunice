@@ -35,9 +35,9 @@ export default function DevAdminPage() {
     >
       <div className="mb-6 grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
         <SurfaceCard className="overflow-hidden bg-[linear-gradient(135deg,#0d321c,#124828_38%,#9a730f)] p-7 text-white">
-          <p className="text-xs uppercase tracking-[0.18em] text-white/80">Operations at a glance</p>
-          <h2 className="display-serif mt-3 text-3xl font-semibold text-white">Admissions queue with stronger visual hierarchy</h2>
-          <p className="mt-3 max-w-2xl text-sm leading-7 text-white/90">
+          <p className="type-label text-white/80">Operations at a glance</p>
+          <h2 className="display-serif type-display-lg mt-3 text-white">Admissions queue with stronger visual hierarchy</h2>
+          <p className="type-body mt-3 max-w-2xl text-white/90">
             This surface should feel like a real operations cockpit, with immediate clarity on risk, volume, and next decisions.
           </p>
           <div className="mt-6 grid gap-3 sm:grid-cols-3">
@@ -48,15 +48,15 @@ export default function DevAdminPage() {
         </SurfaceCard>
 
         <SurfaceCard className="bg-[linear-gradient(180deg,#fffef9,#f7f2e3)] p-7">
-          <p className="text-xs uppercase tracking-[0.18em] text-primary-700/75">Queue health</p>
+          <p className="type-label text-primary-700/75">Queue health</p>
           <div className="mt-4 space-y-3">
             <div className="rounded-2xl border border-primary-200 bg-white px-4 py-3 shadow-[0_12px_28px_rgba(15,23,42,0.08)]">
-              <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Accepted</div>
-              <div className="mt-2 text-3xl font-semibold text-slate-950">{totals.accepted}</div>
+              <div className="type-label text-slate-500">Accepted</div>
+              <div className="type-metric mt-2 text-slate-950">{totals.accepted}</div>
             </div>
             <div className="rounded-2xl border border-accent-200 bg-[linear-gradient(145deg,#fef8e7,#f7e2a0)] px-4 py-3 shadow-[0_12px_28px_rgba(184,137,7,0.18)]">
-              <div className="text-xs uppercase tracking-[0.16em] text-accent-700">Dev only</div>
-              <div className="mt-2 text-sm font-semibold text-slate-950">Review states now use Eunice green and gold accents.</div>
+              <div className="type-label text-accent-700">Dev only</div>
+              <div className="type-body mt-2 font-semibold text-slate-950">Review states now use Eunice green and gold accents.</div>
             </div>
           </div>
         </SurfaceCard>
@@ -75,7 +75,7 @@ export default function DevAdminPage() {
           </div>
           <div className="overflow-x-auto">
             <table className="min-w-full text-left text-sm">
-              <thead className="bg-primary-900 text-xs uppercase tracking-[0.16em] text-white/80">
+              <thead className="type-label bg-primary-900 text-white/80">
                 <tr>
                   <th className="px-6 py-4">Reference</th>
                   <th className="px-6 py-4">Learner</th>
@@ -136,21 +136,21 @@ export default function DevAdminPage() {
 
         <SurfaceCard className="bg-[linear-gradient(180deg,#fffef9,#f6f0df)] p-6">
           <div className="mb-5">
-            <p className="text-xs uppercase tracking-[0.16em] text-slate-400">Selected application</p>
-            <h2 className="display-serif mt-2 text-2xl font-semibold text-slate-950">{featured.learnerName}</h2>
-            <p className="text-sm text-slate-600">
+            <p className="type-label text-slate-400">Selected application</p>
+            <h2 className="display-serif type-title mt-2 text-slate-950">{featured.learnerName}</h2>
+            <p className="type-body text-slate-600">
               {featured.parentName} · {featured.grade}
             </p>
           </div>
 
           <div className="mb-6 grid grid-cols-2 gap-3">
             <div className="rounded-2xl border border-primary-200 bg-white p-4 shadow-sm">
-              <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Completion</div>
-              <div className="mt-2 text-2xl font-semibold text-slate-950">{featured.completion}%</div>
+              <div className="type-label text-slate-500">Completion</div>
+              <div className="type-metric mt-2 text-slate-950">{featured.completion}%</div>
             </div>
             <div className="rounded-2xl border border-primary-200 bg-white p-4 shadow-sm">
-              <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Assigned</div>
-              <div className="mt-2 text-sm font-semibold text-slate-950">{featured.assignedTo}</div>
+              <div className="type-label text-slate-500">Assigned</div>
+              <div className="type-body mt-2 font-semibold text-slate-950">{featured.assignedTo}</div>
             </div>
           </div>
 

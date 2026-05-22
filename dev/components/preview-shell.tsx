@@ -50,11 +50,11 @@ export function PreviewShell({
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)] lg:items-start">
             <div className="space-y-5">
               <div className="space-y-3">
-                <p className="text-xs font-medium uppercase tracking-[0.22em] text-white/80">{eyebrow}</p>
-                <h1 className="display-serif max-w-4xl text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-[2.85rem] lg:leading-[1.05]">
+                <p className="type-label text-white/80">{eyebrow}</p>
+                <h1 className="display-serif type-display-xl max-w-4xl text-white">
                   {title}
                 </h1>
-                <p className="max-w-3xl text-sm leading-7 text-white/90 sm:text-base">{description}</p>
+                <p className="type-body max-w-3xl text-white/90">{description}</p>
               </div>
               <div className="flex flex-wrap gap-2">
                 {surfaceInfo.chips.map((chip) => (
@@ -67,8 +67,8 @@ export function PreviewShell({
 
             <div className="flex flex-col gap-3">
               <div className="rounded-[28px] border border-white/35 bg-white/16 p-5 backdrop-blur-md">
-                <div className="text-xs uppercase tracking-[0.18em] text-white/80">Preview frame</div>
-                <p className="mt-2 text-sm leading-6 text-white/95">{surfaceInfo.lead}</p>
+                <div className="type-label text-white/80">Preview frame</div>
+                <p className="type-body mt-2 text-white/95">{surfaceInfo.lead}</p>
               </div>
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 {meta}

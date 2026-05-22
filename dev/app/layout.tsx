@@ -1,18 +1,19 @@
 import './globals.css';
-import { Cormorant_Garamond, Inter } from 'next/font/google';
+import { Manrope, Source_Serif_4 } from 'next/font/google';
 import type { Metadata } from 'next';
 import { NavBar } from '@/components/nav';
 
-const inter = Inter({
+const manrope = Manrope({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-sans-ui',
+  weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
 });
 
-const cormorant = Cormorant_Garamond({
+const sourceSerif = Source_Serif_4({
   subsets: ['latin'],
-  variable: '--font-serif',
-  weight: ['400', '500', '600', '700'],
+  variable: '--font-serif-display',
+  weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
 });
 
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${cormorant.variable}`}>
+    <html lang="en" className={`${manrope.variable} ${sourceSerif.variable}`}>
       <head />
       <body className="font-sans min-h-screen flex flex-col bg-background text-foreground">
         <NavBar />

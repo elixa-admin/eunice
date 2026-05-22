@@ -1,5 +1,8 @@
 # Sprint: Intake Role Model + Document Orchestration
 
+## Status
+Completed and wrapped. The live Eunice intake structure is now reflected in the repo, the Vercel preview, and the active planning notes. The next phase is the product-feel sprint.
+
 ## Objective
 Turn the live Eunice intake findings into a cleaner product flow that captures the real admissions structure without copying the Google Form literally. The sprint should make submitter, parent, legal guardian, and fee-payer roles explicit, keep documents authoritative in one place, and reduce duplicate or irrelevant data entry.
 
@@ -236,3 +239,24 @@ The forms taught us where parents get stuck. We should add the cheapest useful i
 - The admin queue and detail views understand the same document states.
 - We have a cheap-intelligence layer for duplicates, quality placeholders, and drop-off signals.
 - The sprint remains small enough to ship as vertical slices.
+
+## Closeout
+- The branch preview is live on Vercel.
+- The current PR is the working GitHub surface for this sprint.
+- Linear should now treat this sprint as complete and move focus to the next phase.
+
+## Next Phase: Product Feel + Trust Layer
+The platform is now structurally smart enough. The next phase makes it feel like a real admissions product.
+
+### Focus areas
+1. Visual hierarchy: typography, spacing, card rhythm, and clearer page structure.
+2. Trust cues: admissions progress, friendly guidance, stronger empty states, and clearer next steps.
+3. Parent experience polish: better upload states, review summaries, confirmation surfaces, and stage context.
+4. Admin dashboard polish: queue density, operational status, summary blocks, and action clarity.
+5. Brand treatment: Eunice-specific color, tone, and polish so the platform feels intentional, not generic.
+
+### Phase B outcomes
+- A warmer, more finished-looking parent portal.
+- An admin dashboard that feels operational.
+- A coherent visual system across both surfaces.
+- A platform that looks like a real product, not a scaffold.

@@ -866,9 +866,17 @@ export default function ParentApplicationWorkflow() {
             </p>
           </div>
 
-          <div className="rounded-2xl border border-primary-100 bg-primary-50 px-4 py-3 text-sm text-slate-700">
-            <div className="font-semibold text-slate-950">{APPLICATION_STATUS_LABELS[draft.status]}</div>
-            <div className="mt-1 max-w-md text-slate-600">{APPLICATION_STATUS_DESCRIPTIONS[draft.status]}</div>
+          <div className="rounded-2xl border border-primary-100 bg-primary-50 px-4 py-3 text-sm text-slate-700 shadow-sm">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary-700">Application status</div>
+                <div className="mt-1 font-semibold text-slate-950">{APPLICATION_STATUS_LABELS[draft.status]}</div>
+              </div>
+              <div className="rounded-full border border-primary-100 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-primary-800">
+                {completion}% complete
+              </div>
+            </div>
+            <div className="mt-2 max-w-md text-slate-600">{APPLICATION_STATUS_DESCRIPTIONS[draft.status]}</div>
           </div>
         </div>
 
@@ -923,7 +931,7 @@ export default function ParentApplicationWorkflow() {
             })}
           </div>
 
-              <div className="rounded-3xl border border-slate-200 bg-slate-50/80 p-5 sm:p-6">
+          <div className="rounded-3xl border border-slate-200 bg-slate-50/80 p-5 shadow-[0_16px_40px_rgba(15,23,42,0.04)] sm:p-6">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary-700">
@@ -940,7 +948,7 @@ export default function ParentApplicationWorkflow() {
 
             {activeStep === 'readiness' && (
               <div className="mt-6 space-y-5">
-                <div className="rounded-2xl border border-primary-200 bg-primary-50 p-4">
+                <div className="rounded-2xl border border-primary-200 bg-primary-50 p-4 shadow-sm">
                   <div className="text-sm font-semibold text-slate-950">Before you start</div>
                   <p className="mt-1 text-sm leading-6 text-slate-700">
                     Estimated completion time: <span className="font-semibold">{PROCESS_ESTIMATE}</span>
@@ -951,7 +959,7 @@ export default function ParentApplicationWorkflow() {
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                  <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
                     <div className="text-sm font-semibold text-slate-950">Required documents checklist</div>
                     <ul className="mt-2 space-y-2 text-sm leading-6 text-slate-600">
                       {readinessChecklist.map((item) => (
@@ -959,7 +967,7 @@ export default function ParentApplicationWorkflow() {
                       ))}
                     </ul>
                   </div>
-                  <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                  <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
                     <div className="text-sm font-semibold text-slate-950">Upload quality rules</div>
                     <ul className="mt-2 space-y-2 text-sm leading-6 text-slate-600">
                       {QUALITY_TIPS.map((tip) => (
@@ -985,7 +993,7 @@ export default function ParentApplicationWorkflow() {
 
             {activeStep === 'profile' && (
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:col-span-2">
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:col-span-2 shadow-sm">
                   <div className="text-sm font-semibold text-slate-950">Who is involved</div>
                   <p className="mt-1 text-sm leading-6 text-slate-600">
                     We capture the people behind the application separately so the school can track contact, legal responsibility, and fee responsibility without confusion.
@@ -1076,7 +1084,7 @@ export default function ParentApplicationWorkflow() {
                   onChange={(value) => updateField('financialStatus', value)}
                   options={['Employed', 'Self-employed', 'Other']}
                 />
-                <label className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 sm:col-span-2">
+                <label className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm sm:col-span-2">
                   <input
                     type="checkbox"
                     checked={draft.feePayerSameAsParent}
@@ -1085,7 +1093,7 @@ export default function ParentApplicationWorkflow() {
                   />
                   <span>School fees will be paid by the submitting parent</span>
                 </label>
-                <label className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 sm:col-span-2">
+                <label className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm sm:col-span-2">
                   <input
                     type="checkbox"
                     checked={draft.legalGuardianApplicable}
@@ -1168,7 +1176,7 @@ export default function ParentApplicationWorkflow() {
 
             {activeStep === 'documents' && (
               <div className="mt-6 space-y-4">
-                <div className="rounded-2xl border border-primary-100 bg-primary-50/70 p-4">
+                <div className="rounded-2xl border border-primary-100 bg-primary-50/70 p-4 shadow-sm">
                   <div className="text-sm font-semibold text-slate-950">How document checks work</div>
                   <div className="mt-2 space-y-2 text-sm leading-6 text-slate-600">
                     <p>Some document issues must be fixed before you submit, like the wrong file type or a file that is too large.</p>

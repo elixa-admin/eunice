@@ -14,6 +14,11 @@ import {
   getRequiredDocumentTypes,
 } from '@/lib/domain/application-requirements';
 import {
+  INTAKE_ROLE_LABELS,
+  createEmptyIntakeRoleState,
+  type IntakeRoleState,
+} from '@/lib/domain/intake-roles';
+import {
   DOCUMENT_CONTRACTS,
   DOCUMENT_VALIDATION_LABELS,
   DOCUMENT_TYPE_LABELS,
@@ -56,6 +61,7 @@ type ApplicationDraft = {
   status: ApplicationStatus;
   submittedAt: string | null;
   documents: Record<DocumentType, DocumentDraft>;
+  roles: IntakeRoleState;
 };
 
 type StepMeta = {
@@ -97,6 +103,37 @@ const QUALITY_TIPS = [
   'Capture full pages, not cropped edges.',
   'Retake blurry or dark photos before upload.',
 ] as const;
+
+function createInitialRoleDraft(): IntakeRoleState {
+  const roles = createEmptyIntakeRoleState();
+  return {
+    ...roles,
+    submitter: {
+      ...roles.submitter,
+      fullName: '',
+      emailAddress: '',
+      phoneNumber: '',
+      address: '',
+      notes: 'Submitting parent',
+    },
+    parent: {
+      ...roles.parent,
+      fullName: '',
+      emailAddress: '',
+      phoneNumber: '',
+      address: '',
+      notes: 'Primary parent or guardian',
+    },
+    legalGuardian: {
+      ...roles.legalGuardian,
+      notes: 'Optional unless a legal guardian is involved',
+    },
+    feePayer: {
+      ...roles.feePayer,
+      notes: 'Person responsible for school fees',
+    },
+  };
+}
 
 function createInitialDocumentDrafts(): Record<DocumentType, DocumentDraft> {
   return {
@@ -227,6 +264,7 @@ function createInitialDraft(): ApplicationDraft {
     status: 'draft',
     submittedAt: null,
     documents: createInitialDocumentDrafts(),
+    roles: createInitialRoleDraft(),
   };
 }
 
@@ -369,6 +407,7 @@ export default function ParentApplicationWorkflow() {
               status: appData.status as ApplicationStatus,
               submittedAt: appData.submitted_at,
               documents: documentsDraft,
+              roles: createInitialRoleDraft(),
             });
             
             setLastSavedAt(new Date(appData.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
@@ -533,7 +572,12 @@ export default function ParentApplicationWorkflow() {
   const learnerComplete = Boolean(
     draft.learnerFirstName.trim() && draft.learnerLastName.trim() && draft.learnerGrade.trim(),
   );
-  const schoolComplete = Boolean(draft.previousSchool.trim() && draft.intakeYear.trim());
+    const schoolComplete = Boolean(draft.previousSchool.trim() && draft.intakeYear.trim());
+    const roleComplete = Boolean(
+      draft.roles.submitter.fullName.trim() &&
+        draft.roles.parent.fullName.trim() &&
+        draft.roles.feePayer.fullName.trim(),
+    );
   const requirementInput = {
     citizenshipStatus: draft.citizenshipStatus,
     boardingStatus: draft.boardingStatus,
@@ -553,7 +597,7 @@ export default function ParentApplicationWorkflow() {
     isDocumentStateReviewOnly(draft.documents[documentType].validationState),
   );
 
-  const profileComplete = parentComplete && learnerComplete && schoolComplete;
+  const profileComplete = parentComplete && learnerComplete && schoolComplete && roleComplete;
 
   const isReadyToSubmit = readinessConfirmed && profileComplete && requiredDocsAccepted;
 
@@ -575,6 +619,23 @@ export default function ParentApplicationWorkflow() {
       [key]: value,
     };
     setDraft(updated);
+  }
+
+  function updateRoleField(
+    roleKey: keyof IntakeRoleState,
+    field: keyof IntakeRoleState[keyof IntakeRoleState],
+    value: string,
+  ) {
+    setDraft((current) => ({
+      ...current,
+      roles: {
+        ...current.roles,
+        [roleKey]: {
+          ...current.roles[roleKey],
+          [field]: value,
+        },
+      },
+    }));
   }
 
   function updateDocument(documentType: DocumentType, nextDocument: DocumentDraft) {
@@ -854,6 +915,12 @@ export default function ParentApplicationWorkflow() {
 
             {activeStep === 'profile' && (
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:col-span-2">
+                  <div className="text-sm font-semibold text-slate-950">Who is involved</div>
+                  <p className="mt-1 text-sm leading-6 text-slate-600">
+                    We capture the people behind the application separately so the school can track contact, legal responsibility, and fee responsibility without confusion.
+                  </p>
+                </div>
                 <Field
                   label="First name"
                   value={draft.parentFirstName}
@@ -939,11 +1006,50 @@ export default function ParentApplicationWorkflow() {
                   onChange={(value) => updateField('financialStatus', value)}
                   options={['Employed', 'Self-employed', 'Other']}
                 />
-                <div className="rounded-2xl border border-dashed border-primary-200 bg-primary-50 p-4 text-sm leading-6 text-slate-700">
-                  <div className="font-semibold text-slate-950">Helpful note</div>
-                  <p className="mt-1">
-                    You can continue with basic context now. Any additional admissions detail can still be requested during review.
-                  </p>
+                <Field
+                  label="Submitting parent full name"
+                  value={draft.roles.submitter.fullName}
+                  onChange={(value) => updateRoleField('submitter', 'fullName', value)}
+                  placeholder="Nicolette Dienar"
+                />
+                <Field
+                  label="Fee-payer full name"
+                  value={draft.roles.feePayer.fullName}
+                  onChange={(value) => updateRoleField('feePayer', 'fullName', value)}
+                  placeholder="Account holder or debtor"
+                />
+                <Field
+                  label="Fee-payer email"
+                  value={draft.roles.feePayer.emailAddress}
+                  onChange={(value) => updateRoleField('feePayer', 'emailAddress', value)}
+                  placeholder="finance@example.com"
+                />
+                <Field
+                  label="Fee-payer phone"
+                  value={draft.roles.feePayer.phoneNumber}
+                  onChange={(value) => updateRoleField('feePayer', 'phoneNumber', value)}
+                  placeholder="+27 82 123 4567"
+                />
+                <Field
+                  label="Legal guardian name"
+                  value={draft.roles.legalGuardian.fullName}
+                  onChange={(value) => updateRoleField('legalGuardian', 'fullName', value)}
+                  placeholder="Optional"
+                />
+                <Field
+                  label="Legal guardian notes"
+                  value={draft.roles.legalGuardian.notes}
+                  onChange={(value) => updateRoleField('legalGuardian', 'notes', value)}
+                  placeholder="Only if applicable"
+                />
+                <div className="rounded-2xl border border-dashed border-primary-200 bg-primary-50 p-4 text-sm leading-6 text-slate-700 sm:col-span-2">
+                  <div className="font-semibold text-slate-950">Role summary</div>
+                  <div className="mt-2 grid gap-3 md:grid-cols-2">
+                    <SummaryRow label={INTAKE_ROLE_LABELS.submitter} value={draft.roles.submitter.fullName || 'Not captured yet'} />
+                    <SummaryRow label={INTAKE_ROLE_LABELS.parent} value={draft.roles.parent.fullName || 'Not captured yet'} />
+                    <SummaryRow label={INTAKE_ROLE_LABELS.legal_guardian} value={draft.roles.legalGuardian.fullName || 'Optional'} />
+                    <SummaryRow label={INTAKE_ROLE_LABELS.fee_payer} value={draft.roles.feePayer.fullName || 'Not captured yet'} />
+                  </div>
                 </div>
               </div>
             )}

@@ -13,6 +13,7 @@ export type ApplicationDocumentRequirement = {
   documentType: DocumentType;
   required: boolean;
   reason: string;
+  category: 'identity' | 'school' | 'family' | 'medical' | 'financial' | 'legal' | 'supporting';
 };
 
 const BASE_REQUIRED_DOCUMENTS: ApplicationDocumentRequirement[] = [
@@ -22,6 +23,7 @@ const BASE_REQUIRED_DOCUMENTS: ApplicationDocumentRequirement[] = [
     documentType: 'birth_cert',
     required: true,
     reason: 'Learner identity and age verification.',
+    category: 'identity',
   },
   {
     id: 'learner-photo',
@@ -29,6 +31,7 @@ const BASE_REQUIRED_DOCUMENTS: ApplicationDocumentRequirement[] = [
     documentType: 'learner_photo',
     required: true,
     reason: 'Admissions identity confirmation and school records.',
+    category: 'identity',
   },
   {
     id: 'motivation-letter',
@@ -36,6 +39,7 @@ const BASE_REQUIRED_DOCUMENTS: ApplicationDocumentRequirement[] = [
     documentType: 'motivation_letter',
     required: true,
     reason: 'Principal review requirement in the live Eunice process.',
+    category: 'school',
   },
   {
     id: 'school-report',
@@ -43,6 +47,7 @@ const BASE_REQUIRED_DOCUMENTS: ApplicationDocumentRequirement[] = [
     documentType: 'school_report',
     required: true,
     reason: 'Admissions review and grade placement context.',
+    category: 'school',
   },
   {
     id: 'proof-residence',
@@ -50,6 +55,7 @@ const BASE_REQUIRED_DOCUMENTS: ApplicationDocumentRequirement[] = [
     documentType: 'proof_residence',
     required: true,
     reason: 'Residential details and school records.',
+    category: 'family',
   },
   {
     id: 'parent-id',
@@ -57,6 +63,7 @@ const BASE_REQUIRED_DOCUMENTS: ApplicationDocumentRequirement[] = [
     documentType: 'id_copy',
     required: true,
     reason: 'Parent or guardian identity verification.',
+    category: 'identity',
   },
   {
     id: 'income-proof',
@@ -64,6 +71,7 @@ const BASE_REQUIRED_DOCUMENTS: ApplicationDocumentRequirement[] = [
     documentType: 'income_proof',
     required: true,
     reason: 'Financial review and fee verification.',
+    category: 'financial',
   },
   {
     id: 'medical-aid-card',
@@ -71,6 +79,7 @@ const BASE_REQUIRED_DOCUMENTS: ApplicationDocumentRequirement[] = [
     documentType: 'medical_aid_card',
     required: true,
     reason: 'Medical support and emergency-readiness details.',
+    category: 'medical',
   },
   {
     id: 'immunisation-record',
@@ -78,6 +87,7 @@ const BASE_REQUIRED_DOCUMENTS: ApplicationDocumentRequirement[] = [
     documentType: 'immunisation_record',
     required: true,
     reason: 'Health and immunisation records required by the school.',
+    category: 'medical',
   },
   {
     id: 'fee-payer-id',
@@ -85,6 +95,7 @@ const BASE_REQUIRED_DOCUMENTS: ApplicationDocumentRequirement[] = [
     documentType: 'fee_payer_id_copy',
     required: true,
     reason: 'Separate fee-payer or debtor identity confirmation.',
+    category: 'financial',
   },
 ];
 
@@ -118,6 +129,7 @@ export function getApplicationDocumentRequirements(
       documentType: 'residency_permit',
       required: true,
       reason: 'Passport, study permit, or permanent residence permit for non-South African applicants.',
+      category: 'legal',
     });
   }
 
@@ -128,6 +140,7 @@ export function getApplicationDocumentRequirements(
       documentType: 'custody_order',
       required: true,
       reason: 'Divorce, custody, or co-parenting order where applicable.',
+      category: 'legal',
     });
   }
 
@@ -146,6 +159,7 @@ export function getApplicationDocumentRequirements(
       documentType: 'other',
       required: true,
       reason: conditionalReasons.join(' '),
+      category: 'supporting',
     });
   }
 

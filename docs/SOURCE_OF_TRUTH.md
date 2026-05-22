@@ -77,6 +77,7 @@ Reference docs:
 - Project: `eunice-dev`
 - Root directory: `dev`
 - Latest ready preview (at update time): `https://eunice-k1ypbtcs3-elixa-admins-projects.vercel.app`
+- Most recent deployment status check: newest attempt `https://eunice-pskvq6t9n-elixa-admins-projects.vercel.app` showed `Error`, so use the latest ready preview URL above as the validation target until the next successful deploy
 
 ### Linear
 

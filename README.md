@@ -42,6 +42,7 @@ The phase docs remain the baseline plan, but the current working state is more a
 - [Automation Routines Plan](./docs/automation-routines/plan.md)
 - [Session Continuity & Handoff](./docs/SESSION_CONTINUITY.md)
 - [Session Bootstrap](./docs/SESSION_BOOTSTRAP.md)
+- [Session + Integration Memory](./docs/SESSION_INTEGRATION_MEMORY.md)
 - [Failure Triage](./docs/FAILURE_TRIAGE.md)
 - [QuickFix Knowledgebase](./docs/QUICKFIX_KB.md)
 - [Command Dialect](./docs/COMMAND_DIALECT.md)

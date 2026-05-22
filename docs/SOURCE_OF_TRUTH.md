@@ -62,6 +62,7 @@ Expected environment variables:
 Reference docs:
 
 - `docs/HANDOVER_BOOTSTRAP_PROMPT.md`
+- `docs/SESSION_INTEGRATION_MEMORY.md`
 - `docs/PLATFORM_RELAY_PROTOCOL.md`
 - `docs/ARCHITECTURE.md`
 - `docs/REQUIREMENTS.md`
@@ -69,6 +70,7 @@ Reference docs:
 - `docs/PHASES.md`
 - `docs/UI_THEME_SPEC.md`
 - `docs/GUIDED_APPLICATION_FLOW_PLAN.md`
+- `docs/SPRINT_MICRO_SLICES_NEXT.md`
 
 ## Integration Alignment State
 
@@ -105,6 +107,7 @@ Reference docs:
 3. Confirm branch, commit, remote, and active surface.
 4. Confirm GitHub, Vercel, and Linear auth/connectivity.
 5. Continue from the next smallest coherent slice, not from chat history.
+6. Use `docs/SPRINT_MICRO_SLICES_NEXT.md` as the active low-token sprint queue.
 
 ## Handover Packet Template
 

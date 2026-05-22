@@ -3,6 +3,7 @@ import { SectionHeading } from '@/components/section-heading';
 import { StatusBadge } from '@/components/status-badge';
 import { SurfaceCard } from '@/components/surface-card';
 import {
+  getAdminQueueLane,
   PREVIEW_REVIEW_STATE_CLASSES,
   PREVIEW_REVIEW_STATE_LABELS,
   getPreviewDocumentCounts,
@@ -14,11 +15,21 @@ import {
 } from '@/lib/dev-preview-data';
 import Link from 'next/link';
 
+const laneCounts = previewApplications.reduce(
+  (acc, app) => {
+    acc[getAdminQueueLane(app)] += 1;
+    return acc;
+  },
+  {
+    blocking: 0,
+    review: 0,
+    ready: 0,
+    decision: 0,
+  } as Record<'blocking' | 'review' | 'ready' | 'decision', number>,
+);
+
 const totals = {
   total: previewApplications.length,
-  pending: previewApplications.filter((app) => app.status === 'submitted' || app.status === 'under_review').length,
-  incomplete: previewApplications.filter((app) => app.status === 'incomplete').length,
-  accepted: previewApplications.filter((app) => app.status === 'accepted').length,
 };
 
 const featured = previewApplications[0];
@@ -42,8 +53,8 @@ export default function DevAdminPage() {
           </p>
           <div className="mt-6 grid gap-3 sm:grid-cols-3">
             <StatCard label="Total Applications" value={totals.total.toString()} tone="emerald" />
-            <StatCard label="Pending Review" value={totals.pending.toString()} tone="amber" />
-            <StatCard label="Incomplete" value={totals.incomplete.toString()} tone="slate" />
+            <StatCard label="Needs Review" value={laneCounts.review.toString()} tone="amber" />
+            <StatCard label="Blocking Cases" value={laneCounts.blocking.toString()} tone="slate" />
           </div>
         </SurfaceCard>
 
@@ -51,12 +62,14 @@ export default function DevAdminPage() {
           <p className="type-label text-primary-700/75">Queue health</p>
           <div className="mt-4 space-y-3">
             <div className="rounded-2xl border border-primary-200 bg-white px-4 py-3 shadow-[0_12px_28px_rgba(15,23,42,0.08)]">
-              <div className="type-label text-slate-500">Accepted</div>
-              <div className="type-metric mt-2 text-slate-950">{totals.accepted}</div>
+              <div className="type-label text-slate-500">Decision queue</div>
+              <div className="type-metric mt-2 text-slate-950">{laneCounts.decision}</div>
             </div>
             <div className="rounded-2xl border border-accent-200 bg-[linear-gradient(145deg,#fef8e7,#f7e2a0)] px-4 py-3 shadow-[0_12px_28px_rgba(184,137,7,0.18)]">
               <div className="type-label text-accent-700">Dev only</div>
-              <div className="type-body mt-2 font-semibold text-slate-950">Review states now use Eunice green and gold accents.</div>
+              <div className="type-body mt-2 font-semibold text-slate-950">
+                Queue lanes are now derived from workflow logic, not static status labels.
+              </div>
             </div>
           </div>
         </SurfaceCard>

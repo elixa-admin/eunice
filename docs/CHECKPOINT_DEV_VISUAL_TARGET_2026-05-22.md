@@ -8,6 +8,9 @@
 - The parent portal has now been tightened with a clearer admissions-specific status band and a more explicit "what happens next" panel.
 - The shared theme foundation has been refined so the preview reads more like a finished admissions website and less like a card wireframe.
 - The public hub, parent portal, admin queue, and application detail view now share the same green-and-gold academic treatment.
+- Parent and admin preview workflow now derives from computed document state:
+  - parent step chips and submission gate use a shared workflow snapshot
+  - admin queue health counts use derived workflow lanes (`blocking`, `review`, `ready`, `decision`)
 
 ## Visual Target
 - External-facing pages should feel academic, calm, and Eunice-specific.

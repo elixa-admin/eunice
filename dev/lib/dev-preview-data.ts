@@ -52,6 +52,18 @@ export type PreviewApplication = {
 };
 
 export type PreviewReviewState = 'blocked' | 'review' | 'ready' | 'complete';
+export type ParentWorkflowStepKey = 'profile' | 'family' | 'documents' | 'review' | 'submit';
+export type ParentWorkflowStepState = 'todo' | 'active' | 'done' | 'blocked';
+
+export type ParentWorkflowSnapshot = {
+  activeStep: ParentWorkflowStepKey;
+  canSubmit: boolean;
+  blockers: string[];
+  reviewOnlyWarnings: string[];
+  readyRequiredDocuments: number;
+  totalRequiredDocuments: number;
+  stepStates: Record<ParentWorkflowStepKey, ParentWorkflowStepState>;
+};
 
 export const previewApplications: PreviewApplication[] = [
   {
@@ -278,4 +290,81 @@ export function getPreviewNextAction(application: PreviewApplication) {
   }
 
   return 'Continue the admissions review and prepare the next decision.';
+}
+
+function buildStepStates(
+  activeStep: ParentWorkflowStepKey,
+  canSubmit: boolean,
+  hasBlockers: boolean,
+): Record<ParentWorkflowStepKey, ParentWorkflowStepState> {
+  const sequence: ParentWorkflowStepKey[] = ['profile', 'family', 'documents', 'review', 'submit'];
+  const activeIndex = sequence.indexOf(activeStep);
+
+  return sequence.reduce(
+    (acc, step, index) => {
+      if (step === 'submit') {
+        acc[step] = canSubmit ? 'done' : hasBlockers ? 'blocked' : 'todo';
+        return acc;
+      }
+
+      if (index < activeIndex) {
+        acc[step] = 'done';
+      } else if (index === activeIndex) {
+        acc[step] = hasBlockers && step === 'documents' ? 'blocked' : 'active';
+      } else {
+        acc[step] = 'todo';
+      }
+
+      return acc;
+    },
+    {} as Record<ParentWorkflowStepKey, ParentWorkflowStepState>,
+  );
+}
+
+export function getParentWorkflowSnapshot(application: PreviewApplication): ParentWorkflowSnapshot {
+  const counts = getPreviewDocumentCounts(application);
+  const blockers = application.documents
+    .filter((document) => isDocumentStateBlocking(document.status))
+    .map((document) => `${getPreviewDocumentLabel(document.type)}: ${getPreviewDocumentStatusLabel(document.status)}`);
+  const reviewOnlyWarnings = application.documents
+    .filter((document) => isDocumentStateReviewOnly(document.status))
+    .map((document) => `${getPreviewDocumentLabel(document.type)}: ${getPreviewDocumentStatusLabel(document.status)}`);
+
+  const canSubmit = blockers.length === 0 && counts.ready + counts.reviewOnly === counts.total;
+
+  let activeStep: ParentWorkflowStepKey = 'profile';
+  if (application.status === 'accepted' || application.status === 'rejected') {
+    activeStep = 'submit';
+  } else if (blockers.length > 0) {
+    activeStep = 'documents';
+  } else if (canSubmit && application.status !== 'submitted' && application.status !== 'under_review') {
+    activeStep = 'review';
+  } else if (application.status === 'submitted' || application.status === 'under_review') {
+    activeStep = 'submit';
+  } else {
+    activeStep = 'review';
+  }
+
+  return {
+    activeStep,
+    canSubmit,
+    blockers,
+    reviewOnlyWarnings,
+    readyRequiredDocuments: counts.ready,
+    totalRequiredDocuments: counts.total,
+    stepStates: buildStepStates(activeStep, canSubmit, blockers.length > 0),
+  };
+}
+
+export type AdminQueueLane = 'blocking' | 'review' | 'ready' | 'decision';
+
+export function getAdminQueueLane(application: PreviewApplication): AdminQueueLane {
+  if (application.status === 'accepted' || application.status === 'rejected') {
+    return 'decision';
+  }
+
+  const reviewState = getPreviewReviewState(application);
+  if (reviewState === 'blocked') return 'blocking';
+  if (reviewState === 'review') return 'review';
+  return 'ready';
 }

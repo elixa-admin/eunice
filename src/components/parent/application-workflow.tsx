@@ -67,6 +67,14 @@ type ApplicationDraft = {
   roles: IntakeRoleState;
 };
 
+type StoredApplicationDraftSnapshot = {
+  version: 1;
+  savedAt: string;
+  activeStep: StepKey;
+  readinessConfirmed: boolean;
+  draft: ApplicationDraft;
+};
+
 type StepMeta = {
   title: string;
   eyebrow: string;
@@ -98,6 +106,7 @@ const STEP_META: Record<StepKey, StepMeta> = {
 
 const STORAGE_KEY = 'eunice-parent-application-draft-v1';
 const READINESS_KEY = 'eunice-parent-readiness-confirmed-v1';
+const STORAGE_VERSION = 1;
 const PROCESS_ESTIMATE = '25-35 minutes';
 
 const QUALITY_TIPS = [
@@ -231,6 +240,86 @@ function createInitialDocumentDrafts(): Record<DocumentType, DocumentDraft> {
   };
 }
 
+function mergeDocumentDrafts(
+  baseDocuments: Record<DocumentType, DocumentDraft>,
+  storedDocuments: Partial<Record<DocumentType, DocumentDraft>> | undefined,
+) {
+  if (!storedDocuments) return baseDocuments;
+
+  const merged = { ...baseDocuments };
+  for (const [documentType, storedDocument] of Object.entries(storedDocuments) as Array<
+    [DocumentType, DocumentDraft]
+  >) {
+    merged[documentType] = {
+      ...merged[documentType],
+      ...storedDocument,
+    };
+  }
+  return merged;
+}
+
+function mergeRoleDrafts(baseRoles: IntakeRoleState, storedRoles: Partial<IntakeRoleState> | undefined) {
+  if (!storedRoles) return baseRoles;
+
+  return {
+    ...baseRoles,
+    ...storedRoles,
+    submitter: {
+      ...baseRoles.submitter,
+      ...storedRoles.submitter,
+    },
+    parent: {
+      ...baseRoles.parent,
+      ...storedRoles.parent,
+    },
+    legalGuardian: {
+      ...baseRoles.legalGuardian,
+      ...storedRoles.legalGuardian,
+    },
+    feePayer: {
+      ...baseRoles.feePayer,
+      ...storedRoles.feePayer,
+    },
+  };
+}
+
+function mergeDraftState(baseDraft: ApplicationDraft, storedDraft: Partial<ApplicationDraft> | undefined) {
+  if (!storedDraft) return baseDraft;
+
+  return {
+    ...baseDraft,
+    ...storedDraft,
+    documents: mergeDocumentDrafts(baseDraft.documents, storedDraft.documents),
+    roles: mergeRoleDrafts(baseDraft.roles, storedDraft.roles),
+  };
+}
+
+function readStoredDraftSnapshot(): StoredApplicationDraftSnapshot | null {
+  if (typeof window === 'undefined') return null;
+
+  const stored = window.localStorage.getItem(STORAGE_KEY);
+  if (!stored) return null;
+
+  try {
+    const parsed = JSON.parse(stored);
+
+    if (parsed?.version === STORAGE_VERSION && parsed?.draft) {
+      return parsed as StoredApplicationDraftSnapshot;
+    }
+
+    return {
+      version: STORAGE_VERSION,
+      savedAt: new Date().toISOString(),
+      activeStep: parsed?.activeStep && STEP_KEYS.includes(parsed.activeStep) ? parsed.activeStep : 'readiness',
+      readinessConfirmed: Boolean(parsed?.readinessConfirmed),
+      draft: mergeDraftState(createInitialDraft(), parsed as Partial<ApplicationDraft>),
+    };
+  } catch {
+    window.localStorage.removeItem(STORAGE_KEY);
+    return null;
+  }
+}
+
 function createInitialDraft(): ApplicationDraft {
   return {
     parentFirstName: '',
@@ -323,7 +412,9 @@ export default function ParentApplicationWorkflow() {
   useEffect(() => {
     async function checkAuthAndLoadData() {
       try {
-        if (typeof window !== 'undefined' && window.localStorage.getItem(READINESS_KEY) === 'true') {
+        const storedSnapshot = readStoredDraftSnapshot();
+        const storedReadiness = storedSnapshot?.readinessConfirmed ?? false;
+        if (storedReadiness) {
           setReadinessConfirmed(true);
         }
 
@@ -377,7 +468,7 @@ export default function ParentApplicationWorkflow() {
               });
             }
             
-            setDraft({
+            const serverDraft: ApplicationDraft = {
               parentFirstName: profileData.first_name,
               parentLastName: profileData.last_name,
               parentEmail: authUser.email || '',
@@ -399,54 +490,46 @@ export default function ParentApplicationWorkflow() {
               submittedAt: appData.submitted_at,
               documents: documentsDraft,
               roles: createDefaultIntakeRoleState(),
-            });
+            };
+
+            setDraft(mergeDraftState(serverDraft, storedSnapshot?.draft));
             
-            setLastSavedAt(new Date(appData.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+            setLastSavedAt(
+              storedSnapshot?.savedAt
+                ? new Date(storedSnapshot.savedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                : new Date(appData.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            );
           } else {
-            // Setup fresh draft using parent profile info
-            setDraft((current) => ({
-              ...current,
+            const baseDraft = mergeDraftState(createInitialDraft(), storedSnapshot?.draft);
+            setDraft({
+              ...baseDraft,
               parentFirstName: profileData.first_name,
               parentLastName: profileData.last_name,
               parentEmail: authUser.email || '',
               parentPhone: profileData.phone_number || '',
-            }));
+            });
           }
         } else {
-          loadGuestDraft();
+          const guestDraft = storedSnapshot?.draft;
+          if (guestDraft) {
+            setDraft((current) => mergeDraftState(current, guestDraft));
+            setActiveStep(storedSnapshot.activeStep);
+            setLastSavedAt(new Date(storedSnapshot.savedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+          }
         }
       } catch (err) {
         console.warn('Error loading parent database application:', err);
-        loadGuestDraft();
+        const guestSnapshot = readStoredDraftSnapshot();
+        if (guestSnapshot?.draft) {
+          setDraft((current) => mergeDraftState(current, guestSnapshot.draft));
+          setActiveStep(guestSnapshot.activeStep);
+          setReadinessConfirmed(guestSnapshot.readinessConfirmed);
+          setLastSavedAt(new Date(guestSnapshot.savedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+        } else if (typeof window !== 'undefined') {
+          window.localStorage.removeItem(STORAGE_KEY);
+        }
       } finally {
         setMounted(true);
-      }
-    }
-
-    function loadGuestDraft() {
-      try {
-        const stored = window.localStorage.getItem(STORAGE_KEY);
-        if (!stored) return;
-
-        const parsed = JSON.parse(stored);
-        setDraft((current) => ({
-          ...current,
-          ...parsed,
-          documents: {
-            ...current.documents,
-            ...(parsed.documents ?? {}),
-          },
-        }));
-
-        if (parsed.activeStep && STEP_KEYS.includes(parsed.activeStep)) {
-          setActiveStep(parsed.activeStep);
-        }
-        const savedReadiness = window.localStorage.getItem(READINESS_KEY);
-        if (savedReadiness === 'true') {
-          setReadinessConfirmed(true);
-        }
-      } catch {
-        window.localStorage.removeItem(STORAGE_KEY);
       }
     }
 
@@ -457,17 +540,22 @@ export default function ParentApplicationWorkflow() {
   useEffect(() => {
     if (!mounted || typeof window === 'undefined') return;
 
+    const snapshot: StoredApplicationDraftSnapshot = {
+      version: STORAGE_VERSION,
+      savedAt: new Date().toISOString(),
+      activeStep,
+      readinessConfirmed,
+      draft,
+    };
+
     window.localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify({
-        ...draft,
-        activeStep,
-      }),
+      JSON.stringify(snapshot),
     );
     if (!user) {
       setLastSavedAt(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
     }
-  }, [activeStep, draft, mounted, user]);
+  }, [activeStep, draft, mounted, readinessConfirmed, user]);
 
   useEffect(() => {
     if (!mounted || typeof window === 'undefined') return;

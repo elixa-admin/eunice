@@ -106,6 +106,21 @@ const QUALITY_TIPS = [
   'Retake blurry or dark photos before upload.',
 ] as const;
 
+const WORKFLOW_HIGHLIGHTS = [
+  {
+    title: 'Keep moving',
+    body: 'Save progress as you go and return any time without losing context.',
+  },
+  {
+    title: 'Know what matters',
+    body: 'Required, conditional, and optional documents are separated clearly.',
+  },
+  {
+    title: 'See the status',
+    body: 'Parents can quickly see what is complete, what still needs action, and what is under review.',
+  },
+] as const;
+
 function createInitialRoleDraft(): IntakeRoleState {
   const roles = createEmptyIntakeRoleState();
   return {
@@ -891,6 +906,15 @@ export default function ParentApplicationWorkflow() {
               style={{ width: `${completion}%` }}
             />
           </div>
+        </div>
+
+        <div className="mt-6 grid gap-3 md:grid-cols-3">
+          {WORKFLOW_HIGHLIGHTS.map((item) => (
+            <div key={item.title} className="rounded-2xl border border-primary-100 bg-white px-4 py-4 shadow-sm">
+              <div className="text-sm font-semibold text-slate-950">{item.title}</div>
+              <p className="mt-1 text-sm leading-6 text-slate-600">{item.body}</p>
+            </div>
+          ))}
         </div>
       </div>
 

@@ -9,6 +9,7 @@ Make the `dev/` preview feel like a finished Eunice admissions website and form,
 - Touch shared chrome first so one change improves every preview surface.
 - Prioritise the public/parent-facing experience before internal polish.
 - Avoid logic changes unless they directly improve visual hierarchy.
+- Make the build change first, then verify on the live dev site after the commit.
 - Keep admin work out of this sprint unless it is required to preserve visual coherence.
 
 ## Slice 1: Public Site Shell
@@ -70,4 +71,3 @@ Make the parent portal feel like a polished online admissions form with stronger
 
 ## Stop Rule
 After Slice 2, pause and review before touching admin or application detail views.
-

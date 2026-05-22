@@ -17,7 +17,8 @@
 ## Decisions
 - Work in small slices, one surface at a time.
 - Keep `dev/` as the preview-only surface for visible theme work.
-- Use screenshots/preview review as the main validation path, not local render loops.
+- Prefer build changes and Git commits first, then check the live dev site after the commit lands.
+- Use screenshots/preview review as the main validation path once the branch is comfortable, not local render loops.
 
 ## Next Slice
 1. Run the public site shell punch first.

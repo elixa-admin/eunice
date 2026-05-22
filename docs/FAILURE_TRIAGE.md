@@ -41,6 +41,7 @@ Likely signals:
 - bad workspace link
 - CLI commands pointing at the wrong folder
 - settings that work in one surface but not another
+- connector auth failures such as `401 Reauthentication required`
 
 Fallback:
 
@@ -48,6 +49,7 @@ Fallback:
 - re-link the project or re-run setup
 - pull settings again
 - correct the workspace path before retrying the same command
+- for connector `401` failures, reauthenticate once, retest with a read action, and only then retry writes
 
 ### Code Related
 
@@ -77,4 +79,3 @@ Fallback:
 - If a fix is found and the same problem recurs, document it.
 - If a failure wastes more than one session or appears twice, capture it.
 - If a workaround is safer than the original path, record the workaround clearly.
-

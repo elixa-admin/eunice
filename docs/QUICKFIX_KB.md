@@ -60,6 +60,48 @@ Any caveats or things to avoid next time.
 
 ## Recent QuickFixes
 
+### Linear connector returns `401 Reauthentication required`
+
+**Symptom**
+
+- Linear connector calls fail with: `401: Server returned 401: 'Reauthentication required'`.
+- Project status updates cannot be read or written from the connector.
+
+**Classification**
+
+- config
+
+**Root Cause**
+
+- The Linear connector session for this workspace expires or disconnects and must be re-authorized in the host app.
+
+**Fix**
+
+- Reconnect Linear from the app connector settings, then rerun a minimal read check before any write:
+  - Read test: fetch the latest project status update for `Eunice Admissions Platform`.
+  - Write test: create/update one short status update.
+
+**Fallback**
+
+- Continue coding and commit/push as normal.
+- Record the exact Linear blocker in `docs/SOURCE_OF_TRUTH.md`.
+- Retry connector auth once per session boundary, not repeatedly during active implementation.
+
+**Commands / Checks**
+
+- Connector read check: Linear status updates list for `Eunice Admissions Platform`.
+- Connector write check: save one project status update.
+- If read fails, do not attempt repeated writes until reconnect is complete.
+
+**Last Verified**
+
+- 2026-05-22 in the Eunice workspace.
+
+**Notes**
+
+- Treat Linear availability as a startup gate for tracker-dependent work.
+- Avoid silent drift: if Linear is down, explicitly mark it in the handover source of truth.
+
 ### GitHub CLI keyring mismatch in Codex shell
 
 **Symptom**

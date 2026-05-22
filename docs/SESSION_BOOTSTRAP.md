@@ -32,6 +32,10 @@ If this is a resumed session or work is being transferred from another platform,
    - Supabase: `supabase projects list`
    - Vercel: `vercel whoami`
    - Linear: confirm the intended team/project is available in the connector and matches the workstream
+   - Linear hard gate:
+     - Run one connector read check against `Eunice Admissions Platform`.
+     - If the connector returns `401 Reauthentication required`, pause tracker writes, reconnect Linear in app settings, and retest read before any write.
+     - If still failing after reconnect, document blocker in `docs/SOURCE_OF_TRUTH.md` and continue implementation without repeated retries.
 8. Confirm the current app package can verify cleanly.
    - Prefer the bounded verifier so quiet stalls fail clearly:
      - `npm run verify:src` from the repo root when working on the `src/` app
@@ -81,6 +85,7 @@ If this is a resumed session or work is being transferred from another platform,
 ## If Something Fails
 
 - Fix auth or project linking before starting feature work.
+- If Linear fails with `401`, use the QuickFix entry in `docs/QUICKFIX_KB.md` and do not keep retrying writes in a loop.
 - Do not create a new branch just to work around a broken integration.
 - Do not duplicate configuration in another folder unless the workspace truly needs a separate source of truth.
 - Do not keep retrying the same failing command without a classification decision.

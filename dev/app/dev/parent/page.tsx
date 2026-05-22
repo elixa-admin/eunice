@@ -13,19 +13,19 @@ export default function DevParentPage() {
     <PreviewShell
       eyebrow="Dev Preview"
       title="Parent admissions dashboard"
-      description="Calm, clear status tracking so parents can follow progress without chasing the school for updates."
+      description="A polished admissions form and status experience that makes the next step obvious without feeling busy."
       surface="parent"
       backLabel="Back to preview hub"
     >
-      <div className="mb-6 grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
-        <SurfaceCard className="overflow-hidden bg-[linear-gradient(135deg,rgba(22,163,74,0.09),rgba(202,138,4,0.10))] p-7">
+      <div className="mb-6 grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
+        <SurfaceCard className="overflow-hidden bg-[linear-gradient(135deg,rgba(31,109,58,0.10),rgba(184,137,7,0.10))] p-7">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
             <div className="max-w-2xl">
               <p className="text-xs uppercase tracking-[0.18em] text-primary-700/70">Welcome back</p>
               <h2 className="display-serif mt-3 text-4xl font-semibold text-slate-950">Lerato Khumalo</h2>
               <p className="mt-3 text-sm leading-7 text-slate-600">
-                Parents should never have to wonder what happens next. This dashboard is designed to make progress,
-                missing items, and school updates easy to understand at a glance.
+                Parents should never have to wonder what happens next. This dashboard should read like a polished
+                admissions form with clear progress, steady guidance, and an unmistakable next action.
               </p>
               <div className="mt-6 flex flex-wrap gap-2">
                 {['Profile', 'Family', 'Documents', 'Review'].map((step, index) => (
@@ -42,22 +42,22 @@ export default function DevParentPage() {
                 ))}
               </div>
               <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                <div className="rounded-2xl border border-primary-100 bg-white/85 px-4 py-3">
+                <div className="rounded-2xl border border-primary-100 bg-white/90 px-4 py-3 shadow-sm">
                   <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Current stage</div>
                   <div className="mt-2 text-sm font-semibold text-slate-950">{featuredApplication.status.replace('_', ' ')}</div>
                 </div>
-                <div className="rounded-2xl border border-primary-100 bg-white/85 px-4 py-3">
+                <div className="rounded-2xl border border-primary-100 bg-white/90 px-4 py-3 shadow-sm">
                   <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Next update</div>
                   <div className="mt-2 text-sm font-semibold text-slate-950">After school review</div>
                 </div>
-                <div className="rounded-2xl border border-accent-200 bg-white/85 px-4 py-3">
+                <div className="rounded-2xl border border-accent-100 bg-white/90 px-4 py-3 shadow-sm">
                   <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Open items</div>
                   <div className="mt-2 text-sm font-semibold text-slate-950">{featuredApplication.missingItems.length} item{featuredApplication.missingItems.length === 1 ? '' : 's'}</div>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-3xl border border-accent-200 bg-white/85 p-4 shadow-[0_18px_45px_rgba(202,138,4,0.10)]">
+            <div className="rounded-3xl border border-accent-100 bg-white/92 p-4 shadow-[0_18px_45px_rgba(184,137,7,0.10)]">
               <div className="text-xs uppercase tracking-[0.18em] text-accent-700">Next expected action</div>
               <div className="mt-2 text-lg font-semibold text-slate-950">School review and document check</div>
               <div className="mt-2 text-sm leading-6 text-slate-600">
@@ -70,13 +70,13 @@ export default function DevParentPage() {
           </div>
 
           <div className="mt-6 grid gap-3 sm:grid-cols-3">
-            <div className="rounded-2xl border border-primary-100 bg-white/80 px-4 py-3 text-sm text-slate-700">
+            <div className="rounded-2xl border border-primary-100 bg-white/90 px-4 py-3 text-sm text-slate-700 shadow-sm">
               {previewApplications.length} active applications in this preview
             </div>
-            <div className="rounded-2xl border border-primary-100 bg-primary-50 px-4 py-3 text-sm text-primary-800">
+            <div className="rounded-2xl border border-primary-100 bg-primary-50 px-4 py-3 text-sm text-primary-800 shadow-sm">
               Current status: {featuredApplication.status.replace('_', ' ')}
             </div>
-            <div className="rounded-2xl border border-accent-200 bg-accent-50 px-4 py-3 text-sm text-accent-700">
+            <div className="rounded-2xl border border-accent-100 bg-accent-50 px-4 py-3 text-sm text-accent-700 shadow-sm">
               {featuredApplication.documents.filter((item) => isDocumentStateSubmissionReady(item.status)).length} of {featuredApplication.documents.length} documents ready
             </div>
           </div>
@@ -88,9 +88,9 @@ export default function DevParentPage() {
             description="The UI should answer the first three questions a parent has without effort."
           />
           <div className="mt-5 space-y-3 text-sm text-slate-600">
-            <div className="rounded-2xl border border-primary-100 bg-primary-50/50 px-4 py-3">The application is under review and moving through admissions checks.</div>
-            <div className="rounded-2xl border border-primary-100 bg-primary-50/50 px-4 py-3">One document still needs manual attention before the file can move cleanly forward.</div>
-            <div className="rounded-2xl border border-primary-100 bg-primary-50/50 px-4 py-3">The next school update should follow once that review step is complete.</div>
+            <div className="rounded-2xl border border-primary-100 bg-primary-50/55 px-4 py-3 shadow-sm">The application is under review and moving through admissions checks.</div>
+            <div className="rounded-2xl border border-primary-100 bg-primary-50/55 px-4 py-3 shadow-sm">One document still needs manual attention before the file can move cleanly forward.</div>
+            <div className="rounded-2xl border border-primary-100 bg-primary-50/55 px-4 py-3 shadow-sm">The next school update should follow once that review step is complete.</div>
           </div>
         </SurfaceCard>
       </div>
@@ -115,7 +115,9 @@ export default function DevParentPage() {
               <div>Submitted: {app.submittedAt}</div>
               <div>Last updated: {app.updatedAt}</div>
               <div>Parent contact: {app.parentEmail}</div>
-              <div>{app.documents.filter((item) => isDocumentStateSubmissionReady(item.status)).length} of {app.documents.length} documents checked</div>
+              <div>
+                {app.documents.filter((item) => isDocumentStateSubmissionReady(item.status)).length} of {app.documents.length} documents checked
+              </div>
             </div>
             <div className="mt-5">
               <Link

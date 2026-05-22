@@ -12,8 +12,8 @@ export const NavBar: React.FC = () => {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-primary-100/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(249,250,248,0.94))] backdrop-blur-md shadow-[0_8px_24px_rgba(15,23,42,0.04)]">
-      <div className="h-1 w-full bg-[linear-gradient(90deg,rgba(22,163,74,0.95),rgba(202,138,4,0.95))]" />
+    <nav className="sticky top-0 z-50 w-full border-b border-primary-100/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(250,248,241,0.95))] backdrop-blur-md shadow-[0_8px_24px_rgba(15,23,42,0.04)]">
+      <div className="h-1 w-full bg-[linear-gradient(90deg,rgba(31,109,58,0.95),rgba(184,137,7,0.95))]" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-[68px] items-center justify-between">
           {/* Logo and Brand */}
@@ -37,7 +37,7 @@ export const NavBar: React.FC = () => {
                 <span className="display-serif block text-lg font-bold tracking-tight text-slate-950 transition-colors group-hover:text-primary-700">
                   Eunice Admissions
                 </span>
-                <span className="text-[11px] uppercase tracking-[0.22em] text-slate-500">School admissions platform</span>
+                <span className="text-[11px] uppercase tracking-[0.22em] text-slate-500">Admissions platform preview</span>
               </div>
             </Link>
           </div>

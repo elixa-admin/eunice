@@ -2,10 +2,12 @@
 
 ## Current State
 - The branch is `codex/vercel-project-separation`.
-- The latest published commit is `ab940e8 feat: refine dev preview admissions theme`.
+- The latest published commit before this visual punch pass was `ab940e8 feat: refine dev preview admissions theme`.
 - The `dev/` surface is the Vercel preview the team is reviewing.
 - `src/` remains the product app surface and should not be pulled into preview styling work unless the logic itself is changing.
 - The parent portal has now been tightened with a clearer admissions-specific status band and a more explicit "what happens next" panel.
+- The shared theme foundation has been refined so the preview reads more like a finished admissions website and less like a card wireframe.
+- The public hub, parent portal, admin queue, and application detail view now share the same green-and-gold academic treatment.
 
 ## Visual Target
 - External-facing pages should feel academic, calm, and Eunice-specific.
@@ -21,9 +23,9 @@
 - Use screenshots/preview review as the main validation path once the branch is comfortable, not local render loops.
 
 ## Next Slice
-1. Run the public site shell punch first.
-2. Then do the parent portal form-feel pass.
-3. Stop after those two slices and reassess before touching admin or application detail.
+1. Review the live preview after the shared theme pass lands.
+2. If the direction holds, do one narrower admin/detail polish pass.
+3. Stop and reassess before widening scope again.
 
 ## Open Notes
 - Linear auth still needs a refresh before tracker updates can resume cleanly.

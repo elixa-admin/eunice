@@ -2,29 +2,33 @@
 
 /* ─── Eunice Design System — Base Tokens ─────────────────────────────────── */
 :root {
-  --color-primary-50:  #f0fdf4;
-  --color-primary-100: #dcfce7;
-  --color-primary-500: #16a34a;
-  --color-primary-600: #15803d;
-  --color-primary-900: #14532d;
+  --color-primary-50:  #eef8ee;
+  --color-primary-100: #d9eadb;
+  --color-primary-200: #bcd4bf;
+  --color-primary-500: #1f6d3a;
+  --color-primary-600: #185b31;
+  --color-primary-700: #124828;
+  --color-primary-900: #0d321c;
 
-  --color-accent-500:  #ca8a04;
-  --color-accent-600:  #a16207;
+  --color-accent-50:   #fcf7e8;
+  --color-accent-100:  #f6e7b5;
+  --color-accent-200:  #eed583;
+  --color-accent-500:  #b88907;
+  --color-accent-600:  #8f6906;
+  --color-accent-700:  #6f5105;
 
-  --color-neutral-50:  #fafafa;
-  --color-neutral-100: #f5f5f5;
-  --color-neutral-200: #e5e5e5;
-  --color-neutral-700: #404040;
-  --color-neutral-800: #262626;
-  --color-neutral-900: #171717;
+  --color-neutral-50:  #fbfbf8;
+  --color-neutral-100: #f5f4ef;
+  --color-neutral-200: #e7e3d8;
+  --color-neutral-700: #4d4d44;
+  --color-neutral-800: #2f2f28;
+  --color-neutral-900: #181813;
 
-  /* Glassmorphism */
-  --glass-bg:     rgba(255, 255, 255, 0.15);
-  --glass-border: rgba(255, 255, 255, 0.25);
-  --glass-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
+  --glass-bg:     rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(22, 95, 54, 0.10);
+  --glass-shadow: 0 18px 50px rgba(17, 24, 39, 0.07);
 
-  /* Semantic aliases */
-  --background: var(--color-neutral-50);
+  --background: #faf9f4;
   --foreground: var(--color-neutral-900);
   --surface:    #ffffff;
 }
@@ -49,9 +53,9 @@ html {
 
 body {
   background:
-    radial-gradient(circle at top left, rgba(22, 163, 74, 0.10), transparent 30%),
-    radial-gradient(circle at top right, rgba(202, 138, 4, 0.08), transparent 26%),
-    radial-gradient(circle at bottom right, rgba(34, 197, 94, 0.06), transparent 24%),
+    radial-gradient(circle at top left, rgba(31, 109, 58, 0.10), transparent 28%),
+    radial-gradient(circle at top right, rgba(184, 137, 7, 0.08), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(31, 109, 58, 0.05), transparent 20%),
     var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), 'Inter', system-ui, -apple-system, sans-serif;
@@ -60,7 +64,7 @@ body {
 }
 
 ::selection {
-  background: rgba(22, 163, 74, 0.18);
+  background: rgba(31, 109, 58, 0.16);
   color: var(--color-neutral-900);
 }
 

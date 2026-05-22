@@ -30,11 +30,11 @@ export default function DevAdminPage() {
     <PreviewShell
       eyebrow="Dev Preview"
       title="Admissions Operations Dashboard"
-      description="Operational admissions queue with status tracking, document review states, and lightweight preview data."
+      description="A polished operations surface for admissions staff, with better hierarchy and a more deliberate review feel."
       surface="admin"
     >
       <div className="mb-6 grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
-        <SurfaceCard className="overflow-hidden bg-[linear-gradient(135deg,rgba(22,163,74,0.08),rgba(202,138,4,0.10))] p-7">
+        <SurfaceCard className="overflow-hidden bg-[linear-gradient(135deg,rgba(31,109,58,0.10),rgba(184,137,7,0.10))] p-7">
           <p className="text-xs uppercase tracking-[0.18em] text-primary-700/75">Operations at a glance</p>
           <h2 className="display-serif mt-3 text-3xl font-semibold text-slate-950">Admissions queue with stronger visual hierarchy</h2>
           <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
@@ -50,11 +50,11 @@ export default function DevAdminPage() {
         <SurfaceCard className="p-7">
           <p className="text-xs uppercase tracking-[0.18em] text-primary-700/75">Queue health</p>
           <div className="mt-4 space-y-3">
-            <div className="rounded-2xl border border-primary-100 bg-primary-50/50 px-4 py-3">
+            <div className="rounded-2xl border border-primary-100 bg-primary-50/55 px-4 py-3 shadow-sm">
               <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Accepted</div>
               <div className="mt-2 text-3xl font-semibold text-slate-950">{totals.accepted}</div>
             </div>
-            <div className="rounded-2xl border border-accent-200 bg-accent-50/70 px-4 py-3">
+            <div className="rounded-2xl border border-accent-100 bg-accent-50/70 px-4 py-3 shadow-sm">
               <div className="text-xs uppercase tracking-[0.16em] text-accent-700">Dev only</div>
               <div className="mt-2 text-sm font-semibold text-slate-950">Review states now use Eunice green and gold accents.</div>
             </div>

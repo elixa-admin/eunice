@@ -52,7 +52,7 @@ Compress the 13-page application into an upfront preparation screen plus a guide
 6. Review, consent, and submit
 
 Current next slice:
-Implement the guided parent preview in dev/ using docs/GUIDED_APPLICATION_FLOW_PLAN.md.
+Kick off Phase 2 foundation schemas, Next.js routing structure, and Resend email bindings integration.
 
 At the start of a new session, run:
 npm run session:start
@@ -234,17 +234,12 @@ Known verification note:
 
 ## Immediate Next Work
 
-Build the guided parent preview:
+Begin the Phase 2 MVP build foundation:
 
-1. Add a Start Checklist / Before You Begin section in `dev/app/dev/parent/page.tsx`.
-2. Rename the visible parent journey to match the guided flow in `docs/GUIDED_APPLICATION_FLOW_PLAN.md`.
-3. Keep the current role and document logic in `dev/lib/dev-preview-data.ts`.
-4. Add clear readiness language:
-   - what is required now
-   - what can continue under manual review
-   - what blocks submission
-5. Commit and push one coherent slice.
-6. Validate on the latest `eunice-dev` Vercel preview.
+1. Deploy the new SQL schema database migrations (`supabase/migrations/20260523_000003_guided_flow_schema.sql`) to prepare standard household, medical, fee-payer, and consent profiles.
+2. Initialize and configure the Next.js routes and layouts under `src/` to receive authentications.
+3. Bind the Resend email service adapter to trigger automated notifications.
+4. Establish row-level database security (RLS) filters.
 
 ## Handoff Packet
 
@@ -256,10 +251,10 @@ Repo: elixa-admin/eunice
 Root: /Users/brandondienar/Documents/Codex/Projects/Eunice
 Branch: codex/vercel-project-separation
 Last known commit: current branch head
-Primary surface: dev/
-Current goal: guided parent application flow replacing the 13-page form pattern
-Next slice: implement Start Checklist + 5-step parent preview
-Vercel: eunice-dev, root dev/
+Primary surface: src/ (starting Phase 2 foundation)
+Current goal: guided parent application database schemas and foundation Next.js app structure setup
+Next slice: Deploy migrations and configure main Next.js routes under src/
+Vercel: eunice-dev, root dev/ (shifting to main src/)
 Linear: Eunice Admissions Platform, currently needs connector reauth if 401 appears
 Read first: docs/SOURCE_OF_TRUTH.md and docs/HANDOVER_BOOTSTRAP_PROMPT.md
 Relay rules: docs/PLATFORM_RELAY_PROTOCOL.md

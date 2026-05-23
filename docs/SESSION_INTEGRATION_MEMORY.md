@@ -136,9 +136,10 @@ Policy:
 
 ## Current Design/Implementation Intent Snapshot
 
-- Parent-facing flow: academic, structured, Eunice green/gold brand discipline.
-- Admin-facing dashboard: more expressive operational UI while still brand-aligned.
-- Functional priority now: compress long intake into guided 4-5 step flow and strengthen admin workflow visibility.
+- **Parent-facing flow:** Polished, interactive 5-step guided wizard preview with Step 0 checklist, POPIA disclosures, and dynamic care/fee-payer blocks is fully implemented.
+- **Admin-facing dashboard:** Expressive, fully interactive operations cockpit complete with state-driven row clicks, micro-status chips ('Waiting on Parent', 'Needs Staff Verification', 'Ready for Decision', 'Finalized'), and completion progress heatmaps is fully implemented.
+- **Database Schema:** Versioned Supabase SQL migration files drafted to prepare households, medical care profiles, fee-payer profiles, and audited consent logs.
+- **Next Functional priority:** Move into Phase 2 Foundation build (June 1 kickoff): schema deployment, RLS policy validations, Next.js routing, and Resend client bindings integration.
 
 ## Handover Protocol (Minimum Packet)
 
@@ -147,8 +148,8 @@ When handing over across agent/platform/developer, include:
 - repo root
 - active branch
 - latest commit hash
-- current sprint intent
-- current next slice
+- current sprint intent: Phase 2 Foundation kickoff
+- current next slice: Deploy migrations and configure main Next.js routes under `src/`
 - env key list (names only)
 - connector/auth status (GitHub/Vercel/Linear/Supabase)
 - latest Vercel preview URL

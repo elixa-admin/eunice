@@ -111,4 +111,4 @@ console.log('3. docs/PLATFORM_RELAY_PROTOCOL.md');
 console.log('4. docs/GUIDED_APPLICATION_FLOW_PLAN.md');
 
 section('Next Slice');
-console.log('Implement the guided parent preview in dev/app/dev/parent/page.tsx using docs/GUIDED_APPLICATION_FLOW_PLAN.md.');
+console.log('Kick off Phase 2 MVP Foundation: deploy SQL migrations and configure main Next.js routes under src/.');

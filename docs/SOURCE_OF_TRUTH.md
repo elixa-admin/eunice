@@ -46,6 +46,10 @@ If chat context is lost, a platform changes, or a new developer joins, start her
 - Commit published to GitHub and branch-aligned with Vercel preview
 - Admin dashboard now includes lane-aware heatmap cards and row tinting so progress, waiting, and blocking states are visible at a glance
 - Guided application flow direction documented in `docs/GUIDED_APPLICATION_FLOW_PLAN.md`
+- Parent portal upgraded to an interactive 5-step guided wizard with preparation checklist (Step 0), care, fee-payer, and consent gates
+- Database schema migration drafted in `supabase/migrations/20260523_000003_guided_flow_schema.sql` to back the guided intake flows with sub-tables for households, medical profiles, fee payers, and consent logs
+- Admin Operations Dashboard made fully interactive, enabling sidebar detail card updates when clicking any table row
+- Stuck-state visibility chips ('Waiting on Parent', 'Needs Staff Verification', 'Ready for Decision', 'Finalized') and color-coded progress health indicators integrated into the admin list and details card
 
 ## Environment And Configuration
 
@@ -124,7 +128,7 @@ GitHub: aligned at branch head
 Vercel: aligned to eunice-dev preview
 Linear: update status from SOURCE_OF_TRUTH.md after each coherent slice
 Known local note: .claude/ remains untracked and excluded
-Next slice: implement the guided 5-step parent preview from docs/GUIDED_APPLICATION_FLOW_PLAN.md
+Next slice: Slice 4 (Trust ROI: Handover + Bootstrap Hardening and system sync verification)
 Bootstrap prompt: docs/HANDOVER_BOOTSTRAP_PROMPT.md
 Relay protocol: docs/PLATFORM_RELAY_PROTOCOL.md
 ```

@@ -52,7 +52,7 @@ export type PreviewApplication = {
 };
 
 export type PreviewReviewState = 'blocked' | 'review' | 'ready' | 'complete';
-export type ParentWorkflowStepKey = 'profile' | 'family' | 'documents' | 'review' | 'submit';
+export type ParentWorkflowStepKey = 'checklist' | 'learner' | 'household' | 'medical' | 'fees_docs' | 'review';
 export type ParentWorkflowStepState = 'todo' | 'active' | 'done' | 'blocked';
 
 export type ParentWorkflowSnapshot = {
@@ -297,12 +297,12 @@ function buildStepStates(
   canSubmit: boolean,
   hasBlockers: boolean,
 ): Record<ParentWorkflowStepKey, ParentWorkflowStepState> {
-  const sequence: ParentWorkflowStepKey[] = ['profile', 'family', 'documents', 'review', 'submit'];
+  const sequence: ParentWorkflowStepKey[] = ['checklist', 'learner', 'household', 'medical', 'fees_docs', 'review'];
   const activeIndex = sequence.indexOf(activeStep);
 
   return sequence.reduce(
     (acc, step, index) => {
-      if (step === 'submit') {
+      if (step === 'review') {
         acc[step] = canSubmit ? 'done' : hasBlockers ? 'blocked' : 'todo';
         return acc;
       }
@@ -310,7 +310,7 @@ function buildStepStates(
       if (index < activeIndex) {
         acc[step] = 'done';
       } else if (index === activeIndex) {
-        acc[step] = hasBlockers && step === 'documents' ? 'blocked' : 'active';
+        acc[step] = hasBlockers && step === 'fees_docs' ? 'blocked' : 'active';
       } else {
         acc[step] = 'todo';
       }
@@ -332,17 +332,15 @@ export function getParentWorkflowSnapshot(application: PreviewApplication): Pare
 
   const canSubmit = blockers.length === 0 && counts.ready + counts.reviewOnly === counts.total;
 
-  let activeStep: ParentWorkflowStepKey = 'profile';
-  if (application.status === 'accepted' || application.status === 'rejected') {
-    activeStep = 'submit';
-  } else if (blockers.length > 0) {
-    activeStep = 'documents';
-  } else if (canSubmit && application.status !== 'submitted' && application.status !== 'under_review') {
+  let activeStep: ParentWorkflowStepKey = 'checklist';
+  if (application.status === 'accepted' || application.status === 'rejected' || application.status === 'submitted' || application.status === 'under_review') {
     activeStep = 'review';
-  } else if (application.status === 'submitted' || application.status === 'under_review') {
-    activeStep = 'submit';
+  } else if (blockers.length > 0 || application.status === 'incomplete') {
+    activeStep = 'fees_docs';
+  } else if (canSubmit) {
+    activeStep = 'review';
   } else {
-    activeStep = 'review';
+    activeStep = 'learner';
   }
 
   return {

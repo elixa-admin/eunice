@@ -46,6 +46,7 @@ If chat context is lost, a platform changes, or a new developer joins, start her
 - Commit published to GitHub and branch-aligned with Vercel preview
 - Admin dashboard now includes lane-aware heatmap cards and row tinting so progress, waiting, and blocking states are visible at a glance
 - Guided application flow direction documented in `docs/GUIDED_APPLICATION_FLOW_PLAN.md`
+- Admin dashboard typography and hierarchy were tightened to reduce the wireframe/cartoon feel: serif headings removed, rounded geometry reduced, invalid Tailwind utility names fixed, and queue/action copy made more operational
 - Parent portal upgraded to an interactive 5-step guided wizard with preparation checklist (Step 0), care, fee-payer, and consent gates
 - Database schema migration drafted in `supabase/migrations/20260523_000003_guided_flow_schema.sql` to back the guided intake flows with sub-tables for households, medical profiles, fee payers, and consent logs
 - Admin Operations Dashboard made fully interactive, enabling sidebar detail card updates when clicking any table row

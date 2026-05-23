@@ -119,6 +119,26 @@ export default function SignIn() {
             Create account
           </Link>
         </div>
+
+        <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-4">
+          <p className="text-center text-xs font-semibold uppercase tracking-[0.14em] text-primary-200">
+            Preview Access
+          </p>
+          <div className="mt-3 grid gap-2 sm:grid-cols-2">
+            <Link
+              href="/dev/parent"
+              className="inline-flex items-center justify-center rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/20"
+            >
+              Parent Demo
+            </Link>
+            <Link
+              href="/dev/admin"
+              className="inline-flex items-center justify-center rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/20"
+            >
+              Admin Demo
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

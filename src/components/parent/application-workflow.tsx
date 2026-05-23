@@ -940,49 +940,49 @@ export default function ParentApplicationWorkflow() {
   }
 
   return (
-    <section className="rounded-[2rem] border border-emerald-100 bg-white shadow-[0_28px_80px_rgba(15,23,42,0.08)]">
-      <div className="border-b border-emerald-100 bg-gradient-to-r from-emerald-50 via-white to-amber-50 px-6 py-5 sm:px-8">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+    <section className="rounded-[2.5rem] border border-emerald-900/10 bg-white shadow-[0_32px_96px_-24px_rgba(6,46,28,0.12)] overflow-hidden">
+      <div className="border-b border-slate-100 bg-gradient-to-r from-emerald-900/5 via-white to-amber-500/5 px-6 py-6 sm:px-8">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-800">Application workspace</p>
-            <h2 className="display-serif mt-2 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">Complete your application in 4 clear stages</h2>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-              We guide families upfront on everything required to avoid mid-form surprises and unnecessary backtracking.
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">Admissions Workspace</p>
+            <h2 className="display-serif mt-2 text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-950 via-amber-800 to-emerald-900 sm:text-4xl">Complete your application dossier</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-600">
+              A refined admissions experience designed for families. Enter details and upload documents to lock in your child's placement.
             </p>
           </div>
 
-          <div className="rounded-2xl border border-emerald-100 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm">
+          <div className="rounded-2xl border border-emerald-900/10 bg-white px-5 py-4 text-sm text-slate-700 shadow-sm max-w-sm">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-800">Application status</div>
+                <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-800">Dossier status</div>
                 <div className="mt-1 font-semibold text-slate-950">{APPLICATION_STATUS_LABELS[draft.status]}</div>
               </div>
-              <div className="rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-emerald-900">
+              <div className="rounded-full bg-emerald-900 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-300">
                 {completion}% complete
               </div>
             </div>
-            <div className="mt-2 max-w-md text-slate-600">{APPLICATION_STATUS_DESCRIPTIONS[draft.status]}</div>
+            <div className="mt-2 text-xs leading-5 text-slate-600">{APPLICATION_STATUS_DESCRIPTIONS[draft.status]}</div>
           </div>
         </div>
 
         <div className="mt-6">
-          <div className="mb-2 flex items-center justify-between text-xs font-medium uppercase tracking-[0.16em] text-slate-500">
-            <span>Draft progress</span>
+          <div className="mb-2 flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-slate-500">
+            <span>Dossier progress</span>
             <span>{completion}% complete</span>
           </div>
-          <div className="h-2 rounded-full bg-slate-100">
+          <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
             <div
-              className="h-2 rounded-full bg-gradient-to-r from-primary-700 via-primary-600 to-accent-500 transition-all"
+              className="h-2 bg-gradient-to-r from-emerald-900 via-emerald-700 to-amber-500 transition-all duration-500"
               style={{ width: `${completion}%` }}
             />
           </div>
         </div>
 
-          <div className="mt-6 grid gap-3 md:grid-cols-3">
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
           {WORKFLOW_HIGHLIGHTS.map((item) => (
-            <div key={item.title} className="rounded-2xl border border-emerald-100 bg-white px-4 py-4 shadow-sm">
+            <div key={item.title} className="rounded-2xl border border-slate-100 bg-white px-5 py-4 shadow-sm">
               <div className="text-sm font-semibold text-slate-950">{item.title}</div>
-              <p className="mt-1 text-sm leading-6 text-slate-600">{item.body}</p>
+              <p className="mt-1.5 text-xs leading-5 text-slate-600">{item.body}</p>
             </div>
           ))}
         </div>
@@ -990,42 +990,53 @@ export default function ParentApplicationWorkflow() {
 
       <div className="grid gap-0 lg:grid-cols-[1.15fr_0.85fr]">
         <form className="p-6 sm:p-8" onSubmit={handleSubmit}>
-          <div className="mb-6 grid gap-3 sm:grid-cols-4">
-            {STEP_KEYS.map((step) => {
-              const meta = STEP_META[step];
-              const isActive = step === activeStep;
-              const isComplete = stepStates[step];
+          <div className="relative mb-8 mt-2 px-4 py-5 rounded-3xl border border-amber-500/10 bg-slate-50/50 shadow-inner sm:px-6 w-full overflow-x-auto">
+            <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-slate-200 -translate-y-1/2 hidden md:block" />
+            <div className="relative flex justify-between items-center gap-6 min-w-[650px] md:min-w-0">
+              {STEP_KEYS.map((step, index) => {
+                const meta = STEP_META[step];
+                const isActive = step === activeStep;
+                const isComplete = stepStates[step];
 
-              return (
-                <button
-                  key={step}
-                  type="button"
-                  onClick={() => setActiveStep(step)}
-                  className={`rounded-2xl border px-4 py-3 text-left transition ${
-                    isActive
-                      ? 'border-primary-200 bg-primary-50 shadow-sm'
-                      : 'border-slate-200 bg-white hover:border-primary-200 hover:bg-primary-50/60'
-                  }`}
-                >
-                  <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
-                    {meta.eyebrow}
-                  </div>
-                  <div className="mt-1 flex items-center justify-between gap-2">
-                    <span className="text-sm font-semibold text-slate-950">{meta.title}</span>
-                    <span
-                      className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] ${
-                        isComplete ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-600'
+                return (
+                  <button
+                    key={step}
+                    type="button"
+                    onClick={() => setActiveStep(step)}
+                    className="relative z-10 flex flex-col items-center gap-2 bg-transparent border-0 outline-none cursor-pointer group flex-1"
+                  >
+                    <div
+                      className={`flex h-10 w-10 items-center justify-center rounded-full border-2 text-xs font-semibold shadow-sm transition-all duration-300 ${
+                        isActive
+                          ? 'border-amber-600 bg-emerald-900 text-amber-100 ring-4 ring-emerald-900/10 scale-110 shadow-md shadow-emerald-950/20'
+                          : isComplete
+                            ? 'border-emerald-600 bg-emerald-50 text-emerald-700 hover:border-emerald-700'
+                            : 'border-slate-300 bg-white text-slate-500 group-hover:border-amber-500 group-hover:text-amber-700'
                       }`}
                     >
-                      {isComplete ? 'Done' : 'Open'}
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
+                      {isComplete ? (
+                        <svg className="w-5 h-5 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="3">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      ) : (
+                        <span>{index}</span>
+                      )}
+                    </div>
+                    <div className="text-center">
+                      <p className={`text-[9px] font-bold uppercase tracking-wider ${isActive ? 'text-emerald-900' : 'text-slate-400'}`}>
+                        {meta.eyebrow}
+                      </p>
+                      <p className={`mt-0.5 text-[11px] font-semibold whitespace-nowrap ${isActive ? 'text-emerald-950 font-bold' : 'text-slate-600 group-hover:text-slate-900'}`}>
+                        {meta.title.split(' ')[0]}
+                      </p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="rounded-3xl border border-slate-200 bg-slate-50/80 p-5 shadow-[0_16px_40px_rgba(15,23,42,0.04)] sm:p-6">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_20px_50px_rgba(6,58,35,0.03)] sm:p-8">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary-700">
@@ -1448,41 +1459,65 @@ export default function ParentApplicationWorkflow() {
           </div>
         </form>
 
-        <aside className="border-t border-primary-100 bg-primary-50/50 p-6 sm:p-8 lg:border-l lg:border-t-0">
-          <div className="rounded-3xl border border-primary-100 bg-white p-5 shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary-700">Draft summary</p>
-            <div className="mt-4 space-y-4 text-sm">
+        <aside className="border-t border-emerald-950/10 bg-emerald-950/[0.02] p-6 sm:p-8 lg:border-l lg:border-t-0">
+          <div className="rounded-3xl border border-emerald-950/10 bg-white p-6 shadow-sm flex flex-col items-center text-center">
+            <p className="text-xs font-bold uppercase tracking-wider text-emerald-900 mb-4 self-start">Dossier Completion</p>
+            
+            <div className="relative flex items-center justify-center h-28 w-28">
+              <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                <circle
+                  className="text-slate-100"
+                  strokeWidth="8"
+                  stroke="currentColor"
+                  fill="transparent"
+                  r="38"
+                  cx="50"
+                  cy="50"
+                />
+                <circle
+                  className="text-amber-500 transition-all duration-500 ease-in-out"
+                  strokeWidth="8"
+                  strokeDasharray={2 * Math.PI * 38}
+                  strokeDashoffset={2 * Math.PI * 38 * (1 - completion / 100)}
+                  strokeLinecap="round"
+                  stroke="currentColor"
+                  fill="transparent"
+                  r="38"
+                  cx="50"
+                  cy="50"
+                />
+              </svg>
+              <div className="absolute text-xl font-extrabold text-slate-900">{completion}%</div>
+            </div>
+            
+            <div className="mt-4 space-y-3 w-full text-left pt-4 border-t border-slate-100 text-sm">
               <SummaryRow label="Parent" value={parentComplete ? `${draft.parentFirstName} ${draft.parentLastName}`.trim() : 'Incomplete'} />
               <SummaryRow label="Learner" value={learnerComplete ? `${draft.learnerFirstName} ${draft.learnerLastName}`.trim() : 'Incomplete'} />
               <SummaryRow label="Grade" value={draft.learnerGrade || 'Not chosen yet'} />
               <SummaryRow label="Current status" value={APPLICATION_STATUS_LABELS[draft.status]} />
-              <SummaryRow label="Saved locally" value={mounted ? 'Yes' : 'Loading draft...'} />
             </div>
           </div>
 
-          <div className="mt-5 rounded-3xl border border-primary-100 bg-white p-5 shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary-700">Required documents</p>
+          <div className="mt-5 rounded-3xl border border-emerald-950/10 bg-white p-5 shadow-sm">
+            <p className="text-xs font-bold uppercase tracking-wider text-emerald-900">Required documents</p>
             {reviewOnlyRequiredDocuments.length > 0 ? (
-              <div className="mt-3 rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+              <div className="mt-3 rounded-2xl border border-amber-200 bg-amber-50/50 p-3 text-xs text-amber-900 leading-5">
                 {reviewOnlyRequiredDocuments.length === 1
-                  ? 'One uploaded document can still be submitted and will be checked manually by the school later.'
-                  : `${reviewOnlyRequiredDocuments.length} uploaded documents can still be submitted and will be checked manually by the school later.`}
+                  ? 'One uploaded document will be verified manually by the school staff.'
+                  : `${reviewOnlyRequiredDocuments.length} uploaded documents will be verified manually by the school staff.`}
               </div>
             ) : null}
             <div className="mt-4 space-y-3">
               {requiredDocumentTypes.map((documentType) => {
                 const document = draft.documents[documentType];
                 return (
-                  <div key={documentType} className="flex items-start justify-between gap-3 rounded-2xl bg-slate-50 px-4 py-3">
+                  <div key={documentType} className="flex items-start justify-between gap-3 rounded-2xl bg-slate-50 px-4 py-3 border border-slate-100">
                     <div>
                       <div className="text-sm font-semibold text-slate-950">{DOCUMENT_TYPE_LABELS[documentType]}</div>
                       <div className="mt-1 text-xs leading-5 text-slate-500">{getDocumentStateGuidance(document.validationState)}</div>
-                      {document.storagePath ? (
-                        <div className="mt-1 text-[11px] leading-5 text-slate-400">Draft saved</div>
-                      ) : null}
                     </div>
                     <div className="text-right">
-                      <span className={`rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] ${getValidationTone(document.validationState)}`}>
+                      <span className={`rounded-full border px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider ${getValidationTone(document.validationState)}`}>
                         {DOCUMENT_VALIDATION_LABELS[document.validationState]}
                       </span>
                     </div>
@@ -1513,15 +1548,15 @@ function Field({
   disabled?: boolean;
 }) {
   return (
-    <label className="flex flex-col gap-1.5">
-      <span className="text-sm font-medium text-slate-700">{label}</span>
+    <label className="flex flex-col gap-2">
+      <span className="text-xs font-bold uppercase tracking-wider text-slate-600">{label}</span>
       <input
         type={type}
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
         disabled={disabled}
-        className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-primary-300 focus:ring-4 focus:ring-primary-100"
+        className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-950 outline-none transition duration-300 placeholder:text-slate-400 focus:border-amber-600 focus:ring-4 focus:ring-emerald-900/5 disabled:opacity-50"
       />
     </label>
   );
@@ -1539,12 +1574,12 @@ function SelectField({
   options: string[];
 }) {
   return (
-    <label className="flex flex-col gap-1.5">
-      <span className="text-sm font-medium text-slate-700">{label}</span>
+    <label className="flex flex-col gap-2">
+      <span className="text-xs font-bold uppercase tracking-wider text-slate-600">{label}</span>
       <select
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-950 outline-none transition focus:border-primary-300 focus:ring-4 focus:ring-primary-100"
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-950 outline-none transition duration-300 focus:border-amber-600 focus:ring-4 focus:ring-emerald-900/5"
       >
         {options.map((option) => (
           <option key={option} value={option}>

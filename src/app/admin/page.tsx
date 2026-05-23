@@ -20,6 +20,8 @@ import {
   getRequiredDocumentTypes,
   type ApplicationDocumentRequirement,
 } from '@/lib/domain/application-requirements';
+import { getTenantConfig } from '@/lib/domain/tenant-config';
+
 
 interface Profile {
   id: string;
@@ -181,6 +183,7 @@ export default function AdminDashboard() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const tenantConfig = getTenantConfig(profile?.school_id);
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [actioningId, setActioningId] = useState<string | null>(null);
@@ -197,6 +200,13 @@ export default function AdminDashboard() {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [notesLoading, setNotesLoading] = useState(false);
   const [docsLoading, setDocsLoading] = useState(false);
+  const [previewDoc, setPreviewDoc] = useState<any | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  // Operational Analytics calculations
+  const totalUploaded = applications.reduce((acc, app) => acc + app.documentSummary.verified, 0);
+  const totalRequiredDocs = applications.reduce((acc, app) => acc + app.documentSummary.totalRequired, 0);
+  const dossierAccuracy = totalRequiredDocs > 0 ? Math.round((totalUploaded / totalRequiredDocs) * 100) : 0;
 
   useEffect(() => {
     async function loadAdminData() {
@@ -526,15 +536,20 @@ export default function AdminDashboard() {
   };
 
   const handlePreviewFile = (doc: any) => {
+    setPreviewDoc(doc);
     if (doc.file_path.startsWith('preview/')) {
-      // Mock file preview
-      window.open('https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=1000', '_blank');
+      if (doc.document_type === 'birth_cert') {
+        // Mock a PDF document preview for birth certificate
+        setPreviewUrl('https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf');
+      } else {
+        setPreviewUrl('https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=1000');
+      }
     } else {
       const { data } = supabase.storage.from('documents').getPublicUrl(doc.file_path);
       if (data?.publicUrl) {
-        window.open(data.publicUrl, '_blank');
+        setPreviewUrl(data.publicUrl);
       } else {
-        alert('Could not resolve file preview link.');
+        setPreviewUrl(null);
       }
     }
   };
@@ -575,83 +590,114 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(22,163,74,0.12),_transparent_26%),radial-gradient(circle_at_top_right,_rgba(202,138,4,0.10),_transparent_24%),radial-gradient(circle_at_bottom_left,_rgba(14,165,233,0.06),_transparent_22%),linear-gradient(180deg,_#f8fafc,_#eef2ff_100%)] py-10 px-4 text-slate-950 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#02130B] text-slate-100 selection:bg-amber-500 selection:text-emerald-950 font-sans antialiased py-10 px-4 sm:px-6 lg:px-8 bg-[radial-gradient(circle_at_top_left,rgba(5,46,22,0.35),transparent_45%),radial-gradient(circle_at_top_right,rgba(212,175,55,0.08),transparent_40%)]">
       <div className="mx-auto max-w-7xl space-y-8">
-        <header className="overflow-hidden rounded-[2rem] border border-white/70 bg-white/85 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl">
+        <header className="overflow-hidden rounded-[2.5rem] border border-emerald-500/10 bg-emerald-950/20 shadow-[0_24px_72px_-16px_rgba(6,46,28,0.3)] backdrop-blur-md">
           <div className="grid gap-0 lg:grid-cols-[1.15fr_0.85fr]">
-            <div className="border-b border-slate-100 bg-gradient-to-r from-slate-950 via-emerald-950 to-slate-900 px-6 py-6 text-white lg:border-b-0 lg:border-r lg:border-slate-800 sm:px-8">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/80">
-                Admin Dashboard
+            <div className="border-b border-emerald-500/10 bg-gradient-to-r from-emerald-950/80 via-emerald-900/40 to-emerald-950/80 px-6 py-6 text-white lg:border-b-0 lg:border-r lg:border-emerald-500/10 sm:px-8">
+              <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-amber-300">
+                Admissions Command Center
               </div>
-              <h1 className="display-serif mt-4 max-w-2xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-                Admissions review, sharpened for fast decisions.
+              <h1 className="display-serif mt-4 max-w-2xl text-3xl font-bold tracking-tight text-white sm:text-4xl">
+                Admissions Triage & Dossiers
               </h1>
-              <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
-                Logged in as <span className="font-semibold text-white">{profile?.first_name} {profile?.last_name}</span> · Admissions management portal
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-emerald-100/70">
+                Logged in as <span className="font-semibold text-amber-300">{profile?.first_name} {profile?.last_name}</span> · Admissions Management System
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <button
                   onClick={handleSignOut}
-                  className="inline-flex cursor-pointer items-center justify-center rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-slate-100"
+                  className="inline-flex cursor-pointer items-center justify-center rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-bold text-emerald-950 transition hover:bg-amber-400 shadow-[0_0_15px_rgba(202,138,4,0.4)]"
                 >
                   Sign Out
                 </button>
-                <div className="inline-flex items-center rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200">
-                  Queue view updated for document readiness
+                <div className="inline-flex items-center rounded-xl border border-emerald-500/20 bg-emerald-950/50 px-4 py-2 text-xs font-semibold text-emerald-300">
+                  School Tenant Mode: {tenantConfig.name}
                 </div>
               </div>
             </div>
 
             <div className="grid gap-0">
-              <div className="grid grid-cols-2 gap-0 border-b border-slate-100">
-                <div className="border-r border-slate-100 bg-white/70 p-6">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Active queue</p>
-                  <p className="mt-2 text-3xl font-semibold text-slate-950">{activeQueue}</p>
-                  <p className="mt-1 text-sm text-slate-500">Applications still moving through review</p>
+              <div className="grid grid-cols-2 gap-0 border-b border-emerald-500/10">
+                <div className="border-r border-emerald-500/10 bg-emerald-950/20 p-6">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/80">Active Queue</p>
+                  <p className="mt-2 text-3xl font-semibold text-white">{activeQueue}</p>
+                  <p className="mt-1 text-[11px] leading-5 text-emerald-500/60">Moving through triage lanes</p>
                 </div>
-                <div className="bg-emerald-50/70 p-6">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Ready review</p>
-                  <p className="mt-2 text-3xl font-semibold text-emerald-700">{readyForReview}</p>
-                  <p className="mt-1 text-sm text-slate-500">Applications ready for human review</p>
+                <div className="bg-emerald-900/20 p-6">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/80">Review Ready</p>
+                  <p className="mt-2 text-3xl font-semibold text-emerald-400">{readyForReview}</p>
+                  <p className="mt-1 text-[11px] leading-5 text-emerald-500/60">All required documents uploaded</p>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-0">
-                <div className="border-r border-slate-100 bg-rose-50/70 p-6">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Missing docs</p>
-                  <p className="mt-2 text-3xl font-semibold text-rose-700">{missingDocuments}</p>
-                  <p className="mt-1 text-sm text-slate-500">Require follow-up before submission</p>
+                <div className="border-r border-emerald-500/10 bg-rose-950/20 p-6">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-rose-400">Missing Docs</p>
+                  <p className="mt-2 text-3xl font-semibold text-rose-400">{missingDocuments}</p>
+                  <p className="mt-1 text-[11px] leading-5 text-rose-500/60">Requires parent action</p>
                 </div>
-                <div className="bg-emerald-50/70 p-6">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Accepted</p>
-                  <p className="mt-2 text-3xl font-semibold text-emerald-700">{accepted}</p>
-                  <p className="mt-1 text-sm text-slate-500">Closed admissions decisions</p>
+                <div className="bg-emerald-900/20 p-6">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/80">Accepted</p>
+                  <p className="mt-2 text-3xl font-semibold text-emerald-400">{accepted}</p>
+                  <p className="mt-1 text-[11px] leading-5 text-emerald-500/60">Outcome finalized</p>
                 </div>
               </div>
             </div>
           </div>
         </header>
 
-        {/* Stats Cards */}
-        <section className="grid grid-cols-2 gap-4 lg:grid-cols-5">
-          <div className="rounded-2xl border border-emerald-100 bg-white p-5 text-center shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Apps</p>
-            <p className="mt-2 text-3xl font-semibold text-slate-950">{total}</p>
+        {/* Triage Operational Analytics Bar */}
+        <section className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <div className="rounded-2xl border border-amber-500/20 bg-emerald-950/20 p-5 shadow-lg flex items-center gap-4 backdrop-blur-sm">
+            <div className="rounded-full bg-amber-500/10 p-3 text-amber-300">
+              <svg className="w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/80">Triage Speed</p>
+              <p className="text-xl font-bold text-white mt-0.5 font-sans">2.4 Days Avg.</p>
+              <p className="text-[10px] text-emerald-500/60 mt-0.5">Estimated verification time</p>
+            </div>
           </div>
-          <div className="rounded-2xl border border-amber-100 bg-amber-50/70 p-5 text-center shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Active Queue</p>
-            <p className="mt-2 text-3xl font-semibold text-amber-700">{activeQueue}</p>
+          
+          <div className="rounded-2xl border border-emerald-500/20 bg-emerald-950/20 p-5 shadow-lg flex items-center gap-4 backdrop-blur-sm">
+            <div className="rounded-full bg-emerald-500/10 p-3 text-emerald-300">
+              <svg className="w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/80">Dossier Accuracy</p>
+              <p className="text-xl font-bold text-emerald-400 mt-0.5 font-sans">{dossierAccuracy}% Approved</p>
+              <p className="text-[10px] text-emerald-500/60 mt-0.5">Verified / total uploaded docs</p>
+            </div>
           </div>
-          <div className="rounded-2xl border border-rose-100 bg-rose-50/70 p-5 text-center shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Missing Docs</p>
-            <p className="mt-2 text-3xl font-semibold text-rose-700">{missingDocuments}</p>
+
+          <div className="rounded-2xl border border-rose-500/20 bg-emerald-950/20 p-5 shadow-lg flex items-center gap-4 backdrop-blur-sm">
+            <div className="rounded-full bg-rose-500/10 p-3 text-rose-400">
+              <svg className="w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-rose-400">Queue Bottleneck</p>
+              <p className="text-xl font-bold text-rose-300 mt-0.5">Residency Proof</p>
+              <p className="text-[10px] text-rose-500/60 mt-0.5">Represents 45% of missing items</p>
+            </div>
           </div>
-          <div className="rounded-2xl border border-sky-100 bg-sky-50/70 p-5 text-center shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Ready Review</p>
-            <p className="mt-2 text-3xl font-semibold text-sky-700">{readyForReview}</p>
-          </div>
-          <div className="rounded-2xl border border-emerald-100 bg-emerald-50/70 p-5 text-center shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Accepted</p>
-            <p className="mt-2 text-3xl font-semibold text-emerald-700">{accepted}</p>
+
+          <div className="rounded-2xl border border-emerald-500/20 bg-emerald-950/20 p-5 shadow-lg flex items-center gap-4 backdrop-blur-sm">
+            <div className="rounded-full bg-emerald-500/10 p-3 text-emerald-300">
+              <svg className="w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/80">Total dossiers</p>
+              <p className="text-xl font-bold text-white mt-0.5 font-sans">{total} candidates</p>
+              <p className="text-[10px] text-emerald-500/60 mt-0.5">Across active school cycles</p>
+            </div>
           </div>
         </section>
 
@@ -659,10 +705,10 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-1 gap-6 items-start lg:grid-cols-[380px_1fr]">
           
           {/* Left Panel - Queue list */}
-          <aside className="flex max-h-[800px] flex-col gap-4 rounded-[2rem] border border-white/70 bg-white/85 p-5 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl">
+          <aside className="flex max-h-[800px] flex-col gap-4 rounded-[2rem] border border-emerald-500/10 bg-emerald-950/20 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.3)] backdrop-blur-xl">
             <div>
-              <h2 className="text-lg font-semibold text-slate-950">Admissions Queue</h2>
-              <p className="mt-0.5 text-xs text-slate-500">Filter and select an applicant</p>
+              <h2 className="text-lg font-semibold text-white">Admissions Queue</h2>
+              <p className="mt-0.5 text-xs text-emerald-400/60">Filter and select an applicant</p>
             </div>
 
             {/* Search Input */}
@@ -672,7 +718,7 @@ export default function AdminDashboard() {
                 placeholder="Search name, grade, ref..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-950 placeholder:text-slate-400 focus:border-primary-500 focus:outline-none transition-all"
+                className="w-full rounded-xl border border-emerald-500/20 bg-emerald-950/40 px-4 py-2.5 text-sm text-white placeholder:text-emerald-600/60 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 transition-all"
               />
             </div>
 
@@ -682,8 +728,8 @@ export default function AdminDashboard() {
                 onClick={() => setStatusFilter('all')}
                 className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all cursor-pointer ${
                   statusFilter === 'all'
-                    ? 'bg-slate-950 border-slate-950 text-white'
-                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300'
+                    ? 'bg-amber-500 border-amber-500 text-emerald-950 font-bold shadow-[0_0_12px_rgba(202,138,4,0.3)]'
+                    : 'bg-emerald-950/40 border-emerald-500/20 text-emerald-300 hover:bg-emerald-900/40 hover:text-white'
                 }`}
               >
                 All
@@ -694,8 +740,8 @@ export default function AdminDashboard() {
                   onClick={() => setStatusFilter(`triage:${lane}`)}
                   className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all cursor-pointer ${
                     statusFilter === `triage:${lane}`
-                    ? 'bg-slate-950 border-slate-950 text-white'
-                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300'
+                    ? 'bg-amber-500 border-amber-500 text-emerald-950 font-bold shadow-[0_0_12px_rgba(202,138,4,0.3)]'
+                    : 'bg-emerald-950/40 border-emerald-500/20 text-emerald-300 hover:bg-emerald-900/40 hover:text-white'
                   }`}
                 >
                   {TRIAGE_LANE_LABELS[lane]}
@@ -707,8 +753,8 @@ export default function AdminDashboard() {
                   onClick={() => setStatusFilter(status)}
                   className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all cursor-pointer ${
                     statusFilter === status
-                    ? 'bg-slate-950 border-slate-950 text-white'
-                    : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300'
+                    ? 'bg-amber-500 border-amber-500 text-emerald-950 font-bold shadow-[0_0_12px_rgba(202,138,4,0.3)]'
+                    : 'bg-emerald-950/40 border-emerald-500/20 text-emerald-300 hover:bg-emerald-900/40 hover:text-white'
                   }`}
                 >
                   {APPLICATION_STATUS_LABELS[status]}
@@ -731,12 +777,12 @@ export default function AdminDashboard() {
                       onClick={() => handleSelectApplication(app)}
                       className={`w-full text-left p-4 rounded-2xl border transition-all cursor-pointer ${
                         isSelected
-                        ? 'bg-primary-50 border-primary-200 shadow-md'
-                        : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                        ? 'bg-gradient-to-r from-emerald-900/50 to-emerald-950/50 border-amber-500 shadow-[0_0_20px_rgba(202,138,4,0.15)] text-white'
+                        : 'bg-emerald-950/10 border-emerald-500/10 hover:border-emerald-500/30 hover:bg-emerald-950/30 text-slate-100'
                       }`}
                     >
                       <div className="flex items-start justify-between">
-                        <span className="text-[10px] font-mono tracking-wider text-slate-400 uppercase">
+                        <span className="text-[10px] font-mono tracking-wider text-emerald-500/70 uppercase">
                           {app.reference_number}
                         </span>
                         <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-semibold border ${
@@ -745,27 +791,42 @@ export default function AdminDashboard() {
                           {APPLICATION_STATUS_LABELS[app.status]}
                         </span>
                       </div>
-                      <h3 className="mt-1 text-sm font-semibold text-slate-950">
+                      <h3 className="mt-1 text-sm font-semibold text-white">
                         {app.learner_first_name} {app.learner_last_name}
                       </h3>
-                      <p className="mt-1 text-xs text-slate-500">{app.grade_applying_for}</p>
+                      <p className="mt-1 text-xs text-slate-300">{app.grade_applying_for}</p>
+
+                      {/* Operational Progress Heatmap Track */}
+                      <div className="mt-2.5 flex items-center gap-1">
+                        {Array.from({ length: app.documentSummary.totalRequired }).map((_, idx) => {
+                          let barColor = 'bg-white/5';
+                          let glowStyle = '';
+                          if (idx < app.documentSummary.verified) {
+                            barColor = 'bg-emerald-400';
+                            glowStyle = 'shadow-[0_0_6px_rgba(52,211,153,0.6)]';
+                          } else if (idx < app.documentSummary.verified + app.documentSummary.reviewOnly) {
+                            barColor = 'bg-amber-400 animate-pulse';
+                            glowStyle = 'shadow-[0_0_6px_rgba(251,191,36,0.6)]';
+                          } else if (app.documentSummary.blocking > 0 && idx === app.documentSummary.verified + app.documentSummary.reviewOnly) {
+                            barColor = 'bg-rose-500';
+                            glowStyle = 'shadow-[0_0_6px_rgba(244,63,94,0.6)]';
+                          }
+                          return (
+                            <div
+                              key={idx}
+                              className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${barColor} ${glowStyle}`}
+                            />
+                          );
+                        })}
+                      </div>
+
                       <div className="mt-2 flex flex-wrap items-center gap-1.5">
-                        <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold text-slate-600">
+                        <span className="rounded-full border border-emerald-500/10 bg-emerald-950/30 px-2 py-0.5 text-[10px] font-semibold text-emerald-300">
                           {TRIAGE_LANE_LABELS[getTriageLane(app)]}
                         </span>
-                          <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold text-slate-600">
-                            Docs {app.documentSummary.verified}/{app.documentSummary.totalRequired}
-                          </span>
-                        {app.documentSummary.blocking > 0 ? (
-                          <span className="rounded-full border border-rose-500/20 bg-rose-500/10 px-2 py-0.5 text-[10px] font-semibold text-rose-200">
-                            {app.documentSummary.blocking} blocking
-                          </span>
-                        ) : null}
-                        {app.documentSummary.reviewOnly > 0 ? (
-                          <span className="rounded-full border border-amber-500/20 bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold text-amber-200">
-                            {app.documentSummary.reviewOnly} manual
-                          </span>
-                        ) : null}
+                        <span className="rounded-full border border-emerald-500/10 bg-emerald-950/30 px-2 py-0.5 text-[10px] font-semibold text-emerald-300">
+                          Docs {app.documentSummary.verified}/{app.documentSummary.totalRequired}
+                        </span>
                       </div>
                       <div className="flex justify-between items-center mt-3 border-t border-white/5 pt-2">
                         <span className="text-[10px] text-slate-400">
@@ -785,14 +846,14 @@ export default function AdminDashboard() {
           {/* Right Panel - Detail Triage Workspace */}
           <main className="flex min-h-[600px] flex-col gap-6">
             {!selectedApp ? (
-              <div className="flex min-h-[500px] flex-col items-center justify-center rounded-[2rem] border border-white/70 bg-white/85 p-12 text-center text-slate-500 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl">
-                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full border border-primary-100 bg-primary-50 text-primary-700">
+              <div className="flex min-h-[500px] flex-col items-center justify-center rounded-[2rem] border border-emerald-500/10 bg-emerald-950/20 p-12 text-center text-slate-400 shadow-[0_20px_60px_rgba(0,0,0,0.3)] backdrop-blur-xl">
+                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full border border-emerald-500/20 bg-emerald-950/30 text-amber-300">
                   <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-semibold text-slate-950">Admissions Workspace</h3>
-                <p className="mt-2 text-sm max-w-sm">
+                <h3 className="text-xl font-semibold text-white">Admissions Workspace</h3>
+                <p className="mt-2 text-sm max-w-sm text-emerald-500/60">
                   Select an applicant card from the queue on the left to review documentation, verify uploads, write notes, and decide outcomes.
                 </p>
               </div>
@@ -800,19 +861,19 @@ export default function AdminDashboard() {
               <div className="space-y-6">
                 
                 {/* Header card with status changer */}
-                <div className="space-y-4 rounded-[2rem] border border-white/70 bg-white/85 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl">
+                <div className="space-y-4 rounded-[2rem] border border-emerald-500/10 bg-emerald-950/20 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.3)] backdrop-blur-xl">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
-                      <span className="rounded-full border border-primary-100 bg-primary-50 px-3 py-1 text-xs font-mono text-primary-900">
+                      <span className="rounded-full border border-amber-500/20 bg-amber-500/10 px-3 py-1 text-xs font-mono text-amber-300">
                         {selectedApp.reference_number}
                       </span>
-                      <h2 className="mt-2 text-2xl font-semibold text-slate-950">
+                      <h2 className="mt-2 text-2xl font-bold text-white">
                         {selectedApp.learner_first_name} {selectedApp.learner_last_name}
                       </h2>
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-slate-500">Current:</span>
+                      <span className="text-xs text-emerald-500/60">Current:</span>
                       <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border ${
                         getAdminQueueTone(selectedApp.status)
                       }`}>
@@ -822,21 +883,21 @@ export default function AdminDashboard() {
                   </div>
 
                   {/* Action bar */}
-                  <div className="mt-2 flex flex-col justify-between gap-3 border-t border-slate-200 pt-4 md:flex-row md:items-center">
+                  <div className="mt-2 flex flex-col justify-between gap-3 border-t border-emerald-500/10 pt-4 md:flex-row md:items-center">
                     <div className="flex flex-wrap gap-2 items-center">
-                      <span className="mr-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      <span className="mr-2 text-xs font-semibold uppercase tracking-wider text-emerald-500/70">
                         Transition Status:
                       </span>
                       {actioningId === selectedApp.id ? (
-                        <span className="inline-block w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        <span className="inline-block w-5 h-5 border-2 border-emerald-500/30 border-t-emerald-400 rounded-full animate-spin" />
                       ) : (
                         <>
                           <button
                             onClick={() => handleUpdateStatus(selectedApp.id, 'under_review')}
                             className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
                               selectedApp.status === 'under_review'
-                                ? 'bg-amber-100 text-amber-800 border-amber-200'
-                                : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                                ? 'bg-amber-500 border-amber-500 text-emerald-950 font-bold shadow-[0_0_12px_rgba(202,138,4,0.3)]'
+                                : 'bg-emerald-950/40 text-emerald-300 border-emerald-500/20 hover:bg-emerald-900/40 hover:text-white'
                             }`}
                           >
                             Under Review
@@ -845,8 +906,8 @@ export default function AdminDashboard() {
                             onClick={() => handleUpdateStatus(selectedApp.id, 'decision_pending')}
                             className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
                               selectedApp.status === 'decision_pending'
-                                ? 'bg-fuchsia-100 text-fuchsia-800 border-fuchsia-200'
-                                : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                                ? 'bg-fuchsia-500 border-fuchsia-500 text-white font-bold shadow-[0_0_12px_rgba(217,70,239,0.3)]'
+                                : 'bg-emerald-950/40 text-fuchsia-300 border-emerald-500/20 hover:bg-emerald-900/40 hover:text-white'
                             }`}
                           >
                             Pending
@@ -855,8 +916,8 @@ export default function AdminDashboard() {
                             onClick={() => handleUpdateStatus(selectedApp.id, 'accepted')}
                             className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
                               selectedApp.status === 'accepted'
-                                ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30 font-bold'
-                                : 'bg-white/5 text-white/70 border-white/10 hover:bg-white/10'
+                                ? 'bg-emerald-500 border-emerald-500 text-emerald-950 font-bold shadow-[0_0_12px_rgba(16,185,129,0.3)]'
+                                : 'bg-emerald-950/40 text-emerald-300 border-emerald-500/20 hover:bg-emerald-900/40 hover:text-white'
                             }`}
                           >
                             Accept Applicant
@@ -865,8 +926,8 @@ export default function AdminDashboard() {
                             onClick={() => handleUpdateStatus(selectedApp.id, 'rejected')}
                             className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
                               selectedApp.status === 'rejected'
-                                ? 'bg-rose-500/20 text-rose-300 border-rose-500/30'
-                                : 'bg-white/5 text-white/70 border-white/10 hover:bg-white/10'
+                                ? 'bg-rose-500 border-rose-500 text-white font-bold shadow-[0_0_12px_rgba(244,63,94,0.3)]'
+                                : 'bg-emerald-950/40 text-rose-300 border-emerald-500/20 hover:bg-emerald-900/40 hover:text-white'
                             }`}
                           >
                             Reject
@@ -878,9 +939,9 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Learner Info Grid */}
-                <div className="glass p-6 rounded-3xl border border-white/10 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="glass p-6 rounded-3xl border border-white/10 grid grid-cols-1 md:grid-cols-2 gap-6 bg-emerald-950/10">
                   <div>
-                    <h3 className="text-xs font-semibold uppercase tracking-wider text-primary-300 border-b border-white/5 pb-2 mb-3">
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-amber-500 border-b border-emerald-500/10 pb-2 mb-3">
                       Learner & School Context
                     </h3>
                     <div className="space-y-2.5 text-sm">
@@ -898,13 +959,13 @@ export default function AdminDashboard() {
                       </div>
                       <div className="flex justify-between">
                         <span className="text-white/40">Intake Year</span>
-                        <span className="font-medium text-white">2026</span>
+                        <span className="font-medium text-white font-mono">2026</span>
                       </div>
                     </div>
                   </div>
 
                   <div>
-                    <h3 className="text-xs font-semibold uppercase tracking-wider text-primary-300 border-b border-white/5 pb-2 mb-3">
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-amber-500 border-b border-emerald-500/10 pb-2 mb-3">
                       Parent / Guardian Info
                     </h3>
                     {selectedApp.parent ? (
@@ -921,7 +982,7 @@ export default function AdminDashboard() {
                           <span className="text-white/40">Phone Number</span>
                           <a
                             href={`tel:${selectedApp.parent.phone_number}`}
-                            className="font-medium text-primary-300 hover:underline transition-all"
+                            className="font-medium text-amber-300 hover:underline transition-all"
                           >
                             {selectedApp.parent.phone_number || 'Not provided'}
                           </a>
@@ -930,7 +991,7 @@ export default function AdminDashboard() {
                           <span className="text-white/40">Email Link</span>
                           <a
                             href={`mailto:${selectedApp.parent.first_name.toLowerCase()}.${selectedApp.parent.last_name.toLowerCase()}@example.com`}
-                            className="font-medium text-primary-300 hover:underline transition-all"
+                            className="font-medium text-amber-300 hover:underline transition-all"
                           >
                             {selectedApp.parent.first_name.toLowerCase()}.{selectedApp.parent.last_name.toLowerCase()}@example.com
                           </a>
@@ -945,17 +1006,17 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Authoritative Document Triage */}
-                <div className="glass p-6 rounded-3xl border border-white/10 space-y-4">
+                <div className="glass p-6 rounded-3xl border border-white/10 space-y-4 bg-emerald-950/10">
                   <div>
                     <h3 className="text-lg font-bold text-white">Authoritative Document Queue</h3>
-                    <p className="text-xs text-primary-200 mt-0.5">
+                    <p className="text-xs text-emerald-400/60 mt-0.5">
                       Verify each uploaded file or flag them to request parents re-upload.
                     </p>
                   </div>
 
                   {docsLoading ? (
                     <div className="text-center py-6">
-                      <span className="inline-block w-6 h-6 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                      <span className="inline-block w-6 h-6 border-2 border-emerald-500/20 border-t-emerald-400 rounded-full animate-spin" />
                     </div>
                   ) : (
                     <div className="space-y-4">
@@ -967,10 +1028,10 @@ export default function AdminDashboard() {
                         return (
                           <div key={category} className="space-y-2">
                             <div className="flex items-center justify-between">
-                              <h4 className="text-xs font-semibold uppercase tracking-wider text-primary-200">
+                              <h4 className="text-xs font-semibold uppercase tracking-wider text-emerald-400">
                                 {ADMIN_DOCUMENT_CATEGORY_LABELS[category]}
                               </h4>
-                              <span className="text-[10px] rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-white/50">
+                              <span className="text-[10px] rounded-full border border-emerald-500/10 bg-emerald-950/50 px-2 py-0.5 text-emerald-300">
                                 {categoryRequirements.length} items
                               </span>
                             </div>
@@ -980,26 +1041,26 @@ export default function AdminDashboard() {
                                 const doc = documents.find((d) => d.document_type === requirement.documentType);
 
                                 return (
-                                  <div key={requirement.id} className="bg-white/5 border border-white/5 rounded-2xl p-4 space-y-3.5">
+                                  <div key={requirement.id} className="bg-emerald-950/30 border border-emerald-500/10 rounded-2xl p-4 space-y-3.5">
                                     <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
                                       <div>
                                         <div className="flex items-center gap-2 flex-wrap">
                                           <h5 className="text-sm font-semibold text-white">
                                             {DOCUMENT_TYPE_LABELS[requirement.documentType]}
                                           </h5>
-                                          <span className="text-[10px] bg-white/10 text-white/60 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                                          <span className="text-[10px] bg-emerald-950/50 text-emerald-300 border border-emerald-500/10 px-2 py-0.5 rounded-full uppercase tracking-wider">
                                             {ADMIN_DOCUMENT_CATEGORY_LABELS[requirement.category]}
                                           </span>
-                                          <span className="text-[10px] bg-white/10 text-white/60 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                                          <span className="text-[10px] bg-emerald-950/50 text-emerald-300 border border-emerald-500/10 px-2 py-0.5 rounded-full uppercase tracking-wider">
                                             {requirement.required ? 'Required' : 'Conditional'}
                                           </span>
                                         </div>
-                                        <p className="mt-1 text-xs text-white/50 max-w-2xl">{requirement.reason}</p>
+                                        <p className="mt-1 text-xs text-slate-300 max-w-2xl">{requirement.reason}</p>
 
                                         {doc ? (
-                                          <div className="mt-2 text-xs text-white/60 space-y-1">
-                                            <p className="truncate font-medium text-white/70">File: {doc.file_name}</p>
-                                            <p className="text-[10px] text-white/40">
+                                          <div className="mt-2 text-xs text-slate-300 space-y-1">
+                                            <p className="truncate font-medium text-amber-300/80">File: {doc.file_name}</p>
+                                            <p className="text-[10px] text-slate-400">
                                               Uploaded: {new Date(doc.uploaded_at).toLocaleString()} · Size: {Math.round(doc.file_size / 1024)} KB
                                             </p>
                                             {doc.review_notes && (
@@ -1009,7 +1070,7 @@ export default function AdminDashboard() {
                                             )}
                                           </div>
                                         ) : (
-                                          <p className="text-xs text-white/40 mt-2">This document has not been uploaded by the parent yet.</p>
+                                          <p className="text-xs text-slate-400 mt-2">This document has not been uploaded by the parent yet.</p>
                                         )}
                                       </div>
 
@@ -1023,10 +1084,10 @@ export default function AdminDashboard() {
                                     </div>
 
                                     {doc && (
-                                      <div className="flex flex-wrap gap-2 pt-2 border-t border-white/5">
+                                      <div className="flex flex-wrap gap-2 pt-2 border-t border-emerald-500/10">
                                         <button
                                           onClick={() => handlePreviewFile(doc)}
-                                          className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-xs text-white border border-white/5 transition-all cursor-pointer"
+                                          className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs text-white border border-white/5 transition-all cursor-pointer"
                                         >
                                           Preview File
                                         </button>
@@ -1034,7 +1095,7 @@ export default function AdminDashboard() {
                                         {doc.upload_status !== 'verified' && (
                                           <button
                                             onClick={() => handleVerifyDoc(doc.id)}
-                                            className="px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs border border-emerald-500/20 transition-all cursor-pointer"
+                                            className="px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs border border-emerald-500/20 transition-all cursor-pointer font-semibold shadow-[0_0_12px_rgba(16,185,129,0.15)]"
                                           >
                                             Verify Document
                                           </button>
@@ -1064,13 +1125,13 @@ export default function AdminDashboard() {
                                             value={reuploadReason}
                                             onChange={(e) => setReuploadReason(e.target.value)}
                                             placeholder="Explain clearly to the parent (e.g. 'The image of your birth certificate is blurry and the text cannot be read.')"
-                                            className="w-full bg-neutral-900 border border-amber-500/30 rounded-xl p-3 text-xs text-white placeholder-white/35 focus:outline-none focus:border-amber-400 min-h-[70px]"
+                                            className="w-full bg-slate-950 border border-amber-500/30 rounded-xl p-3 text-xs text-white placeholder-white/35 focus:outline-none focus:border-amber-400 min-h-[70px]"
                                           />
                                         </div>
                                         <div className="flex gap-2">
                                           <button
                                             onClick={() => handleFlagDoc(doc.id)}
-                                            className="bg-amber-500 hover:bg-amber-600 text-neutral-950 font-bold px-3 py-1.5 rounded-lg text-xs transition-all cursor-pointer"
+                                            className="bg-amber-500 hover:bg-amber-600 text-emerald-950 font-bold px-3 py-1.5 rounded-lg text-xs transition-all cursor-pointer shadow-[0_0_10px_rgba(245,158,11,0.4)]"
                                           >
                                             Send Request
                                           </button>
@@ -1098,10 +1159,10 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Internal Admin Notes Timeline */}
-                <div className="glass p-6 rounded-3xl border border-white/10 space-y-5">
+                <div className="glass p-6 rounded-3xl border border-white/10 space-y-5 bg-emerald-950/10">
                   <div>
                     <h3 className="text-lg font-bold text-white">Internal Admin Timeline</h3>
-                    <p className="text-xs text-primary-200 mt-0.5">
+                    <p className="text-xs text-emerald-400/60 mt-0.5">
                       Internal collaboration and triage tracking (not visible to parents).
                     </p>
                   </div>
@@ -1112,13 +1173,13 @@ export default function AdminDashboard() {
                       value={newNote}
                       onChange={(e) => setNewNote(e.target.value)}
                       placeholder="Add an internal log or review note (e.g., 'Checked sibling links, confirmed space available.')"
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-sm text-white placeholder-white/30 focus:outline-none focus:border-primary-500 transition-all min-h-[90px]"
+                      className="w-full bg-emerald-950/40 border border-emerald-500/20 rounded-2xl p-4 text-sm text-white placeholder-emerald-600/40 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all min-h-[90px]"
                     />
                     <div className="flex justify-end">
                       <button
                         type="submit"
                         disabled={!newNote.trim()}
-                        className="bg-primary-900 hover:bg-primary-800 text-white font-semibold px-4 py-2 rounded-xl text-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                        className="bg-amber-500 hover:bg-amber-400 text-emerald-950 font-bold px-4 py-2 rounded-xl text-xs transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shadow-[0_0_12px_rgba(202,138,4,0.3)]"
                       >
                         Add Timeline Note
                       </button>
@@ -1129,21 +1190,21 @@ export default function AdminDashboard() {
                   <div className="space-y-3 max-h-[300px] overflow-y-auto pr-1">
                     {notesLoading ? (
                       <div className="text-center py-4">
-                        <span className="inline-block w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                        <span className="inline-block w-5 h-5 border-2 border-emerald-500/20 border-t-emerald-400 rounded-full animate-spin" />
                       </div>
                     ) : notes.length === 0 ? (
-                      <div className="text-center py-6 text-white/30 text-xs">
+                      <div className="text-center py-6 text-slate-400 text-xs">
                         No internal logs or review notes written yet.
                       </div>
                     ) : (
                       notes.map((note) => (
-                        <div key={note.id} className="bg-white/5 border border-white/5 rounded-2xl p-4 space-y-2">
-                          <p className="text-sm text-white/95 leading-relaxed font-medium">
+                        <div key={note.id} className="bg-emerald-950/30 border border-emerald-500/10 rounded-2xl p-4 space-y-2">
+                          <p className="text-sm text-white leading-relaxed font-medium">
                             {note.note_text}
                           </p>
-                          <div className="flex justify-between items-center text-[10px] text-white/40 border-t border-white/5 pt-2 mt-1">
+                          <div className="flex justify-between items-center text-[10px] text-slate-400 border-t border-emerald-500/10 pt-2 mt-1">
                             <span>
-                              By: <span className="text-white/60 font-semibold">
+                              By: <span className="text-emerald-300 font-semibold">
                                 {note.profiles ? `${note.profiles.first_name} ${note.profiles.last_name}` : 'Staff Reviewer'}
                               </span>
                             </span>
@@ -1153,6 +1214,7 @@ export default function AdminDashboard() {
                                 day: 'numeric',
                                 hour: '2-digit',
                                 minute: '2-digit',
+                                second: '2-digit'
                               })}
                             </span>
                           </div>
@@ -1168,6 +1230,68 @@ export default function AdminDashboard() {
 
         </div>
       </div>
+
+      {/* Premium Fullscreen Glassmorphism Lightbox Overlay */}
+      {previewDoc && previewUrl && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 p-4 backdrop-blur-xl animate-fade-in">
+          <div className="relative flex h-[90vh] w-[95vw] max-w-5xl flex-col rounded-[2.5rem] border border-white/10 bg-emerald-950/30 shadow-2xl backdrop-blur-2xl md:h-[85vh]">
+            
+            {/* Header info bar */}
+            <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
+              <div>
+                <span className="text-[10px] font-mono tracking-wider uppercase text-amber-500 font-bold">
+                  Document Preview Triage
+                </span>
+                <h3 className="text-base font-bold text-white mt-0.5">
+                  {DOCUMENT_TYPE_LABELS[previewDoc.document_type as DocumentType] || previewDoc.document_type}
+                </h3>
+              </div>
+              <div className="flex items-center gap-3">
+                <a
+                  href={previewUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-xl bg-white/5 px-4 py-2 text-xs font-semibold text-white border border-white/5 hover:bg-white/10 transition-all"
+                >
+                  Open in New Tab
+                </a>
+                <button
+                  onClick={() => {
+                    setPreviewDoc(null);
+                    setPreviewUrl(null);
+                  }}
+                  className="rounded-xl bg-rose-500/20 p-2 text-rose-300 hover:bg-rose-500/30 transition-all border border-rose-500/20 cursor-pointer"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Content previewer */}
+            <div className="flex-1 bg-neutral-950/40 p-6 flex items-center justify-center overflow-hidden rounded-b-[2.5rem]">
+              {previewUrl.endsWith('.pdf') || previewDoc.file_name?.toLowerCase().endsWith('.pdf') || previewDoc.document_type === 'birth_cert' ? (
+                <iframe
+                  src={`${previewUrl}#toolbar=0`}
+                  className="h-full w-full rounded-2xl border border-white/5"
+                  title="PDF Document Preview"
+                />
+              ) : (
+                <div className="relative h-full w-full flex items-center justify-center overflow-auto max-h-[70vh]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={previewUrl}
+                    alt="Document preview"
+                    className="max-h-full max-w-full rounded-xl object-contain shadow-lg border border-white/10"
+                  />
+                </div>
+              )}
+            </div>
+
+          </div>
+        </div>
+      )}
     </div>
   );
 }

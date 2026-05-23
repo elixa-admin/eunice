@@ -31,7 +31,7 @@ import {
 } from '@/lib/documents/contracts';
 import { uploadDocumentDraft } from '@/lib/documents/upload';
 
-const STEP_KEYS = ['readiness', 'profile', 'documents', 'review'] as const;
+const STEP_KEYS = ['checklist', 'learner', 'household', 'medical', 'fees_docs', 'review'] as const;
 type StepKey = (typeof STEP_KEYS)[number];
 
 type DocumentDraft = {
@@ -82,25 +82,35 @@ type StepMeta = {
 };
 
 const STEP_META: Record<StepKey, StepMeta> = {
-  readiness: {
+  checklist: {
+    eyebrow: 'Step 0',
+    title: 'Preparation & Checklist',
+    description: 'Confirm you have the required documents and understand the admissions journey before starting.',
+  },
+  learner: {
     eyebrow: 'Step 1',
-    title: 'Readiness and eligibility',
-    description: 'Confirm you have the required documents and know what the full process needs.',
+    title: 'Learner & Admission Details',
+    description: 'Capture basic learner legal names, grade applied, and previous school context.',
   },
-  profile: {
+  household: {
     eyebrow: 'Step 2',
-    title: 'Parent and learner profile',
-    description: 'Capture parent contact, learner identity, and school context in one focused stage.',
+    title: 'Parent & Household Info',
+    description: 'Capture details of the submitting parent, legacy sibling status, and co-parent contexts.',
   },
-  documents: {
+  medical: {
     eyebrow: 'Step 3',
-    title: 'Document uploads',
-    description: 'Upload required files with format checks and clear quality guidance.',
+    title: 'Medical Care & Support',
+    description: 'Disclose healthcare support plans, doctor contacts, and boarding house requests.',
+  },
+  fees_docs: {
+    eyebrow: 'Step 4',
+    title: 'Fee Payer & Uploads',
+    description: 'Select fee-payer responsibility and upload all required checklist documents.',
   },
   review: {
-    eyebrow: 'Step 4',
-    title: 'Review and submit',
-    description: 'Confirm everything is complete before final submission.',
+    eyebrow: 'Step 5',
+    title: 'Review & Submit',
+    description: 'Audit your completed information and submit your file to the admissions queue.',
   },
 };
 
@@ -310,7 +320,7 @@ function readStoredDraftSnapshot(): StoredApplicationDraftSnapshot | null {
     return {
       version: STORAGE_VERSION,
       savedAt: new Date().toISOString(),
-      activeStep: parsed?.activeStep && STEP_KEYS.includes(parsed.activeStep) ? parsed.activeStep : 'readiness',
+      activeStep: parsed?.activeStep && STEP_KEYS.includes(parsed.activeStep) ? parsed.activeStep : 'checklist',
       readinessConfirmed: Boolean(parsed?.readinessConfirmed),
       draft: mergeDraftState(createInitialDraft(), parsed as Partial<ApplicationDraft>),
     };
@@ -398,7 +408,7 @@ function getDocumentStateGuidance(state: DocumentValidationState) {
 }
 
 export default function ParentApplicationWorkflow() {
-  const [activeStep, setActiveStep] = useState<StepKey>('readiness');
+  const [activeStep, setActiveStep] = useState<StepKey>('checklist');
   const [draft, setDraft] = useState<ApplicationDraft>(createInitialDraft);
   const [lastSavedAt, setLastSavedAt] = useState('Not saved yet');
   const [mounted, setMounted] = useState(false);
@@ -699,9 +709,11 @@ export default function ParentApplicationWorkflow() {
   const isReadyToSubmit = readinessConfirmed && profileComplete && requiredDocsAccepted;
 
   const stepStates: Record<StepKey, boolean> = {
-    readiness: readinessConfirmed,
-    profile: profileComplete,
-    documents: requiredDocsAccepted,
+    checklist: readinessConfirmed,
+    learner: learnerComplete && schoolComplete,
+    household: parentComplete && roleComplete,
+    medical: true,
+    fees_docs: requiredDocsAccepted,
     review: isReadyToSubmit,
   };
 
@@ -1028,7 +1040,7 @@ export default function ParentApplicationWorkflow() {
               </div>
             </div>
 
-            {activeStep === 'readiness' && (
+            {activeStep === 'checklist' && (
               <div className="mt-6 space-y-5">
                 <div className="rounded-2xl border border-primary-200 bg-primary-50 p-4 shadow-sm">
                   <div className="text-sm font-semibold text-slate-950">Before you start</div>
@@ -1073,68 +1085,79 @@ export default function ParentApplicationWorkflow() {
               </div>
             )}
 
-            {activeStep === 'profile' && (
+            {activeStep === 'learner' && (
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:col-span-2 shadow-sm">
-                  <div className="text-sm font-semibold text-slate-950">Who is involved</div>
+                  <div className="text-sm font-semibold text-slate-950">Learner & Admission Details</div>
                   <p className="mt-1 text-sm leading-6 text-slate-600">
-                    We capture the people behind the application separately so the school can track contact, legal responsibility, and fee responsibility without confusion.
+                    Provide basic details of the child applying for admission to Eunice High School.
+                  </p>
+                </div>
+                <Field
+                  label="Learner first name"
+                  value={draft.learnerFirstName}
+                  onChange={(value) => updateField('learnerFirstName', value)}
+                  placeholder="Ayanda"
+                />
+                <Field
+                  label="Learner last name"
+                  value={draft.learnerLastName}
+                  onChange={(value) => updateField('learnerLastName', value)}
+                  placeholder="Khumalo"
+                />
+                <Field
+                  label="Grade applying for"
+                  value={draft.learnerGrade}
+                  onChange={(value) => updateField('learnerGrade', value)}
+                  placeholder="Grade 8"
+                />
+                <Field
+                  label="Current or previous school"
+                  value={draft.previousSchool}
+                  onChange={(value) => updateField('previousSchool', value)}
+                  placeholder="Heatherdale Intermediate"
+                />
+                <Field
+                  label="Intake year"
+                  value={draft.intakeYear}
+                  onChange={(value) => updateField('intakeYear', value)}
+                  placeholder="2027"
+                />
+              </div>
+            )}
+
+            {activeStep === 'household' && (
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:col-span-2 shadow-sm">
+                  <div className="text-sm font-semibold text-slate-950">Parent & Household Info</div>
+                  <p className="mt-1 text-sm leading-6 text-slate-600">
+                    Capture contact details of the submitting parent, sibling links, and family structures.
                   </p>
                 </div>
                 <Field
                   label="First name"
                   value={draft.parentFirstName}
                   onChange={(value) => updateField('parentFirstName', value)}
-                  placeholder="Nicolette"
+                  placeholder="Lerato"
                 />
                 <Field
                   label="Last name"
                   value={draft.parentLastName}
                   onChange={(value) => updateField('parentLastName', value)}
-                  placeholder="Dienar"
+                  placeholder="Khumalo"
                 />
                 <Field
                   label="Email address"
                   value={draft.parentEmail}
                   onChange={(value) => updateField('parentEmail', value)}
-                  placeholder="parent@example.com"
+                  placeholder="lerato.khumalo@example.com"
                   type="email"
                 />
                 <Field
                   label="Phone number"
                   value={draft.parentPhone}
                   onChange={(value) => updateField('parentPhone', value)}
-                  placeholder="+27 82 123 4567"
-                />
-                <Field
-                  label="Learner first name"
-                  value={draft.learnerFirstName}
-                  onChange={(value) => updateField('learnerFirstName', value)}
-                  placeholder="Learner first name"
-                />
-                <Field
-                  label="Learner last name"
-                  value={draft.learnerLastName}
-                  onChange={(value) => updateField('learnerLastName', value)}
-                  placeholder="Learner last name"
-                />
-                <Field
-                  label="Grade applying for"
-                  value={draft.learnerGrade}
-                  onChange={(value) => updateField('learnerGrade', value)}
-                  placeholder="Grade 1"
-                />
-                <Field
-                  label="Current or previous school"
-                  value={draft.previousSchool}
-                  onChange={(value) => updateField('previousSchool', value)}
-                  placeholder="Current school or nursery"
-                />
-                <Field
-                  label="Intake year"
-                  value={draft.intakeYear}
-                  onChange={(value) => updateField('intakeYear', value)}
-                  placeholder="2026"
+                  placeholder="+27 83 555 0102"
                 />
                 <SelectField
                   label="Sibling at Eunice?"
@@ -1154,231 +1177,201 @@ export default function ParentApplicationWorkflow() {
                   onChange={(value) => updateField('citizenshipStatus', value)}
                   options={['South African', 'Non-South African']}
                 />
+              </div>
+            )}
+
+            {activeStep === 'medical' && (
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:col-span-2 shadow-sm">
+                  <div className="text-sm font-semibold text-slate-950">Medical Care & Support</div>
+                  <p className="mt-1 text-sm leading-6 text-slate-600">
+                    Help us ensure learner support and duty of care by providing medical aid and hostel boarding context.
+                  </p>
+                </div>
                 <SelectField
-                  label="Application type"
+                  label="Application Type"
                   value={draft.boardingStatus}
                   onChange={(value) => updateField('boardingStatus', value)}
                   options={['Daygirl', 'Boarder']}
                 />
                 <SelectField
-                  label="Financial context"
+                  label="Financial / Employment status"
                   value={draft.financialStatus}
                   onChange={(value) => updateField('financialStatus', value)}
                   options={['Employed', 'Self-employed', 'Other']}
                 />
-                <label className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm sm:col-span-2">
-                  <input
-                    type="checkbox"
-                    checked={draft.feePayerSameAsParent}
-                    onChange={(event) => syncFeePayerFromParent(event.target.checked)}
-                    className="mt-0.5 h-4 w-4 rounded border-slate-300 text-primary-700 focus:ring-primary-300"
-                  />
-                  <span>School fees will be paid by the submitting parent</span>
-                </label>
-                <label className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm sm:col-span-2">
-                  <input
-                    type="checkbox"
-                    checked={draft.legalGuardianApplicable}
-                    onChange={(event) => syncLegalGuardianToggle(event.target.checked)}
-                    className="mt-0.5 h-4 w-4 rounded border-slate-300 text-primary-700 focus:ring-primary-300"
-                  />
-                  <span>A separate legal guardian needs to be captured</span>
-                </label>
-                <Field
-                  label="Submitting parent full name"
-                  value={draft.roles.submitter.fullName}
-                  onChange={(value) => updateRoleField('submitter', 'fullName', value)}
-                  placeholder="Nicolette Dienar"
-                />
-                <Field
-                  label="Submitting parent email"
-                  value={draft.roles.submitter.emailAddress}
-                  onChange={(value) => updateRoleField('submitter', 'emailAddress', value)}
-                  placeholder="parent@example.com"
-                  type="email"
-                />
-                <Field
-                  label="Submitting parent phone"
-                  value={draft.roles.submitter.phoneNumber}
-                  onChange={(value) => updateRoleField('submitter', 'phoneNumber', value)}
-                  placeholder="+27 82 123 4567"
-                />
-                <Field
-                  label="Submitting parent address"
-                  value={draft.roles.submitter.address}
-                  onChange={(value) => updateRoleField('submitter', 'address', value)}
-                  placeholder="Home address"
-                />
-                <Field
-                  label="Fee-payer full name"
-                  value={draft.roles.feePayer.fullName}
-                  onChange={(value) => updateRoleField('feePayer', 'fullName', value)}
-                  placeholder="Account holder or debtor"
-                  disabled={draft.feePayerSameAsParent}
-                />
-                <Field
-                  label="Fee-payer email"
-                  value={draft.roles.feePayer.emailAddress}
-                  onChange={(value) => updateRoleField('feePayer', 'emailAddress', value)}
-                  placeholder="finance@example.com"
-                  disabled={draft.feePayerSameAsParent}
-                />
-                <Field
-                  label="Fee-payer phone"
-                  value={draft.roles.feePayer.phoneNumber}
-                  onChange={(value) => updateRoleField('feePayer', 'phoneNumber', value)}
-                  placeholder="+27 82 123 4567"
-                  disabled={draft.feePayerSameAsParent}
-                />
-                <Field
-                  label="Legal guardian name"
-                  value={draft.roles.legalGuardian.fullName}
-                  onChange={(value) => updateRoleField('legalGuardian', 'fullName', value)}
-                  placeholder="Optional"
-                  disabled={!draft.legalGuardianApplicable}
-                />
-                <Field
-                  label="Legal guardian notes"
-                  value={draft.roles.legalGuardian.notes}
-                  onChange={(value) => updateRoleField('legalGuardian', 'notes', value)}
-                  placeholder="Only if applicable"
-                  disabled={!draft.legalGuardianApplicable}
-                />
-                <div className="rounded-2xl border border-dashed border-primary-200 bg-primary-50 p-4 text-sm leading-6 text-slate-700 sm:col-span-2">
-                  <div className="font-semibold text-slate-950">Role summary</div>
-                  <div className="mt-2 grid gap-3 md:grid-cols-2">
-                    <SummaryRow label={INTAKE_ROLE_LABELS.submitter} value={draft.roles.submitter.fullName || 'Not captured yet'} />
-                    <SummaryRow label={INTAKE_ROLE_LABELS.parent} value={draft.roles.parent.fullName || 'Not captured yet'} />
-                    <SummaryRow label={INTAKE_ROLE_LABELS.legal_guardian} value={draft.legalGuardianApplicable ? (draft.roles.legalGuardian.fullName || 'Not captured yet') : 'Not applicable'} />
-                    <SummaryRow label={INTAKE_ROLE_LABELS.fee_payer} value={draft.feePayerSameAsParent ? 'Same as submitting parent' : (draft.roles.feePayer.fullName || 'Not captured yet')} />
-                  </div>
-                </div>
               </div>
             )}
 
-            {activeStep === 'documents' && (
-              <div className="mt-6 space-y-4">
-                <div className="rounded-2xl border border-primary-100 bg-primary-50/70 p-4 shadow-sm">
-                  <div className="text-sm font-semibold text-slate-950">How document checks work</div>
-                  <div className="mt-2 space-y-2 text-sm leading-6 text-slate-600">
-                    <p>Some document issues must be fixed before you submit, like the wrong file type or a file that is too large.</p>
-                    <p>Other documents can still go forward and be checked by the school later if a manual review is needed.</p>
-                  </div>
-                </div>
-
-                <div className="space-y-5">
-                  {documentCategoryOrder.map((category) => {
-                    const categoryRequirements = documentRequirements.filter((requirement) => requirement.category === category);
-                    if (categoryRequirements.length === 0) return null;
-
-                    return (
-                      <div key={category} className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <h4 className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                            {documentCategoryLabels[category]}
-                          </h4>
-                          <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
-                            {categoryRequirements.length} items
-                          </span>
-                        </div>
-                        <div className="grid gap-4">
-                          {categoryRequirements.map((requirement) => {
-                            const documentType = requirement.documentType;
-                            const document = draft.documents[documentType];
-
-                            return (
-                              <div key={requirement.id} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                                  <div>
-                                    <div className="flex items-center gap-2 flex-wrap">
-                                      <h5 className="text-sm font-semibold text-slate-950">{requirement.label}</h5>
-                                      <span className="rounded-full bg-primary-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-primary-700">
-                                        {requirement.required ? 'Required' : 'Conditional'}
-                                      </span>
-                                      <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
-                                        {documentCategoryLabels[category]}
-                                      </span>
-                                    </div>
-                                    <p className="mt-1 text-sm leading-6 text-slate-600">{requirement.reason}</p>
-                                    <p className="mt-1 text-sm leading-6 text-slate-600">
-                                      Accepted formats: {DOCUMENT_CONTRACTS[documentType].acceptedMimeTypes.join(', ')}.
-                                      Maximum size: {Math.round(DOCUMENT_CONTRACTS[documentType].maxFileSizeBytes / (1024 * 1024))} MB.
-                                    </p>
-                                    <p className="mt-1 text-sm leading-6 text-slate-600">{getDocumentStateGuidance(document.validationState)}</p>
-                                    {document.message !== getDocumentStateGuidance(document.validationState) ? (
-                                      <p className="mt-1 text-xs leading-5 text-slate-500">{document.message}</p>
-                                    ) : null}
-                                    {document.fileName ? (
-                                      <p className="mt-1 text-xs font-medium text-slate-500">Selected file: {document.fileName}</p>
-                                    ) : null}
-                                    {document.uploadedAt ? (
-                                      <p className="mt-1 text-xs text-slate-500">
-                                        Saved to draft on {new Date(document.uploadedAt).toLocaleDateString()}.
-                                      </p>
-                                    ) : null}
-                                    {document.storagePath ? (
-                                      <p className="mt-1 truncate text-[11px] leading-5 text-slate-400">Storage path: {document.storagePath}</p>
-                                    ) : null}
-                                  </div>
-                                  <div className={`rounded-2xl border px-3 py-2 text-sm font-medium ${getValidationTone(document.validationState)}`}>
-                                    {DOCUMENT_VALIDATION_LABELS[document.validationState]}
-                                  </div>
-                                </div>
-
-                                <div className="mt-4 flex flex-wrap gap-3">
-                                  <label className="inline-flex cursor-pointer items-center rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-primary-200 hover:bg-primary-50">
-                                    {uploadingDocument === documentType ? 'Saving...' : 'Choose file'}
-                                    <input
-                                      type="file"
-                                      className="sr-only"
-                                      accept={DOCUMENT_CONTRACTS[documentType].acceptedMimeTypes.join(',')}
-                                      onChange={(event) => handleFileSelect(documentType, event.target.files?.[0] ?? null)}
-                                    />
-                                  </label>
-                                  <button
-                                    type="button"
-                                    onClick={() => loadSampleDocument(documentType)}
-                                    className="rounded-xl border border-primary-200 bg-primary-50 px-3 py-2 text-sm font-semibold text-primary-900 transition hover:bg-primary-100"
-                                  >
-                                    Load sample
-                                  </button>
-                                  <button
-                                    type="button"
-                                    onClick={() => clearDocument(documentType)}
-                                    className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
-                                  >
-                                    Clear
-                                  </button>
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {!requiredDocumentTypes.includes('other') ? (
-                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                    <div className="text-sm font-semibold text-slate-950">Optional supporting document</div>
+            {activeStep === 'fees_docs' && (
+              <div className="mt-6 space-y-6">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:col-span-2 shadow-sm">
+                    <div className="text-sm font-semibold text-slate-950">Fee Payer Alignment & Legal Guardians</div>
                     <p className="mt-1 text-sm leading-6 text-slate-600">
-                      Add a sibling letter or any extra supporting file if admissions asks for it.
+                      Determine fee responsibility and capture guardian roles if different from the parent.
                     </p>
-                    <div className="mt-3 flex items-center gap-3">
-                      <button
-                        type="button"
-                        onClick={() => loadSampleDocument('other')}
-                        className="rounded-xl border border-primary-200 bg-white px-3 py-2 text-sm font-semibold text-primary-900 transition hover:bg-primary-50"
-                      >
-                        Add sample supporting file
-                      </button>
-                      <span className="text-xs text-slate-500">
-                        Optional documents can be reviewed later by admissions staff.
-                      </span>
+                  </div>
+                  <label className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm sm:col-span-2">
+                    <input
+                      type="checkbox"
+                      checked={draft.feePayerSameAsParent}
+                      onChange={(event) => syncFeePayerFromParent(event.target.checked)}
+                      className="mt-0.5 h-4 w-4 rounded border-slate-300 text-primary-700 focus:ring-primary-300"
+                    />
+                    <span>School fees will be paid by the submitting parent</span>
+                  </label>
+                  {!draft.feePayerSameAsParent && (
+                    <>
+                      <Field
+                        label="Fee-payer full name"
+                        value={draft.roles.feePayer.fullName}
+                        onChange={(value) => updateRoleField('feePayer', 'fullName', value)}
+                        placeholder="Account holder or debtor"
+                      />
+                      <Field
+                        label="Fee-payer email"
+                        value={draft.roles.feePayer.emailAddress}
+                        onChange={(value) => updateRoleField('feePayer', 'emailAddress', value)}
+                        placeholder="finance@example.com"
+                      />
+                      <Field
+                        label="Fee-payer phone"
+                        value={draft.roles.feePayer.phoneNumber}
+                        onChange={(value) => updateRoleField('feePayer', 'phoneNumber', value)}
+                        placeholder="+27 82 123 4567"
+                      />
+                    </>
+                  )}
+                  <label className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm sm:col-span-2">
+                    <input
+                      type="checkbox"
+                      checked={draft.legalGuardianApplicable}
+                      onChange={(event) => syncLegalGuardianToggle(event.target.checked)}
+                      className="mt-0.5 h-4 w-4 rounded border-slate-300 text-primary-700 focus:ring-primary-300"
+                    />
+                    <span>A separate legal guardian needs to be captured</span>
+                  </label>
+                  {draft.legalGuardianApplicable && (
+                    <>
+                      <Field
+                        label="Legal guardian name"
+                        value={draft.roles.legalGuardian.fullName}
+                        onChange={(value) => updateRoleField('legalGuardian', 'fullName', value)}
+                        placeholder="Guardian full name"
+                      />
+                      <Field
+                        label="Legal guardian notes"
+                        value={draft.roles.legalGuardian.notes}
+                        onChange={(value) => updateRoleField('legalGuardian', 'notes', value)}
+                        placeholder="Only if applicable"
+                      />
+                    </>
+                  )}
+                </div>
+
+                <div className="pt-4 border-t border-slate-200 space-y-4">
+                  <div className="rounded-2xl border border-primary-100 bg-primary-50/70 p-4 shadow-sm">
+                    <div className="text-sm font-semibold text-slate-950">How document checks work</div>
+                    <div className="mt-2 space-y-2 text-sm leading-6 text-slate-600">
+                      <p>Some document issues must be fixed before you submit, like the wrong file type or a file that is too large.</p>
+                      <p>Other documents can still go forward and be checked by the school later if a manual review is needed.</p>
                     </div>
                   </div>
-                ) : null}
+
+                  <div className="space-y-5">
+                    {documentCategoryOrder.map((category) => {
+                      const categoryRequirements = documentRequirements.filter((requirement) => requirement.category === category);
+                      if (categoryRequirements.length === 0) return null;
+
+                      return (
+                        <div key={category} className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <h4 className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                              {documentCategoryLabels[category]}
+                            </h4>
+                            <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                              {categoryRequirements.length} items
+                            </span>
+                          </div>
+                          <div className="grid gap-4">
+                            {categoryRequirements.map((requirement) => {
+                              const documentType = requirement.documentType;
+                              const document = draft.documents[documentType];
+
+                              return (
+                                <div key={requirement.id} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                                    <div>
+                                      <div className="flex items-center gap-2 flex-wrap">
+                                        <h5 className="text-sm font-semibold text-slate-950">{requirement.label}</h5>
+                                        <span className="rounded-full bg-primary-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-primary-700">
+                                          {requirement.required ? 'Required' : 'Conditional'}
+                                        </span>
+                                        <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                                          {documentCategoryLabels[category]}
+                                        </span>
+                                      </div>
+                                      <p className="mt-1 text-sm leading-6 text-slate-600">{requirement.reason}</p>
+                                      <p className="mt-1 text-sm leading-6 text-slate-600">
+                                        Accepted formats: {DOCUMENT_CONTRACTS[documentType].acceptedMimeTypes.join(', ')}.
+                                        Maximum size: {Math.round(DOCUMENT_CONTRACTS[documentType].maxFileSizeBytes / (1024 * 1024))} MB.
+                                      </p>
+                                      <p className="mt-1 text-sm leading-6 text-slate-600">{getDocumentStateGuidance(document.validationState)}</p>
+                                      {document.message !== getDocumentStateGuidance(document.validationState) ? (
+                                        <p className="mt-1 text-xs leading-5 text-slate-500">{document.message}</p>
+                                      ) : null}
+                                      {document.fileName ? (
+                                        <p className="mt-1 text-xs font-medium text-slate-500">Selected file: {document.fileName}</p>
+                                      ) : null}
+                                      {document.uploadedAt ? (
+                                        <p className="mt-1 text-xs text-slate-500">
+                                          Saved to draft on {new Date(document.uploadedAt).toLocaleDateString()}.
+                                        </p>
+                                      ) : null}
+                                      {document.storagePath ? (
+                                        <p className="mt-1 truncate text-[11px] leading-5 text-slate-400">Storage path: {document.storagePath}</p>
+                                      ) : null}
+                                    </div>
+                                    <div className={`rounded-2xl border px-3 py-2 text-sm font-medium ${getValidationTone(document.validationState)}`}>
+                                      {DOCUMENT_VALIDATION_LABELS[document.validationState]}
+                                    </div>
+                                  </div>
+
+                                  <div className="mt-4 flex flex-wrap gap-3">
+                                    <label className="inline-flex cursor-pointer items-center rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-primary-200 hover:bg-primary-50">
+                                      {uploadingDocument === documentType ? 'Saving...' : 'Choose file'}
+                                      <input
+                                        type="file"
+                                        className="sr-only"
+                                        accept={DOCUMENT_CONTRACTS[documentType].acceptedMimeTypes.join(',')}
+                                        onChange={(event) => handleFileSelect(documentType, event.target.files?.[0] ?? null)}
+                                      />
+                                    </label>
+                                    <button
+                                      type="button"
+                                      onClick={() => loadSampleDocument(documentType)}
+                                      className="rounded-xl border border-primary-200 bg-primary-50 px-3 py-2 text-sm font-semibold text-primary-900 transition hover:bg-primary-100"
+                                    >
+                                      Load sample
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => clearDocument(documentType)}
+                                      className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+                                    >
+                                      Clear
+                                    </button>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             )}
 
@@ -1427,7 +1420,7 @@ export default function ParentApplicationWorkflow() {
                 <button
                   type="button"
                   onClick={goToPreviousStep}
-                  disabled={activeStep === 'readiness'}
+                  disabled={activeStep === 'checklist'}
                   className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Back
@@ -1436,7 +1429,7 @@ export default function ParentApplicationWorkflow() {
                   <button
                     type="button"
                     onClick={goToNextStep}
-                    disabled={activeStep === 'readiness' && !readinessConfirmed}
+                    disabled={activeStep === 'checklist' && !readinessConfirmed}
                     className="rounded-xl bg-primary-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-800"
                   >
                     Continue

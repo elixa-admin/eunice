@@ -142,6 +142,24 @@ const WORKFLOW_HIGHLIGHTS = [
   },
 ] as const;
 
+function getDocumentCounts(
+  documents: Record<DocumentType, DocumentDraft>,
+  requiredTypes: DocumentType[],
+) {
+  const required = requiredTypes.length;
+  const complete = requiredTypes.filter((documentType) =>
+    isDocumentStateSubmissionReady(documents[documentType].validationState),
+  ).length;
+  const reviewOnly = requiredTypes.filter((documentType) =>
+    isDocumentStateReviewOnly(documents[documentType].validationState),
+  ).length;
+  const blocking = requiredTypes.filter((documentType) =>
+    isDocumentStateBlocking(documents[documentType].validationState),
+  ).length;
+
+  return { required, complete, reviewOnly, blocking };
+}
+
 function createInitialDocumentDrafts(): Record<DocumentType, DocumentDraft> {
   return {
     birth_cert: {
@@ -694,6 +712,7 @@ export default function ParentApplicationWorkflow() {
   const reviewOnlyRequiredDocuments = requiredDocumentTypes.filter((documentType) =>
     isDocumentStateReviewOnly(draft.documents[documentType].validationState),
   );
+  const documentCounts = getDocumentCounts(draft.documents, requiredDocumentTypes);
 
   const profileComplete = parentComplete && learnerComplete && schoolComplete && roleComplete;
 
@@ -968,7 +987,7 @@ export default function ParentApplicationWorkflow() {
   }
 
   return (
-    <section className="rounded-[2.5rem] border border-emerald-900/10 bg-white shadow-[0_32px_96px_-24px_rgba(6,46,28,0.12)] overflow-hidden">
+    <section className="surface-card rounded-[2.5rem] overflow-hidden">
       <div className="border-b border-slate-100 bg-gradient-to-r from-emerald-900/5 via-white to-amber-500/5 px-6 py-6 sm:px-8">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
@@ -990,6 +1009,11 @@ export default function ParentApplicationWorkflow() {
               </div>
             </div>
             <div className="mt-2 text-xs leading-5 text-slate-600">{APPLICATION_STATUS_DESCRIPTIONS[draft.status]}</div>
+            <div className="mt-4 grid grid-cols-3 gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+              <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">{documentCounts.complete}/{documentCounts.required} docs</div>
+              <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">{documentCounts.reviewOnly} review</div>
+              <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">{documentCounts.blocking} fix</div>
+            </div>
           </div>
         </div>
 
@@ -1034,7 +1058,7 @@ export default function ParentApplicationWorkflow() {
 
       <div className="grid gap-0 lg:grid-cols-[1.15fr_0.85fr]">
         <form className="p-6 sm:p-8" onSubmit={handleSubmit}>
-          <div className="relative mb-8 mt-2 px-4 py-5 rounded-3xl border border-amber-500/10 bg-slate-50/50 shadow-inner sm:px-6 w-full overflow-x-auto">
+          <div className="relative mb-8 mt-2 w-full overflow-x-auto rounded-3xl border border-amber-500/10 bg-slate-50/60 px-4 py-5 shadow-inner sm:px-6">
             <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-slate-200 -translate-y-1/2 hidden md:block" />
             <div className="relative flex justify-between items-center gap-6 min-w-[650px] md:min-w-0">
               {STEP_KEYS.map((step, index) => {
@@ -1080,7 +1104,7 @@ export default function ParentApplicationWorkflow() {
             </div>
           </div>
 
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_20px_50px_rgba(6,58,35,0.03)] sm:p-8">
+          <div className="surface-card rounded-3xl p-6 sm:p-8">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary-700">
@@ -1506,8 +1530,8 @@ export default function ParentApplicationWorkflow() {
           </div>
         </form>
 
-        <aside className="border-t border-emerald-950/10 bg-emerald-950/[0.02] p-6 sm:p-8 lg:border-l lg:border-t-0">
-          <div className="rounded-3xl border border-emerald-950/10 bg-white p-6 shadow-sm flex flex-col items-center text-center">
+        <aside className="border-t border-emerald-950/10 bg-emerald-950/[0.02] p-6 sm:p-8 lg:sticky lg:top-24 lg:self-start lg:border-l lg:border-t-0">
+          <div className="surface-card flex flex-col items-center rounded-3xl p-6 text-center">
             <p className="text-xs font-bold uppercase tracking-wider text-emerald-900 mb-4 self-start">Dossier Completion</p>
             
             <div className="relative flex items-center justify-center h-28 w-28">

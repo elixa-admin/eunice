@@ -42,6 +42,9 @@ Read first:
 Current intent:
 Continue the latest dev-preview work on the Eunice admissions platform: apply the screenshot-driven visual system to `dev/` first, keep the UI premium and operational, tighten admin hierarchy, and preserve the guided parent-friendly flow that replaces the 13-page Google Form while still capturing the school's required data and document needs.
 
+Hard boundary:
+Keep all active work on `dev/` until we explicitly decide to promote it. Do not touch the assessment page/surface during this stage. Production is a separate promotion step, not part of the current sprint.
+
 Most recent product decision:
 Compress the 13-page application into an upfront preparation screen plus a guided 5-step parent flow:
 1. Start checklist

@@ -46,6 +46,8 @@ Current work: Task 1, shared visual shell
 ## Shared Decisions
 
 - Use `dev/` as the first implementation surface and leave `src/` unchanged until the preview is stable.
+- Do not touch the assessment page or assessment flow during this sprint.
+- Do not promote these changes to production until we explicitly decide the preview is ready.
 - Treat the screenshots and the primary Eunice site as the brand reference set, not a pixel-perfect cloning target.
 - Keep parent and admin different in density, but identical in brand family, typography, and core color logic.
 - Prefer one reusable shell and shared visual language over one-off page fixes.

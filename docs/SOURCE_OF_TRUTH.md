@@ -24,9 +24,17 @@ If chat context is lost, a platform changes, or a new developer joins, start her
 - `supabase/`: schema and migration source of truth
 - `docs/`: durable decisions, operating policies, and continuity artifacts
 
+## Surface Boundaries
+
+- `dev/` is the only surface to receive active UI/theme development until we explicitly promote a change.
+- `src/` remains the product surface and should not be used for the current visual sprint.
+- The assessment page/surface is out of scope for this stage and should not be touched.
+- Production changes only happen after we explicitly decide to promote the `dev/` work.
+
 ## Current Sprint Intent
 
 - Primary goal: move the visible UI from "wireframe-like" to "professional admissions product feel"
+- Surface rule: keep all current UI development confined to `dev/`; do not touch assessment; do not promote to production until the sprint is ready
 - Theme direction:
   - External and parent-facing: structured, academic, green-and-gold Eunice-aligned
   - Internal admin: slightly more expressive, still brand-aligned

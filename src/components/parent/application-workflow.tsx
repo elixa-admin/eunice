@@ -1482,6 +1482,9 @@ export default function ParentApplicationWorkflow() {
                 <div className="rounded-2xl border border-primary-100 bg-primary-50 p-4 text-sm leading-6 text-slate-700">
                   If a file is blurry or wrong, replace it now.
                 </div>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700">
+                  After you submit, the school will review your file and contact you if anything still needs attention.
+                </div>
               </div>
             )}
 

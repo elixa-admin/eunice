@@ -724,6 +724,17 @@ export default function AdminDashboard() {
       detail: `${recentSubmissionTrend >= 0 ? '+' : ''}${recentSubmissionTrend}% vs previous 7 days.`,
     },
   ] satisfies Array<{ label: string; value: number; tone: InsightLevel; detail: string }>;
+  const focusNowItems = [
+    missingDocuments > 0
+      ? `Follow up on ${missingDocuments} blocked application${missingDocuments === 1 ? '' : 's'}.`
+      : 'No blocked applications are waiting on parents.',
+    readyForReview > 0
+      ? `Review ${readyForReview} fast-lane application${readyForReview === 1 ? '' : 's'} next.`
+      : 'Fast lane is clear for now.',
+    recentSubmittedCount > previousSubmittedCount
+      ? `Intake is up ${Math.abs(recentSubmissionTrend)}% compared with the previous 7 days.`
+      : 'Intake pressure is stable compared with the previous 7 days.',
+  ];
 
   if (loading) {
     return (
@@ -929,6 +940,18 @@ export default function AdminDashboard() {
                 <p className="mt-1 text-sm leading-6 text-slate-300">
                   Compare this with the previous 7-day window to see intake pressure.
                 </p>
+              </div>
+            </div>
+
+            <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Focus now</p>
+              <div className="mt-2 space-y-2">
+                {focusNowItems.map((item) => (
+                  <div key={item} className="flex items-start gap-2 text-sm leading-6 text-slate-300">
+                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-amber-300" />
+                    <span>{item}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

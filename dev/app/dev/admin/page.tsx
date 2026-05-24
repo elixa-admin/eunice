@@ -104,7 +104,7 @@ export default function DevAdminPage() {
 
         <main className="space-y-6">
           <SurfaceCard className="overflow-hidden border border-primary-200/70 bg-[linear-gradient(135deg,rgba(8,41,27,0.98),rgba(17,57,37,0.96)_48%,rgba(174,127,6,0.92)_100%)] p-0 text-white shadow-[0_26px_70px_rgba(11,20,12,0.18)]">
-            <div className="grid gap-6 px-6 py-6 lg:grid-cols-[1.25fr_0.75fr]">
+            <div className="grid gap-6 px-6 py-6 lg:grid-cols-[1.15fr_0.85fr]">
               <div className="space-y-4">
                 <div className="flex flex-wrap items-center gap-3">
                   <div className="h-16 w-16 rounded-full border border-white/20 bg-white/95" />
@@ -145,7 +145,7 @@ export default function DevAdminPage() {
             </div>
           </SurfaceCard>
 
-          <div className="grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
+          <div className="grid gap-6 xl:grid-cols-[minmax(0,1.18fr)_minmax(0,0.82fr)]">
             <SurfaceCard className="overflow-hidden border border-slate-100 bg-white/92 p-0 shadow-[0_18px_40px_rgba(11,20,12,0.06)]">
               <div className="border-b border-slate-100 bg-[#faf7ef] px-6 py-5">
                 <SectionHeading title="Admissions Queue" description="Click any row to load the record into the review panel." />

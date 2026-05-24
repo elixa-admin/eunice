@@ -91,7 +91,7 @@ export default function DevParentPage() {
 
             <div className="grid gap-6 px-6 py-6 lg:grid-cols-[1.15fr_0.85fr]">
               <div className="space-y-5">
-                <div className="grid gap-3 sm:grid-cols-6">
+                <div className="flex items-center gap-3 overflow-x-auto pb-1">
                   {stepOrder.map((step, index) => {
                     const isActive = activeTab === step;
                     const isDone = index < activeIndex;
@@ -99,7 +99,7 @@ export default function DevParentPage() {
                       <button
                         key={step}
                         onClick={() => setActiveTab(step)}
-                        className={`rounded-2xl border p-3 text-left transition ${
+                        className={`min-w-[132px] rounded-2xl border p-3 text-left transition ${
                           isActive
                             ? 'border-white/35 bg-white text-primary-900 shadow-[0_12px_24px_rgba(11,20,12,0.18)]'
                             : isDone
@@ -107,15 +107,24 @@ export default function DevParentPage() {
                               : 'border-white/15 bg-white/6 text-white/78 hover:bg-white/10'
                         }`}
                       >
-                        <div className="text-[10px] uppercase tracking-[0.18em] opacity-70">{stepMeta[step].label}</div>
-                        <div className="mt-2 text-sm font-semibold">{stepMeta[step].title}</div>
+                        <div className="flex items-center gap-3">
+                          <div className={`flex h-8 w-8 items-center justify-center rounded-full border text-xs font-semibold ${
+                            isActive ? 'border-primary-900 bg-primary-900 text-white' : 'border-current/20 bg-white/10 text-current'
+                          }`}>
+                            {stepMeta[step].label}
+                          </div>
+                          <div>
+                            <div className="text-xs font-semibold uppercase tracking-[0.14em] opacity-70">{stepMeta[step].title}</div>
+                            <div className="mt-1 text-[11px] opacity-75">{stepMeta[step].subtitle}</div>
+                          </div>
+                        </div>
                       </button>
                     );
                   })}
                 </div>
 
                 <div className="rounded-[28px] border border-white/12 bg-white/95 p-6 text-slate-950 shadow-[0_18px_50px_rgba(11,20,12,0.10)]">
-                  <div className="mb-5 grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+                  <div className="mb-5 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
                     <div className="space-y-3">
                       <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Before you begin</div>
                       <div className="grid gap-3 sm:grid-cols-2">
@@ -132,8 +141,8 @@ export default function DevParentPage() {
                         ))}
                       </div>
                     </div>
-                    <div className="rounded-[24px] border border-slate-200 bg-[#faf7ef] p-5">
-                      <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Required documents</div>
+                      <div className="rounded-[24px] border border-slate-200 bg-[#faf7ef] p-5">
+                        <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Required documents</div>
                       <div className="mt-4 space-y-3">
                         {['Birth certificate', 'Latest school report', 'Proof of residence', 'Immunisation record'].map((item) => (
                           <div key={item} className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-3 py-2.5">

@@ -64,6 +64,7 @@ type DocumentSummary = {
 
 type TriageLane = 'blocked' | 'review_ready' | 'in_review' | 'decision_pending' | 'closed' | 'incomplete';
 type QueueFilter = 'all' | `triage:${TriageLane}` | 'missing_docs' | 'recent_submitted' | 'awaiting_parent' | ApplicationStatus;
+type InsightLevel = 'good' | 'warn' | 'risk';
 
 const ADMIN_REQUIRED_DOCUMENT_TYPES = getRequiredDocumentTypes();
 const ADMIN_DOCUMENT_REQUIREMENTS = getApplicationDocumentRequirements();
@@ -246,6 +247,26 @@ function getDocumentStatusTone(status: DocumentValidationState) {
     default:
       return 'bg-white/10 text-white/50 border-white/10';
   }
+}
+
+function getInsightTone(level: InsightLevel) {
+  switch (level) {
+    case 'good':
+      return 'border-emerald-500/20 bg-emerald-500/10 text-emerald-200';
+    case 'warn':
+      return 'border-amber-500/20 bg-amber-500/10 text-amber-100';
+    case 'risk':
+    default:
+      return 'border-rose-500/20 bg-rose-500/10 text-rose-100';
+  }
+}
+
+function getPercentChange(current: number, previous: number) {
+  if (previous === 0) {
+    if (current === 0) return 0;
+    return 100;
+  }
+  return Math.round(((current - previous) / previous) * 100);
 }
 
 export default function AdminDashboard() {
@@ -674,6 +695,35 @@ export default function AdminDashboard() {
     applications.filter((app) => getTriageLane(app) === 'decision_pending').length,
     applications.filter((app) => getTriageLane(app) === 'closed').length,
   ];
+  const now = Date.now();
+  const recentWindowMs = 1000 * 60 * 60 * 24 * 7;
+  const recentSubmittedCount = applications.filter((app) => now - new Date(app.created_at).getTime() <= recentWindowMs).length;
+  const previousSubmittedCount = applications.filter((app) => {
+    const age = now - new Date(app.created_at).getTime();
+    return age > recentWindowMs && age <= recentWindowMs * 2;
+  }).length;
+  const recentSubmissionTrend = getPercentChange(recentSubmittedCount, previousSubmittedCount);
+
+  const documentRiskFlags = [
+    {
+      label: 'Blocked documents',
+      value: missingDocuments,
+      tone: missingDocuments > 0 ? 'risk' : 'good',
+      detail: missingDocuments > 0 ? 'Parent follow-up needed today.' : 'No document blockers right now.',
+    },
+    {
+      label: 'Review-ready queue',
+      value: readyForReview,
+      tone: readyForReview > 0 ? 'warn' : 'good',
+      detail: readyForReview > 0 ? 'Move these through the fast lane.' : 'Fast lane is clear.',
+    },
+    {
+      label: 'Recent submissions',
+      value: recentSubmittedCount,
+      tone: recentSubmissionTrend > 0 ? 'warn' : 'good',
+      detail: `${recentSubmissionTrend >= 0 ? '+' : ''}${recentSubmissionTrend}% vs previous 7 days.`,
+    },
+  ] satisfies Array<{ label: string; value: number; tone: InsightLevel; detail: string }>;
 
   if (loading) {
     return (
@@ -839,6 +889,75 @@ export default function AdminDashboard() {
               <div className="mt-3">
                 <MiniSparkline values={workloadSpark} />
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
+          <div className="rounded-[2rem] border border-emerald-500/10 bg-emerald-950/20 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/70">Smart insights</p>
+                <h3 className="mt-1 text-base font-semibold text-white">AI-assisted triage summary</h3>
+              </div>
+              <div className="rounded-full border border-emerald-500/20 bg-emerald-950/40 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-emerald-300">
+                Heuristic layer
+              </div>
+            </div>
+
+            <div className="mt-4 grid gap-3 md:grid-cols-3">
+              {documentRiskFlags.map((item) => (
+                <div key={item.label} className={`rounded-2xl border p-4 ${getInsightTone(item.tone)}`}>
+                  <p className="text-[10px] font-semibold uppercase tracking-wider opacity-80">{item.label}</p>
+                  <div className="mt-2 text-2xl font-semibold">{item.value}</div>
+                  <p className="mt-2 text-sm leading-6 opacity-90">{item.detail}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-4 grid gap-3 md:grid-cols-2">
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Suggested focus</p>
+                <p className="mt-2 text-base font-semibold text-white">Start with blocked cases, then fast-lane reviews</p>
+                <p className="mt-1 text-sm leading-6 text-slate-300">
+                  This keeps the queue moving while reducing parent back-and-forth.
+                </p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Daily signal</p>
+                <p className="mt-2 text-base font-semibold text-white">Recent submissions {recentSubmissionTrend >= 0 ? 'up' : 'down'} {Math.abs(recentSubmissionTrend)}%</p>
+                <p className="mt-1 text-sm leading-6 text-slate-300">
+                  Compare this with the previous 7-day window to see intake pressure.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-[2rem] border border-emerald-500/10 bg-emerald-950/20 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/70">Risk flags</p>
+                <h3 className="mt-1 text-base font-semibold text-white">What could stall the queue</h3>
+              </div>
+              <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-emerald-300/80">
+                Live review
+              </div>
+            </div>
+
+            <div className="mt-4 space-y-3">
+              {documentRiskFlags.map((item) => (
+                <div key={`${item.label}-risk`} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-semibold text-white">{item.label}</p>
+                      <p className="mt-1 text-sm leading-6 text-slate-300">{item.detail}</p>
+                    </div>
+                    <span className={`rounded-full border px-3 py-1 text-xs font-semibold ${getInsightTone(item.tone)}`}>
+                      {item.value}
+                    </span>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>

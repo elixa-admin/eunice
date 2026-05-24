@@ -1,12 +1,18 @@
 # Next Sprint Micro-Slices (High Value, Low Token Burn)
 
-Last updated: 2026-05-22
+Last updated: 2026-05-24
 Branch: `codex/vercel-project-separation`
 Primary surface: `dev/`
 
 ## Sprint Goal
 
 Ship a visibly professional parent intake + admin operations experience in tiny deterministic slices, with each slice commit-ready and preview-verifiable.
+
+## GitHub Coordination Note
+
+- GitHub repository: `elixa-admin/eunice`
+- GitHub issue creation from the integration is currently blocked by repository permissions (`Resource not accessible by integration`)
+- Use this file as the sprint board source of truth until issue access is restored
 
 ## Execution Rules
 
@@ -99,6 +105,15 @@ If session context dies, work must continue without friction.
 
 - New agent can continue work from docs without chat history.
 - No ambiguity on next slice.
+
+## Next Sprint Framing
+
+The next sprint should stay focused on the smallest visible product improvements that make the parent and admin surfaces feel real:
+
+1. Polish typography and hierarchy so the UI reads as an admissions product.
+2. Compress the parent journey into a clearer guided flow with upfront expectations.
+3. Expose admin queue health so staff can see blocked, waiting, and ready states at a glance.
+4. Keep the handover docs aligned so the next session can continue without reorientation.
 
 ## Stop Conditions (Token Safety)
 

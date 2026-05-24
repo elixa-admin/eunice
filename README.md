@@ -8,8 +8,9 @@ A modern digital admissions and learner intake workflow platform for Eunice High
 ### Working Status Snapshot
 - Discovery is underway, with live workflow inspection captured in [Current State Scratchpad](./docs/CURRENT_STATE_SCRATCHPAD.md).
 - The latest live-form walkthrough confirmed the real Eunice intake shape and is captured in [Live Form Discovery Report](./docs/DISCOVERY_REPORT_LIVE_FORM.md).
+- The current branch head focuses on polishing the dev preview into a premium admissions product feel, with admin hierarchy tightened and the parent/admin flows kept aligned.
 - Design and planning prep are active through the sprint and task-board docs in `docs/`.
-- Early Phase 2 foundation work has started in the repo, including the real `src/` app surface, the `dev/` preview surface, and initial Supabase migration work.
+- The real `src/` app surface, the `dev/` preview surface, and initial Supabase migration work remain in the repo, but the active workstream is currently centered on the preview surface.
 - Linear is the planning source of truth for the active workstream when a slice is being tracked there.
 
 ### Tracker Alignment
@@ -17,7 +18,7 @@ A modern digital admissions and learner intake workflow platform for Eunice High
 - GitHub repo: `elixa-admin/eunice`
 - Vercel project currently linked in this workspace: `eunice-dev` with root directory `dev`
 
-The phase docs remain the baseline plan, but the current working state is more advanced than the original “not started” markers in the older planning docs.
+The phase docs remain the baseline plan, but the current working state is more advanced than the original “not started” markers in the older planning docs and is now centered on the current dev-preview polish work.
 
 ## Quick Links
 - [Single Source Of Truth](./docs/SOURCE_OF_TRUTH.md)

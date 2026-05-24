@@ -1,6 +1,6 @@
 # Eunice Single Source Of Truth
 
-Last updated: 2026-05-22 (Africa/Johannesburg)
+Last updated: 2026-05-24 (Africa/Johannesburg)
 Owner: Current sprint implementer on `codex/vercel-project-separation`
 
 ## Purpose
@@ -30,6 +30,7 @@ If chat context is lost, a platform changes, or a new developer joins, start her
 - Theme direction:
   - External and parent-facing: structured, academic, green-and-gold Eunice-aligned
   - Internal admin: slightly more expressive, still brand-aligned
+  - Adopted visual north star (2026-05-23): premium academic product UI with modern professional typography, compact action-focused layouts, guided progression cues, and explicit "what happens next" messaging
 - Scope discipline:
   - Prioritize coherent visual slices
   - Avoid broad architecture churn during UI sprint
@@ -47,6 +48,7 @@ If chat context is lost, a platform changes, or a new developer joins, start her
 - Admin dashboard now includes lane-aware heatmap cards and row tinting so progress, waiting, and blocking states are visible at a glance
 - Guided application flow direction documented in `docs/GUIDED_APPLICATION_FLOW_PLAN.md`
 - Admin dashboard typography and hierarchy were tightened to reduce the wireframe/cartoon feel: serif headings removed, rounded geometry reduced, invalid Tailwind utility names fixed, and queue/action copy made more operational
+- Visual goal/vision aligned for handoff: parent journey, administrator review, and admin dashboard should all converge on this same premium green/gold Eunice system with dense but calm operational clarity
 - Parent portal upgraded to an interactive 5-step guided wizard with preparation checklist (Step 0), care, fee-payer, and consent gates
 - Database schema migration drafted in `supabase/migrations/20260523_000003_guided_flow_schema.sql` to back the guided intake flows with sub-tables for households, medical profiles, fee payers, and consent logs
 - Admin Operations Dashboard made fully interactive, enabling sidebar detail card updates when clicking any table row
@@ -90,6 +92,7 @@ Reference docs:
 - Remote: `origin https://github.com/elixa-admin/eunice.git`
 - Remote branch head should match current branch head; verify with `git ls-remote origin codex/vercel-project-separation`
 - PR workflow remains branch-based on `codex/vercel-project-separation`
+- GitHub issue creation from the Codex integration is currently blocked by repository permissions (`Resource not accessible by integration`), so sprint coordination is temporarily doc-driven
 
 ### Vercel
 
@@ -130,6 +133,7 @@ Vercel: aligned to eunice-dev preview
 Linear: update status from SOURCE_OF_TRUTH.md after each coherent slice
 Known local note: .claude/ remains untracked and excluded
 Next slice: Slice 4 (Trust ROI: Handover + Bootstrap Hardening and system sync verification)
+Next sprint focus: typography/hierarchy polish, guided parent flow compression, admin queue health, handover hardening
 Bootstrap prompt: docs/HANDOVER_BOOTSTRAP_PROMPT.md
 Relay protocol: docs/PLATFORM_RELAY_PROTOCOL.md
 ```

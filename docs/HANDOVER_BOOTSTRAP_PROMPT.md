@@ -1,6 +1,6 @@
 # Eunice Handover Bootstrap Prompt
 
-Last updated: 2026-05-22 (Africa/Johannesburg)
+Last updated: 2026-05-24 (Africa/Johannesburg)
 
 Use this document when moving the project to a new agent, new coding platform, new developer, or fresh session. It is written as a practical bootstrap prompt plus the minimum project facts needed to continue safely.
 
@@ -40,7 +40,7 @@ Read first:
 10. docs/FAILURE_TRIAGE.md
 
 Current intent:
-Build a modern admissions workflow platform for Eunice that replaces the current 13-page Google Form with a guided, parent-friendly application journey while preserving the school's required data and document needs.
+Continue the latest dev-preview work on the Eunice admissions platform: keep the visual system premium and operational, tighten admin hierarchy, and preserve the guided parent-friendly flow that replaces the 13-page Google Form while still capturing the school's required data and document needs.
 
 Most recent product decision:
 Compress the 13-page application into an upfront preparation screen plus a guided 5-step parent flow:
@@ -52,7 +52,7 @@ Compress the 13-page application into an upfront preparation screen plus a guide
 6. Review, consent, and submit
 
 Current next slice:
-Kick off Phase 2 foundation schemas, Next.js routing structure, and Resend email bindings integration.
+Continue the current dev-preview refinement slice: finish the admin dashboard hierarchy cleanup, keep the guided parent/admin flows aligned, and then move to the next smallest visual/product slice.
 
 At the start of a new session, run:
 npm run session:start
@@ -252,9 +252,9 @@ Root: /Users/brandondienar/Documents/Codex/Projects/Eunice
 Branch: codex/vercel-project-separation
 Last known commit: current branch head
 Primary surface: src/ (starting Phase 2 foundation)
-Current goal: guided parent application database schemas and foundation Next.js app structure setup
-Next slice: Deploy migrations and configure main Next.js routes under src/
-Vercel: eunice-dev, root dev/ (shifting to main src/)
+Current goal: keep the latest dev preview aligned to the current premium admissions UI direction
+Next slice: continue the smallest coherent dev-preview improvement and verify it against the live branch preview
+Vercel: eunice-dev, root dev/
 Linear: Eunice Admissions Platform, currently needs connector reauth if 401 appears
 Read first: docs/SOURCE_OF_TRUTH.md and docs/HANDOVER_BOOTSTRAP_PROMPT.md
 Relay rules: docs/PLATFORM_RELAY_PROTOCOL.md

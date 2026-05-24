@@ -80,6 +80,51 @@ What this means in the UI:
 - reassuring save and return behavior
 - support cues that feel helpful, not alarmist
 
+## Expectation-Setting Charter
+
+The portal must manage expectations at every stage so parents do not have to guess what happens next.
+
+This means the UI should clearly communicate:
+
+- what the current step is for
+- what information is required now
+- what happens after this step is completed
+- what might happen if information is missing or unclear
+- whether the school may come back with a question, request, or next action
+- what outcome the parent should expect after submission
+
+Principles:
+
+1. No surprises.
+- If a step can trigger follow-up, say so in plain language.
+
+2. One step at a time.
+- Parents should only need to think about the current section, not the whole process.
+
+3. Explain downstream impact.
+- Let parents know why accuracy matters and what the school will use each section for.
+
+4. Make next actions visible.
+- Every step should end with a clear “what happens next” message.
+
+5. Separate required, review, and optional items.
+- Parents should know what blocks progress, what may be reviewed later, and what is simply helpful context.
+
+6. Reassure about outcomes.
+- Explain expected timing and possible review stages without promising exact timing that may change.
+
+## Step-Level Messaging Rules
+
+Each step should include a small expectation panel that answers:
+
+- What is this step for?
+- What should I prepare?
+- How long might it take?
+- What happens when I click continue?
+- Will Eunice contact me after this?
+
+Keep this panel brief, friendly, and always visible near the top or within the support rail.
+
 What this means in the content:
 
 - use fewer words, but make the words do more work
@@ -274,6 +319,7 @@ What it should answer:
 - Conditional fields should appear only when relevant
 - Completion should be obvious without forcing the user to interpret status codes
 - Save/return behavior should be reassuring and visible
+- Each step should communicate what happens next and reduce follow-up enquiries
 
 ## Trust And Privacy Rules
 

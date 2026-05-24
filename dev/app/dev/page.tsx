@@ -37,7 +37,8 @@ export default function DevIndexPage() {
       )}
     >
       <div className="mb-6 grid gap-4 xl:grid-cols-[minmax(0,1.42fr)_minmax(360px,0.58fr)]">
-        <SurfaceCard className="overflow-hidden bg-[linear-gradient(135deg,rgba(31,109,58,0.10),rgba(184,137,7,0.09))] p-7 xl:min-h-[320px]">
+        <SurfaceCard className="overflow-hidden border border-primary-100 bg-[#fffdf8] p-7 xl:min-h-[320px]">
+          <div className="-mx-7 -mt-7 mb-6 h-1 bg-[#b88907]" />
           <div className="mb-5 flex items-start justify-between gap-4">
             <div>
               <div className="mb-3 flex items-center gap-3">

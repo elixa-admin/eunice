@@ -107,7 +107,8 @@ export default function DevAdminPage() {
         </aside>
 
         <main className="min-w-0 space-y-3">
-          <SurfaceCard className="overflow-hidden border border-primary-200/70 bg-[linear-gradient(135deg,rgba(8,41,27,0.98),rgba(17,57,37,0.96)_48%,rgba(174,127,6,0.92)_100%)] p-0 text-white shadow-[0_26px_70px_rgba(11,20,12,0.18)]">
+          <SurfaceCard className="overflow-hidden border border-[#0f3c28]/35 bg-[#073820] p-0 text-white shadow-[0_22px_58px_rgba(11,20,12,0.16)]">
+            <div className="h-1 w-full bg-[#b88907]" />
             <div className="border-b border-white/12 px-5 py-3">
               <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-white/80">
                 <div className="flex flex-wrap items-center gap-2">

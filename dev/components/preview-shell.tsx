@@ -32,8 +32,9 @@ export function PreviewShell({
         className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-[linear-gradient(90deg,rgba(17,54,36,0.06)_1px,transparent_1px),linear-gradient(rgba(17,54,36,0.06)_1px,transparent_1px)] bg-[size:58px_58px] opacity-55"
       />
       <div className="relative w-full px-4 py-5 sm:px-5 lg:px-6 2xl:px-8">
-        <div className="mb-5 overflow-hidden rounded-[26px] border border-primary-200/60 bg-[linear-gradient(120deg,rgba(8,41,27,0.98),rgba(17,57,37,0.96)_42%,rgba(174,127,6,0.92)_100%)] px-5 py-5 shadow-[0_20px_48px_rgba(11,20,12,0.21)] lg:px-6 lg:py-5">
-          <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-white/18 pb-3">
+        <div className="mb-5 overflow-hidden rounded-[26px] border border-[#0f3c28]/35 bg-[#073820] px-5 py-5 shadow-[0_20px_48px_rgba(11,20,12,0.18)] lg:px-6 lg:py-5">
+          <div className="mb-5 h-1 w-full rounded-full bg-[#b88907]" />
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-white/16 pb-3">
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-full border border-white/40 bg-white/12 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white">
                 Eunice Admissions
@@ -72,7 +73,7 @@ export function PreviewShell({
             </div>
 
             <div className="flex flex-col gap-3">
-              <div className="rounded-[28px] border border-white/28 bg-white/14 p-5 backdrop-blur-md">
+              <div className="rounded-[24px] border border-white/22 bg-white/10 p-5 backdrop-blur-md">
                 <div className="type-label text-white/80">Preview frame</div>
                 <p className="type-body mt-2 text-white/95">{surfaceInfo.lead}</p>
               </div>

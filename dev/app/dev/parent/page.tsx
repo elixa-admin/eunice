@@ -147,7 +147,8 @@ export default function DevParentPage() {
         </aside>
 
         <main className="min-w-0 space-y-3">
-          <SurfaceCard className="overflow-hidden border border-primary-200/70 bg-[linear-gradient(135deg,rgba(8,41,27,0.98),rgba(17,57,37,0.96)_48%,rgba(174,127,6,0.92)_100%)] p-0 text-white shadow-[0_26px_70px_rgba(11,20,12,0.18)]">
+          <SurfaceCard className="overflow-hidden border border-[#0f3c28]/35 bg-[#073820] p-0 text-white shadow-[0_22px_58px_rgba(11,20,12,0.16)]">
+            <div className="h-1 w-full bg-[#b88907]" />
             <div className="border-b border-white/12 px-5 py-3">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
@@ -221,7 +222,7 @@ export default function DevParentPage() {
                         ))}
                       </div>
                     </div>
-                    <div className="rounded-[24px] border border-primary-100 bg-[linear-gradient(135deg,rgba(31,109,58,0.06),rgba(184,137,7,0.08))] p-4">
+                    <div className="rounded-[24px] border border-primary-100 bg-[#f8f4e8] p-4">
                       <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Progress</div>
                       <div className="mt-3 flex items-center gap-4">
                         <div className="flex h-16 w-16 items-center justify-center rounded-full border border-primary-200 bg-white text-lg font-semibold text-slate-950">{progress}%</div>
@@ -236,7 +237,7 @@ export default function DevParentPage() {
                   </div>
 
                   <div className="mb-4 grid gap-3 xl:grid-cols-[minmax(0,1.18fr)_minmax(280px,0.82fr)]">
-                    <div className="rounded-[24px] border border-primary-100 bg-[linear-gradient(135deg,rgba(31,109,58,0.06),rgba(184,137,7,0.08))] p-4">
+                    <div className="rounded-[24px] border border-primary-100 bg-[#f8f4e8] p-4">
                       <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">What this step is for</div>
                       <p className="mt-2 text-sm leading-6 text-slate-700">{stepExpectations[activeTab].purpose}</p>
                       <div className="mt-3 flex flex-wrap gap-2">

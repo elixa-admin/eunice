@@ -12,11 +12,13 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [status, setStatus] = useState<string | null>(null);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setStatus(null);
 
     try {
       const { data, error: signInError } = await supabase.auth.signInWithPassword({
@@ -36,10 +38,12 @@ export default function SignIn() {
       if (profileError) {
         // Fallback if profile not found
         console.warn('Profile not found, defaulting to parent portal');
+        setStatus('Signed in successfully.');
         router.replace(getPostAuthRoute('parent'));
         return;
       }
 
+      setStatus('Signed in successfully.');
       router.replace(getPostAuthRoute(profile.role));
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : 'An error occurred during sign in.');
@@ -65,6 +69,11 @@ export default function SignIn() {
         {error && (
           <div className="mb-6 p-4 rounded-xl bg-red-500/15 border border-red-500/20 text-red-200 text-sm text-center">
             {error}
+          </div>
+        )}
+        {status && (
+          <div className="mb-6 p-4 rounded-xl bg-emerald-500/15 border border-emerald-500/20 text-emerald-100 text-sm text-center">
+            {status}
           </div>
         )}
 

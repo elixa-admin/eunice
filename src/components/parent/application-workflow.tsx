@@ -396,6 +396,9 @@ export default function ParentApplicationWorkflow() {
   const [profile, setProfile] = useState<any>(null);
   const [appId, setAppId] = useState<string | null>(null);
   const [schoolId, setSchoolId] = useState<string | null>(null);
+  const [submitState, setSubmitState] = useState<'idle' | 'saving' | 'submitted' | 'error'>('idle');
+  const [draftState, setDraftState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [draftNotice, setDraftNotice] = useState<string | null>(null);
 
   useEffect(() => {
     async function checkAuthAndLoadData() {
@@ -551,9 +554,15 @@ export default function ParentApplicationWorkflow() {
   }, [mounted, readinessConfirmed]);
 
   async function saveApplicationState(updatedDraft = draft) {
-    if (!user || !schoolId) return;
+    if (!user || !schoolId) {
+      setDraftState('saved');
+      setDraftNotice('Draft saved locally in this browser.');
+      return;
+    }
 
     try {
+      setDraftState('saving');
+      setDraftNotice('Saving draft changes...');
       const isInsert = !appId;
       const refNum = isInsert
         ? `EUN-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`
@@ -594,8 +603,12 @@ export default function ParentApplicationWorkflow() {
       }
 
       setLastSavedAt(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+      setDraftState('saved');
+      setDraftNotice('Draft saved and ready to continue.');
     } catch (err) {
       console.error('Error auto-saving parent application draft:', err);
+      setDraftState('error');
+      setDraftNotice('We could not save right now. Your local draft is still kept in this browser.');
     }
   }
 
@@ -821,6 +834,11 @@ export default function ParentApplicationWorkflow() {
       };
 
       updateDocument(documentType, nextDoc);
+      setDraftNotice(
+        uploadedDocument.uploadStatus === 'saved'
+          ? `${DOCUMENT_TYPE_LABELS[documentType]} saved successfully.`
+          : uploadedDocument.message,
+      );
 
       if (user && activeAppId && uploadedDocument.uploadStatus === 'saved' && uploadedDocument.storagePath) {
         const { error } = await supabase.from('documents').upsert({
@@ -840,6 +858,7 @@ export default function ParentApplicationWorkflow() {
       }
     } catch (err) {
       console.error('Error uploading or saving document meta:', err);
+      setDraftNotice('Upload failed. Please retry with the same document or a clearer replacement.');
       updateDocument(documentType, {
         ...draft.documents[documentType],
         validationState: 'needs_reupload',
@@ -908,6 +927,7 @@ export default function ParentApplicationWorkflow() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!isReadyToSubmit) return;
+    if (submitState === 'saving') return;
 
     const submittedDate = new Date().toISOString();
     const updatedDraft = {
@@ -917,6 +937,8 @@ export default function ParentApplicationWorkflow() {
     };
 
     setDraft(updatedDraft);
+    setSubmitState('saving');
+    setDraftNotice('Submitting application...');
 
     if (user && appId) {
       try {
@@ -930,9 +952,16 @@ export default function ParentApplicationWorkflow() {
           .eq('id', appId);
 
         if (error) throw error;
+        setSubmitState('submitted');
+        setDraftNotice('Application submitted successfully. The school will now review your file.');
       } catch (err) {
         console.error('Error updating application submission state:', err);
+        setSubmitState('error');
+        setDraftNotice('Submission could not be completed just now. Please try again after a short wait.');
       }
+    } else {
+      setSubmitState('submitted');
+      setDraftNotice('Application marked as submitted in this browser draft.');
     }
 
     setActiveStep('review');
@@ -963,6 +992,22 @@ export default function ParentApplicationWorkflow() {
             <div className="mt-2 text-xs leading-5 text-slate-600">{APPLICATION_STATUS_DESCRIPTIONS[draft.status]}</div>
           </div>
         </div>
+
+        {draftNotice && (
+          <div
+            className={`mt-5 rounded-2xl border px-4 py-3 text-sm shadow-sm ${
+              submitState === 'error' || draftState === 'error'
+                ? 'border-rose-200 bg-rose-50 text-rose-800'
+                : submitState === 'submitted'
+                  ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+                  : 'border-amber-200 bg-amber-50 text-amber-800'
+            }`}
+            role="status"
+            aria-live="polite"
+          >
+            {draftNotice}
+          </div>
+        )}
 
         <div className="mt-6">
           <div className="mb-2 flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-slate-500">
@@ -1047,6 +1092,9 @@ export default function ParentApplicationWorkflow() {
               <div className="rounded-2xl border border-white bg-white px-3 py-2 text-right shadow-sm">
                 <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">Last saved</div>
                 <div className="mt-1 text-sm font-semibold text-slate-950">{lastSavedAt}</div>
+                <div className="mt-1 text-[11px] font-medium text-slate-500">
+                  {draftState === 'saving' ? 'Saving now' : draftState === 'saved' ? 'Saved locally' : draftState === 'error' ? 'Save needs attention' : 'Draft active'}
+                </div>
               </div>
             </div>
 
@@ -1447,10 +1495,10 @@ export default function ParentApplicationWorkflow() {
                 ) : (
                   <button
                     type="submit"
-                    disabled={!isReadyToSubmit}
+                    disabled={!isReadyToSubmit || submitState === 'saving'}
                     className="rounded-xl bg-primary-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-800 disabled:cursor-not-allowed disabled:bg-primary-300"
                   >
-                    Submit application
+                    {submitState === 'saving' ? 'Submitting...' : 'Submit application'}
                   </button>
                 )}
               </div>

@@ -22,6 +22,7 @@ export default function SignUp() {
   const [schools, setSchools] = useState<School[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [status, setStatus] = useState<string | null>(null);
 
   // Load schools from database
   useEffect(() => {
@@ -53,6 +54,7 @@ export default function SignUp() {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setStatus(null);
 
     try {
       // 1. Sign up user in Supabase Auth
@@ -81,7 +83,7 @@ export default function SignUp() {
 
       if (profileError) throw profileError;
 
-      // Redirect on success
+      setStatus('Account created. Taking you to the parent portal.');
       router.replace(getPostAuthRoute('parent'));
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : 'An error occurred during registration.');
@@ -107,6 +109,11 @@ export default function SignUp() {
         {error && (
           <div className="mb-6 p-4 rounded-xl bg-red-500/15 border border-red-500/20 text-red-200 text-sm text-center">
             {error}
+          </div>
+        )}
+        {status && (
+          <div className="mb-6 p-4 rounded-xl bg-emerald-500/15 border border-emerald-500/20 text-emerald-100 text-sm text-center">
+            {status}
           </div>
         )}
 
@@ -208,7 +215,7 @@ export default function SignUp() {
           <button
             id="btn-signup-submit"
             type="submit"
-            disabled={loading}
+              disabled={loading}
             className="w-full bg-white text-primary-950 font-bold py-3 rounded-xl hover:bg-primary-50 transition-all duration-200 shadow-lg disabled:opacity-50 flex items-center justify-center gap-2 mt-4"
           >
             {loading ? (

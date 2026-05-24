@@ -95,6 +95,15 @@ const TRIAGE_LANE_LABELS: Record<TriageLane, string> = {
   incomplete: 'Incomplete',
 };
 
+const TRIAGE_LANE_PRIORITY: Record<TriageLane, number> = {
+  blocked: 0,
+  review_ready: 1,
+  in_review: 2,
+  decision_pending: 3,
+  incomplete: 4,
+  closed: 5,
+};
+
 const TRIAGE_FILTERS: TriageLane[] = ['blocked', 'review_ready', 'in_review', 'decision_pending'];
 
 function summarizeDocumentsForApp(applicationId: string, docs: DocumentRecord[]): DocumentSummary {
@@ -158,6 +167,16 @@ function getAdminQueueTone(status: ApplicationStatus) {
     default:
       return 'bg-white/10 text-white/80 border-white/10';
   }
+}
+
+function getNextActionLabel(app: Application) {
+  const lane = getTriageLane(app);
+  if (lane === 'blocked') return 'Parent follow-up';
+  if (lane === 'review_ready') return 'Review documents';
+  if (lane === 'in_review') return 'Continue review';
+  if (lane === 'decision_pending') return 'Resolve decision';
+  if (lane === 'closed') return 'Archive / notify';
+  return 'Needs intake completion';
 }
 
 function getDocumentStatusTone(status: DocumentValidationState) {
@@ -561,7 +580,8 @@ export default function AdminDashboard() {
   };
 
   // Filter application list
-  const filteredApplications = applications.filter((app) => {
+  const filteredApplications = applications
+    .filter((app) => {
     const matchesSearch =
       `${app.learner_first_name} ${app.learner_last_name}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (app.parent && `${app.parent.first_name} ${app.parent.last_name}`.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -575,8 +595,13 @@ export default function AdminDashboard() {
       || (statusFilter === 'awaiting_parent' && app.status === 'awaiting_documents')
       || app.status === statusFilter;
 
-    return matchesSearch && matchesStatus;
-  });
+      return matchesSearch && matchesStatus;
+    })
+    .sort((a, b) => {
+      const laneDelta = TRIAGE_LANE_PRIORITY[getTriageLane(a)] - TRIAGE_LANE_PRIORITY[getTriageLane(b)];
+      if (laneDelta !== 0) return laneDelta;
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    });
 
   // Calculate statistics
   const total = applications.length;
@@ -904,6 +929,9 @@ export default function AdminDashboard() {
                       <h2 className="mt-2 text-2xl font-bold text-white">
                         {selectedApp.learner_first_name} {selectedApp.learner_last_name}
                       </h2>
+                      <p className="mt-1 text-xs text-emerald-400/70">
+                        Next action: <span className="font-semibold text-amber-300">{getNextActionLabel(selectedApp)}</span>
+                      </p>
                     </div>
 
                     <div className="flex items-center gap-2">
@@ -927,8 +955,10 @@ export default function AdminDashboard() {
                       ) : (
                         <>
                           <button
+                            type="button"
+                            disabled={actioningId === selectedApp.id}
                             onClick={() => handleUpdateStatus(selectedApp.id, 'under_review')}
-                            className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
+                            className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer disabled:cursor-not-allowed disabled:opacity-60 ${
                               selectedApp.status === 'under_review'
                                 ? 'bg-amber-500 border-amber-500 text-emerald-950 font-bold shadow-[0_0_12px_rgba(202,138,4,0.3)]'
                                 : 'bg-emerald-950/40 text-emerald-300 border-emerald-500/20 hover:bg-emerald-900/40 hover:text-white'
@@ -937,8 +967,10 @@ export default function AdminDashboard() {
                             Under Review
                           </button>
                           <button
+                            type="button"
+                            disabled={actioningId === selectedApp.id}
                             onClick={() => handleUpdateStatus(selectedApp.id, 'decision_pending')}
-                            className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
+                            className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer disabled:cursor-not-allowed disabled:opacity-60 ${
                               selectedApp.status === 'decision_pending'
                                 ? 'bg-fuchsia-500 border-fuchsia-500 text-white font-bold shadow-[0_0_12px_rgba(217,70,239,0.3)]'
                                 : 'bg-emerald-950/40 text-fuchsia-300 border-emerald-500/20 hover:bg-emerald-900/40 hover:text-white'
@@ -947,8 +979,10 @@ export default function AdminDashboard() {
                             Pending
                           </button>
                           <button
+                            type="button"
+                            disabled={actioningId === selectedApp.id}
                             onClick={() => handleUpdateStatus(selectedApp.id, 'accepted')}
-                            className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
+                            className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer disabled:cursor-not-allowed disabled:opacity-60 ${
                               selectedApp.status === 'accepted'
                                 ? 'bg-emerald-500 border-emerald-500 text-emerald-950 font-bold shadow-[0_0_12px_rgba(16,185,129,0.3)]'
                                 : 'bg-emerald-950/40 text-emerald-300 border-emerald-500/20 hover:bg-emerald-900/40 hover:text-white'
@@ -957,8 +991,10 @@ export default function AdminDashboard() {
                             Accept Applicant
                           </button>
                           <button
+                            type="button"
+                            disabled={actioningId === selectedApp.id}
                             onClick={() => handleUpdateStatus(selectedApp.id, 'rejected')}
-                            className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
+                            className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer disabled:cursor-not-allowed disabled:opacity-60 ${
                               selectedApp.status === 'rejected'
                                 ? 'bg-rose-500 border-rose-500 text-white font-bold shadow-[0_0_12px_rgba(244,63,94,0.3)]'
                                 : 'bg-emerald-950/40 text-rose-300 border-emerald-500/20 hover:bg-emerald-900/40 hover:text-white'

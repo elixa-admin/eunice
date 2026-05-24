@@ -62,7 +62,7 @@ export default function Home() {
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">Platform snapshot</p>
             <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
               <div className="text-sm font-semibold text-white">Current phase</div>
-              <div className="mt-1 text-sm leading-6 text-slate-300">Sprint D: UX elevation and production hardening</div>
+              <div className="mt-1 text-sm leading-6 text-slate-300">Sprint E: admin intelligence and guided parent flow</div>
             </div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
               <div className="rounded-2xl border border-white/10 bg-white/5 p-5">

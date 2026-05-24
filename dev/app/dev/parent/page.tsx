@@ -40,7 +40,7 @@ export default function DevParentPage() {
       surface="parent"
       backLabel="Back to preview hub"
     >
-      <div className="grid gap-4 xl:grid-cols-[260px_minmax(0,1.55fr)_360px]">
+      <div className="grid gap-3 xl:grid-cols-[240px_minmax(0,1.9fr)_320px] 2xl:grid-cols-[260px_minmax(0,2fr)_340px]">
         <aside className="space-y-3.5">
           <SurfaceCard className="border border-primary-100/80 bg-white/85 p-3.5 shadow-[0_18px_42px_rgba(11,20,12,0.06)]">
             <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">My Application</div>
@@ -80,9 +80,9 @@ export default function DevParentPage() {
           </SurfaceCard>
         </aside>
 
-        <main className="space-y-4">
+        <main className="space-y-3">
           <SurfaceCard className="overflow-hidden border border-primary-200/70 bg-[linear-gradient(135deg,rgba(8,41,27,0.98),rgba(17,57,37,0.96)_48%,rgba(174,127,6,0.92)_100%)] p-0 text-white shadow-[0_26px_70px_rgba(11,20,12,0.18)]">
-            <div className="border-b border-white/12 px-6 py-4">
+            <div className="border-b border-white/12 px-5 py-3.5">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <div className="text-[10px] uppercase tracking-[0.18em] text-white/70">Step {stepMeta[activeTab].label}</div>
@@ -98,7 +98,7 @@ export default function DevParentPage() {
               </div>
             </div>
 
-            <div className="grid gap-4 px-5 py-5 xl:grid-cols-[minmax(0,1.2fr)_minmax(340px,0.8fr)] 2xl:grid-cols-[minmax(0,1.24fr)_minmax(360px,0.76fr)]">
+            <div className="grid gap-3 px-5 py-4 xl:grid-cols-[minmax(0,1.36fr)_minmax(300px,0.64fr)] 2xl:grid-cols-[minmax(0,1.42fr)_minmax(320px,0.58fr)]">
               <div className="space-y-4">
                 <div className="flex items-center gap-2.5 overflow-x-auto pb-1">
                   {stepOrder.map((step, index) => {
@@ -132,8 +132,8 @@ export default function DevParentPage() {
                   })}
                 </div>
 
-                <div className="rounded-[28px] border border-white/12 bg-white/95 p-5 text-slate-950 shadow-[0_18px_50px_rgba(11,20,12,0.10)]">
-                  <div className="mb-4 grid gap-4 2xl:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)]">
+                <div className="rounded-[28px] border border-white/12 bg-white/95 p-4 text-slate-950 shadow-[0_18px_50px_rgba(11,20,12,0.10)]">
+                  <div className="mb-4 grid gap-4 xl:grid-cols-[minmax(0,1.18fr)_minmax(280px,0.82fr)] 2xl:grid-cols-[minmax(0,1.24fr)_minmax(320px,0.76fr)]">
                     <div className="space-y-2.5">
                       <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Before you begin</div>
                       <div className="grid gap-2.5 sm:grid-cols-2">

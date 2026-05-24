@@ -54,15 +54,16 @@ html {
 
 body {
   background:
-    radial-gradient(circle at top left, rgba(31, 109, 58, 0.14), transparent 26%),
-    radial-gradient(circle at top right, rgba(184, 137, 7, 0.12), transparent 22%),
-    radial-gradient(circle at bottom right, rgba(31, 109, 58, 0.07), transparent 20%),
+    radial-gradient(circle at top left, rgba(31, 109, 58, 0.16), transparent 24%),
+    radial-gradient(circle at top right, rgba(184, 137, 7, 0.12), transparent 20%),
+    radial-gradient(circle at bottom right, rgba(31, 109, 58, 0.08), transparent 18%),
     var(--background);
   color: var(--foreground);
   font-family: var(--font-sans-ui), var(--font-ui-fallback), system-ui, -apple-system, sans-serif;
   min-height: 100vh;
   line-height: 1.55;
   letter-spacing: -0.008em;
+  overflow-x: hidden;
 }
 
 ::selection {

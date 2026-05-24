@@ -52,7 +52,7 @@ Compress the 13-page application into an upfront preparation screen plus a guide
 6. Review, consent, and submit
 
 Current next slice:
-Continue the current dev-preview refinement slice: establish the shared visual foundation on `dev/`, keep the guided parent/admin flows aligned, and then move to the next smallest visual/product slice.
+Continue the landscape UI sprint in `docs/SPRINT_NEXT_LANDSCAPE_UI.md`: finalize the shared visual shell, finish the wide Parent Portal flow, elevate the Admin review surface, and keep the preview hub and handoff docs aligned.
 
 At the start of a new session, run:
 npm run session:start
@@ -251,9 +251,9 @@ Repo: elixa-admin/eunice
 Root: /Users/brandondienar/Documents/Codex/Projects/Eunice
 Branch: codex/vercel-project-separation
 Last known commit: current branch head
-Primary surface: src/ (starting Phase 2 foundation)
-Current goal: keep the latest dev preview aligned to the current premium admissions UI direction
-Next slice: continue the smallest coherent dev-preview improvement and verify it against the live branch preview
+Primary surface: dev/ (landscape UI sprint)
+Current goal: keep the preview aligned to the premium Eunice website brand and wide-screen admissions layout
+Next slice: Task 1 of docs/SPRINT_NEXT_LANDSCAPE_UI.md
 Vercel: eunice-dev, root dev/
 Linear: Eunice Admissions Platform, currently needs connector reauth if 401 appears
 Read first: docs/SOURCE_OF_TRUTH.md and docs/HANDOVER_BOOTSTRAP_PROMPT.md

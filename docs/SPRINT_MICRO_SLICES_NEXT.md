@@ -8,6 +8,10 @@ Primary surface: `dev/`
 
 Adopt the latest screenshot references as the visual north star for the `dev/` surface, then carry that system through the parent and admin preview experiences in tiny deterministic slices.
 
+## Current Sprint Pointer
+
+The full current sprint plan now lives in [docs/SPRINT_NEXT_LANDSCAPE_UI.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_NEXT_LANDSCAPE_UI.md). Use that document for the next full-sprint sequence; keep this file as the low-token micro-slice queue when you want the smallest next step.
+
 ## GitHub Coordination Note
 
 - GitHub repository: `elixa-admin/eunice`

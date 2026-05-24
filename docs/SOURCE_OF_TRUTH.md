@@ -80,6 +80,7 @@ Reference docs:
 - `docs/PHASES.md`
 - `docs/UI_THEME_SPEC.md`
 - `docs/GUIDED_APPLICATION_FLOW_PLAN.md`
+- `docs/SPRINT_NEXT_LANDSCAPE_UI.md`
 - `docs/SPRINT_MICRO_SLICES_NEXT.md`
 
 ## Integration Alignment State
@@ -135,8 +136,8 @@ GitHub: aligned at branch head
 Vercel: aligned to eunice-dev preview
 Linear: update status from SOURCE_OF_TRUTH.md after each coherent slice
 Known local note: .claude/ remains untracked and excluded
-Next slice: Slice 4 (Trust ROI: Handover + Bootstrap Hardening and system sync verification)
-Next sprint focus: typography/hierarchy polish, guided parent flow compression, admin queue health, handover hardening
+Next slice: Landscape UI Sprint, Task 1 (Finalize the shared visual shell)
+Next sprint focus: wide-screen parent/admin polish, brand fidelity, queue clarity, handover hardening
 Bootstrap prompt: docs/HANDOVER_BOOTSTRAP_PROMPT.md
 Relay protocol: docs/PLATFORM_RELAY_PROTOCOL.md
 ```

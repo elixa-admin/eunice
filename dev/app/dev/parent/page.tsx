@@ -40,8 +40,8 @@ export default function DevParentPage() {
       surface="parent"
       backLabel="Back to preview hub"
     >
-      <div className="grid gap-3 xl:grid-cols-[240px_minmax(0,1.9fr)_320px] 2xl:grid-cols-[260px_minmax(0,2fr)_340px]">
-        <aside className="space-y-3.5">
+      <div className="grid gap-3 xl:grid-cols-[220px_minmax(0,2.1fr)_300px] 2xl:grid-cols-[240px_minmax(0,2.2fr)_320px]">
+        <aside className="space-y-3">
           <SurfaceCard className="border border-primary-100/80 bg-white/85 p-3.5 shadow-[0_18px_42px_rgba(11,20,12,0.06)]">
             <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">My Application</div>
             <div className="mt-2 text-lg font-semibold text-slate-950">{featuredApplication.ref}</div>
@@ -82,7 +82,7 @@ export default function DevParentPage() {
 
         <main className="space-y-3">
           <SurfaceCard className="overflow-hidden border border-primary-200/70 bg-[linear-gradient(135deg,rgba(8,41,27,0.98),rgba(17,57,37,0.96)_48%,rgba(174,127,6,0.92)_100%)] p-0 text-white shadow-[0_26px_70px_rgba(11,20,12,0.18)]">
-            <div className="border-b border-white/12 px-5 py-3.5">
+            <div className="border-b border-white/12 px-5 py-3">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <div className="text-[10px] uppercase tracking-[0.18em] text-white/70">Step {stepMeta[activeTab].label}</div>
@@ -98,7 +98,7 @@ export default function DevParentPage() {
               </div>
             </div>
 
-            <div className="grid gap-3 px-5 py-4 xl:grid-cols-[minmax(0,1.36fr)_minmax(300px,0.64fr)] 2xl:grid-cols-[minmax(0,1.42fr)_minmax(320px,0.58fr)]">
+            <div className="grid gap-3 px-5 py-4 xl:grid-cols-[minmax(0,1.48fr)_minmax(280px,0.52fr)] 2xl:grid-cols-[minmax(0,1.58fr)_minmax(300px,0.42fr)]">
               <div className="space-y-4">
                 <div className="flex items-center gap-2.5 overflow-x-auto pb-1">
                   {stepOrder.map((step, index) => {
@@ -184,7 +184,7 @@ export default function DevParentPage() {
                 </div>
               </div>
 
-              <div className="space-y-3.5">
+              <div className="space-y-3">
                 <SurfaceCard className="border border-white/12 bg-white/92 p-4 text-slate-950">
                   <div className="text-xs uppercase tracking-[0.16em] text-primary-800/70">Guidance & Tips</div>
                   <div className="mt-3.5 space-y-2.5">

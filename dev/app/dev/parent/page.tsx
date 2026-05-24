@@ -181,6 +181,7 @@ export default function DevParentPage() {
                       <button type="button" className="rounded-xl bg-primary-900 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(11,20,12,0.16)]">Continue</button>
                     </div>
                   </div>
+                </div>
               </div>
 
               <div className="space-y-3.5">

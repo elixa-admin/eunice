@@ -74,7 +74,7 @@ export default function DevAdminPage() {
       description="A premium queue review surface with clearer document health, risk indicators, and next actions."
       surface="admin"
     >
-      <div className="grid gap-5 xl:grid-cols-[240px_minmax(0,1.35fr)_340px]">
+      <div className="grid gap-4 xl:grid-cols-[260px_minmax(0,1.5fr)_360px]">
         <aside className="space-y-3.5">
           <SurfaceCard className="border border-primary-100/80 bg-white/90 p-3.5 shadow-[0_18px_42px_rgba(11,20,12,0.06)]">
             <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Admissions</div>
@@ -106,7 +106,7 @@ export default function DevAdminPage() {
           </SurfaceCard>
         </aside>
 
-        <main className="space-y-5">
+        <main className="space-y-4">
           <SurfaceCard className="overflow-hidden border border-primary-200/70 bg-[linear-gradient(135deg,rgba(8,41,27,0.98),rgba(17,57,37,0.96)_48%,rgba(174,127,6,0.92)_100%)] p-0 text-white shadow-[0_26px_70px_rgba(11,20,12,0.18)]">
             <div className="border-b border-white/12 px-6 py-3.5">
               <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-white/80">
@@ -123,7 +123,7 @@ export default function DevAdminPage() {
                 </div>
               </div>
             </div>
-            <div className="grid gap-5 px-6 py-5 lg:grid-cols-[1.15fr_0.85fr]">
+            <div className="grid gap-4 px-5 py-5 xl:grid-cols-[minmax(0,1.2fr)_minmax(300px,0.8fr)] 2xl:grid-cols-[minmax(0,1.28fr)_minmax(320px,0.72fr)]">
               <div className="space-y-3.5">
                 <div className="flex flex-wrap items-center gap-3">
                   <div className="h-16 w-16 rounded-full border border-white/20 bg-white/95" />
@@ -164,7 +164,7 @@ export default function DevAdminPage() {
             </div>
           </SurfaceCard>
 
-          <div className="grid gap-5 xl:grid-cols-[minmax(0,1.18fr)_minmax(0,0.82fr)]">
+          <div className="grid gap-4 xl:grid-cols-[minmax(0,1.22fr)_minmax(0,0.78fr)]">
             <SurfaceCard className="overflow-hidden border border-slate-100 bg-white/92 p-0 shadow-[0_18px_40px_rgba(11,20,12,0.06)]">
               <div className="border-b border-slate-100 bg-[#faf7ef] px-6 py-4">
                 <SectionHeading title="Admissions Queue" description="Click any row to load the record into the review panel." />

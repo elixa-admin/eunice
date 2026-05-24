@@ -32,8 +32,8 @@ export function PreviewShell({
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-[linear-gradient(90deg,rgba(17,54,36,0.06)_1px,transparent_1px),linear-gradient(rgba(17,54,36,0.06)_1px,transparent_1px)] bg-[size:58px_58px] opacity-55"
       />
-      <div className="relative mx-auto max-w-[1440px] px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
-        <div className="mb-8 overflow-hidden rounded-[32px] border border-primary-200/60 bg-[linear-gradient(120deg,rgba(8,41,27,0.98),rgba(17,57,37,0.96)_42%,rgba(174,127,6,0.92)_100%)] px-6 py-6 shadow-[0_24px_58px_rgba(11,20,12,0.23)] lg:px-8 lg:py-8">
+      <div className="relative mx-auto w-full max-w-[1720px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+        <div className="mb-6 overflow-hidden rounded-[32px] border border-primary-200/60 bg-[linear-gradient(120deg,rgba(8,41,27,0.98),rgba(17,57,37,0.96)_42%,rgba(174,127,6,0.92)_100%)] px-6 py-6 shadow-[0_24px_58px_rgba(11,20,12,0.23)] lg:px-8 lg:py-7">
           <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-white/18 pb-4">
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-full border border-white/40 bg-white/12 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white">
@@ -89,7 +89,7 @@ export function PreviewShell({
             </div>
           </div>
         </div>
-        <div className="space-y-6">{children}</div>
+        <div className="space-y-5">{children}</div>
       </div>
     </div>
   );

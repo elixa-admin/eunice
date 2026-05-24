@@ -91,6 +91,7 @@ Reference docs:
 - `docs/PHASES.md`
 - `docs/UI_THEME_SPEC.md`
 - `docs/GUIDED_APPLICATION_FLOW_PLAN.md`
+- `docs/parent-application-portal/plan.md`
 - `docs/SPRINT_NEXT_LANDSCAPE_UI.md`
 - `docs/phase-next-level-output/plan.md`
 - `docs/SPRINT_MICRO_SLICES_NEXT.md`

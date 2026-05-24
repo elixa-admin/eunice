@@ -34,7 +34,7 @@ export const NavBar: React.FC = () => {
                 </svg>
               </div>
               <div className="leading-tight">
-                <span className="display-serif block text-[1.42rem] font-semibold tracking-tight text-white transition-colors group-hover:text-white/95">
+                <span className="display-serif block text-[1.28rem] font-semibold tracking-tight text-white transition-colors group-hover:text-white/95">
                   Eunice Admissions
                 </span>
                 <span className="type-label text-white/70">Admissions platform preview</span>

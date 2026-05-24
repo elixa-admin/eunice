@@ -24,6 +24,63 @@ const guidanceItems = [
   { title: 'What happens next?', body: 'Once submitted, the admissions team reviews your file and may request clarifications or re-uploads.' },
 ] as const;
 
+const stepExpectations: Record<ParentWorkflowStepKey, { purpose: string; prepare: string; next: string; timing: string }> = {
+  checklist: {
+    purpose: 'Get ready before you begin.',
+    prepare: 'Have your ID, learner documents, and contact details nearby.',
+    next: 'Once you start, we’ll guide you step by step.',
+    timing: 'This first screen takes only a minute or two.',
+  },
+  learner: {
+    purpose: 'Tell us who the child is and what they are applying for.',
+    prepare: 'Keep the learner’s details and school history close by.',
+    next: 'After this, we’ll move to parent and household details.',
+    timing: 'Usually a short section if the details are ready.',
+  },
+  household: {
+    purpose: 'Capture the responsible adult and household contact information.',
+    prepare: 'Have the parent or guardian contact details ready.',
+    next: 'Then we’ll ask about support, health, and readiness.',
+    timing: 'This stays short unless extra context is needed.',
+  },
+  medical: {
+    purpose: 'Share any care or support information we need to know.',
+    prepare: 'Only share what is relevant to Eunice supporting the learner well.',
+    next: 'Next we’ll handle fees and document uploads.',
+    timing: 'We only ask follow-up questions if they matter.',
+  },
+  fees_docs: {
+    purpose: 'Confirm fee responsibility and collect the required documents.',
+    prepare: 'Keep your documents ready and make sure images are clear.',
+    next: 'Once complete, you’ll review everything before submission.',
+    timing: 'This is usually the heaviest section, but we keep it guided.',
+  },
+  review: {
+    purpose: 'Check everything, confirm consent, and submit with confidence.',
+    prepare: 'Take a moment to review anything that still needs attention.',
+    next: 'After submission, the admissions team will review your application.',
+    timing: 'This is the final step before the file enters the queue.',
+  },
+};
+
+const documentGroups = [
+  {
+    title: 'Always needed',
+    why: 'These are the core records Eunice needs to process the application.',
+    items: ['Birth certificate', 'Latest school report'],
+  },
+  {
+    title: 'Usually needed',
+    why: 'These help confirm where the learner lives and who is responsible.',
+    items: ['Proof of residence', 'Parent / guardian contact details'],
+  },
+  {
+    title: 'Only if relevant',
+    why: 'These appear only when the parent’s answers make them necessary.',
+    items: ['Immunisation record', 'Special support or custody-related documents'],
+  },
+] as const;
+
 export default function DevParentPage() {
   const featuredApplication = previewApplications[0];
   const workflow = getParentWorkflowSnapshot(featuredApplication);
@@ -133,15 +190,41 @@ export default function DevParentPage() {
                 </div>
 
                 <div className="rounded-[28px] border border-white/12 bg-white/95 p-4 text-slate-950 shadow-[0_18px_50px_rgba(11,20,12,0.10)]">
+                  <div className="mb-4 grid gap-3 xl:grid-cols-[minmax(0,1.18fr)_minmax(280px,0.82fr)]">
+                    <div className="rounded-[24px] border border-primary-100 bg-[linear-gradient(135deg,rgba(31,109,58,0.06),rgba(184,137,7,0.08))] p-4">
+                      <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">What this step is for</div>
+                      <p className="mt-2 text-sm leading-6 text-slate-700">{stepExpectations[activeTab].purpose}</p>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        <span className="rounded-full border border-primary-100 bg-white px-3 py-1 text-xs font-medium text-slate-700">{stepExpectations[activeTab].timing}</span>
+                        {activeTab === 'checklist' ? (
+                          <button
+                            type="button"
+                            onClick={() => setActiveTab('learner')}
+                            className="rounded-full bg-primary-900 px-3 py-1 text-xs font-semibold text-white"
+                          >
+                            Start application
+                          </button>
+                        ) : null}
+                      </div>
+                    </div>
+                    <div className="rounded-[24px] border border-slate-200 bg-[#faf7ef] p-4">
+                      <div className="text-xs uppercase tracking-[0.18em] text-slate-500">What happens next</div>
+                      <div className="mt-2 space-y-2 text-sm leading-6 text-slate-600">
+                        <p>{stepExpectations[activeTab].prepare}</p>
+                        <p>{stepExpectations[activeTab].next}</p>
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="mb-4 grid gap-4 xl:grid-cols-[minmax(0,1.28fr)_minmax(300px,0.72fr)] 2xl:grid-cols-[minmax(0,1.34fr)_minmax(340px,0.66fr)]">
                     <div className="space-y-2.5">
                       <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Before you begin</div>
-                      <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2">
+                      <div className="grid gap-2.5 sm:grid-cols-2">
                         {[
-                          ['Prepare documents', 'Have the required documents ready for upload.'],
-                          ['Estimated time', 'This application takes about 25-30 minutes.'],
-                          ['Save and return', 'You can save your progress and return anytime.'],
-                          ['Next response', 'We typically respond within 5-7 school days.'],
+                          ['Prepare documents', 'Keep the learner’s details and key documents nearby.'],
+                          ['Save and return', 'You can pause and continue later without losing your place.'],
+                          ['Review clearly', 'We will show you what is required and what can be reviewed later.'],
+                          ['Stay informed', 'We will explain what happens after each step.'],
                         ].map(([title, body]) => (
                           <div key={title} className="rounded-2xl border border-primary-100 bg-primary-50/45 p-3.5">
                             <div className="text-sm font-semibold text-slate-950">{title}</div>
@@ -151,15 +234,33 @@ export default function DevParentPage() {
                       </div>
                     </div>
                     <div className="rounded-[24px] border border-slate-200 bg-[#faf7ef] p-4">
-                      <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Required documents</div>
-                      <div className="mt-3.5 space-y-2.5">
-                        {['Birth certificate', 'Latest school report', 'Proof of residence', 'Immunisation record'].map((item) => (
-                          <div key={item} className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-3 py-2">
-                            <div>
-                              <div className="text-sm font-medium text-slate-950">{item}</div>
-                              <div className="text-xs text-slate-500">Required</div>
+                      <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Document readiness</div>
+                      <div className="mt-2 text-sm leading-6 text-slate-600">
+                        We group documents by purpose so you can see what matters most without scanning a long list.
+                      </div>
+                      <div className="mt-3.5 space-y-3">
+                        {documentGroups.map((group) => (
+                          <div key={group.title} className="rounded-2xl border border-slate-200 bg-white p-3.5">
+                            <div className="flex items-start justify-between gap-3">
+                              <div>
+                                <div className="text-sm font-semibold text-slate-950">{group.title}</div>
+                                <div className="mt-1 text-xs leading-5 text-slate-500">{group.why}</div>
+                              </div>
+                              <span className="rounded-full border border-primary-100 bg-primary-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-primary-800">
+                                {group.items.length} item{group.items.length === 1 ? '' : 's'}
+                              </span>
                             </div>
-                            <span className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[10px] font-semibold text-amber-700">Pending</span>
+                            <div className="mt-3 space-y-2">
+                              {group.items.map((item) => (
+                                <div key={item} className="flex items-center justify-between rounded-xl border border-slate-200 bg-[#fcfaf5] px-3 py-2">
+                                  <div>
+                                    <div className="text-sm font-medium text-slate-950">{item}</div>
+                                    <div className="text-xs text-slate-500">Keep this ready or upload it when prompted</div>
+                                  </div>
+                                  <span className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[10px] font-semibold text-amber-700">Pending</span>
+                                </div>
+                              ))}
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -169,15 +270,25 @@ export default function DevParentPage() {
                   <div className="rounded-[24px] border border-slate-200 bg-white p-4">
                     <div className="text-xs uppercase tracking-[0.16em] text-slate-500">{stepMeta[activeTab].title}</div>
                     <div className="mt-2 text-sm leading-6 text-slate-600">
-                      {activeTab === 'checklist' && 'Gather documents and confirm you are ready before you begin the form.'}
+                      {activeTab === 'checklist' && 'This first screen is your guide to what comes next. We will keep the flow short, clear, and easy to return to.'}
                       {activeTab === 'learner' && 'Capture the learner’s details exactly as they appear on official records.'}
                       {activeTab === 'household' && 'Add the parent and guardian details that admissions staff will use to contact you.'}
-                      {activeTab === 'medical' && 'Share the care, medical, and support context we need to support your child well.'}
+                      {activeTab === 'medical' && 'Share only the care, medical, and support context we need to support your child well.'}
                       {activeTab === 'fees_docs' && 'Confirm fee responsibility and upload the required documents with clear images.'}
                       {activeTab === 'review' && 'Review everything once more before you submit it to the admissions queue.'}
                     </div>
                     <div className="mt-4 flex flex-wrap gap-3">
-                      <button type="button" className="rounded-xl border border-slate-200 bg-[#fcfaf5] px-4 py-2.5 text-sm font-semibold text-slate-700">Back</button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const currentIndex = stepOrder.indexOf(activeTab);
+                          const prevStep = stepOrder[Math.max(0, currentIndex - 1)];
+                          setActiveTab(prevStep);
+                        }}
+                        className="rounded-xl border border-slate-200 bg-[#fcfaf5] px-4 py-2.5 text-sm font-semibold text-slate-700"
+                      >
+                        Back
+                      </button>
                       <button type="button" className="rounded-xl bg-primary-900 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(11,20,12,0.16)]">Continue</button>
                     </div>
                   </div>
@@ -187,6 +298,13 @@ export default function DevParentPage() {
               <div className="space-y-3">
                 <SurfaceCard className="border border-white/12 bg-white/92 p-4 text-slate-950 xl:min-h-[280px]">
                   <div className="text-xs uppercase tracking-[0.16em] text-primary-800/70">Guidance & Tips</div>
+                  <div className="mt-2 rounded-2xl border border-primary-100 bg-primary-50/45 p-3">
+                    <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Expectation panel</div>
+                    <div className="mt-2 space-y-1.5 text-sm leading-6 text-slate-600">
+                      <p>{stepExpectations[activeTab].purpose}</p>
+                      <p>{stepExpectations[activeTab].next}</p>
+                    </div>
+                  </div>
                   <div className="mt-3.5 space-y-2.5">
                     {guidanceItems.map((item) => (
                       <details key={item.title} className="group rounded-2xl border border-slate-200 bg-[#fbf8f0] p-4 transition group-open:border-accent-200">

@@ -45,6 +45,9 @@ Continue the latest dev-preview work on the Eunice admissions platform: apply th
 Hard boundary:
 Keep all active work on `dev/` until we explicitly decide to promote it. Do not touch the assessment page/surface during this stage. Production is a separate promotion step, not part of the current sprint.
 
+Current phase:
+Follow `docs/phase-brand-locked-dev-to-production/plan.md` as the active phase plan. The current implementation focus is still the landscape UI sprint and its Parent/Admin wide-screen finish.
+
 Most recent product decision:
 Compress the 13-page application into an upfront preparation screen plus a guided 5-step parent flow:
 1. Start checklist

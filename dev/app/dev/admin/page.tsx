@@ -1,442 +1,270 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { PreviewShell } from '@/components/preview-shell';
 import { SectionHeading } from '@/components/section-heading';
-import { StatusBadge } from '@/components/status-badge';
 import { SurfaceCard } from '@/components/surface-card';
+import { StatusBadge } from '@/components/status-badge';
 import {
   getAdminQueueLane,
-  PREVIEW_REVIEW_STATE_CLASSES,
-  PREVIEW_REVIEW_STATE_LABELS,
   getPreviewDocumentCounts,
   getPreviewDocumentLabel,
+  getPreviewDocumentStatusLabel,
   getPreviewNextAction,
   getPreviewReviewState,
-  getPreviewDocumentStatusLabel,
   previewApplications,
+  previewDocumentClasses,
 } from '@/lib/dev-preview-data';
-import Link from 'next/link';
 
-const adminLaneMeta = {
+const laneMeta = {
   blocking: {
     label: 'Blocking',
-    helper: 'Missing documents or hard stops',
-    cardClass: 'border-rose-200 bg-rose-50/80 text-rose-950 shadow-[0_16px_36px_rgba(225,29,72,0.08)]',
-    chipClass: 'border-rose-200 bg-white text-rose-700',
-    rowClass: 'border-l-rose-300 bg-rose-50/20 hover:bg-rose-50/50',
-    barClass: 'bg-rose-500',
-    progressClass: 'bg-rose-100',
+    helper: 'Missing or hard-stop documents',
+    card: 'border-rose-200 bg-rose-50/80 text-rose-950',
+    chip: 'border-rose-200 bg-white text-rose-700',
+    row: 'border-l-rose-300 bg-rose-50/20 hover:bg-rose-50/50',
+    bar: 'bg-rose-500',
   },
   review: {
     label: 'Needs review',
     helper: 'Waiting on a staff decision',
-    cardClass: 'border-amber-200 bg-amber-50/80 text-amber-950 shadow-[0_16px_36px_rgba(217,119,6,0.08)]',
-    chipClass: 'border-amber-200 bg-white text-amber-700',
-    rowClass: 'border-l-amber-300 bg-amber-50/20 hover:bg-amber-50/50',
-    barClass: 'bg-amber-500',
-    progressClass: 'bg-amber-100',
+    card: 'border-amber-200 bg-amber-50/80 text-amber-950',
+    chip: 'border-amber-200 bg-white text-amber-700',
+    row: 'border-l-amber-300 bg-amber-50/20 hover:bg-amber-50/50',
+    bar: 'bg-amber-500',
   },
   ready: {
     label: 'Ready',
     helper: 'Clear for the next step',
-    cardClass: 'border-emerald-200 bg-emerald-50/80 text-emerald-950 shadow-[0_16px_36px_rgba(16,185,129,0.08)]',
-    chipClass: 'border-emerald-200 bg-white text-emerald-700',
-    rowClass: 'border-l-emerald-300 bg-emerald-50/20 hover:bg-emerald-50/50',
-    barClass: 'bg-emerald-500',
-    progressClass: 'bg-emerald-100',
+    card: 'border-emerald-200 bg-emerald-50/80 text-emerald-950',
+    chip: 'border-emerald-200 bg-white text-emerald-700',
+    row: 'border-l-emerald-300 bg-emerald-50/20 hover:bg-emerald-50/50',
+    bar: 'bg-emerald-500',
   },
   decision: {
     label: 'Decision',
     helper: 'Accepted or rejected outcomes',
-    cardClass: 'border-slate-200 bg-slate-50/80 text-slate-950 shadow-[0_16px_36px_rgba(71,85,105,0.08)]',
-    chipClass: 'border-slate-200 bg-white text-slate-600',
-    rowClass: 'border-l-slate-300 bg-slate-50/20 hover:bg-slate-50/50',
-    barClass: 'bg-slate-500',
-    progressClass: 'bg-slate-100',
+    card: 'border-slate-200 bg-slate-50/80 text-slate-950',
+    chip: 'border-slate-200 bg-white text-slate-600',
+    row: 'border-l-slate-300 bg-slate-50/20 hover:bg-slate-50/50',
+    bar: 'bg-slate-500',
   },
-} satisfies Record<
-  'blocking' | 'review' | 'ready' | 'decision',
-  {
-    label: string;
-    helper: string;
-    cardClass: string;
-    chipClass: string;
-    rowClass: string;
-    barClass: string;
-    progressClass: string;
-  }
->;
+} satisfies Record<'blocking' | 'review' | 'ready' | 'decision', { label: string; helper: string; card: string; chip: string; row: string; bar: string }>;
 
 export default function DevAdminPage() {
-  const [selectedAppId, setSelectedAppId] = useState<string>(previewApplications[0].id);
-
-  const featured = previewApplications.find((app) => app.id === selectedAppId) || previewApplications[0];
-  const featuredReviewState = getPreviewReviewState(featured);
-  const featuredCounts = getPreviewDocumentCounts(featured);
-  const featuredLane =
-    featuredReviewState === 'blocked'
-      ? 'blocking'
-      : featuredReviewState === 'review'
-        ? 'review'
-        : featuredReviewState === 'ready'
-          ? 'ready'
-          : 'decision';
+  const [selectedAppId, setSelectedAppId] = useState(previewApplications[0].id);
+  const featured = previewApplications.find((app) => app.id === selectedAppId) ?? previewApplications[0];
+  const reviewState = getPreviewReviewState(featured);
+  const counts = getPreviewDocumentCounts(featured);
+  const lane = getAdminQueueLane(featured);
 
   const laneCounts = previewApplications.reduce(
     (acc, app) => {
       acc[getAdminQueueLane(app)] += 1;
       return acc;
     },
-    {
-      blocking: 0,
-      review: 0,
-      ready: 0,
-      decision: 0,
-    } as Record<'blocking' | 'review' | 'ready' | 'decision', number>,
+    { blocking: 0, review: 0, ready: 0, decision: 0 } as Record<'blocking' | 'review' | 'ready' | 'decision', number>,
   );
-
-  const totals = {
-    total: previewApplications.length,
-  };
-
-  const laneTotal = totals.total || 1;
-
-  // Custom actionability helper for sidebar detail
-  const featuredActionLabel = 
-    featuredReviewState === 'blocked' 
-      ? 'Waiting on Parent' 
-      : featuredReviewState === 'review' 
-        ? 'Needs Staff Verification' 
-        : featuredReviewState === 'ready' 
-          ? 'Ready for Decision' 
-          : 'Finalized';
 
   return (
     <PreviewShell
       eyebrow="Dev Preview"
       title="Admissions Operations Dashboard"
-      description="A focused operations surface for admissions staff, with clearer queue health, document risk, and decision readiness."
+      description="A premium queue review surface with clearer document health, risk indicators, and next actions."
       surface="admin"
     >
-      <div className="mb-6 grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
-        <SurfaceCard className="overflow-hidden border border-emerald-900/15 bg-[linear-gradient(135deg,#063f2a_0%,#0b5b3d_58%,#b89214_100%)] p-7 text-white shadow-xl shadow-emerald-950/15">
-          <p className="text-[10px] uppercase font-semibold tracking-[0.18em] text-white/75">Operations at a glance</p>
-          <h2 className="mt-3 max-w-3xl text-3xl font-semibold leading-tight text-white">
-            Queue health, document risk, and decision readiness
-          </h2>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-white/88">
-            Staff can scan the intake queue by action state, then load a record into the review panel without losing context.
-          </p>
-          <div className="mt-6 grid gap-3 sm:grid-cols-3">
-            <StatCard label="Total Applications" value={totals.total.toString()} tone="emerald" />
-            <StatCard label="Needs Review" value={laneCounts.review.toString()} tone="amber" />
-            <StatCard label="Blocking Cases" value={laneCounts.blocking.toString()} tone="slate" />
-          </div>
-        </SurfaceCard>
+      <div className="grid gap-6 xl:grid-cols-[250px_minmax(0,1.35fr)_360px]">
+        <aside className="space-y-4">
+          <SurfaceCard className="border border-primary-100/80 bg-white/90 p-4 shadow-[0_18px_42px_rgba(11,20,12,0.06)]">
+            <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Admissions</div>
+            <div className="mt-2 text-lg font-semibold text-slate-950">Queue Review</div>
+            <div className="mt-1 text-sm text-slate-600">Naledi Mokoena is selected for detailed review.</div>
+          </SurfaceCard>
 
-        <SurfaceCard className="flex flex-col justify-between border border-amber-500/15 bg-white p-7 shadow-lg shadow-slate-200/60">
-          <div>
-            <p className="text-[10px] uppercase font-semibold tracking-[0.16em] text-emerald-800">Queue Insights</p>
-            <div className="mt-4 space-y-3">
-              <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3.5 shadow-sm">
-                <div className="text-[10px] uppercase font-semibold tracking-[0.12em] text-slate-500">Decision-ready queue</div>
-                <div className="mt-1.5 text-2xl font-semibold text-slate-950">{laneCounts.ready}</div>
+          <SurfaceCard className="border border-slate-100 bg-white/90 p-4">
+            <div className="space-y-2 text-sm">
+              {['Dashboard', 'Queue Review', 'Applications', 'Document Triage', 'Reports'].map((label, index) => (
+                <div
+                  key={label}
+                  className={`flex items-center justify-between rounded-xl px-3 py-2 ${index === 1 ? 'bg-primary-50 text-primary-900' : 'text-slate-600 hover:bg-slate-50'}`}
+                >
+                  <span>{label}</span>
+                  {label === 'Queue Review' ? <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">2</span> : null}
+                </div>
+              ))}
+            </div>
+          </SurfaceCard>
+
+          <SurfaceCard className="border border-slate-100 bg-white/90 p-4">
+            <div className="text-xs uppercase tracking-[0.18em] text-slate-500">Messages</div>
+            <div className="mt-2 text-sm text-slate-600">1 unread</div>
+          </SurfaceCard>
+        </aside>
+
+        <main className="space-y-6">
+          <SurfaceCard className="overflow-hidden border border-primary-200/70 bg-[linear-gradient(135deg,rgba(8,41,27,0.98),rgba(17,57,37,0.96)_48%,rgba(174,127,6,0.92)_100%)] p-0 text-white shadow-[0_26px_70px_rgba(11,20,12,0.18)]">
+            <div className="grid gap-6 px-6 py-6 lg:grid-cols-[1.25fr_0.75fr]">
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center gap-3">
+                  <div className="h-16 w-16 rounded-full border border-white/20 bg-white/95" />
+                  <div>
+                    <div className="text-xs uppercase tracking-[0.18em] text-white/70">Selected application</div>
+                    <h2 className="mt-1 text-3xl font-semibold text-white">{featured.learnerName}</h2>
+                    <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-white/85">
+                      <span>{featured.ref}</span>
+                      <span className="rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-xs font-semibold">{reviewState === 'blocked' ? 'Under review' : reviewState === 'review' ? 'Needs review' : reviewState === 'ready' ? 'Ready' : 'Complete'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-3">
+                  <MetricCard label="Assigned reviewer" value={featured.assignedTo} />
+                  <MetricCard label="Grade applying for" value={featured.grade} />
+                  <MetricCard label="Application submitted" value={featured.submittedAt} />
+                </div>
               </div>
-              <div className="rounded-lg border border-amber-500/15 bg-amber-50/70 p-4 text-xs leading-5 text-slate-700 shadow-sm">
-                <strong>Dynamic queue lanes:</strong> submissions split into actionable queues based on document audit outcomes rather than static form status.
+
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                <div className="rounded-[24px] border border-white/12 bg-white/12 p-4 backdrop-blur-md">
+                  <div className="text-xs uppercase tracking-[0.16em] text-white/70">Queue health</div>
+                  <div className="mt-3 grid gap-2">
+                    {(['blocking', 'review', 'ready', 'decision'] as const).map((key) => (
+                      <div key={key} className="flex items-center justify-between rounded-xl bg-white/10 px-3 py-2 text-sm text-white">
+                        <span>{laneMeta[key].label}</span>
+                        <span className="font-semibold">{laneCounts[key]}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="rounded-[24px] border border-white/12 bg-white/12 p-4 backdrop-blur-md">
+                  <div className="text-xs uppercase tracking-[0.16em] text-white/70">Next action</div>
+                  <p className="mt-2 text-sm leading-6 text-white/90">{getPreviewNextAction(featured)}</p>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="text-xs text-slate-400 mt-4 border-t border-slate-100 pt-4">
-            Eunice High School Intake Platform · Phase 1
-          </div>
-        </SurfaceCard>
-      </div>
+          </SurfaceCard>
 
-      {/* Progress Cards per lane */}
-      <div className="mb-6 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-        {(Object.keys(adminLaneMeta) as Array<keyof typeof adminLaneMeta>).map((lane) => {
-          const meta = adminLaneMeta[lane];
-          const count = laneCounts[lane];
-          const progress = Math.max(4, Math.round((count / laneTotal) * 100));
-
-          return (
-            <SurfaceCard key={lane} className={`overflow-hidden rounded-lg border p-0 ${meta.cardClass} transition-transform duration-300 hover:-translate-y-0.5`}>
-              <div className="h-1.5 bg-white/60">
-                <div className={`h-full ${meta.barClass}`} style={{ width: `${progress}%` }} />
+          <div className="grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
+            <SurfaceCard className="overflow-hidden border border-slate-100 bg-white/92 p-0 shadow-[0_18px_40px_rgba(11,20,12,0.06)]">
+              <div className="border-b border-slate-100 bg-[#faf7ef] px-6 py-5">
+                <SectionHeading title="Admissions Queue" description="Click any row to load the record into the review panel." />
               </div>
-              <div className="p-5">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-[10px] uppercase font-semibold tracking-[0.12em] text-current/60">{meta.label}</p>
-                    <h3 className="mt-2 text-2xl font-semibold text-current">{count}</h3>
-                  </div>
-                  <span className={`rounded-md border px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.08em] ${meta.chipClass}`}>
-                    {progress}%
-                  </span>
-                </div>
-                <p className="mt-2 text-xs leading-5 text-current/70">{meta.helper}</p>
-                <div className={`mt-4 h-1.5 w-full overflow-hidden rounded-full ${meta.progressClass}`}>
-                  <div className={`h-full rounded-full ${meta.barClass}`} style={{ width: `${progress}%` }} />
-                </div>
+              <div className="overflow-hidden">
+                <table className="min-w-full text-left text-sm">
+                  <thead className="bg-slate-900 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/80">
+                    <tr>
+                      <th className="px-6 py-4">Reference</th>
+                      <th className="px-6 py-4">Learner</th>
+                      <th className="px-6 py-4">Status</th>
+                      <th className="px-6 py-4">Docs</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 bg-white">
+                    {previewApplications.map((app) => {
+                      const appLane = getAdminQueueLane(app);
+                      const isSelected = app.id === selectedAppId;
+                      const appCounts = getPreviewDocumentCounts(app);
+                      return (
+                        <tr
+                          key={app.id}
+                          onClick={() => setSelectedAppId(app.id)}
+                          className={`cursor-pointer border-l-4 transition ${isSelected ? 'border-l-primary-800 bg-primary-50/30' : laneMeta[appLane].row}`}
+                        >
+                          <td className="px-6 py-4">
+                            <div className="font-semibold text-slate-950">{app.ref}</div>
+                            <div className="text-xs text-slate-500">{app.assignedTo}</div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="font-semibold text-slate-950">{app.learnerName}</div>
+                            <div className="text-xs text-slate-500">{app.parentName}</div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <StatusBadge status={app.status} />
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-2">
+                              <span className={`rounded-full border px-2.5 py-1 text-[10px] font-semibold ${laneMeta[appLane].chip}`}>{appCounts.blocking} block</span>
+                              <span className="rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[10px] font-semibold text-slate-600">{appCounts.reviewOnly} review</span>
+                              <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700">{appCounts.ready} ready</span>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             </SurfaceCard>
-          );
-        })}
-      </div>
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,2fr)_360px]">
-        {/* Table Queue Card */}
-        <SurfaceCard className="overflow-hidden border-slate-100 shadow-lg p-0">
-          <div className="border-b border-slate-100 bg-slate-50 px-6 py-5">
-            <SectionHeading
-              title="Admissions Queue"
-              description="Click any row below to swap files and load details into the review deck."
-              action={(
-                <div className="rounded-md border border-emerald-900/10 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-800">
-                  Realtime Sync Active
+            <div className="space-y-6">
+              <SurfaceCard className="border border-slate-100 bg-white/92 p-5">
+                <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Risk indicators</div>
+                <div className="mt-4 space-y-3 text-sm">
+                  <RiskRow label="Incomplete documents" value={counts.blocking} tone="rose" />
+                  <RiskRow label="Document issues" value={counts.reviewOnly} tone="amber" />
+                  <RiskRow label="Ready for decision" value={counts.ready} tone="emerald" />
                 </div>
-              )}
-            />
-          </div>
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-left text-xs">
-              <thead className="bg-slate-900 text-[10px] font-semibold uppercase tracking-[0.1em] text-white/80">
-                <tr>
-                  <th className="px-6 py-4">Reference</th>
-                  <th className="px-6 py-4">Learner</th>
-                  <th className="px-6 py-4">Parent</th>
-                  <th className="px-6 py-4">Grade</th>
-                  <th className="px-6 py-4">Status</th>
-                  <th className="px-6 py-4">Document Health / Action State</th>
-                  <th className="px-6 py-4">Assigned</th>
-                  <th className="px-6 py-4">Submitted</th>
-                  <th className="px-6 py-4">Updated</th>
-                  <th className="px-6 py-4 text-right">Review</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 bg-white">
-                {previewApplications.map((app) => {
-                  const lane = getAdminQueueLane(app);
-                  const laneMeta = adminLaneMeta[lane];
-                  const reviewState = getPreviewReviewState(app);
-                  const counts = getPreviewDocumentCounts(app);
-                  const isSelected = app.id === selectedAppId;
+              </SurfaceCard>
 
-                  // Custom actionability stuck state chip mapping
-                  const actionLabel = 
-                    reviewState === 'blocked' 
-                      ? 'Waiting on Parent' 
-                      : reviewState === 'review' 
-                        ? 'Needs Review' 
-                        : reviewState === 'ready' 
-                          ? 'Ready for Decision' 
-                          : 'Finalized';
-
-                  const actionBadgeClass = 
-                    reviewState === 'blocked' 
-                      ? 'bg-rose-50 text-rose-700 border-rose-200/50' 
-                      : reviewState === 'review' 
-                        ? 'bg-amber-50 text-amber-800 border-amber-200/50' 
-                        : reviewState === 'ready' 
-                          ? 'bg-emerald-50 text-emerald-800 border-emerald-200/50' 
-                          : 'bg-slate-50 text-slate-700 border-slate-200/50';
-
-                  return (
-                    <tr 
-                      key={app.id} 
-                      onClick={() => setSelectedAppId(app.id)}
-                      className={`border-l-4 cursor-pointer transition-all duration-200 ${
-                        isSelected 
-                          ? 'border-l-emerald-800 bg-emerald-50/20 shadow-inner' 
-                          : `border-l-transparent ${laneMeta.rowClass}`
-                      }`}
-                    >
-                      <td className="px-6 py-4 font-bold text-slate-800">
-                        <div className="flex items-center gap-2.5">
-                          <span className={`inline-flex h-2 w-2 rounded-full ${laneMeta.barClass}`} />
-                          {app.ref}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 font-semibold text-slate-900">{app.learnerName}</td>
-                      <td className="px-6 py-4 text-slate-600">{app.parentName}</td>
-                      <td className="px-6 py-4 text-slate-600">{app.grade}</td>
-                      <td className="px-6 py-4"><StatusBadge status={app.status} /></td>
-                      <td className="px-6 py-4">
-                        <div className="space-y-1.5">
-                          <span className={`inline-flex rounded-md border px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.08em] ${actionBadgeClass}`}>
-                            {actionLabel}
-                          </span>
-                          <div className="flex items-center gap-2 text-[10px] text-slate-500">
-                            <span className={`inline-flex h-1.5 w-16 overflow-hidden rounded-full ${laneMeta.progressClass}`}>
-                              <span
-                                className={`h-full rounded-full ${laneMeta.barClass}`}
-                                style={{
-                                  width: `${Math.max(
-                                    12,
-                                    Math.round(
-                                      ((counts.ready + counts.reviewOnly) / Math.max(counts.total, 1)) * 100,
-                                    ),
-                                  )}%`,
-                                }}
-                              />
-                            </span>
-                            <span>
-                              {counts.blocking > 0
-                                ? `${counts.blocking} blocking`
-                                : counts.reviewOnly > 0
-                                  ? `${counts.reviewOnly} flagged`
-                                  : `${counts.ready} ready`}
-                            </span>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-slate-600">{app.assignedTo}</td>
-                      <td className="px-6 py-4 text-slate-600">{app.submittedAt}</td>
-                      <td className="px-6 py-4 text-slate-500">{app.updatedAt}</td>
-                      <td className="px-6 py-4 text-right">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation(); // Avoid double toggle
-                            setSelectedAppId(app.id);
-                          }}
-                          className={`inline-flex rounded-md px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-white shadow-sm transition-colors ${
-                            lane === 'blocking' 
-                              ? 'bg-rose-700 hover:bg-rose-800' 
-                              : lane === 'review' 
-                                ? 'bg-amber-700 hover:bg-amber-800' 
-                                : lane === 'ready' 
-                                  ? 'bg-emerald-800 hover:bg-emerald-900' 
-                                  : 'bg-slate-700 hover:bg-slate-800'
-                          }`}
-                        >
-                          Select
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </SurfaceCard>
-
-        {/* Dynamic Sidebar Detail Review Deck */}
-        <SurfaceCard className="flex flex-col justify-between border border-slate-200 bg-white p-6 shadow-lg shadow-slate-200/60">
-          <div>
-            <div className="mb-5 pb-4 border-b border-slate-200/60">
-              <span className="text-[9px] uppercase font-semibold tracking-[0.14em] text-slate-400">Selected Application</span>
-              <h2 className="mt-1 text-xl font-semibold tracking-normal text-slate-950">{featured.learnerName}</h2>
-              <p className="text-xs text-slate-600 mt-1">
-                {featured.parentName} · {featured.grade}
-              </p>
-            </div>
-
-            <div className="mb-5 grid grid-cols-2 gap-3">
-              <div className={`rounded-lg border p-3.5 shadow-sm ${adminLaneMeta[featuredLane].cardClass}`}>
-                <div className="text-[9px] uppercase font-semibold tracking-[0.1em] text-slate-500">Completion</div>
-                <div className="mt-1 text-2xl font-semibold text-slate-950">{featured.completion}%</div>
-              </div>
-              <div className="rounded-lg border border-slate-200/80 bg-slate-50 p-3.5 shadow-sm">
-                <div className="text-[9px] uppercase font-semibold tracking-[0.1em] text-slate-500">Assigned To</div>
-                <div className="text-xs font-semibold mt-2.5 text-slate-900 leading-none">{featured.assignedTo}</div>
-              </div>
-            </div>
-
-            {/* Stuck-State Micro status Chip inside Detail Card */}
-            <div className={`mb-5 rounded-lg border p-4 shadow-sm ${adminLaneMeta[featuredLane].cardClass}`}>
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <div className="text-[9px] uppercase font-semibold tracking-[0.12em] text-slate-500">Action State</div>
-                  <div className="mt-1">
-                    <span className={`inline-flex rounded-md border px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.08em] ${
-                      featuredReviewState === 'blocked' 
-                        ? 'bg-rose-50 text-rose-700 border-rose-200' 
-                        : featuredReviewState === 'review' 
-                          ? 'bg-amber-50 text-amber-800 border-amber-200' 
-                          : featuredReviewState === 'ready' 
-                            ? 'bg-emerald-50 text-emerald-800 border-emerald-200' 
-                            : 'bg-slate-50 text-slate-700 border-slate-200'
-                    }`}>
-                      {featuredActionLabel}
-                    </span>
-                  </div>
+              <SurfaceCard className="border border-slate-100 bg-white/92 p-5">
+                <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Document checklist</div>
+                <div className="mt-4 space-y-3">
+                  {featured.documents.map((document) => (
+                    <div key={`${document.type}-${document.uploadedAt ?? 'missing'}`} className="flex items-center justify-between rounded-2xl border border-slate-200 bg-[#fbf8f0] px-4 py-3">
+                      <div>
+                        <div className="text-sm font-semibold text-slate-950">{getPreviewDocumentLabel(document.type)}</div>
+                        <div className="text-xs text-slate-500">{document.note ?? 'No note yet.'}</div>
+                      </div>
+                      <div className="text-right">
+                        <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold capitalize ${previewDocumentClasses[document.status]}`}>
+                          {getPreviewDocumentStatusLabel(document.status)}
+                        </span>
+                        <div className="mt-1 text-[11px] text-slate-500">{document.uploadedAt ?? 'Not uploaded'}</div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className="text-right text-[10px] text-slate-500">
-                  <div>{featuredCounts.ready} ready</div>
-                  <div>{featuredCounts.reviewOnly} flagged</div>
-                  <div>{featuredCounts.blocking} blocking</div>
-                </div>
-              </div>
-              <p className="mt-3 text-xs leading-5 text-slate-700">{getPreviewNextAction(featured)}</p>
-            </div>
+              </SurfaceCard>
 
-            {/* Documents checklist */}
-            <div className="mb-5 space-y-2">
-              <span className="mb-1 block text-[9px] font-semibold uppercase tracking-[0.12em] text-slate-400">Uploaded Files Check</span>
-              {featured.documents.map((document) => (
-                <div
-                  key={`${document.type}-${document.uploadedAt ?? 'missing'}`}
-                  className={`flex items-center justify-between rounded-lg border px-3 py-2.5 ${document.status === 'missing' || document.status === 'needs_reupload' ? 'border-rose-200/60 bg-rose-50/40' : document.status === 'manual_review' || document.status === 'low_confidence_ocr' || document.status === 'blurry' ? 'border-amber-200/60 bg-amber-50/40' : 'border-emerald-200/60 bg-emerald-50/30'}`}
-                >
-                  <div>
-                    <div className="text-xs font-semibold text-slate-800 leading-normal">{getPreviewDocumentLabel(document.type)}</div>
-                    <div className="text-[9px] text-slate-400 mt-0.5">{document.uploadedAt ?? 'Not uploaded'}</div>
-                  </div>
-                  <span className={`text-[10px] font-bold ${document.status === 'missing' || document.status === 'needs_reupload' ? 'text-rose-700' : document.status === 'manual_review' || document.status === 'low_confidence_ocr' || document.status === 'blurry' ? 'text-amber-700' : 'text-emerald-700'}`}>
-                    {getPreviewDocumentStatusLabel(document.status)}
-                  </span>
+              <SurfaceCard className="border border-amber-200 bg-amber-50/80 p-5">
+                <div className="text-xs uppercase tracking-[0.16em] text-amber-800">Recommended next action</div>
+                <p className="mt-3 text-sm leading-6 text-slate-700">{getPreviewNextAction(featured)}</p>
+                <div className="mt-4 flex gap-3">
+                  <Link href={`/dev/application/${featured.id}`} className="inline-flex items-center rounded-xl bg-primary-900 px-4 py-2.5 text-sm font-semibold text-white">
+                    Open record
+                  </Link>
                 </div>
-              ))}
-            </div>
-
-            {/* Note block */}
-            <div className={`mb-5 rounded-lg border p-3.5 ${featuredReviewState === 'blocked' ? 'border-rose-200/60 bg-rose-50/40' : featuredReviewState === 'review' ? 'border-amber-200/60 bg-amber-50/40' : 'border-emerald-200/60 bg-emerald-50/30'}`}>
-              <div className="text-[9px] font-semibold uppercase tracking-[0.1em] text-slate-500">Latest Internal Note</div>
-              <p className="mt-1.5 text-xs leading-5 text-slate-700">{featured.note}</p>
+              </SurfaceCard>
             </div>
           </div>
-
-          <div>
-            <div className="mb-3 text-xs font-bold text-slate-900 border-t border-slate-200/60 pt-4">Action Timeline</div>
-            <div className="space-y-2.5 max-h-48 overflow-y-auto pr-1">
-              {featured.timeline.map((entry) => (
-                <div key={`${entry.at}-${entry.title}`} className="rounded-lg border border-slate-200/60 bg-slate-50 px-3.5 py-2.5 shadow-sm">
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="text-xs font-bold text-slate-950">{entry.title}</div>
-                    <div className="text-[9px] text-slate-400">{entry.at}</div>
-                  </div>
-                  <div className="mt-1 text-[11px] text-slate-600 leading-normal">{entry.detail}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </SurfaceCard>
+        </main>
       </div>
     </PreviewShell>
   );
 }
 
-function StatCard({
-  label,
-  value,
-  tone,
-}: {
-  label: string;
-  value: string;
-  tone: 'emerald' | 'amber' | 'slate';
-}) {
-  const toneClasses: Record<'emerald' | 'amber' | 'slate', string> = {
-    emerald: 'bg-emerald-950 text-white border-white/10 shadow-md shadow-emerald-950/20',
-    amber: 'bg-amber-600 text-white border-white/10 shadow-md shadow-amber-900/20',
-    slate: 'bg-slate-900 text-white border-white/10 shadow-md shadow-slate-900/20',
-  };
+function MetricCard({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-[24px] border border-white/12 bg-white/12 p-4 backdrop-blur-md">
+      <div className="text-xs uppercase tracking-[0.16em] text-white/70">{label}</div>
+      <div className="mt-2 text-sm font-semibold text-white">{value}</div>
+    </div>
+  );
+}
+
+function RiskRow({ label, value, tone }: { label: string; value: number; tone: 'rose' | 'amber' | 'emerald' }) {
+  const toneClass =
+    tone === 'rose'
+      ? 'bg-rose-100 text-rose-700'
+      : tone === 'amber'
+        ? 'bg-amber-100 text-amber-700'
+        : 'bg-emerald-100 text-emerald-700';
 
   return (
-    <SurfaceCard className={`rounded-lg border p-5 ${toneClasses[tone]}`}>
-      <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/75">{label}</div>
-      <div className="mt-3 text-2xl font-semibold leading-none text-white">{value}</div>
-    </SurfaceCard>
+    <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-[#fbf8f0] px-4 py-3">
+      <div className="text-sm text-slate-700">{label}</div>
+      <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${toneClass}`}>{value}</span>
+    </div>
   );
 }

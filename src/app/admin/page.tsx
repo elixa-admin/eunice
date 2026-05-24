@@ -582,18 +582,19 @@ export default function AdminDashboard() {
   // Filter application list
   const filteredApplications = applications
     .filter((app) => {
-    const matchesSearch =
-      `${app.learner_first_name} ${app.learner_last_name}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (app.parent && `${app.parent.first_name} ${app.parent.last_name}`.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      app.reference_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (app.previous_school_name && app.previous_school_name.toLowerCase().includes(searchTerm.toLowerCase()));
+      const matchesSearch =
+        `${app.learner_first_name} ${app.learner_last_name}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (app.parent && `${app.parent.first_name} ${app.parent.last_name}`.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        app.reference_number.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (app.previous_school_name && app.previous_school_name.toLowerCase().includes(searchTerm.toLowerCase()));
 
-    const matchesStatus = statusFilter === 'all'
-      || (statusFilter.startsWith('triage:') && getTriageLane(app) === statusFilter.replace('triage:', '') as TriageLane)
-      || (statusFilter === 'missing_docs' && (app.documentSummary.missingRequired > 0 || app.documentSummary.blocking > 0))
-      || (statusFilter === 'recent_submitted' && (Date.now() - new Date(app.created_at).getTime()) <= 1000 * 60 * 60 * 24 * 2)
-      || (statusFilter === 'awaiting_parent' && app.status === 'awaiting_documents')
-      || app.status === statusFilter;
+      const matchesStatus =
+        statusFilter === 'all' ||
+        (statusFilter.startsWith('triage:') && (getTriageLane(app) === statusFilter.replace('triage:', '') as TriageLane)) ||
+        (statusFilter === 'missing_docs' && (app.documentSummary.missingRequired > 0 || app.documentSummary.blocking > 0)) ||
+        (statusFilter === 'recent_submitted' && Date.now() - new Date(app.created_at).getTime() <= 1000 * 60 * 60 * 24 * 2) ||
+        (statusFilter === 'awaiting_parent' && app.status === 'awaiting_documents') ||
+        app.status === statusFilter;
 
       return matchesSearch && matchesStatus;
     })
@@ -619,29 +620,29 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#02130B] text-slate-100 selection:bg-amber-500 selection:text-emerald-950 font-sans antialiased py-10 px-4 sm:px-6 lg:px-8 bg-[radial-gradient(circle_at_top_left,rgba(5,46,22,0.35),transparent_45%),radial-gradient(circle_at_top_right,rgba(212,175,55,0.08),transparent_40%)]">
+    <div className="min-h-screen bg-[#02130B] text-slate-100 selection:bg-amber-500 selection:text-emerald-950 font-sans antialiased px-4 py-10 sm:px-6 lg:px-8 bg-[radial-gradient(circle_at_top_left,rgba(5,46,22,0.32),transparent_45%),radial-gradient(circle_at_top_right,rgba(212,175,55,0.08),transparent_40%)]">
       <div className="mx-auto max-w-7xl space-y-8">
         <header className="overflow-hidden rounded-[2.5rem] border border-emerald-500/10 bg-emerald-950/20 shadow-[0_24px_72px_-16px_rgba(6,46,28,0.3)] backdrop-blur-md">
-          <div className="grid gap-0 lg:grid-cols-[1.15fr_0.85fr]">
+          <div className="grid gap-0 lg:grid-cols-[1.1fr_0.9fr]">
             <div className="border-b border-emerald-500/10 bg-gradient-to-r from-emerald-950/80 via-emerald-900/40 to-emerald-950/80 px-6 py-6 text-white lg:border-b-0 lg:border-r lg:border-emerald-500/10 sm:px-8">
               <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-amber-300">
                 Admissions Command Center
               </div>
-              <h1 className="display-serif mt-4 max-w-2xl text-3xl font-bold tracking-tight text-white sm:text-4xl">
-                Admissions Triage & Dossiers
+              <h1 className="display-serif mt-4 max-w-2xl text-3xl font-bold tracking-tight text-white sm:text-4xl text-balance">
+                Admissions triage with fewer clicks and clearer next steps
               </h1>
               <p className="mt-4 max-w-2xl text-sm leading-7 text-emerald-100/70">
-                Logged in as <span className="font-semibold text-amber-300">{profile?.first_name} {profile?.last_name}</span> · Admissions Management System
+                Logged in as <span className="font-semibold text-amber-300">{profile?.first_name} {profile?.last_name}</span> · {tenantConfig.name}
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <button
                   onClick={handleSignOut}
-                  className="inline-flex cursor-pointer items-center justify-center rounded-xl bg-amber-500 px-5 py-2.5 text-sm font-bold text-emerald-950 transition hover:bg-amber-400 shadow-[0_0_15px_rgba(202,138,4,0.4)]"
+                  className="inline-flex cursor-pointer items-center justify-center rounded-full bg-amber-500 px-5 py-2.5 text-sm font-bold text-emerald-950 transition hover:bg-amber-400 shadow-[0_0_15px_rgba(202,138,4,0.35)]"
                 >
                   Sign Out
                 </button>
-                <div className="inline-flex items-center rounded-xl border border-emerald-500/20 bg-emerald-950/50 px-4 py-2 text-xs font-semibold text-emerald-300">
-                  School Tenant Mode: {tenantConfig.name}
+                <div className="inline-flex items-center rounded-full border border-emerald-500/20 bg-emerald-950/50 px-4 py-2 text-xs font-semibold text-emerald-300">
+                  School tenant
                 </div>
               </div>
             </div>
@@ -651,24 +652,24 @@ export default function AdminDashboard() {
                 <div className="border-r border-emerald-500/10 bg-emerald-950/20 p-6">
                   <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/80">Active Queue</p>
                   <p className="mt-2 text-3xl font-semibold text-white">{activeQueue}</p>
-                  <p className="mt-1 text-[11px] leading-5 text-emerald-500/60">Moving through triage lanes</p>
+                  <p className="mt-1 text-[11px] leading-5 text-emerald-500/60">Open applications only</p>
                 </div>
                 <div className="bg-emerald-900/20 p-6">
                   <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/80">Review Ready</p>
                   <p className="mt-2 text-3xl font-semibold text-emerald-400">{readyForReview}</p>
-                  <p className="mt-1 text-[11px] leading-5 text-emerald-500/60">All required documents uploaded</p>
+                  <p className="mt-1 text-[11px] leading-5 text-emerald-500/60">Ready to triage now</p>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-0">
                 <div className="border-r border-emerald-500/10 bg-rose-950/20 p-6">
                   <p className="text-[10px] font-bold uppercase tracking-wider text-rose-400">Missing Docs</p>
                   <p className="mt-2 text-3xl font-semibold text-rose-400">{missingDocuments}</p>
-                  <p className="mt-1 text-[11px] leading-5 text-rose-500/60">Requires parent action</p>
+                  <p className="mt-1 text-[11px] leading-5 text-rose-500/60">Needs parent action</p>
                 </div>
                 <div className="bg-emerald-900/20 p-6">
                   <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/80">Accepted</p>
                   <p className="mt-2 text-3xl font-semibold text-emerald-400">{accepted}</p>
-                  <p className="mt-1 text-[11px] leading-5 text-emerald-500/60">Outcome finalized</p>
+                  <p className="mt-1 text-[11px] leading-5 text-emerald-500/60">Finalized outcomes</p>
                 </div>
               </div>
             </div>
@@ -731,13 +732,13 @@ export default function AdminDashboard() {
         </section>
 
         {/* Workspace Layout */}
-        <div className="grid grid-cols-1 gap-6 items-start lg:grid-cols-[380px_1fr]">
+        <div className="grid grid-cols-1 gap-6 items-start lg:grid-cols-[340px_1fr]">
           
           {/* Left Panel - Queue list */}
-          <aside className="flex max-h-[800px] flex-col gap-4 rounded-[2rem] border border-emerald-500/10 bg-emerald-950/20 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.3)] backdrop-blur-xl">
+          <aside className="flex max-h-[820px] flex-col gap-4 rounded-[2rem] border border-emerald-500/10 bg-emerald-950/20 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.3)] backdrop-blur-xl">
             <div>
               <h2 className="text-lg font-semibold text-white">Admissions Queue</h2>
-              <p className="mt-0.5 text-xs text-emerald-400/60">Filter and select an applicant</p>
+              <p className="mt-0.5 text-xs text-emerald-400/60">Search, filter, then jump straight to the next action</p>
             </div>
 
             {/* Search Input */}
@@ -747,12 +748,12 @@ export default function AdminDashboard() {
                 placeholder="Search name, grade, ref..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full rounded-xl border border-emerald-500/20 bg-emerald-950/40 px-4 py-2.5 text-sm text-white placeholder:text-emerald-600/60 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 transition-all"
+                className="w-full rounded-2xl border border-emerald-500/20 bg-emerald-950/40 px-4 py-3 text-sm text-white placeholder:text-emerald-600/60 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 transition-all"
               />
             </div>
 
             {/* Filter pills */}
-            <div className="flex max-h-[120px] flex-wrap gap-1.5 overflow-y-auto pr-1">
+            <div className="flex max-h-[140px] flex-wrap gap-1.5 overflow-y-auto pr-1">
               <button
                 onClick={() => setStatusFilter('all')}
                 className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all cursor-pointer ${
@@ -822,7 +823,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Applicants List cards */}
-            <div className="flex-1 overflow-y-auto space-y-2.5 max-h-[500px] pr-1">
+            <div className="flex-1 overflow-y-auto space-y-2.5 max-h-[520px] pr-1">
               {filteredApplications.length === 0 ? (
                 <div className="py-10 text-center text-sm text-slate-500">
                   No applicants matching criteria.
@@ -853,7 +854,7 @@ export default function AdminDashboard() {
                       <h3 className="mt-1 text-sm font-semibold text-white">
                         {app.learner_first_name} {app.learner_last_name}
                       </h3>
-                      <p className="mt-1 text-xs text-slate-300">{app.grade_applying_for}</p>
+                      <p className="mt-1 text-xs text-slate-300">{app.grade_applying_for} · {getNextActionLabel(app)}</p>
 
                       {/* Operational Progress Heatmap Track */}
                       <div className="mt-2.5 flex items-center gap-1">

@@ -81,6 +81,15 @@ const documentGroups = [
   },
 ] as const;
 
+const stepHighlights: Record<ParentWorkflowStepKey, { title: string; detail: string }> = {
+  checklist: { title: 'Start with the checklist', detail: 'Understand the journey and prepare before the form begins.' },
+  learner: { title: 'Learner details', detail: 'Capture the learner’s identity and grade context clearly.' },
+  household: { title: 'Household details', detail: 'Tell us who is responsible and how we should contact you.' },
+  medical: { title: 'Care and support', detail: 'Share only the information Eunice needs to support the learner well.' },
+  fees_docs: { title: 'Fees and documents', detail: 'Group uploads by purpose and keep the important files ready.' },
+  review: { title: 'Review and submit', detail: 'Check for missing items before you send the application in.' },
+};
+
 export default function DevParentPage() {
   const featuredApplication = previewApplications[0];
   const workflow = getParentWorkflowSnapshot(featuredApplication);
@@ -190,6 +199,42 @@ export default function DevParentPage() {
                 </div>
 
                 <div className="rounded-[28px] border border-white/12 bg-white/95 p-4 text-slate-950 shadow-[0_18px_50px_rgba(11,20,12,0.10)]">
+                  <div className="mb-4 grid gap-3 xl:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)]">
+                    <div className="rounded-[24px] border border-primary-100 bg-white p-4">
+                      <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Current step</div>
+                      <div className="mt-2 text-lg font-semibold text-slate-950">{stepHighlights[activeTab].title}</div>
+                      <div className="mt-1 text-sm leading-6 text-slate-600">{stepHighlights[activeTab].detail}</div>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {stepOrder.map((step, index) => (
+                          <span
+                            key={step}
+                            className={`rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] ${
+                              step === activeTab
+                                ? 'bg-primary-900 text-white'
+                                : index < activeIndex
+                                  ? 'bg-primary-50 text-primary-800'
+                                  : 'bg-slate-100 text-slate-600'
+                            }`}
+                          >
+                            {stepMeta[step].label}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="rounded-[24px] border border-primary-100 bg-[linear-gradient(135deg,rgba(31,109,58,0.06),rgba(184,137,7,0.08))] p-4">
+                      <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Progress</div>
+                      <div className="mt-3 flex items-center gap-4">
+                        <div className="flex h-16 w-16 items-center justify-center rounded-full border border-primary-200 bg-white text-lg font-semibold text-slate-950">{progress}%</div>
+                        <div className="space-y-1 text-sm leading-6 text-slate-600">
+                          <p>{workflow.canSubmit ? 'Ready to review and submit.' : 'Work through the current step before moving on.'}</p>
+                          <p>
+                            {workflow.readyRequiredDocuments} of {workflow.totalRequiredDocuments} required documents are ready.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="mb-4 grid gap-3 xl:grid-cols-[minmax(0,1.18fr)_minmax(280px,0.82fr)]">
                     <div className="rounded-[24px] border border-primary-100 bg-[linear-gradient(135deg,rgba(31,109,58,0.06),rgba(184,137,7,0.08))] p-4">
                       <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">What this step is for</div>
@@ -277,6 +322,16 @@ export default function DevParentPage() {
                       {activeTab === 'fees_docs' && 'Confirm fee responsibility and upload the required documents with clear images.'}
                       {activeTab === 'review' && 'Review everything once more before you submit it to the admissions queue.'}
                     </div>
+                    <div className="mt-4 rounded-2xl border border-primary-100 bg-primary-50/45 p-3.5">
+                      <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Helpful reminder</div>
+                      <div className="mt-1 text-sm leading-6 text-slate-600">
+                        {activeTab === 'fees_docs'
+                          ? 'Documents are grouped by purpose so you can focus on the important files without feeling overwhelmed.'
+                          : activeTab === 'review'
+                            ? 'If something is missing, we’ll show it clearly before you submit.'
+                            : 'You can save and return at any time if you need a break.'}
+                      </div>
+                    </div>
                     <div className="mt-4 flex flex-wrap gap-3">
                       <button
                         type="button"
@@ -290,6 +345,24 @@ export default function DevParentPage() {
                         Back
                       </button>
                       <button type="button" className="rounded-xl bg-primary-900 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(11,20,12,0.16)]">Continue</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="rounded-[28px] border border-white/12 bg-white/95 p-4 text-slate-950 shadow-[0_18px_50px_rgba(11,20,12,0.10)]">
+                  <div className="text-xs uppercase tracking-[0.16em] text-primary-800/70">What this means for you</div>
+                  <div className="mt-2 grid gap-3 sm:grid-cols-3">
+                    <div className="rounded-2xl border border-primary-100 bg-primary-50/45 p-3">
+                      <div className="text-sm font-semibold text-slate-950">No surprises</div>
+                      <div className="mt-1 text-sm leading-6 text-slate-600">We tell you what to expect before each step and before submit.</div>
+                    </div>
+                    <div className="rounded-2xl border border-primary-100 bg-primary-50/45 p-3">
+                      <div className="text-sm font-semibold text-slate-950">Easy to recover</div>
+                      <div className="mt-1 text-sm leading-6 text-slate-600">You can save, return, and correct without losing your place.</div>
+                    </div>
+                    <div className="rounded-2xl border border-primary-100 bg-primary-50/45 p-3">
+                      <div className="text-sm font-semibold text-slate-950">Better submissions</div>
+                      <div className="mt-1 text-sm leading-6 text-slate-600">Clear expectations help the school receive cleaner, more complete data.</div>
                     </div>
                   </div>
                 </div>

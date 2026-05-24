@@ -23,6 +23,8 @@ export default function SignUp() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
+  const inputClassName =
+    'w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-primary-300 transition focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-white/15';
 
   // Load schools from database
   useEffect(() => {
@@ -93,26 +95,29 @@ export default function SignUp() {
   };
 
   return (
-    <div className="relative min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gradient-to-br from-primary-950 via-primary-900 to-accent-950 p-4">
+    <div className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center overflow-hidden bg-gradient-to-br from-primary-950 via-primary-900 to-accent-950 p-4">
       {/* Ambient background blur blobs */}
-      <div className="pointer-events-none absolute -top-40 -left-40 w-[500px] h-[500px] rounded-full bg-primary-500/10 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-40 -right-40 w-[500px] h-[500px] rounded-full bg-accent-500/10 blur-3xl" />
+      <div className="pointer-events-none absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-primary-500/10 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-40 -right-40 h-[500px] w-[500px] rounded-full bg-accent-500/10 blur-3xl" />
 
-      <div className="relative z-10 w-full max-w-lg glass rounded-3xl p-8 sm:p-10 shadow-2xl">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-white tracking-tight">Create Account</h2>
-          <p className="text-primary-200 mt-2 text-sm">
-            Join the digital admissions platform
+      <div className="relative z-10 w-full max-w-lg rounded-[2rem] border border-white/10 bg-white/10 p-8 shadow-2xl backdrop-blur-xl sm:p-10">
+        <div className="mb-8 text-center">
+          <div className="mx-auto inline-flex items-center rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary-100">
+            Create your account
+          </div>
+          <h2 className="display-serif mt-5 text-3xl font-bold tracking-tight text-white">Start your application</h2>
+          <p className="mt-2 text-sm leading-6 text-primary-100/80">
+            Create a secure profile so your progress, documents, and status stay in one place.
           </p>
         </div>
 
         {error && (
-          <div className="mb-6 p-4 rounded-xl bg-red-500/15 border border-red-500/20 text-red-200 text-sm text-center">
+          <div className="mb-6 rounded-2xl border border-red-500/20 bg-red-500/15 p-4 text-center text-sm text-red-100" role="alert">
             {error}
           </div>
         )}
         {status && (
-          <div className="mb-6 p-4 rounded-xl bg-emerald-500/15 border border-emerald-500/20 text-emerald-100 text-sm text-center">
+          <div className="mb-6 rounded-2xl border border-emerald-500/20 bg-emerald-500/15 p-4 text-center text-sm text-emerald-100" role="status" aria-live="polite">
             {status}
           </div>
         )}
@@ -127,7 +132,7 @@ export default function SignUp() {
                 id="first-name"
                 type="text"
                 required
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-primary-300 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all text-sm"
+                className={inputClassName}
                 placeholder="John"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
@@ -141,7 +146,7 @@ export default function SignUp() {
                 id="last-name"
                 type="text"
                 required
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-primary-300 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all text-sm"
+                className={inputClassName}
                 placeholder="Doe"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
@@ -156,7 +161,7 @@ export default function SignUp() {
             <input
               id="phone"
               type="tel"
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-primary-300 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all text-sm"
+              className={inputClassName}
               placeholder="+27 82 123 4567"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
@@ -169,7 +174,7 @@ export default function SignUp() {
             </label>
             <select
               id="school"
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white/20 transition-all text-sm appearance-none"
+              className={inputClassName}
               value={schoolId}
               onChange={(e) => setSchoolId(e.target.value)}
             >
@@ -189,7 +194,7 @@ export default function SignUp() {
               id="email"
               type="email"
               required
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-primary-300 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all text-sm"
+              className={inputClassName}
               placeholder="name@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -205,7 +210,7 @@ export default function SignUp() {
               type="password"
               required
               minLength={6}
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-primary-300 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all text-sm"
+              className={inputClassName}
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -215,8 +220,8 @@ export default function SignUp() {
           <button
             id="btn-signup-submit"
             type="submit"
-              disabled={loading}
-            className="w-full bg-white text-primary-950 font-bold py-3 rounded-xl hover:bg-primary-50 transition-all duration-200 shadow-lg disabled:opacity-50 flex items-center justify-center gap-2 mt-4"
+            disabled={loading}
+            className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-white py-3 font-bold text-primary-950 shadow-lg transition hover:bg-primary-50 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? (
               <span className="w-5 h-5 border-2 border-primary-950 border-t-transparent rounded-full animate-spin" />
@@ -226,7 +231,7 @@ export default function SignUp() {
           </button>
         </form>
 
-        <div className="mt-8 text-center border-t border-white/5 pt-6 text-sm text-primary-200">
+        <div className="mt-8 border-t border-white/10 pt-6 text-center text-sm text-primary-200">
           Already have an account?{' '}
           <Link href="/auth/signin" className="text-white font-semibold hover:underline">
             Sign in

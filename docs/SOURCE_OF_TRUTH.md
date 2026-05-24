@@ -93,6 +93,7 @@ Reference docs:
 - `docs/GUIDED_APPLICATION_FLOW_PLAN.md`
 - `docs/parent-application-portal/plan.md`
 - `docs/parent-application-portal/next-two-sprints.md`
+- `docs/parent-application-portal/three-sprints.md`
 - `docs/SPRINT_NEXT_LANDSCAPE_UI.md`
 - `docs/phase-next-level-output/plan.md`
 - `docs/SPRINT_MICRO_SLICES_NEXT.md`

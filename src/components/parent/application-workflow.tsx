@@ -1365,7 +1365,7 @@ export default function ParentApplicationWorkflow() {
 
                 <div className="pt-4 border-t border-slate-200 space-y-4">
                   <div className="rounded-2xl border border-primary-100 bg-primary-50/70 p-4 shadow-sm">
-                    <div className="text-sm font-semibold text-slate-950">Upload guide</div>
+                    <div className="text-sm font-semibold text-slate-950">Next steps</div>
                     <div className="mt-2 grid gap-2 text-sm leading-6 text-slate-600 sm:grid-cols-3">
                       <p>1. Upload one file per card.</p>
                       <p>2. Keep files clear and under 5 MB.</p>

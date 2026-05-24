@@ -46,7 +46,7 @@ export default async function DevApplicationDetailPage({
         <SurfaceCard className="overflow-hidden border border-[#0f3c28]/35 bg-[#073820] p-0 text-white shadow-[0_22px_58px_rgba(11,20,12,0.16)]">
           <div className="h-1 w-full bg-[#b88907]" />
           <div className="p-5">
-          <div className="flex flex-col gap-3.5 sm:flex-row sm:items-start sm:justify-between">
+            <div className="flex flex-col gap-3.5 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <div className="text-xs uppercase tracking-[0.18em] text-white/70">Current status</div>
               <div className="mt-2">
@@ -56,9 +56,9 @@ export default async function DevApplicationDetailPage({
               <p className="mt-2 text-sm text-white/80">{application.parentName} · {application.ref}</p>
             </div>
             <div className="rounded-3xl border border-white/18 bg-white/12 p-4 text-sm text-white shadow-[0_18px_45px_rgba(184,137,7,0.10)] backdrop-blur-md">
-              <div className="text-xs uppercase tracking-[0.16em] text-white/70">Grade</div>
+              <div className="text-xs uppercase tracking-[0.16em] text-white/75">Grade</div>
               <div className="mt-2 text-2xl font-semibold text-white">{application.grade}</div>
-              <div className="mt-3 text-sm leading-6 text-white/85">Review-ready profile for the admissions team.</div>
+              <div className="mt-3 text-sm leading-6 text-white/90">Review-ready profile for the admissions team.</div>
             </div>
           </div>
           <div className="mt-5 grid gap-2.5 sm:grid-cols-3">
@@ -80,20 +80,20 @@ export default async function DevApplicationDetailPage({
 
         <SurfaceCard className="p-5">
           <div className="grid gap-2.5 sm:grid-cols-3">
-            <div className="rounded-2xl border border-accent-100 bg-[rgba(255,248,231,0.85)] p-3.5 shadow-sm">
-              <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Parent</div>
+            <div className="rounded-2xl border border-accent-100 bg-[#fffdf8] p-3.5 shadow-sm">
+              <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Parent</div>
               <div className="mt-2 text-sm font-semibold text-slate-950">{application.parentName}</div>
             </div>
-            <div className="rounded-2xl border border-accent-100 bg-[rgba(255,248,231,0.85)] p-3.5 shadow-sm">
-              <div className="text-xs uppercase tracking-[0.16em] text-slate-500">School year</div>
+            <div className="rounded-2xl border border-accent-100 bg-[#fffdf8] p-3.5 shadow-sm">
+              <div className="text-xs uppercase tracking-[0.16em] text-slate-700">School year</div>
               <div className="mt-2 text-sm font-semibold text-slate-950">{application.schoolYear}</div>
             </div>
-            <div className="rounded-2xl border border-accent-100 bg-[rgba(255,248,231,0.85)] p-3.5 shadow-sm">
-              <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Reviewer</div>
+            <div className="rounded-2xl border border-accent-100 bg-[#fffdf8] p-3.5 shadow-sm">
+              <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Reviewer</div>
               <div className="mt-2 text-sm font-semibold text-slate-950">{application.assignedTo}</div>
             </div>
           </div>
-          <div className="mt-3.5 rounded-2xl border border-accent-200 bg-[rgba(255,248,231,0.98)] p-3.5 text-sm leading-6 text-accent-900">
+          <div className="mt-3.5 rounded-2xl border border-accent-200 bg-[#fff8e7] p-3.5 text-sm leading-6 text-[#3a2b07]">
             {getPreviewNextAction(application)}
           </div>
         </SurfaceCard>
@@ -102,50 +102,50 @@ export default async function DevApplicationDetailPage({
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
         <SurfaceCard className="p-5">
           <div className="mb-5 grid gap-3 md:grid-cols-3">
-            <div className="rounded-2xl border border-accent-100 bg-[rgba(255,248,231,0.82)] p-3.5">
-              <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Parent</div>
+            <div className="rounded-2xl border border-accent-100 bg-[#fffdf8] p-3.5">
+              <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Parent</div>
               <div className="mt-2 text-sm font-semibold text-slate-950">{application.parentName}</div>
-              <div className="mt-1 text-sm text-slate-600">{application.parentEmail}</div>
-              <div className="text-sm text-slate-600">{application.parentPhone}</div>
+              <div className="mt-1 text-sm text-slate-700">{application.parentEmail}</div>
+              <div className="text-sm text-slate-700">{application.parentPhone}</div>
             </div>
-            <div className="rounded-2xl border border-accent-100 bg-[rgba(255,248,231,0.82)] p-3.5">
-              <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Previous school</div>
+            <div className="rounded-2xl border border-accent-100 bg-[#fffdf8] p-3.5">
+              <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Previous school</div>
               <div className="mt-2 text-sm font-semibold text-slate-950">{application.previousSchool}</div>
-              <div className="mt-1 text-sm text-slate-600">{application.schoolYear}</div>
+              <div className="mt-1 text-sm text-slate-700">{application.schoolYear}</div>
             </div>
-            <div className="rounded-2xl border border-accent-100 bg-[rgba(255,248,231,0.82)] p-3.5">
-              <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Assigned reviewer</div>
+            <div className="rounded-2xl border border-accent-100 bg-[#fffdf8] p-3.5">
+              <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Assigned reviewer</div>
               <div className="mt-2 text-sm font-semibold text-slate-950">{application.assignedTo}</div>
-              <div className="mt-1 text-sm text-slate-600">{application.completion}% complete</div>
+              <div className="mt-1 text-sm text-slate-700">{application.completion}% complete</div>
             </div>
           </div>
 
           <div className="mb-5 rounded-2xl border border-primary-100 bg-white p-3.5 shadow-[0_12px_30px_rgba(31,109,58,0.06)]">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Review state</div>
+                <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Review state</div>
                 <div className="mt-2">
                   <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${PREVIEW_REVIEW_STATE_CLASSES[reviewState]}`}>
                     {PREVIEW_REVIEW_STATE_LABELS[reviewState]}
                   </span>
                 </div>
               </div>
-              <div className="grid grid-cols-3 gap-3 text-center text-xs text-slate-500">
-                <div className="rounded-2xl border border-primary-100 bg-primary-50/50 px-3 py-2">
+              <div className="grid grid-cols-3 gap-3 text-center text-xs text-slate-700">
+                <div className="rounded-2xl border border-primary-100 bg-[#fffdf8] px-3 py-2">
                   <div className="font-semibold text-slate-950">{counts.ready}</div>
                   <div>Ready</div>
                 </div>
-                <div className="rounded-2xl border border-primary-100 bg-primary-50/50 px-3 py-2">
+                <div className="rounded-2xl border border-primary-100 bg-[#fffdf8] px-3 py-2">
                   <div className="font-semibold text-slate-950">{counts.reviewOnly}</div>
                   <div>Flagged</div>
                 </div>
-                <div className="rounded-2xl border border-primary-100 bg-primary-50/50 px-3 py-2">
+                <div className="rounded-2xl border border-primary-100 bg-[#fffdf8] px-3 py-2">
                   <div className="font-semibold text-slate-950">{counts.blocking}</div>
                   <div>Blocking</div>
                 </div>
               </div>
             </div>
-            <p className="mt-3 text-sm leading-6 text-slate-600">{getPreviewNextAction(application)}</p>
+            <p className="mt-3 text-sm leading-6 text-slate-700">{getPreviewNextAction(application)}</p>
           </div>
 
           <SectionHeading
@@ -156,11 +156,11 @@ export default async function DevApplicationDetailPage({
             {application.documents.map((document) => (
               <div
                 key={`${document.type}-${document.uploadedAt ?? 'missing'}`}
-                className="mt-2.5 flex items-center justify-between rounded-2xl border border-primary-100 bg-primary-50/40 px-4 py-3"
+                className="mt-2.5 flex items-center justify-between rounded-2xl border border-primary-100 bg-[#fbf8f0] px-4 py-3"
               >
                 <div>
                   <div className="text-sm text-slate-700">{getPreviewDocumentLabel(document.type)}</div>
-                  <div className="text-xs text-slate-500">{document.note ?? 'No note added yet.'}</div>
+                  <div className="text-xs text-slate-600">{document.note ?? 'No note added yet.'}</div>
                 </div>
                 <div className="text-right">
                   <span
@@ -168,7 +168,7 @@ export default async function DevApplicationDetailPage({
                   >
                     {getPreviewDocumentStatusLabel(document.status)}
                   </span>
-                  <div className="mt-1 text-xs text-slate-500">{document.uploadedAt ?? 'Not uploaded'}</div>
+                  <div className="mt-1 text-xs text-slate-600">{document.uploadedAt ?? 'Not uploaded'}</div>
                 </div>
               </div>
             ))}
@@ -178,11 +178,11 @@ export default async function DevApplicationDetailPage({
         <aside className="space-y-5">
           <SurfaceCard className="p-5">
             <h2 className="text-lg font-semibold text-slate-950">Review notes</h2>
-            <p className="mt-2.5 text-sm leading-6 text-slate-600">{application.note}</p>
+            <p className="mt-2.5 text-sm leading-6 text-slate-700">{application.note}</p>
             {application.missingItems.length > 0 ? (
               <div className="mt-3.5 rounded-2xl border border-accent-200 bg-accent-50 p-3.5">
                 <div className="text-xs uppercase tracking-[0.16em] text-accent-700">Open items</div>
-                <div className="mt-2 text-sm text-accent-900">{application.missingItems.join(' · ')}</div>
+                <div className="mt-2 text-sm text-[#3a2b07]">{application.missingItems.join(' · ')}</div>
               </div>
             ) : null}
           </SurfaceCard>
@@ -192,7 +192,7 @@ export default async function DevApplicationDetailPage({
             <div className="mt-3.5 space-y-2.5 text-sm">
               <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-rose-800">
                 <div className="font-semibold">{blockingDocuments.length} blocking document{blockingDocuments.length === 1 ? '' : 's'}</div>
-                <div className="mt-1">
+                <div className="mt-1 text-slate-700">
                   {blockingDocuments.length > 0
                     ? 'Request a replacement before the file can move forward.'
                     : 'No blocking document issues are stopping the application right now.'}
@@ -200,15 +200,15 @@ export default async function DevApplicationDetailPage({
               </div>
               <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900">
                 <div className="font-semibold">{reviewDocuments.length} flagged document{reviewDocuments.length === 1 ? '' : 's'}</div>
-                <div className="mt-1">
+                <div className="mt-1 text-slate-700">
                   {reviewDocuments.length > 0
                     ? 'These can stay in the queue, but they need a staff decision.'
                     : 'No document is waiting on a manual review decision.'}
                 </div>
               </div>
-              <div className="rounded-2xl border border-primary-100 bg-primary-50/60 px-4 py-3 text-slate-700">
+              <div className="rounded-2xl border border-primary-100 bg-[#fffdf8] px-4 py-3 text-slate-700">
                 <div className="font-semibold text-slate-950">Recommended next step</div>
-                <div className="mt-1">{getPreviewNextAction(application)}</div>
+                <div className="mt-1 text-slate-700">{getPreviewNextAction(application)}</div>
               </div>
             </div>
           </SurfaceCard>
@@ -217,12 +217,12 @@ export default async function DevApplicationDetailPage({
             <h2 className="text-lg font-semibold text-slate-950">Activity</h2>
             <div className="mt-3.5 space-y-2.5">
               {application.timeline.map((entry) => (
-                <div key={`${entry.at}-${entry.title}`} className="rounded-2xl border border-primary-100 bg-primary-50/40 px-4 py-3">
+                <div key={`${entry.at}-${entry.title}`} className="rounded-2xl border border-primary-100 bg-[#fbf8f0] px-4 py-3">
                   <div className="flex items-center justify-between gap-3">
                     <div className="text-sm font-semibold text-slate-950">{entry.title}</div>
-                    <div className="text-xs text-slate-500">{entry.at}</div>
+                    <div className="text-xs text-slate-600">{entry.at}</div>
                   </div>
-                  <div className="mt-1 text-sm text-slate-600">{entry.detail}</div>
+                  <div className="mt-1 text-sm text-slate-700">{entry.detail}</div>
                 </div>
               ))}
             </div>

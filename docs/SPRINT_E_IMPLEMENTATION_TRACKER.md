@@ -8,6 +8,7 @@
 - [x] Smart insights and risk flags
 - [ ] Browser verification
 - [x] Focus now action list
+- [x] Shared UI panel primitives extracted
 
 ## Track 2 — Guided Parent Flow
 - [x] Upload guidance simplification
@@ -20,4 +21,4 @@
 ## Track 3 — Docs and Handoff
 - [x] Sprint E plan written
 - [x] Local handoff updated
-- [ ] Repository sync note
+- [x] Repository sync note

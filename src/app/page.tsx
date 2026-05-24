@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { SURFACE_CARD_CLASS_NAME } from '@/lib/ui-classes';
 
 const featureTiles = [
   'A guided parent application journey',
@@ -13,7 +14,7 @@ export default function Home() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(22,163,74,0.11),_transparent_30%),radial-gradient(circle_at_top_right,_rgba(202,138,4,0.10),_transparent_26%),radial-gradient(circle_at_bottom_right,_rgba(34,197,94,0.08),_transparent_24%)]" />
       <div className="relative mx-auto flex min-h-[calc(100vh-4rem)] max-w-7xl items-center px-4 py-10 sm:px-6 lg:px-8">
         <div className="grid w-full gap-8 lg:grid-cols-[1.08fr_0.92fr]">
-          <section className="surface-card rounded-[2.25rem] border border-emerald-100/80 bg-white/94 p-8 shadow-[0_25px_90px_rgba(15,23,42,0.08)] backdrop-blur-xl sm:p-10">
+          <section className={`${SURFACE_CARD_CLASS_NAME} rounded-[2.25rem] border border-emerald-100/80 bg-white/94 p-8 shadow-[0_25px_90px_rgba(15,23,42,0.08)] backdrop-blur-xl sm:p-10`}>
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-emerald-950">
               Eunice Admissions Platform
             </div>
@@ -58,7 +59,7 @@ export default function Home() {
             </div>
           </section>
 
-          <aside className="surface-card space-y-4 rounded-[2rem] border border-slate-200/80 bg-slate-950 p-8 text-white shadow-[0_25px_90px_rgba(15,23,42,0.18)]">
+          <aside className={`${SURFACE_CARD_CLASS_NAME} space-y-4 rounded-[2rem] border border-slate-200/80 bg-slate-950 p-8 text-white shadow-[0_25px_90px_rgba(15,23,42,0.18)]`}>
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">Platform snapshot</p>
             <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
               <div className="text-sm font-semibold text-white">Current phase</div>

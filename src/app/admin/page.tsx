@@ -21,6 +21,7 @@ import {
   type ApplicationDocumentRequirement,
 } from '@/lib/domain/application-requirements';
 import { getTenantConfig } from '@/lib/domain/tenant-config';
+import { SUBTLE_PANEL_CLASS_NAME, SURFACE_CARD_CLASS_NAME } from '@/lib/ui-classes';
 
 
 interface Profile {
@@ -864,7 +865,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-              <div className="surface-card rounded-[2rem] border border-emerald-500/10 bg-emerald-950/20 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl">
+              <div className={`${SURFACE_CARD_CLASS_NAME} rounded-[2rem] border border-emerald-500/10 bg-emerald-950/20 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl`}>
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/70">Quick views</p>
@@ -876,20 +877,20 @@ export default function AdminDashboard() {
             </div>
 
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div className={`${SUBTLE_PANEL_CLASS_NAME} p-4`}>
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Fast lane</p>
                 <div className="mt-2 text-lg font-semibold text-white">{readyForReview} ready</div>
                 <p className="mt-1 text-sm leading-6 text-slate-300">Review these first to keep turnaround short.</p>
                 <p className="mt-2 text-[11px] font-medium text-emerald-300/80">Document accuracy {dossierAccuracy}%</p>
               </div>
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div className={`${SUBTLE_PANEL_CLASS_NAME} p-4`}>
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Parent action</p>
                 <div className="mt-2 text-lg font-semibold text-white">{missingDocuments} blocked</div>
                 <p className="mt-1 text-sm leading-6 text-slate-300">These need a re-upload or missing document.</p>
               </div>
             </div>
 
-            <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className={`mt-4 ${SUBTLE_PANEL_CLASS_NAME} p-4`}>
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Workload trend</p>
@@ -905,7 +906,7 @@ export default function AdminDashboard() {
         </section>
 
         <section className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
-          <div className="surface-card rounded-[2rem] border border-emerald-500/10 bg-emerald-950/20 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl">
+          <div className={`${SURFACE_CARD_CLASS_NAME} rounded-[2rem] border border-emerald-500/10 bg-emerald-950/20 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl`}>
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/70">Smart insights</p>
@@ -927,14 +928,14 @@ export default function AdminDashboard() {
             </div>
 
             <div className="mt-4 grid gap-3 md:grid-cols-2">
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div className={`${SUBTLE_PANEL_CLASS_NAME} p-4`}>
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Suggested focus</p>
                 <p className="mt-2 text-base font-semibold text-white">Start with blocked cases, then fast-lane reviews</p>
                 <p className="mt-1 text-sm leading-6 text-slate-300">
                   This keeps the queue moving while reducing parent back-and-forth.
                 </p>
               </div>
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div className={`${SUBTLE_PANEL_CLASS_NAME} p-4`}>
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Daily signal</p>
                 <p className="mt-2 text-base font-semibold text-white">Recent submissions {recentSubmissionTrend >= 0 ? 'up' : 'down'} {Math.abs(recentSubmissionTrend)}%</p>
                 <p className="mt-1 text-sm leading-6 text-slate-300">
@@ -943,7 +944,7 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className={`mt-4 ${SUBTLE_PANEL_CLASS_NAME} p-4`}>
               <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Focus now</p>
               <div className="mt-2 space-y-2">
                 {focusNowItems.map((item) => (
@@ -956,7 +957,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="surface-card rounded-[2rem] border border-emerald-500/10 bg-emerald-950/20 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl">
+          <div className={`${SURFACE_CARD_CLASS_NAME} rounded-[2rem] border border-emerald-500/10 bg-emerald-950/20 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl`}>
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/70">Risk flags</p>
@@ -969,7 +970,7 @@ export default function AdminDashboard() {
 
             <div className="mt-4 space-y-3">
               {documentRiskFlags.map((item) => (
-                <div key={`${item.label}-risk`} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <div key={`${item.label}-risk`} className={`${SUBTLE_PANEL_CLASS_NAME} p-4`}>
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <p className="text-sm font-semibold text-white">{item.label}</p>

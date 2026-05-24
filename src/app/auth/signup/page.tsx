@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import supabase from '@/lib/supabase';
 import { getPostAuthRoute } from '@/lib/auth-routing';
+import { AUTH_INPUT_CLASS_NAME, SURFACE_CARD_CLASS_NAME } from '@/lib/ui-classes';
 
 interface School {
   id: string;
@@ -23,9 +24,6 @@ export default function SignUp() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
-  const inputClassName =
-    'w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-primary-300 transition focus:border-white/30 focus:outline-none focus:ring-2 focus:ring-white/15';
-
   // Load schools from database
   useEffect(() => {
     async function loadSchools() {
@@ -100,7 +98,7 @@ export default function SignUp() {
       <div className="pointer-events-none absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-primary-500/10 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-40 -right-40 h-[500px] w-[500px] rounded-full bg-accent-500/10 blur-3xl" />
 
-      <div className="surface-card relative z-10 w-full max-w-lg rounded-[2rem] border border-white/10 bg-white/10 p-8 shadow-2xl backdrop-blur-xl sm:p-10">
+      <div className={`${SURFACE_CARD_CLASS_NAME} relative z-10 w-full max-w-lg rounded-[2rem] border border-white/10 bg-white/10 p-8 shadow-2xl backdrop-blur-xl sm:p-10`}>
         <div className="mb-8 text-center">
           <div className="mx-auto inline-flex items-center rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary-100">
             Create your account
@@ -132,7 +130,7 @@ export default function SignUp() {
                 id="first-name"
                 type="text"
                 required
-                className={inputClassName}
+                className={AUTH_INPUT_CLASS_NAME}
                 placeholder="John"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
@@ -146,7 +144,7 @@ export default function SignUp() {
                 id="last-name"
                 type="text"
                 required
-                className={inputClassName}
+                className={AUTH_INPUT_CLASS_NAME}
                 placeholder="Doe"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
@@ -161,7 +159,7 @@ export default function SignUp() {
             <input
               id="phone"
               type="tel"
-              className={inputClassName}
+              className={AUTH_INPUT_CLASS_NAME}
               placeholder="+27 82 123 4567"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
@@ -174,7 +172,7 @@ export default function SignUp() {
             </label>
             <select
               id="school"
-              className={inputClassName}
+              className={AUTH_INPUT_CLASS_NAME}
               value={schoolId}
               onChange={(e) => setSchoolId(e.target.value)}
             >

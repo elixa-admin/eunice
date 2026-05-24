@@ -5,6 +5,7 @@ import Link from 'next/link';
 import ParentApplicationWorkflow from '@/components/parent/application-workflow';
 import { APPLICATION_STATUS_DESCRIPTIONS, APPLICATION_STATUS_LABELS } from '@/lib/domain/applications';
 import supabase from '@/lib/supabase';
+import { SURFACE_CARD_CLASS_NAME } from '@/lib/ui-classes';
 
 const statusHighlights = ['draft', 'awaiting_documents', 'under_review'] as const;
 
@@ -52,7 +53,7 @@ export default function ParentPortalPage() {
         </div>
 
         <div className="mb-10 grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
-          <section className="surface-card overflow-hidden rounded-[2.25rem] border border-emerald-100/80 bg-white/92 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl">
+          <section className={`${SURFACE_CARD_CLASS_NAME} overflow-hidden rounded-[2.25rem] border border-emerald-100/80 bg-white/92 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl`}>
             <div className="border-b border-slate-100 bg-gradient-to-r from-emerald-50 via-white to-amber-50 px-8 py-6">
               <div className="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-emerald-950">
                 Parent Portal
@@ -141,7 +142,7 @@ export default function ParentPortalPage() {
             </div>
           </section>
 
-          <aside className="surface-card rounded-[2rem] border border-slate-200/80 bg-slate-950 p-6 text-white shadow-[0_20px_60px_rgba(15,23,42,0.12)]">
+          <aside className={`${SURFACE_CARD_CLASS_NAME} rounded-[2rem] border border-slate-200/80 bg-slate-950 p-6 text-white shadow-[0_20px_60px_rgba(15,23,42,0.12)]`}>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Current focus</p>
             <div className="mt-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-4">
               <div className="text-sm font-semibold text-white">What happens next</div>

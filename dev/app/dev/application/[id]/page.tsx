@@ -43,34 +43,34 @@ export default async function DevApplicationDetailPage({
       backLabel="Back to admin"
     >
       <div className="mb-6 grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
-        <SurfaceCard className="overflow-hidden bg-[linear-gradient(135deg,rgba(31,109,58,0.10),rgba(184,137,7,0.10))] p-6">
+        <SurfaceCard className="overflow-hidden border border-primary-200/70 bg-[linear-gradient(135deg,rgba(8,41,27,0.98),rgba(17,57,37,0.96)_48%,rgba(174,127,6,0.92)_100%)] p-6 text-white shadow-[0_26px_70px_rgba(11,20,12,0.18)]">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
-              <div className="text-xs uppercase tracking-[0.18em] text-primary-700/70">Current status</div>
+              <div className="text-xs uppercase tracking-[0.18em] text-white/70">Current status</div>
               <div className="mt-2">
                 <StatusBadge status={application.status} />
               </div>
-              <h2 className="display-serif mt-4 text-3xl font-semibold text-slate-950">{application.learnerName}</h2>
-              <p className="mt-2 text-sm text-slate-600">{application.parentName} · {application.ref}</p>
+              <h2 className="display-serif mt-4 text-3xl font-semibold text-white">{application.learnerName}</h2>
+              <p className="mt-2 text-sm text-white/80">{application.parentName} · {application.ref}</p>
             </div>
-            <div className="rounded-3xl border border-accent-100 bg-white/92 p-4 text-sm text-slate-700 shadow-[0_18px_45px_rgba(184,137,7,0.10)]">
-              <div className="text-xs uppercase tracking-[0.16em] text-accent-700">Grade</div>
-              <div className="mt-2 text-2xl font-semibold text-slate-950">{application.grade}</div>
-              <div className="mt-3 text-sm leading-6 text-slate-600">Review-ready profile for the admissions team.</div>
+            <div className="rounded-3xl border border-white/18 bg-white/12 p-4 text-sm text-white shadow-[0_18px_45px_rgba(184,137,7,0.10)] backdrop-blur-md">
+              <div className="text-xs uppercase tracking-[0.16em] text-white/70">Grade</div>
+              <div className="mt-2 text-2xl font-semibold text-white">{application.grade}</div>
+              <div className="mt-3 text-sm leading-6 text-white/85">Review-ready profile for the admissions team.</div>
             </div>
           </div>
           <div className="mt-6 grid gap-3 sm:grid-cols-3">
-            <div className="rounded-2xl border border-primary-100 bg-white/90 px-4 py-3 shadow-sm">
-              <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Application form</div>
-              <div className="mt-2 text-sm font-semibold text-slate-950">Learner record summary</div>
+            <div className="rounded-2xl border border-white/15 bg-white/12 px-4 py-3 shadow-sm backdrop-blur-md">
+              <div className="text-xs uppercase tracking-[0.16em] text-white/65">Application form</div>
+              <div className="mt-2 text-sm font-semibold text-white">Learner record summary</div>
             </div>
-            <div className="rounded-2xl border border-primary-100 bg-white/90 px-4 py-3 shadow-sm">
-              <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Review focus</div>
-              <div className="mt-2 text-sm font-semibold text-slate-950">{counts.blocking > 0 ? 'Resolve blockers' : 'Confirm readiness'}</div>
+            <div className="rounded-2xl border border-white/15 bg-white/12 px-4 py-3 shadow-sm backdrop-blur-md">
+              <div className="text-xs uppercase tracking-[0.16em] text-white/65">Review focus</div>
+              <div className="mt-2 text-sm font-semibold text-white">{counts.blocking > 0 ? 'Resolve blockers' : 'Confirm readiness'}</div>
             </div>
-            <div className="rounded-2xl border border-accent-100 bg-white/90 px-4 py-3 shadow-sm">
-              <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Next action</div>
-              <div className="mt-2 text-sm font-semibold text-slate-950">School review and document check</div>
+            <div className="rounded-2xl border border-white/15 bg-white/12 px-4 py-3 shadow-sm backdrop-blur-md">
+              <div className="text-xs uppercase tracking-[0.16em] text-white/65">Next action</div>
+              <div className="mt-2 text-sm font-semibold text-white">School review and document check</div>
             </div>
           </div>
         </SurfaceCard>

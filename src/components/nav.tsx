@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 
 export function NavBar() {
@@ -9,37 +10,35 @@ export function NavBar() {
   const adminHref = '/admin';
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-slate-200/70 bg-white/85 backdrop-blur-xl shadow-[0_1px_0_rgba(15,23,42,0.03)]">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-primary-100 bg-gradient-to-br from-primary-700 to-primary-950 shadow-sm">
-            <svg viewBox="0 0 32 32" fill="none" className="h-5 w-5 stroke-white" aria-hidden="true">
-              <path d="M6 8h20M6 16h14M6 24h8" strokeWidth="2.5" strokeLinecap="round" />
-            </svg>
-          </div>
-          <div>
-            <span className="block text-lg font-semibold tracking-tight text-slate-950">Eunice Admissions</span>
-            <span className="block text-xs font-medium uppercase tracking-[0.22em] text-slate-500">Intake platform</span>
-          </div>
-        </Link>
+    <nav className="sticky top-0 z-50 w-full border-b border-emerald-900/20 bg-[#005c42]/96 text-white shadow-[0_10px_30px_rgba(0,0,0,0.18)] backdrop-blur-md">
+      <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <Link href="/" className="flex items-center gap-3">
+            <Image src="/eunice-school-logo.svg" alt="Eunice crest" width={46} height={46} className="h-11 w-11 object-contain drop-shadow-sm" />
+            <div>
+              <span className="block text-lg font-semibold tracking-tight text-white">Eunice Admissions</span>
+              <span className="block text-[11px] font-medium uppercase tracking-[0.24em] text-[#e7c86b]">Intake platform</span>
+            </div>
+          </Link>
 
-        <div className="flex items-center gap-3">
-          <Link
-            href={parentHref}
-            className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
-              pathname === parentHref ? 'bg-primary-50 text-primary-950' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-950'
-            }`}
-          >
-            Parent Portal
-          </Link>
-          <Link
-            href={adminHref}
-            className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
-              pathname === adminHref ? 'bg-slate-950 text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-950'
-            }`}
-          >
-            Admin Dashboard
-          </Link>
+          <div className="flex flex-wrap items-center gap-2 sm:justify-end">
+            <Link
+              href={parentHref}
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                pathname === parentHref ? 'bg-[#d6aa3a] text-[#0a3d2d] shadow-[0_0_0_1px_rgba(214,170,58,0.4)]' : 'text-white/90 hover:bg-white/10 hover:text-white'
+              }`}
+            >
+              Parent Portal
+            </Link>
+            <Link
+              href={adminHref}
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                pathname === adminHref ? 'bg-[#d6aa3a] text-[#0a3d2d] shadow-[0_0_0_1px_rgba(214,170,58,0.4)]' : 'text-white/90 hover:bg-white/10 hover:text-white'
+              }`}
+            >
+              Admin Dashboard
+            </Link>
+          </div>
         </div>
       </div>
     </nav>

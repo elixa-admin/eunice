@@ -50,6 +50,7 @@ If chat context is lost, a platform changes, or a new developer joins, start her
   - Keep the parent-facing workflow aligned to the same shared document logic
   - Compress the current 13-page Eunice application pattern into a guided 4-5 step parent journey with upfront document preparation
   - Move the parent and admin surfaces from layout progress into polished output-ready experiences
+  - Prioritize the parent-led cue framework: orientation, expectations, readiness, action, and outcome
 
 ## Delivered Outcome Snapshot
 
@@ -94,6 +95,7 @@ Reference docs:
 - `docs/parent-application-portal/plan.md`
 - `docs/parent-application-portal/next-two-sprints.md`
 - `docs/parent-application-portal/three-sprints.md`
+- `docs/parent-application-portal/next-two-high-value-sprints.md`
 - `docs/SPRINT_NEXT_LANDSCAPE_UI.md`
 - `docs/phase-next-level-output/plan.md`
 - `docs/SPRINT_MICRO_SLICES_NEXT.md`
@@ -151,8 +153,8 @@ GitHub: aligned at branch head
 Vercel: aligned to eunice-dev preview
 Linear: update status from SOURCE_OF_TRUTH.md after each coherent slice
 Known local note: .claude/ remains untracked and excluded
-Next slice: Landscape UI Sprint, Task 1 (Finalize the shared visual shell)
-Next sprint focus: wide-screen parent/admin polish, brand fidelity, queue clarity, handover hardening
+Next slice: Parent-Led High-Value Sprint, Phase 1.1 (Parent Welcome And Cue Framework)
+Next sprint focus: parent orientation, step expectations, document confidence, and cross-surface cue cohesion
 Bootstrap prompt: docs/HANDOVER_BOOTSTRAP_PROMPT.md
 Relay protocol: docs/PLATFORM_RELAY_PROTOCOL.md
 ```

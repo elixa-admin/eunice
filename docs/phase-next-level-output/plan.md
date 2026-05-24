@@ -8,6 +8,8 @@ Primary surface: `dev/`
 
 Turn the `dev/` surface into a truly polished Eunice admissions experience that feels finished in motion, spacing, copy, and interaction quality.
 
+The highest-value execution queue for this phase is now captured in [docs/parent-application-portal/next-two-high-value-sprints.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/parent-application-portal/next-two-high-value-sprints.md), which prioritizes parent orientation first and then carries the same cue framework into Admin and the preview hub.
+
 This phase is about:
 
 - making the Parent Portal feel calm, guided, and unmistakably premium

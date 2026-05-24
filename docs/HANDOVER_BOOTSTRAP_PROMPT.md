@@ -40,13 +40,13 @@ Read first:
 10. docs/FAILURE_TRIAGE.md
 
 Current intent:
-Continue the latest dev-preview work on the Eunice admissions platform: apply the screenshot-driven visual system to `dev/` first, keep the UI premium and operational, tighten admin hierarchy, and preserve the guided parent-friendly flow that replaces the 13-page Google Form while still capturing the school's required data and document needs.
+Continue the latest dev-preview work on the Eunice admissions platform: apply the screenshot-driven visual system to `dev/` first, keep the UI premium and operational, and now prioritize the parent-led cue framework that makes the journey feel calm, guided, and unsurprising for first-time applicants.
 
 Hard boundary:
 Keep all active work on `dev/` until we explicitly decide to promote it. Do not touch the assessment page/surface during this stage. Production is a separate promotion step, not part of the current sprint.
 
 Current phase:
-Follow `docs/phase-next-level-output/plan.md` as the active phase plan. The current implementation focus is now output quality: parent finish, admin finish, preview hub polish, and cross-surface consistency.
+Follow `docs/phase-next-level-output/plan.md` as the active phase plan. The current implementation focus is now output quality, with the new high-value parent-led sprint plan as the next practical queue: parent orientation, step expectations, document confidence, and cross-surface cue cohesion.
 
 Most recent product decision:
 Compress the 13-page application into an upfront preparation screen plus a guided 5-step parent flow:
@@ -58,7 +58,7 @@ Compress the 13-page application into an upfront preparation screen plus a guide
 6. Review, consent, and submit
 
 Current next slice:
-Continue the next level output phase in `docs/phase-next-level-output/plan.md`: polish the Parent Portal, tighten Admin operations, refine the preview hub, and keep docs aligned.
+Start the parent-led high-value sprint in `docs/parent-application-portal/next-two-high-value-sprints.md`: build the parent welcome and cue framework first, then flow into step expectations and document confidence before carrying cues into admin and the preview hub.
 
 At the start of a new session, run:
 npm run session:start

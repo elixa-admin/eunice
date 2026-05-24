@@ -106,6 +106,55 @@ const TRIAGE_LANE_PRIORITY: Record<TriageLane, number> = {
 
 const TRIAGE_FILTERS: TriageLane[] = ['blocked', 'review_ready', 'in_review', 'decision_pending'];
 
+function MiniSparkline({ values }: { values: number[] }) {
+  const width = 220;
+  const height = 54;
+  const maxValue = Math.max(...values, 1);
+  const stepX = values.length > 1 ? width / (values.length - 1) : width;
+  const points = values
+    .map((value, index) => {
+      const x = index * stepX;
+      const y = height - (value / maxValue) * (height - 8) - 4;
+      return `${x},${y}`;
+    })
+    .join(' ');
+
+  return (
+    <svg viewBox={`0 0 ${width} ${height}`} className="h-[54px] w-full" aria-hidden="true" role="img">
+      <defs>
+        <linearGradient id="workloadSparkline" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#fbbf24" stopOpacity="0.9" />
+          <stop offset="50%" stopColor="#34d399" stopOpacity="0.9" />
+          <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.9" />
+        </linearGradient>
+      </defs>
+      <polyline
+        fill="none"
+        stroke="url(#workloadSparkline)"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        points={points}
+      />
+      {values.map((value, index) => {
+        const x = values.length > 1 ? index * stepX : width / 2;
+        const y = height - (value / maxValue) * (height - 8) - 4;
+        return (
+          <circle
+            key={`${value}-${index}`}
+            cx={x}
+            cy={y}
+            r="2.8"
+            fill="#0f172a"
+            stroke="#fbbf24"
+            strokeWidth="1.4"
+          />
+        );
+      })}
+    </svg>
+  );
+}
+
 function summarizeDocumentsForApp(applicationId: string, docs: DocumentRecord[]): DocumentSummary {
   const documentByType = new Map(
     docs
@@ -610,6 +659,21 @@ export default function AdminDashboard() {
   const missingDocuments = applications.filter(app => getTriageLane(app) === 'blocked').length;
   const readyForReview = applications.filter(app => getTriageLane(app) === 'review_ready').length;
   const accepted = applications.filter(app => app.status === 'accepted').length;
+  const reviewedOrClosed = applications.filter(app => app.status === 'accepted' || app.status === 'rejected').length;
+  const reviewReadyRate = total > 0 ? Math.round((readyForReview / total) * 100) : 0;
+  const blockedRate = total > 0 ? Math.round((missingDocuments / total) * 100) : 0;
+  const completedRate = total > 0 ? Math.round((reviewedOrClosed / total) * 100) : 0;
+  const activeApplications = applications.filter((app) => app.status !== 'accepted' && app.status !== 'rejected');
+  const averageAgeDays = activeApplications.length > 0
+    ? (activeApplications.reduce((sum, app) => sum + ((Date.now() - new Date(app.created_at).getTime()) / (1000 * 60 * 60 * 24)), 0) / activeApplications.length).toFixed(1)
+    : '0.0';
+  const workloadSpark = [
+    applications.filter((app) => getTriageLane(app) === 'blocked').length,
+    applications.filter((app) => getTriageLane(app) === 'review_ready').length,
+    applications.filter((app) => getTriageLane(app) === 'in_review').length,
+    applications.filter((app) => getTriageLane(app) === 'decision_pending').length,
+    applications.filter((app) => getTriageLane(app) === 'closed').length,
+  ];
 
   if (loading) {
     return (
@@ -676,57 +740,105 @@ export default function AdminDashboard() {
           </div>
         </header>
 
-        {/* Triage Operational Analytics Bar */}
-        <section className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-          <div className="rounded-2xl border border-amber-500/20 bg-emerald-950/20 p-5 shadow-lg flex items-center gap-4 backdrop-blur-sm">
-            <div className="rounded-full bg-amber-500/10 p-3 text-amber-300">
-              <svg className="w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+        <section className="grid gap-4 xl:grid-cols-[1.05fr_0.95fr]">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <div className="rounded-2xl border border-amber-500/20 bg-emerald-950/20 p-5 shadow-lg backdrop-blur-sm">
+              <div className="flex items-center gap-4">
+                <div className="rounded-full bg-amber-500/10 p-3 text-amber-300">
+                  <svg className="w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/80">Triage speed</p>
+                  <p className="text-xl font-bold text-white mt-0.5 font-sans">{averageAgeDays} days avg.</p>
+                  <p className="text-[10px] text-emerald-500/60 mt-0.5">Average age of active cases</p>
+                </div>
+              </div>
             </div>
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/80">Triage Speed</p>
-              <p className="text-xl font-bold text-white mt-0.5 font-sans">2.4 Days Avg.</p>
-              <p className="text-[10px] text-emerald-500/60 mt-0.5">Estimated verification time</p>
+
+            <div className="rounded-2xl border border-emerald-500/20 bg-emerald-950/20 p-5 shadow-lg backdrop-blur-sm">
+              <div className="flex items-center gap-4">
+                <div className="rounded-full bg-emerald-500/10 p-3 text-emerald-300">
+                  <svg className="w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/80">Ready to review</p>
+                  <p className="text-xl font-bold text-emerald-400 mt-0.5 font-sans">{reviewReadyRate}%</p>
+                  <p className="text-[10px] text-emerald-500/60 mt-0.5">{readyForReview} applications</p>
+                </div>
+              </div>
             </div>
-          </div>
-          
-          <div className="rounded-2xl border border-emerald-500/20 bg-emerald-950/20 p-5 shadow-lg flex items-center gap-4 backdrop-blur-sm">
-            <div className="rounded-full bg-emerald-500/10 p-3 text-emerald-300">
-              <svg className="w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+
+            <div className="rounded-2xl border border-rose-500/20 bg-emerald-950/20 p-5 shadow-lg backdrop-blur-sm">
+              <div className="flex items-center gap-4">
+                <div className="rounded-full bg-rose-500/10 p-3 text-rose-400">
+                  <svg className="w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-rose-400">Blocked</p>
+                  <p className="text-xl font-bold text-rose-300 mt-0.5 font-sans">{blockedRate}%</p>
+                  <p className="text-[10px] text-rose-500/60 mt-0.5">{missingDocuments} need action</p>
+                </div>
+              </div>
             </div>
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/80">Dossier Accuracy</p>
-              <p className="text-xl font-bold text-emerald-400 mt-0.5 font-sans">{dossierAccuracy}% Approved</p>
-              <p className="text-[10px] text-emerald-500/60 mt-0.5">Verified / total uploaded docs</p>
+
+            <div className="rounded-2xl border border-emerald-500/20 bg-emerald-950/20 p-5 shadow-lg backdrop-blur-sm">
+              <div className="flex items-center gap-4">
+                <div className="rounded-full bg-emerald-500/10 p-3 text-emerald-300">
+                  <svg className="w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/80">Completed</p>
+                  <p className="text-xl font-bold text-white mt-0.5 font-sans">{completedRate}%</p>
+                  <p className="text-[10px] text-emerald-500/60 mt-0.5">{accepted} accepted</p>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-rose-500/20 bg-emerald-950/20 p-5 shadow-lg flex items-center gap-4 backdrop-blur-sm">
-            <div className="rounded-full bg-rose-500/10 p-3 text-rose-400">
-              <svg className="w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
+          <div className="rounded-[2rem] border border-emerald-500/10 bg-emerald-950/20 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/70">Quick views</p>
+                <h3 className="mt-1 text-base font-semibold text-white">What needs attention now</h3>
+              </div>
+              <div className="rounded-full border border-emerald-500/20 bg-emerald-950/40 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-emerald-300">
+                Live queue
+              </div>
             </div>
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-rose-400">Queue Bottleneck</p>
-              <p className="text-xl font-bold text-rose-300 mt-0.5">Residency Proof</p>
-              <p className="text-[10px] text-rose-500/60 mt-0.5">Represents 45% of missing items</p>
-            </div>
-          </div>
 
-          <div className="rounded-2xl border border-emerald-500/20 bg-emerald-950/20 p-5 shadow-lg flex items-center gap-4 backdrop-blur-sm">
-            <div className="rounded-full bg-emerald-500/10 p-3 text-emerald-300">
-              <svg className="w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Fast lane</p>
+                <div className="mt-2 text-lg font-semibold text-white">{readyForReview} ready</div>
+                <p className="mt-1 text-sm leading-6 text-slate-300">Review these first to keep turnaround short.</p>
+                <p className="mt-2 text-[11px] font-medium text-emerald-300/80">Document accuracy {dossierAccuracy}%</p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Parent action</p>
+                <div className="mt-2 text-lg font-semibold text-white">{missingDocuments} blocked</div>
+                <p className="mt-1 text-sm leading-6 text-slate-300">These need a re-upload or missing document.</p>
+              </div>
             </div>
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/80">Total dossiers</p>
-              <p className="text-xl font-bold text-white mt-0.5 font-sans">{total} candidates</p>
-              <p className="text-[10px] text-emerald-500/60 mt-0.5">Across active school cycles</p>
+
+            <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Workload trend</p>
+                  <p className="mt-1 text-sm font-semibold text-white">Current queue shape</p>
+                </div>
+                <div className="text-xs text-slate-300">Snapshot</div>
+              </div>
+              <div className="mt-3">
+                <MiniSparkline values={workloadSpark} />
+              </div>
             </div>
           </div>
         </section>

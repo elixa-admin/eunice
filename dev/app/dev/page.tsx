@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { previewApplications } from '@/lib/dev-preview-data';
 import { PreviewShell } from '@/components/preview-shell';
 import { SurfaceCard } from '@/components/surface-card';
@@ -40,7 +41,12 @@ export default function DevIndexPage() {
         <SurfaceCard className="overflow-hidden bg-[linear-gradient(135deg,rgba(31,109,58,0.10),rgba(184,137,7,0.09))] p-7">
           <div className="mb-5 flex items-start justify-between gap-4">
             <div>
-              <p className="text-xs uppercase tracking-[0.18em] text-primary-700/75">Current focus</p>
+              <div className="mb-3 flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl border border-primary-100 bg-white shadow-[0_10px_24px_rgba(11,20,12,0.10)]">
+                  <Image src="/favicon.ico" alt="Eunice logo" width={32} height={32} className="h-8 w-8 object-contain" />
+                </div>
+                <p className="text-xs uppercase tracking-[0.18em] text-primary-700/75">Current focus</p>
+              </div>
               <h2 className="display-serif mt-2 text-3xl font-semibold text-slate-950">A polished admissions website, not a wireframe</h2>
               <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
                 The goal is to make the preview feel like a finished school admissions product: structured, trustworthy,

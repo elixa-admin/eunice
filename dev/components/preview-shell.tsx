@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
+import Image from 'next/image';
 import { previewSurfaceSchema, type PreviewSurface } from '@/lib/preview-ui-schema';
 
 type PreviewShellProps = {
@@ -50,6 +51,12 @@ export function PreviewShell({
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1.08fr)_minmax(320px,0.92fr)] lg:items-start">
             <div className="space-y-5">
               <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl border border-white/20 bg-white/95 shadow-[0_10px_24px_rgba(11,20,12,0.12)]">
+                    <Image src="/favicon.ico" alt="Eunice logo" width={32} height={32} className="h-8 w-8 object-contain" />
+                  </div>
+                  <div className="text-sm uppercase tracking-[0.22em] text-white/75">Eunice High School</div>
+                </div>
                 <p className="type-label text-white/80">{eyebrow}</p>
                 <h1 className="display-serif type-display-xl max-w-4xl text-white">
                   {title}

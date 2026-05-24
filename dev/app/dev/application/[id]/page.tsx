@@ -32,6 +32,8 @@ export default async function DevApplicationDetailPage({
   const counts = getPreviewDocumentCounts(application);
   const blockingDocuments = application.documents.filter((document) => isDocumentStateBlocking(document.status));
   const reviewDocuments = application.documents.filter((document) => isDocumentStateReviewOnly(document.status));
+  const readinessTone =
+    counts.blocking > 0 ? 'rose' : counts.reviewOnly > 0 ? 'amber' : 'emerald';
 
   return (
     <PreviewShell
@@ -79,6 +81,9 @@ export default async function DevApplicationDetailPage({
         </SurfaceCard>
 
         <SurfaceCard className="p-5">
+          <div className={`mb-4 h-1 rounded-full ${
+            readinessTone === 'rose' ? 'bg-rose-500' : readinessTone === 'amber' ? 'bg-amber-500' : 'bg-emerald-500'
+          }`} />
           <div className="grid gap-2.5 sm:grid-cols-3">
             <div className="rounded-2xl border border-accent-100 bg-[#fffdf8] p-3.5 shadow-sm">
               <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Parent</div>
@@ -93,8 +98,15 @@ export default async function DevApplicationDetailPage({
               <div className="mt-2 text-sm font-semibold text-slate-950">{application.assignedTo}</div>
             </div>
           </div>
-          <div className="mt-3.5 rounded-2xl border border-accent-200 bg-[#fff8e7] p-3.5 text-sm leading-6 text-[#3a2b07]">
-            {getPreviewNextAction(application)}
+          <div className={`mt-3.5 rounded-2xl border p-3.5 text-sm leading-6 ${
+            readinessTone === 'rose'
+              ? 'border-rose-200 bg-rose-50 text-rose-800'
+              : readinessTone === 'amber'
+                ? 'border-amber-200 bg-amber-50 text-amber-900'
+                : 'border-emerald-200 bg-emerald-50 text-emerald-900'
+          }`}>
+            <div className="text-xs uppercase tracking-[0.16em] opacity-80">Next step</div>
+            <div className="mt-1">{getPreviewNextAction(application)}</div>
           </div>
         </SurfaceCard>
       </div>
@@ -156,11 +168,17 @@ export default async function DevApplicationDetailPage({
             {application.documents.map((document) => (
               <div
                 key={`${document.type}-${document.uploadedAt ?? 'missing'}`}
-                className="mt-2.5 flex items-center justify-between rounded-2xl border border-primary-100 bg-[#fbf8f0] px-4 py-3"
+                className={`mt-2.5 flex items-center justify-between rounded-2xl border px-4 py-3 ${
+                  document.status === 'verified' || document.status === 'accepted'
+                    ? 'border-emerald-200 bg-emerald-50/70'
+                    : isDocumentStateReviewOnly(document.status)
+                      ? 'border-amber-200 bg-amber-50/70'
+                      : 'border-rose-200 bg-rose-50/70'
+                }`}
               >
                 <div>
-                  <div className="text-sm text-slate-700">{getPreviewDocumentLabel(document.type)}</div>
-                  <div className="text-xs text-slate-600">{document.note ?? 'No note added yet.'}</div>
+                  <div className="text-sm font-semibold text-slate-950">{getPreviewDocumentLabel(document.type)}</div>
+                  <div className="text-xs text-slate-700">{document.note ?? 'No note added yet.'}</div>
                 </div>
                 <div className="text-right">
                   <span
@@ -168,7 +186,7 @@ export default async function DevApplicationDetailPage({
                   >
                     {getPreviewDocumentStatusLabel(document.status)}
                   </span>
-                  <div className="mt-1 text-xs text-slate-600">{document.uploadedAt ?? 'Not uploaded'}</div>
+                  <div className="mt-1 text-xs text-slate-700">{document.uploadedAt ?? 'Not uploaded'}</div>
                 </div>
               </div>
             ))}
@@ -217,7 +235,16 @@ export default async function DevApplicationDetailPage({
             <h2 className="text-lg font-semibold text-slate-950">Activity</h2>
             <div className="mt-3.5 space-y-2.5">
               {application.timeline.map((entry) => (
-                <div key={`${entry.at}-${entry.title}`} className="rounded-2xl border border-primary-100 bg-[#fbf8f0] px-4 py-3">
+                <div
+                  key={`${entry.at}-${entry.title}`}
+                  className={`rounded-2xl border px-4 py-3 ${
+                    entry.title.toLowerCase().includes('submitted')
+                      ? 'border-emerald-200 bg-emerald-50/70'
+                      : entry.title.toLowerCase().includes('review')
+                        ? 'border-amber-200 bg-amber-50/70'
+                        : 'border-primary-100 bg-[#fbf8f0]'
+                  }`}
+                >
                   <div className="flex items-center justify-between gap-3">
                     <div className="text-sm font-semibold text-slate-950">{entry.title}</div>
                     <div className="text-xs text-slate-600">{entry.at}</div>

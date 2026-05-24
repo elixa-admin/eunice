@@ -55,6 +55,39 @@ Design implications:
 6. Reassure, don’t overwhelm.
 - Make the process feel manageable even if the application is long underneath the surface.
 
+## Simplicity Charter
+
+The parent experience must feel easy, calm, and lightweight.
+
+Non-negotiables:
+
+- Never show more information than the parent needs at that moment.
+- Never present every possible field up front.
+- Never bury the next action inside dense paragraphs.
+- Never make the parent feel like they need to “study” the form before starting.
+- Never assume the parent already understands school admissions language.
+- Never make document requirements feel punitive or mysterious.
+- Never force the parent to mentally map the whole process before taking the first step.
+
+What this means in the UI:
+
+- one clear primary action on each screen
+- one clear purpose statement per section
+- short, human explanations instead of long technical blocks
+- document guidance shown as a checklist with plain-language reasons
+- optional or conditional items hidden until relevant
+- progress always visible
+- reassuring save and return behavior
+- support cues that feel helpful, not alarmist
+
+What this means in the content:
+
+- use fewer words, but make the words do more work
+- prefer "what happens next" over internal process language
+- explain why the school needs something before naming the field
+- group complex details behind summaries or collapsible explanations
+- keep the tone warm, respectful, and confidence-building
+
 ## Best Practice Grounding
 
 These choices should guide every parent-facing screen:

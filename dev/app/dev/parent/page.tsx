@@ -78,7 +78,7 @@ export default function DevParentPage() {
 
         <main className="space-y-5">
           <SurfaceCard className="overflow-hidden border border-primary-200/70 bg-[linear-gradient(135deg,rgba(8,41,27,0.98),rgba(17,57,37,0.96)_48%,rgba(174,127,6,0.92)_100%)] p-0 text-white shadow-[0_26px_70px_rgba(11,20,12,0.18)]">
-            <div className="border-b border-white/12 px-6 py-4.5">
+            <div className="border-b border-white/12 px-6 py-4">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <div className="text-[10px] uppercase tracking-[0.18em] text-white/70">Step {stepMeta[activeTab].label}</div>
@@ -95,7 +95,7 @@ export default function DevParentPage() {
             </div>
 
             <div className="grid gap-5 px-6 py-5 lg:grid-cols-[1.15fr_0.85fr]">
-              <div className="space-y-4.5">
+                <div className="space-y-4">
                 <div className="flex items-center gap-2.5 overflow-x-auto pb-1">
                   {stepOrder.map((step, index) => {
                     const isActive = activeTab === step;
@@ -128,8 +128,8 @@ export default function DevParentPage() {
                   })}
                 </div>
 
-                <div className="rounded-[28px] border border-white/12 bg-white/95 p-5.5 text-slate-950 shadow-[0_18px_50px_rgba(11,20,12,0.10)]">
-                  <div className="mb-4.5 grid gap-4 lg:grid-cols-[1.08fr_0.92fr]">
+                <div className="rounded-[28px] border border-white/12 bg-white/95 p-5 text-slate-950 shadow-[0_18px_50px_rgba(11,20,12,0.10)]">
+                  <div className="mb-4 grid gap-4 lg:grid-cols-[1.08fr_0.92fr]">
                     <div className="space-y-2.5">
                       <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Before you begin</div>
                       <div className="grid gap-2.5 sm:grid-cols-2">
@@ -146,11 +146,11 @@ export default function DevParentPage() {
                         ))}
                       </div>
                     </div>
-                    <div className="rounded-[24px] border border-slate-200 bg-[#faf7ef] p-4.5">
+                    <div className="rounded-[24px] border border-slate-200 bg-[#faf7ef] p-4">
                       <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Required documents</div>
                       <div className="mt-3.5 space-y-2.5">
                         {['Birth certificate', 'Latest school report', 'Proof of residence', 'Immunisation record'].map((item) => (
-                          <div key={item} className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-3 py-2.25">
+                          <div key={item} className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-3 py-2">
                             <div>
                               <div className="text-sm font-medium text-slate-950">{item}</div>
                               <div className="text-xs text-slate-500">Required</div>
@@ -162,7 +162,7 @@ export default function DevParentPage() {
                     </div>
                   </div>
 
-                  <div className="rounded-[24px] border border-slate-200 bg-white p-4.5">
+                  <div className="rounded-[24px] border border-slate-200 bg-white p-4">
                     <div className="text-xs uppercase tracking-[0.16em] text-slate-500">{stepMeta[activeTab].title}</div>
                     <div className="mt-2 text-sm leading-6 text-slate-600">
                       {activeTab === 'checklist' && 'Gather documents and confirm you are ready before you begin the form.'}
@@ -172,7 +172,7 @@ export default function DevParentPage() {
                       {activeTab === 'fees_docs' && 'Confirm fee responsibility and upload the required documents with clear images.'}
                       {activeTab === 'review' && 'Review everything once more before you submit it to the admissions queue.'}
                     </div>
-                    <div className="mt-4.5 flex flex-wrap gap-3">
+                    <div className="mt-4 flex flex-wrap gap-3">
                       <button type="button" className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-700">Back</button>
                       <button type="button" className="rounded-xl bg-primary-900 px-4 py-2.5 text-sm font-semibold text-white">Continue</button>
                     </div>
@@ -181,7 +181,7 @@ export default function DevParentPage() {
               </div>
 
               <div className="space-y-3.5">
-                <SurfaceCard className="border border-white/12 bg-white/92 p-4.5 text-slate-950">
+                <SurfaceCard className="border border-white/12 bg-white/92 p-4 text-slate-950">
                   <div className="text-xs uppercase tracking-[0.16em] text-primary-800/70">Guidance & Tips</div>
                   <div className="mt-3.5 space-y-2.5">
                     {guidanceItems.map((item) => (
@@ -193,7 +193,7 @@ export default function DevParentPage() {
                   </div>
                 </SurfaceCard>
 
-                <SurfaceCard className="border border-white/12 bg-white/92 p-4.5 text-slate-950">
+                <SurfaceCard className="border border-white/12 bg-white/92 p-4 text-slate-950">
                   <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Application Summary</div>
                   <div className="mt-3.5 grid gap-2.5 text-sm">
                     <SummaryRow label="Application ID" value={featuredApplication.ref} />
@@ -201,12 +201,12 @@ export default function DevParentPage() {
                     <SummaryRow label="Last saved" value={`22 May 2026, ${workflow.blockers.length > 0 ? '14:35' : '14:10'}`} />
                     <SummaryRow label="Status" value={<StatusBadge status={featuredApplication.status} />} />
                   </div>
-                  <button className="mt-4.5 w-full rounded-2xl bg-primary-900 px-4 py-3 text-sm font-semibold text-white shadow-[0_16px_30px_rgba(11,20,12,0.16)]">
+                  <button className="mt-4 w-full rounded-2xl bg-primary-900 px-4 py-3 text-sm font-semibold text-white shadow-[0_16px_30px_rgba(11,20,12,0.16)]">
                     Save & continue
                   </button>
                 </SurfaceCard>
 
-                <SurfaceCard className="border border-amber-200 bg-amber-50/80 p-4.5 text-slate-950">
+                <SurfaceCard className="border border-amber-200 bg-amber-50/80 p-4 text-slate-950">
                   <div className="text-xs uppercase tracking-[0.16em] text-amber-800">Progress</div>
                   <div className="mt-3.5 flex items-center gap-4">
                     <div className="flex h-20 w-20 items-center justify-center rounded-full border border-amber-200 bg-white text-2xl font-semibold text-slate-900">{progress}%</div>

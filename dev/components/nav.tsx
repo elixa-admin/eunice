@@ -50,7 +50,7 @@ export const NavBar: React.FC = () => {
               className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
                 isActive('/parent')
                   || isActive('/dev/parent')
-                  ? 'bg-white text-primary-900 shadow-[0_12px_24px_rgba(11,20,12,0.16)]'
+                  ? 'border border-accent-200 bg-[rgba(255,248,231,0.96)] text-primary-900 shadow-[0_10px_24px_rgba(202,138,4,0.12)]'
                   : 'text-white/85 hover:bg-white/10 hover:text-white'
               }`}
             >

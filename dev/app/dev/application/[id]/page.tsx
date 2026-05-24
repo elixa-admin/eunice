@@ -43,7 +43,7 @@ export default async function DevApplicationDetailPage({
       backLabel="Back to admin"
     >
       <div className="mb-5 grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
-        <SurfaceCard className="overflow-hidden border border-primary-200/70 bg-[linear-gradient(135deg,rgba(8,41,27,0.98),rgba(17,57,37,0.96)_48%,rgba(174,127,6,0.92)_100%)] p-5.5 text-white shadow-[0_26px_70px_rgba(11,20,12,0.18)]">
+        <SurfaceCard className="overflow-hidden border border-primary-200/70 bg-[linear-gradient(135deg,rgba(8,41,27,0.98),rgba(17,57,37,0.96)_48%,rgba(174,127,6,0.92)_100%)] p-5 text-white shadow-[0_26px_70px_rgba(11,20,12,0.18)]">
           <div className="flex flex-col gap-3.5 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <div className="text-xs uppercase tracking-[0.18em] text-white/70">Current status</div>
@@ -59,23 +59,23 @@ export default async function DevApplicationDetailPage({
               <div className="mt-3 text-sm leading-6 text-white/85">Review-ready profile for the admissions team.</div>
             </div>
           </div>
-          <div className="mt-5.5 grid gap-2.5 sm:grid-cols-3">
-            <div className="rounded-2xl border border-white/15 bg-white/12 px-4 py-2.75 shadow-sm backdrop-blur-md">
+          <div className="mt-5 grid gap-2.5 sm:grid-cols-3">
+            <div className="rounded-2xl border border-white/15 bg-white/12 px-4 py-3 shadow-sm backdrop-blur-md">
               <div className="text-xs uppercase tracking-[0.16em] text-white/65">Application form</div>
               <div className="mt-2 text-sm font-semibold text-white">Learner record summary</div>
             </div>
-            <div className="rounded-2xl border border-white/15 bg-white/12 px-4 py-2.75 shadow-sm backdrop-blur-md">
+            <div className="rounded-2xl border border-white/15 bg-white/12 px-4 py-3 shadow-sm backdrop-blur-md">
               <div className="text-xs uppercase tracking-[0.16em] text-white/65">Review focus</div>
               <div className="mt-2 text-sm font-semibold text-white">{counts.blocking > 0 ? 'Resolve blockers' : 'Confirm readiness'}</div>
             </div>
-            <div className="rounded-2xl border border-white/15 bg-white/12 px-4 py-2.75 shadow-sm backdrop-blur-md">
+            <div className="rounded-2xl border border-white/15 bg-white/12 px-4 py-3 shadow-sm backdrop-blur-md">
               <div className="text-xs uppercase tracking-[0.16em] text-white/65">Next action</div>
               <div className="mt-2 text-sm font-semibold text-white">School review and document check</div>
             </div>
           </div>
         </SurfaceCard>
 
-        <SurfaceCard className="p-5.5">
+        <SurfaceCard className="p-5">
           <div className="grid gap-2.5 sm:grid-cols-3">
             <div className="rounded-2xl border border-primary-100 bg-primary-50/60 p-3.5 shadow-sm">
               <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Parent</div>
@@ -97,7 +97,7 @@ export default async function DevApplicationDetailPage({
       </div>
 
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
-        <SurfaceCard className="p-5.5">
+        <SurfaceCard className="p-5">
           <div className="mb-5 grid gap-3 md:grid-cols-3">
             <div className="rounded-2xl border border-primary-100 bg-primary-50/50 p-3.5">
               <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Parent</div>
@@ -173,7 +173,7 @@ export default async function DevApplicationDetailPage({
         </SurfaceCard>
 
         <aside className="space-y-5">
-          <SurfaceCard className="p-5.5">
+          <SurfaceCard className="p-5">
             <h2 className="text-lg font-semibold text-slate-950">Review notes</h2>
             <p className="mt-2.5 text-sm leading-6 text-slate-600">{application.note}</p>
             {application.missingItems.length > 0 ? (
@@ -184,7 +184,7 @@ export default async function DevApplicationDetailPage({
             ) : null}
           </SurfaceCard>
 
-          <SurfaceCard className="p-5.5">
+          <SurfaceCard className="p-5">
             <h2 className="text-lg font-semibold text-slate-950">Triage actions</h2>
             <div className="mt-3.5 space-y-2.5 text-sm">
               <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-2.75 text-rose-800">
@@ -210,7 +210,7 @@ export default async function DevApplicationDetailPage({
             </div>
           </SurfaceCard>
 
-          <SurfaceCard className="p-5.5">
+          <SurfaceCard className="p-5">
             <h2 className="text-lg font-semibold text-slate-950">Activity</h2>
             <div className="mt-3.5 space-y-2.5">
               {application.timeline.map((entry) => (

@@ -213,7 +213,7 @@ export default function DevAdminPage() {
             </SurfaceCard>
 
             <div className="space-y-5">
-              <SurfaceCard className="border border-slate-100 bg-white/92 p-4.5">
+              <SurfaceCard className="border border-slate-100 bg-white/92 p-4">
                 <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Risk indicators</div>
                 <div className="mt-3.5 space-y-2.5 text-sm">
                   <RiskRow label="Incomplete documents" value={counts.blocking} tone="rose" />
@@ -222,11 +222,11 @@ export default function DevAdminPage() {
                 </div>
               </SurfaceCard>
 
-              <SurfaceCard className="border border-slate-100 bg-white/92 p-4.5">
+              <SurfaceCard className="border border-slate-100 bg-white/92 p-4">
                 <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Document checklist</div>
                 <div className="mt-3.5 space-y-2.5">
                   {featured.documents.map((document) => (
-                    <div key={`${document.type}-${document.uploadedAt ?? 'missing'}`} className="flex items-center justify-between rounded-2xl border border-slate-200 bg-[#fbf8f0] px-4 py-2.75">
+                    <div key={`${document.type}-${document.uploadedAt ?? 'missing'}`} className="flex items-center justify-between rounded-2xl border border-slate-200 bg-[#fbf8f0] px-4 py-3">
                       <div>
                         <div className="text-sm font-semibold text-slate-950">{getPreviewDocumentLabel(document.type)}</div>
                         <div className="text-xs text-slate-500">{document.note ?? 'No note yet.'}</div>
@@ -242,7 +242,7 @@ export default function DevAdminPage() {
                 </div>
               </SurfaceCard>
 
-              <SurfaceCard className="border border-amber-200 bg-amber-50/80 p-4.5">
+              <SurfaceCard className="border border-amber-200 bg-amber-50/80 p-4">
                 <div className="text-xs uppercase tracking-[0.16em] text-amber-800">Recommended next action</div>
                 <p className="mt-2.5 text-sm leading-6 text-slate-700">{getPreviewNextAction(featured)}</p>
                 <div className="mt-3.5 flex gap-3">

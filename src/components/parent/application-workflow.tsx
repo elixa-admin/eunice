@@ -142,6 +142,22 @@ const WORKFLOW_HIGHLIGHTS = [
   },
 ] as const;
 
+const DOCUMENT_UPLOAD_GUIDANCE: Record<DocumentType, string> = {
+  birth_cert: 'Upload a clear scan or photo of the birth certificate.',
+  learner_photo: 'Use a recent head-and-shoulders photo.',
+  motivation_letter: 'Upload the letter as a PDF or image.',
+  school_report: 'Add the latest report or results page.',
+  proof_residence: 'Use a recent utility bill or address proof.',
+  id_copy: 'Upload the parent or guardian ID copy.',
+  income_proof: 'Add proof of income or employment.',
+  medical_aid_card: 'Upload the medical aid card or membership proof.',
+  immunisation_record: 'Upload the health or immunisation record.',
+  fee_payer_id_copy: 'Upload the fee payer ID copy.',
+  residency_permit: 'Upload the permit or residency document if applicable.',
+  custody_order: 'Upload the custody or legal order if applicable.',
+  other: 'Upload any extra supporting document requested by admissions.',
+};
+
 function getDocumentCounts(
   documents: Record<DocumentType, DocumentDraft>,
   requiredTypes: DocumentType[],
@@ -158,6 +174,12 @@ function getDocumentCounts(
   ).length;
 
   return { required, complete, reviewOnly, blocking };
+}
+
+function getUploadActionLabel(document: DocumentDraft) {
+  if (document.uploadStatus === 'saved') return 'Replace file';
+  if (document.uploadStatus === 'error') return 'Try again';
+  return 'Upload file';
 }
 
 function createInitialDocumentDrafts(): Record<DocumentType, DocumentDraft> {
@@ -889,17 +911,6 @@ export default function ParentApplicationWorkflow() {
     }
   }
 
-  function loadSampleDocument(documentType: DocumentType) {
-    updateDocument(documentType, {
-      fileName: `sample-${documentType}.pdf`,
-      validationState: 'accepted',
-      message: 'Sample document attached for the preview flow.',
-      storagePath: `preview/${documentType}/sample-${documentType}.pdf`,
-      uploadedAt: new Date().toISOString(),
-      uploadStatus: 'saved',
-    });
-  }
-
   async function clearDocument(documentType: DocumentType) {
     updateDocument(documentType, {
       fileName: '',
@@ -1354,10 +1365,11 @@ export default function ParentApplicationWorkflow() {
 
                 <div className="pt-4 border-t border-slate-200 space-y-4">
                   <div className="rounded-2xl border border-primary-100 bg-primary-50/70 p-4 shadow-sm">
-                    <div className="text-sm font-semibold text-slate-950">How document checks work</div>
-                    <div className="mt-2 space-y-2 text-sm leading-6 text-slate-600">
-                      <p>Some document issues must be fixed before you submit, like the wrong file type or a file that is too large.</p>
-                      <p>Other documents can still go forward and be checked by the school later if a manual review is needed.</p>
+                    <div className="text-sm font-semibold text-slate-950">Upload guide</div>
+                    <div className="mt-2 grid gap-2 text-sm leading-6 text-slate-600 sm:grid-cols-3">
+                      <p>1. Upload one file per card.</p>
+                      <p>2. Keep files clear and under 5 MB.</p>
+                      <p>3. Replace any file that is flagged.</p>
                     </div>
                   </div>
 
@@ -1394,25 +1406,17 @@ export default function ParentApplicationWorkflow() {
                                           {documentCategoryLabels[category]}
                                         </span>
                                       </div>
-                                      <p className="mt-1 text-sm leading-6 text-slate-600">{requirement.reason}</p>
-                                      <p className="mt-1 text-sm leading-6 text-slate-600">
-                                        Accepted formats: {DOCUMENT_CONTRACTS[documentType].acceptedMimeTypes.join(', ')}.
-                                        Maximum size: {Math.round(DOCUMENT_CONTRACTS[documentType].maxFileSizeBytes / (1024 * 1024))} MB.
+                                      <p className="mt-1 text-sm leading-6 text-slate-600">{DOCUMENT_UPLOAD_GUIDANCE[documentType]}</p>
+                                      <p className="mt-1 text-xs leading-5 text-slate-500">
+                                        {getDocumentStateGuidance(document.validationState)}
                                       </p>
-                                      <p className="mt-1 text-sm leading-6 text-slate-600">{getDocumentStateGuidance(document.validationState)}</p>
-                                      {document.message !== getDocumentStateGuidance(document.validationState) ? (
-                                        <p className="mt-1 text-xs leading-5 text-slate-500">{document.message}</p>
-                                      ) : null}
                                       {document.fileName ? (
-                                        <p className="mt-1 text-xs font-medium text-slate-500">Selected file: {document.fileName}</p>
+                                        <p className="mt-2 text-xs font-medium text-slate-600">File: {document.fileName}</p>
                                       ) : null}
                                       {document.uploadedAt ? (
                                         <p className="mt-1 text-xs text-slate-500">
-                                          Saved to draft on {new Date(document.uploadedAt).toLocaleDateString()}.
+                                          Saved on {new Date(document.uploadedAt).toLocaleDateString()}.
                                         </p>
-                                      ) : null}
-                                      {document.storagePath ? (
-                                        <p className="mt-1 truncate text-[11px] leading-5 text-slate-400">Storage path: {document.storagePath}</p>
                                       ) : null}
                                     </div>
                                     <div className={`rounded-2xl border px-3 py-2 text-sm font-medium ${getValidationTone(document.validationState)}`}>
@@ -1422,7 +1426,7 @@ export default function ParentApplicationWorkflow() {
 
                                   <div className="mt-4 flex flex-wrap gap-3">
                                     <label className="inline-flex cursor-pointer items-center rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-primary-200 hover:bg-primary-50">
-                                      {uploadingDocument === documentType ? 'Saving...' : 'Choose file'}
+                                      {uploadingDocument === documentType ? 'Saving...' : getUploadActionLabel(document)}
                                       <input
                                         type="file"
                                         className="sr-only"
@@ -1430,13 +1434,6 @@ export default function ParentApplicationWorkflow() {
                                         onChange={(event) => handleFileSelect(documentType, event.target.files?.[0] ?? null)}
                                       />
                                     </label>
-                                    <button
-                                      type="button"
-                                      onClick={() => loadSampleDocument(documentType)}
-                                      className="rounded-xl border border-primary-200 bg-primary-50 px-3 py-2 text-sm font-semibold text-primary-900 transition hover:bg-primary-100"
-                                    >
-                                      Load sample
-                                    </button>
                                     <button
                                       type="button"
                                       onClick={() => clearDocument(documentType)}
@@ -1483,7 +1480,7 @@ export default function ParentApplicationWorkflow() {
                   </div>
                 </div>
                 <div className="rounded-2xl border border-primary-100 bg-primary-50 p-4 text-sm leading-6 text-slate-700">
-                  Final tip: if any uploaded document is unclear, replace it now to prevent admissions follow-up delays.
+                  If a file is blurry or wrong, replace it now.
                 </div>
               </div>
             )}
@@ -1491,12 +1488,12 @@ export default function ParentApplicationWorkflow() {
             <div className="mt-6 flex flex-col gap-3 border-t border-slate-200 pt-5 sm:flex-row sm:items-center sm:justify-between">
               <div className="text-sm text-slate-600">
                 {blockingRequiredDocuments.length > 0
-                  ? `Please fix ${blockingRequiredDocuments.length} required document${blockingRequiredDocuments.length === 1 ? '' : 's'} before you submit.`
+                  ? `Fix ${blockingRequiredDocuments.length} document${blockingRequiredDocuments.length === 1 ? '' : 's'} to continue.`
                   : reviewOnlyRequiredDocuments.length > 0
-                    ? `You can submit now. The school will manually review ${reviewOnlyRequiredDocuments.length} document${reviewOnlyRequiredDocuments.length === 1 ? '' : 's'} later.`
+                    ? `You can submit now. ${reviewOnlyRequiredDocuments.length} file${reviewOnlyRequiredDocuments.length === 1 ? '' : 's'} will be checked by the school.`
                     : isReadyToSubmit
-                      ? 'The draft is ready to submit.'
-                      : 'Complete the highlighted sections and required documents to unlock submission.'}
+                      ? 'Ready to submit.'
+                      : 'Complete the highlighted sections to continue.'}
               </div>
               <div className="flex flex-wrap gap-3">
                 <button

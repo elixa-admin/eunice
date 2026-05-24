@@ -74,7 +74,7 @@ export default function DevAdminPage() {
       description="A premium queue review surface with clearer document health, risk indicators, and next actions."
       surface="admin"
     >
-      <div className="grid gap-3 xl:grid-cols-[230px_minmax(0,1.86fr)_340px] 2xl:grid-cols-[250px_minmax(0,1.96fr)_360px]">
+      <div className="grid gap-3 xl:grid-cols-[260px_minmax(0,1fr)] 2xl:grid-cols-[280px_minmax(0,1fr)]">
         <aside className="space-y-3">
           <SurfaceCard className="border border-primary-100/80 bg-white/90 p-3.5 shadow-[0_18px_42px_rgba(11,20,12,0.06)]">
             <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Admissions</div>
@@ -106,7 +106,7 @@ export default function DevAdminPage() {
           </SurfaceCard>
         </aside>
 
-        <main className="space-y-3">
+        <main className="min-w-0 space-y-3">
           <SurfaceCard className="overflow-hidden border border-primary-200/70 bg-[linear-gradient(135deg,rgba(8,41,27,0.98),rgba(17,57,37,0.96)_48%,rgba(174,127,6,0.92)_100%)] p-0 text-white shadow-[0_26px_70px_rgba(11,20,12,0.18)]">
             <div className="border-b border-white/12 px-5 py-3">
               <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-white/80">
@@ -123,7 +123,7 @@ export default function DevAdminPage() {
                 </div>
               </div>
             </div>
-            <div className="grid gap-3 px-5 py-4 xl:grid-cols-[minmax(0,1.26fr)_minmax(320px,0.74fr)] 2xl:grid-cols-[minmax(0,1.34fr)_minmax(360px,0.66fr)]">
+            <div className="grid gap-3 px-5 py-4 xl:grid-cols-[minmax(0,1.42fr)_minmax(340px,0.58fr)] 2xl:grid-cols-[minmax(0,1.55fr)_minmax(380px,0.45fr)]">
               <div className="space-y-3.5">
                 <div className="flex flex-wrap items-center gap-3">
                   <div className="h-16 w-16 rounded-full border border-white/20 bg-white/95" />

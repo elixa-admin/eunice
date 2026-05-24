@@ -31,9 +31,9 @@ export function PreviewShell({
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-[linear-gradient(90deg,rgba(17,54,36,0.06)_1px,transparent_1px),linear-gradient(rgba(17,54,36,0.06)_1px,transparent_1px)] bg-[size:58px_58px] opacity-55"
       />
-      <div className="relative mx-auto w-full max-w-[1720px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-        <div className="mb-6 overflow-hidden rounded-[32px] border border-primary-200/60 bg-[linear-gradient(120deg,rgba(8,41,27,0.98),rgba(17,57,37,0.96)_42%,rgba(174,127,6,0.92)_100%)] px-6 py-6 shadow-[0_24px_58px_rgba(11,20,12,0.23)] lg:px-8 lg:py-7">
-          <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-white/18 pb-4">
+      <div className="relative w-full px-4 py-5 sm:px-5 lg:px-6 2xl:px-8">
+        <div className="mb-5 overflow-hidden rounded-[26px] border border-primary-200/60 bg-[linear-gradient(120deg,rgba(8,41,27,0.98),rgba(17,57,37,0.96)_42%,rgba(174,127,6,0.92)_100%)] px-5 py-5 shadow-[0_20px_48px_rgba(11,20,12,0.21)] lg:px-6 lg:py-5">
+          <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-white/18 pb-3">
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-full border border-white/40 bg-white/12 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white">
                 Eunice Admissions
@@ -47,8 +47,8 @@ export function PreviewShell({
             </div>
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-[minmax(0,1.08fr)_minmax(320px,0.92fr)] lg:items-start">
-            <div className="space-y-5">
+          <div className="grid gap-5 lg:grid-cols-[minmax(0,1.18fr)_minmax(320px,0.82fr)] lg:items-start">
+            <div className="space-y-4">
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
                   <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl border border-white/20 bg-white/95 shadow-[0_10px_24px_rgba(11,20,12,0.12)]">
@@ -57,7 +57,7 @@ export function PreviewShell({
                   <div className="text-sm uppercase tracking-[0.22em] text-white/75">Eunice High School</div>
                 </div>
                 <p className="type-label text-white/80">{eyebrow}</p>
-                <h1 className="display-serif type-display-xl max-w-4xl text-white">
+                <h1 className="display-serif type-display-lg max-w-4xl text-white">
                   {title}
                 </h1>
                 <p className="type-body max-w-3xl text-white/90">{description}</p>

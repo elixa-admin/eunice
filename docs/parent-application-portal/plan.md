@@ -55,6 +55,56 @@ Design implications:
 6. Reassure, don’t overwhelm.
 - Make the process feel manageable even if the application is long underneath the surface.
 
+## Best Practice Grounding
+
+These choices should guide every parent-facing screen:
+
+1. Start with a clear service entry point.
+- The first page should explain what the application is, who it is for, what the parent needs, and what happens next.
+- Do not drop the parent into a form before they understand the journey.
+
+2. One screen, one main job.
+- Each page should ask one main question or complete one main task.
+- If a screen starts to feel like a dump of fields, split it.
+
+3. Ask only what Eunice truly needs.
+- Do not collect information just because it might be useful someday.
+- Keep the form lean and purposeful.
+
+4. Explain why each section exists.
+- Every section should earn its place with a short purpose statement.
+- This is especially important for sensitive sections such as medical, household, and fee responsibility.
+
+5. Use progressive disclosure for conditional complexity.
+- Show extra questions only when the parent’s answers make them relevant.
+- Hide irrelevant branches so the flow stays calm.
+
+6. Make documents feel expected, not mysterious.
+- Introduce the document checklist early.
+- Explain why the school needs each document in simple language.
+- Group documents by purpose, not by internal administration structure.
+
+7. Reduce cognitive load.
+- Short headings.
+- Short paragraphs.
+- Clear labels.
+- Plain words first.
+- Visual hierarchy that makes the next action obvious.
+
+8. Design for trust and privacy.
+- Explain what data is collected, why it is needed, and how it will be used.
+- Minimise personal information to what is necessary for admissions.
+- Make the privacy cue visible without making it heavy or legalistic.
+
+9. Make mistakes recoverable.
+- Parents should be able to save, return, correct, and continue.
+- Avoid “all or nothing” states where possible.
+- Clearly separate blockers from items that can be reviewed later.
+
+10. Keep accessibility and inclusion built in.
+- The flow should work for parents with lower digital confidence, screen readers, keyboard use, and small screens.
+- Labels, instructions, and feedback should be easy to understand and consistently placed.
+
 ## Content Architecture
 
 The parent portal should include these content layers:
@@ -191,6 +241,15 @@ What it should answer:
 - Conditional fields should appear only when relevant
 - Completion should be obvious without forcing the user to interpret status codes
 - Save/return behavior should be reassuring and visible
+
+## Trust And Privacy Rules
+
+- Tell the parent why the school is asking for a piece of information before asking for it.
+- Keep sensitive information grouped and clearly labelled.
+- Only show fields that are necessary for the current step.
+- Avoid asking the same thing twice.
+- Make it clear which items are required for admissions and which are only needed in special circumstances.
+- Use plain language for privacy reassurance: what is collected, why it is collected, and who can see it.
 
 ## Design Questions To Solve
 

@@ -104,6 +104,21 @@ export default function DevAdminPage() {
 
         <main className="space-y-6">
           <SurfaceCard className="overflow-hidden border border-primary-200/70 bg-[linear-gradient(135deg,rgba(8,41,27,0.98),rgba(17,57,37,0.96)_48%,rgba(174,127,6,0.92)_100%)] p-0 text-white shadow-[0_26px_70px_rgba(11,20,12,0.18)]">
+            <div className="border-b border-white/12 px-6 py-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-white/80">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span>Queue Review</span>
+                  <span>›</span>
+                  <span>Under Review (2)</span>
+                  <span>›</span>
+                  <span className="text-white">{featured.ref}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <button className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white">Queue overview</button>
+                  <button className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white">Next</button>
+                </div>
+              </div>
+            </div>
             <div className="grid gap-6 px-6 py-6 lg:grid-cols-[1.15fr_0.85fr]">
               <div className="space-y-4">
                 <div className="flex flex-wrap items-center gap-3">

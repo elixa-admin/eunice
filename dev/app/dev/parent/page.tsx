@@ -79,13 +79,18 @@ export default function DevParentPage() {
         <main className="space-y-6">
           <SurfaceCard className="overflow-hidden border border-primary-200/70 bg-[linear-gradient(135deg,rgba(8,41,27,0.98),rgba(17,57,37,0.96)_48%,rgba(174,127,6,0.92)_100%)] p-0 text-white shadow-[0_26px_70px_rgba(11,20,12,0.18)]">
             <div className="border-b border-white/12 px-6 py-5">
-              <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <div className="text-[10px] uppercase tracking-[0.18em] text-white/70">Step {stepMeta[activeTab].label}</div>
                   <h2 className="mt-2 text-3xl font-semibold text-white">{stepMeta[activeTab].title}</h2>
                   <p className="mt-1 text-sm text-white/80">{stepMeta[activeTab].subtitle}</p>
                 </div>
-                <div className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white">Estimated time: 25-35 minutes</div>
+                <div className="flex flex-col items-end gap-2">
+                  <div className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white">Estimated time: 25-35 minutes</div>
+                  <button className="inline-flex items-center rounded-full border border-white/25 bg-white/10 px-4 py-2 text-sm font-semibold text-white">
+                    Save & exit
+                  </button>
+                </div>
               </div>
             </div>
 

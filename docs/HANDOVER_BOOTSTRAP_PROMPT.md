@@ -58,7 +58,7 @@ Compress the 13-page application into an upfront preparation screen plus a guide
 6. Review, consent, and submit
 
 Current next slice:
-Start the parent-led high-value sprint in `docs/parent-application-portal/next-two-high-value-sprints.md`: build the parent welcome and cue framework first, then flow into step expectations and document confidence before carrying cues into admin and the preview hub.
+Start the parent-led next-three-sprints queue in `docs/parent-application-portal/next-three-sprints.md`: build the guided parent welcome and simplified setup first, then flow into document confidence and no-surprises submission, then carry the cue system into Admin and the preview hub while keeping the platform white-label ready.
 
 At the start of a new session, run:
 npm run session:start

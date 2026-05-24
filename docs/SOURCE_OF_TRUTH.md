@@ -96,7 +96,9 @@ Reference docs:
 - `docs/parent-application-portal/next-two-sprints.md`
 - `docs/parent-application-portal/three-sprints.md`
 - `docs/parent-application-portal/next-two-high-value-sprints.md`
+- `docs/parent-application-portal/next-three-sprints.md`
 - `docs/SPRINT_NEXT_LANDSCAPE_UI.md`
+- `docs/phase-next-level-output/plan.md`
 - `docs/phase-next-level-output/plan.md`
 - `docs/SPRINT_MICRO_SLICES_NEXT.md`
 

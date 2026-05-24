@@ -126,38 +126,49 @@ export default function DevAdminPage() {
             </div>
             <div className="grid gap-3 px-5 py-4 xl:grid-cols-[minmax(0,1.42fr)_minmax(340px,0.58fr)] 2xl:grid-cols-[minmax(0,1.55fr)_minmax(380px,0.45fr)]">
               <div className="space-y-3.5">
-                <div className="flex flex-wrap items-center gap-3">
-                  <div className="h-16 w-16 rounded-full border border-white/20 bg-white/95" />
-                  <div>
+                <div className="grid gap-3 sm:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+                  <div className="rounded-[24px] border border-white/15 bg-[#0c4b2b] p-4 shadow-[0_14px_32px_rgba(0,0,0,0.14)]">
                     <div className="text-xs uppercase tracking-[0.18em] text-white/70">Selected application</div>
-                    <h2 className="mt-1 text-3xl font-semibold text-white">{featured.learnerName}</h2>
-                    <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-white/85">
-                      <span>{featured.ref}</span>
-                      <span className="rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-xs font-semibold">{reviewState === 'blocked' ? 'Under review' : reviewState === 'review' ? 'Needs review' : reviewState === 'ready' ? 'Ready' : 'Complete'}</span>
+                    <div className="mt-3 flex flex-wrap items-center gap-3">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-white/95 text-[#073820]">
+                        <span className="text-lg font-semibold">{featured.learnerName.charAt(0)}</span>
+                      </div>
+                      <div>
+                        <h2 className="text-3xl font-semibold text-white">{featured.learnerName}</h2>
+                        <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-white/85">
+                          <span>{featured.ref}</span>
+                          <span className="rounded-full border border-white/20 bg-white/12 px-2.5 py-1 text-xs font-semibold">{reviewState === 'blocked' ? 'Under review' : reviewState === 'review' ? 'Needs review' : reviewState === 'ready' ? 'Ready' : 'Complete'}</span>
+                        </div>
+                      </div>
                     </div>
+                  </div>
+                  <div className="grid gap-2.5">
+                    <MetricCard label="Assigned reviewer" value={featured.assignedTo} />
+                    <MetricCard label="Grade applying for" value={featured.grade} />
+                    <MetricCard label="Application submitted" value={featured.submittedAt} />
                   </div>
                 </div>
 
-                <div className="grid gap-2.5 sm:grid-cols-3">
-                  <MetricCard label="Assigned reviewer" value={featured.assignedTo} />
-                  <MetricCard label="Grade applying for" value={featured.grade} />
-                  <MetricCard label="Application submitted" value={featured.submittedAt} />
+                <div className="grid gap-3 sm:grid-cols-3">
+                  <StatusBarometer label="Blocking" value={laneCounts.blocking} tone="rose" detail="Needs attention" />
+                  <StatusBarometer label="Needs review" value={laneCounts.review} tone="amber" detail="Staff decision" />
+                  <StatusBarometer label="Ready" value={laneCounts.ready} tone="emerald" detail="Clear for next step" />
                 </div>
               </div>
 
               <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-1">
-                <div className="rounded-[24px] border border-white/12 bg-white/12 p-3.5 backdrop-blur-md">
+                <div className="rounded-[24px] border border-white/15 bg-white/12 p-3.5 backdrop-blur-md">
                   <div className="text-xs uppercase tracking-[0.16em] text-white/70">Queue health</div>
                   <div className="mt-2.5 grid gap-2">
                     {(['blocking', 'review', 'ready', 'decision'] as const).map((key) => (
-                      <div key={key} className="flex items-center justify-between rounded-xl bg-white/10 px-3 py-2 text-sm text-white">
+                      <div key={key} className="flex items-center justify-between rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-sm text-white">
                         <span>{laneMeta[key].label}</span>
                         <span className="font-semibold">{laneCounts[key]}</span>
                       </div>
                     ))}
                   </div>
                 </div>
-                <div className="rounded-[24px] border border-white/12 bg-white/12 p-3.5 backdrop-blur-md">
+                <div className="rounded-[24px] border border-white/15 bg-white/12 p-3.5 backdrop-blur-md">
                   <div className="text-xs uppercase tracking-[0.16em] text-white/70">Next action</div>
                   <p className="mt-2 text-sm leading-6 text-white/90">{getPreviewNextAction(featured)}</p>
                 </div>
@@ -269,6 +280,46 @@ function MetricCard({ label, value }: { label: string; value: string }) {
     <div className="rounded-[24px] border border-white/12 bg-white/12 p-4 backdrop-blur-md">
       <div className="text-xs uppercase tracking-[0.16em] text-white/70">{label}</div>
       <div className="mt-2 text-sm font-semibold text-white">{value}</div>
+    </div>
+  );
+}
+
+function StatusBarometer({
+  label,
+  value,
+  tone,
+  detail,
+}: {
+  label: string;
+  value: number;
+  tone: 'rose' | 'amber' | 'emerald';
+  detail: string;
+}) {
+  const ring =
+    tone === 'rose'
+      ? 'border-rose-200 text-rose-800'
+      : tone === 'amber'
+        ? 'border-amber-200 text-amber-900'
+        : 'border-emerald-200 text-emerald-800';
+  const accent =
+    tone === 'rose'
+      ? 'bg-rose-500'
+      : tone === 'amber'
+        ? 'bg-amber-500'
+        : 'bg-emerald-500';
+
+  return (
+    <div className="rounded-[24px] border border-white/15 bg-white/12 p-3.5 backdrop-blur-md">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <div className="text-xs uppercase tracking-[0.16em] text-white/70">{label}</div>
+          <div className="mt-1 text-sm font-semibold text-white/95">{detail}</div>
+        </div>
+        <div className={`flex h-12 w-12 items-center justify-center rounded-full border bg-white text-sm font-semibold ${ring}`}>{value}</div>
+      </div>
+      <div className={`mt-3 h-1.5 w-full overflow-hidden rounded-full bg-white/12`}>
+        <div className={`h-full rounded-full ${accent}`} style={{ width: `${Math.max(18, Math.min(100, value * 22))}%` }} />
+      </div>
     </div>
   );
 }

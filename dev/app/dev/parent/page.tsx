@@ -10,56 +10,56 @@ import { getParentWorkflowSnapshot, previewApplications, type ParentWorkflowStep
 const stepOrder: ParentWorkflowStepKey[] = ['checklist', 'learner', 'household', 'medical', 'fees_docs', 'review'];
 
 const stepMeta: Record<ParentWorkflowStepKey, { title: string; subtitle: string; label: string }> = {
-  checklist: { title: 'Before You Begin', subtitle: 'Prepare documents and understand the journey', label: '1' },
-  learner: { title: 'Learner Details', subtitle: 'About your child', label: '2' },
-  household: { title: 'Parent & Guardian', subtitle: 'Your contact details', label: '3' },
-  medical: { title: 'Medical & Support', subtitle: 'Health and wellbeing', label: '4' },
-  fees_docs: { title: 'Documents & Fees', subtitle: 'Uploads and payment', label: '5' },
-  review: { title: 'Review & Submit', subtitle: 'Check and confirm', label: '6' },
+  checklist: { title: 'Welcome & checklist', subtitle: 'Start here', label: '1' },
+  learner: { title: 'Your child', subtitle: 'Tell us who is applying', label: '2' },
+  household: { title: 'You and your contact details', subtitle: 'Who we should reach', label: '3' },
+  medical: { title: 'Care and support', subtitle: 'Anything we should know', label: '4' },
+  fees_docs: { title: 'Fees & documents', subtitle: 'What to upload', label: '5' },
+  review: { title: 'Review & send', subtitle: 'Check before submission', label: '6' },
 };
 
 const guidanceItems = [
-  { title: 'Who should complete this?', body: 'The parent or legal guardian who will manage the application should start here.' },
-  { title: 'Admissions criteria', body: 'Gather documents now so the flow stays smooth and nothing gets held up later.' },
-  { title: 'What happens next?', body: 'Once submitted, the admissions team reviews your file and may request clarifications or re-uploads.' },
+  { title: 'Who should start this?', body: 'The parent or legal guardian who will manage the application should begin here. If someone is helping, keep them nearby for the final check.' },
+  { title: 'Admissions criteria', body: 'Keep the key documents close by so we can explain each one before you upload it.' },
+  { title: 'What happens next?', body: 'After you submit, Eunice reviews the application and lets you know if anything still needs attention.' },
 ] as const;
 
 const stepExpectations: Record<ParentWorkflowStepKey, { purpose: string; prepare: string; next: string; timing: string }> = {
   checklist: {
-    purpose: 'Get ready before you begin.',
-    prepare: 'Have your ID, learner documents, and contact details nearby.',
-    next: 'Once you start, we’ll guide you step by step.',
-    timing: 'This first screen takes only a minute or two.',
+    purpose: 'Start here. We will keep the journey short and clear.',
+    prepare: 'Have your ID, the learner’s basic details, and a few key documents nearby.',
+    next: 'Once you begin, we will guide you one step at a time.',
+    timing: 'This first screen usually only takes a minute or two.',
   },
   learner: {
-    purpose: 'Tell us who the child is and what they are applying for.',
-    prepare: 'Keep the learner’s details and school history close by.',
-    next: 'After this, we’ll move to parent and household details.',
-    timing: 'Usually a short section if the details are ready.',
+    purpose: 'We ask for the learner’s details first so the application follows the right school and grade path.',
+    prepare: 'Keep the learner’s name, date of birth, and current school information close by.',
+    next: 'After this, we will ask for the parent or guardian details.',
+    timing: 'Usually a quick section if the details are ready.',
   },
   household: {
-    purpose: 'Capture the responsible adult and household contact information.',
-    prepare: 'Have the parent or guardian contact details ready.',
-    next: 'Then we’ll ask about support, health, and readiness.',
-    timing: 'This stays short unless extra context is needed.',
+    purpose: 'We use this to know who to contact and who is responsible for the application.',
+    prepare: 'Have the parent or guardian contact details ready, including a phone number and email address.',
+    next: 'Then we will move into any care, support, or health information that matters.',
+    timing: 'This section stays short unless extra context is needed.',
   },
   medical: {
-    purpose: 'Share any care or support information we need to know.',
-    prepare: 'Only share what is relevant to Eunice supporting the learner well.',
-    next: 'Next we’ll handle fees and document uploads.',
-    timing: 'We only ask follow-up questions if they matter.',
+    purpose: 'Only share the care, health, or support details that would help Eunice support your child well.',
+    prepare: 'Share what is relevant and leave out anything that does not apply.',
+    next: 'After this, we will handle the uploads and any fee-related details that apply.',
+    timing: 'We only ask follow-up questions when they are needed.',
   },
   fees_docs: {
-    purpose: 'Confirm fee responsibility and collect the required documents.',
-    prepare: 'Keep your documents ready and make sure images are clear.',
-    next: 'Once complete, you’ll review everything before submission.',
-    timing: 'This is usually the heaviest section, but we keep it guided.',
+    purpose: 'This is where we collect the documents and any fee details needed for the application to move forward.',
+    prepare: 'Keep your documents ready and make sure every upload is clear and readable.',
+    next: 'Once this is done, you will see a final review before you send the application.',
+    timing: 'This is usually the busiest section, so we keep it guided and clear.',
   },
   review: {
-    purpose: 'Check everything, confirm consent, and submit with confidence.',
-    prepare: 'Take a moment to review anything that still needs attention.',
-    next: 'After submission, the admissions team will review your application.',
-    timing: 'This is the final step before the file enters the queue.',
+    purpose: 'This is your final check before you send it to Eunice.',
+    prepare: 'Pause here and review anything that still needs attention.',
+    next: 'After submission, the admissions team reviews the application and contacts you if anything else is needed.',
+    timing: 'This is the last step before your file enters the queue.',
   },
 };
 
@@ -82,12 +82,12 @@ const documentGroups = [
 ] as const;
 
 const stepHighlights: Record<ParentWorkflowStepKey, { title: string; detail: string }> = {
-  checklist: { title: 'Start with the checklist', detail: 'Understand the journey and prepare before the form begins.' },
-  learner: { title: 'Learner details', detail: 'Capture the learner’s identity and grade context clearly.' },
-  household: { title: 'Household details', detail: 'Tell us who is responsible and how we should contact you.' },
-  medical: { title: 'Care and support', detail: 'Share only the information Eunice needs to support the learner well.' },
-  fees_docs: { title: 'Fees and documents', detail: 'Group uploads by purpose and keep the important files ready.' },
-  review: { title: 'Review and submit', detail: 'Check for missing items before you send the application in.' },
+  checklist: { title: 'Start here', detail: 'See what to prepare before you begin.' },
+  learner: { title: 'About your child', detail: 'Capture the learner’s basic details and grade context.' },
+  household: { title: 'Who to contact', detail: 'Tell us who is responsible and how we should reach you.' },
+  medical: { title: 'Support information', detail: 'Share only the details Eunice needs to support your child.' },
+  fees_docs: { title: 'Uploads and fees', detail: 'Keep the important documents together and upload them when prompted.' },
+  review: { title: 'Check and send', detail: 'Review the full application before you submit it.' },
 };
 
 export default function DevParentPage() {
@@ -103,8 +103,8 @@ export default function DevParentPage() {
   return (
     <PreviewShell
       eyebrow="Dev Preview"
-      title="Parent Application Process"
-      description="A calm, guided admissions journey that makes the next step obvious and keeps documents in view."
+      title="Apply for your child"
+      description="A calm, guided admissions journey for first-time parents so you always know what comes next."
       surface="parent"
       backLabel="Back to preview hub"
     >
@@ -241,7 +241,7 @@ export default function DevParentPage() {
                               : 'border-emerald-200 text-emerald-800'
                         }`}>{progress}%</div>
                         <div className="space-y-1 text-sm leading-6 text-slate-600">
-                          <p className="font-medium text-slate-800">{workflow.canSubmit ? 'Ready to review and submit.' : 'Work through the current step before moving on.'}</p>
+                          <p className="font-medium text-slate-800">{workflow.canSubmit ? 'Ready to review and send.' : 'Work through the current step before moving on.'}</p>
                           <p className="text-slate-700">
                             {workflow.readyRequiredDocuments} of {workflow.totalRequiredDocuments} required documents are ready.
                           </p>
@@ -268,7 +268,7 @@ export default function DevParentPage() {
                       </div>
                     </div>
                     <div className="rounded-[24px] border border-slate-200 bg-[#fffdf8] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
-                      <div className="text-xs uppercase tracking-[0.18em] text-slate-700">What happens next</div>
+                      <div className="text-xs uppercase tracking-[0.18em] text-slate-700">Next up</div>
                       <div className="mt-2 space-y-2 text-sm leading-6 text-slate-700">
                         <p>{stepExpectations[activeTab].prepare}</p>
                         <p>{stepExpectations[activeTab].next}</p>
@@ -276,27 +276,67 @@ export default function DevParentPage() {
                     </div>
                   </div>
 
-                  <div className="mb-4 grid gap-4 xl:grid-cols-[minmax(0,1.28fr)_minmax(300px,0.72fr)] 2xl:grid-cols-[minmax(0,1.34fr)_minmax(340px,0.66fr)]">
+                  <div className="mb-4 grid gap-4 xl:grid-cols-[minmax(0,1.35fr)_minmax(280px,0.65fr)] 2xl:grid-cols-[minmax(0,1.42fr)_minmax(320px,0.58fr)]">
                     <div className="space-y-2.5">
                       <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Before you begin</div>
-                      <div className="grid gap-2.5 sm:grid-cols-2">
-                        {[
-                          ['Prepare documents', 'Keep the learner’s details and key documents nearby.'],
-                          ['Save and return', 'You can pause and continue later without losing your place.'],
-                          ['Review clearly', 'We will show you what is required and what can be reviewed later.'],
-                          ['Stay informed', 'We will explain what happens after each step.'],
-                        ].map(([title, body]) => (
-                          <div key={title} className="rounded-2xl border border-primary-100 bg-[#fffdf8] p-3.5 shadow-[0_8px_18px_rgba(11,20,12,0.03)]">
-                            <div className="text-sm font-semibold text-slate-950">{title}</div>
-                            <div className="mt-1 text-sm leading-6 text-slate-700">{body}</div>
+                      <div className="rounded-[28px] border border-primary-100 bg-[#fffdf8] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
+                        <div className="grid gap-4 md:grid-cols-[auto_minmax(0,1fr)]">
+                          <div className="flex items-start gap-3 md:pt-1">
+                            <div className="flex flex-col items-center gap-1">
+                              {['1', '2', '3'].map((step, index) => (
+                                <div key={step} className="flex flex-col items-center">
+                                  <div
+                                    className={`flex h-9 w-9 items-center justify-center rounded-full border text-xs font-semibold ${
+                                      index === 0
+                                        ? 'border-primary-900 bg-primary-900 text-white'
+                                        : index === 1
+                                          ? 'border-[#b88907] bg-[#fff8e7] text-[#3a2b07]'
+                                          : 'border-slate-300 bg-white text-slate-600'
+                                    }`}
+                                  >
+                                    {step}
+                                  </div>
+                                  {index < 2 ? <div className="h-8 w-px bg-slate-200" /> : null}
+                                </div>
+                              ))}
+                            </div>
                           </div>
-                        ))}
+                          <div className="min-w-0 space-y-3">
+                            <div>
+                              <div className="text-sm font-semibold text-slate-950">What to have ready</div>
+                              <div className="mt-1 text-sm leading-6 text-slate-700">
+                                Keep the learner’s details, your contact information, and the main documents nearby.
+                              </div>
+                            </div>
+                            <div className="rounded-2xl border border-primary-100 bg-white p-3">
+                              <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Why we ask for it</div>
+                              <div className="mt-1 text-sm leading-6 text-slate-700">
+                                These details help Eunice match the application to the right learner, contact the right adult, and review the file without delays.
+                              </div>
+                            </div>
+                            <div className="grid gap-2 sm:grid-cols-3">
+                              {[
+                                ['Learner details', 'Name, date of birth, and school background.'],
+                                ['Parent contact', 'Phone number and email address.'],
+                                ['Key documents', 'Birth certificate and latest report.'],
+                              ].map(([title, body]) => (
+                                <div key={title} className="rounded-2xl border border-primary-100 bg-white p-3 shadow-[0_8px_18px_rgba(11,20,12,0.03)]">
+                                  <div className="text-sm font-semibold text-slate-950">{title}</div>
+                                  <div className="mt-1 text-sm leading-6 text-slate-700">{body}</div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="mt-4 rounded-2xl border border-dashed border-primary-200 bg-primary-50/35 px-3 py-2 text-sm leading-6 text-slate-700">
+                          You can save and come back at any point, so this never has to be finished in one sitting.
+                        </div>
                       </div>
                     </div>
                     <div className="rounded-[24px] border border-slate-200 bg-[#fffdf8] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
                       <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Document readiness</div>
                       <div className="mt-2 text-sm leading-6 text-slate-700">
-                        We group documents by purpose so you can see what matters most without scanning a long list.
+                        We group documents by purpose so you can see what to prepare first without a long list in the way.
                       </div>
                       <div className="mt-3.5 space-y-3">
                         {documentGroups.map((group) => (
@@ -306,12 +346,9 @@ export default function DevParentPage() {
                                 <div className="text-sm font-semibold text-slate-950">{group.title}</div>
                                 <div className="mt-1 text-xs leading-5 text-slate-600">{group.why}</div>
                               </div>
-                              <span className="rounded-full border border-primary-100 bg-[#fff8e7] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#3a2b07]">
-                                {group.items.length} items
-                              </span>
                             </div>
                             <div className="mt-3 space-y-2">
-                              {group.items.map((item) => (
+                              {group.items.slice(0, 2).map((item) => (
                                 <div key={item} className="flex items-center justify-between rounded-xl border border-slate-200 bg-[#fbf8f0] px-3 py-2">
                                   <div>
                                     <div className="text-sm font-semibold text-slate-950">{item}</div>
@@ -330,12 +367,12 @@ export default function DevParentPage() {
                   <div className="rounded-[24px] border border-slate-200 bg-[#fffdf8] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
                     <div className="text-xs uppercase tracking-[0.16em] text-slate-700">{stepMeta[activeTab].title}</div>
                     <div className="mt-2 text-sm leading-6 text-slate-700">
-                      {activeTab === 'checklist' && 'This first screen is your guide to what comes next. We will keep the flow short, clear, and easy to return to.'}
+                      {activeTab === 'checklist' && 'This first screen helps you understand the journey before you begin. We keep it short, clear, and easy to return to.'}
                       {activeTab === 'learner' && 'Capture the learner’s details exactly as they appear on official records.'}
-                      {activeTab === 'household' && 'Add the parent and guardian details that admissions staff will use to contact you.'}
-                      {activeTab === 'medical' && 'Share only the care, medical, and support context we need to support your child well.'}
+                      {activeTab === 'household' && 'Add the parent or guardian details that admissions staff will use to contact you.'}
+                      {activeTab === 'medical' && 'Share only the care, medical, and support details that help Eunice support your child well.'}
                       {activeTab === 'fees_docs' && 'Confirm fee responsibility and upload the required documents with clear images.'}
-                      {activeTab === 'review' && 'Review everything once more before you submit it to the admissions queue.'}
+                      {activeTab === 'review' && 'Review everything once more before you send it to the admissions queue.'}
                     </div>
                     <div className="mt-4 rounded-2xl border border-primary-100 bg-[#fff8e7] p-3.5">
                       <div className="text-xs uppercase tracking-[0.16em] text-[#3a2b07]">Helpful reminder</div>
@@ -343,7 +380,7 @@ export default function DevParentPage() {
                         {activeTab === 'fees_docs'
                           ? 'Documents are grouped by purpose so you can focus on the important files without feeling overwhelmed.'
                           : activeTab === 'review'
-                            ? 'If something is missing, we’ll show it clearly before you submit.'
+                            ? 'If something is missing, we’ll show it clearly before you send the application.'
                             : 'You can save and return at any time if you need a break.'}
                       </div>
                     </div>
@@ -369,15 +406,15 @@ export default function DevParentPage() {
                   <div className="mt-2 grid gap-3 sm:grid-cols-3">
                     <div className="rounded-2xl border border-primary-100 bg-primary-50/45 p-3">
                       <div className="text-sm font-semibold text-slate-950">No surprises</div>
-                      <div className="mt-1 text-sm leading-6 text-slate-600">We tell you what to expect before each step and before submit.</div>
+                      <div className="mt-1 text-sm leading-6 text-slate-600">You always see what comes next before you move on.</div>
                     </div>
                     <div className="rounded-2xl border border-primary-100 bg-primary-50/45 p-3">
                       <div className="text-sm font-semibold text-slate-950">Easy to recover</div>
-                      <div className="mt-1 text-sm leading-6 text-slate-600">You can save, return, and correct without losing your place.</div>
+                      <div className="mt-1 text-sm leading-6 text-slate-600">You can save, return, and fix things without starting over.</div>
                     </div>
                     <div className="rounded-2xl border border-primary-100 bg-primary-50/45 p-3">
                       <div className="text-sm font-semibold text-slate-950">Better submissions</div>
-                      <div className="mt-1 text-sm leading-6 text-slate-600">Clear expectations help the school receive cleaner, more complete data.</div>
+                      <div className="mt-1 text-sm leading-6 text-slate-600">Clear guidance helps the school receive cleaner, more complete information.</div>
                     </div>
                   </div>
                 </div>

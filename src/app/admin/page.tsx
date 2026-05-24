@@ -864,7 +864,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="rounded-[2rem] border border-emerald-500/10 bg-emerald-950/20 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl">
+              <div className="surface-card rounded-[2rem] border border-emerald-500/10 bg-emerald-950/20 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl">
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/70">Quick views</p>
@@ -905,7 +905,7 @@ export default function AdminDashboard() {
         </section>
 
         <section className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
-          <div className="rounded-[2rem] border border-emerald-500/10 bg-emerald-950/20 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl">
+          <div className="surface-card rounded-[2rem] border border-emerald-500/10 bg-emerald-950/20 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl">
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/70">Smart insights</p>
@@ -956,7 +956,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="rounded-[2rem] border border-emerald-500/10 bg-emerald-950/20 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl">
+          <div className="surface-card rounded-[2rem] border border-emerald-500/10 bg-emerald-950/20 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl">
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-400/70">Risk flags</p>

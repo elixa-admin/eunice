@@ -36,8 +36,8 @@ export default function DevIndexPage() {
         </div>
       )}
     >
-      <div className="mb-6 grid gap-4 lg:grid-cols-[1.25fr_0.75fr]">
-        <SurfaceCard className="overflow-hidden bg-[linear-gradient(135deg,rgba(31,109,58,0.10),rgba(184,137,7,0.09))] p-7">
+      <div className="mb-6 grid gap-4 xl:grid-cols-[minmax(0,1.42fr)_minmax(360px,0.58fr)]">
+        <SurfaceCard className="overflow-hidden bg-[linear-gradient(135deg,rgba(31,109,58,0.10),rgba(184,137,7,0.09))] p-7 xl:min-h-[320px]">
           <div className="mb-5 flex items-start justify-between gap-4">
             <div>
               <div className="mb-3 flex items-center gap-3">
@@ -56,7 +56,7 @@ export default function DevIndexPage() {
               Active lane
             </div>
           </div>
-          <div className="mb-5 grid gap-3 sm:grid-cols-4">
+          <div className="mb-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             {[
               ['Discover', 'Website entry point', 'Homepage and admissions routes'],
               ['Apply', 'Form-led journey', 'Parents submit and save progress'],
@@ -70,7 +70,7 @@ export default function DevIndexPage() {
               </div>
             ))}
           </div>
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid gap-3 md:grid-cols-3">
             <div className="rounded-2xl border border-primary-100 bg-white/88 px-4 py-3">
               <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Public flow</div>
               <div className="mt-2 text-sm font-semibold text-slate-950">Academic and calm</div>
@@ -86,9 +86,9 @@ export default function DevIndexPage() {
           </div>
         </SurfaceCard>
 
-        <SurfaceCard className="overflow-hidden p-7">
+        <SurfaceCard className="overflow-hidden p-7 xl:min-h-[320px]">
           <p className="text-xs uppercase tracking-[0.18em] text-primary-700/75">Site cues</p>
-          <div className="mt-4 space-y-3">
+          <div className="mt-4 grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
             <div className="rounded-2xl border border-primary-100 bg-primary-50/55 px-4 py-3">
               <div className="text-sm font-semibold text-slate-950">School website rhythm</div>
               <div className="mt-1 text-sm text-slate-600">The landing frame should feel designed, not assembled.</div>
@@ -105,7 +105,7 @@ export default function DevIndexPage() {
         </SurfaceCard>
       </div>
 
-      <div className="grid gap-5 md:grid-cols-3">
+      <div className="grid gap-5 lg:grid-cols-3">
         {previewLinks.map((link) => (
           <Link key={link.href} href={link.href} className="block transition hover:-translate-y-1">
             <SurfaceCard className="h-full p-6 transition hover:border-primary-200 hover:shadow-[0_24px_60px_rgba(22,163,74,0.12)]">

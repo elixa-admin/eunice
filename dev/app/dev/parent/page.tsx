@@ -40,7 +40,7 @@ export default function DevParentPage() {
       surface="parent"
       backLabel="Back to preview hub"
     >
-      <div className="grid gap-3 xl:grid-cols-[220px_minmax(0,2.1fr)_300px] 2xl:grid-cols-[240px_minmax(0,2.2fr)_320px]">
+      <div className="grid gap-3 xl:grid-cols-[230px_minmax(0,1.95fr)_340px] 2xl:grid-cols-[250px_minmax(0,2.08fr)_360px]">
         <aside className="space-y-3">
           <SurfaceCard className="border border-primary-100/80 bg-white/85 p-3.5 shadow-[0_18px_42px_rgba(11,20,12,0.06)]">
             <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">My Application</div>
@@ -98,7 +98,7 @@ export default function DevParentPage() {
               </div>
             </div>
 
-            <div className="grid gap-3 px-5 py-4 xl:grid-cols-[minmax(0,1.48fr)_minmax(280px,0.52fr)] 2xl:grid-cols-[minmax(0,1.58fr)_minmax(300px,0.42fr)]">
+            <div className="grid gap-3 px-5 py-4 xl:grid-cols-[minmax(0,1.38fr)_minmax(300px,0.62fr)] 2xl:grid-cols-[minmax(0,1.46fr)_minmax(340px,0.54fr)]">
               <div className="space-y-4">
                 <div className="flex items-center gap-2.5 overflow-x-auto pb-1">
                   {stepOrder.map((step, index) => {
@@ -133,10 +133,10 @@ export default function DevParentPage() {
                 </div>
 
                 <div className="rounded-[28px] border border-white/12 bg-white/95 p-4 text-slate-950 shadow-[0_18px_50px_rgba(11,20,12,0.10)]">
-                  <div className="mb-4 grid gap-4 xl:grid-cols-[minmax(0,1.18fr)_minmax(280px,0.82fr)] 2xl:grid-cols-[minmax(0,1.24fr)_minmax(320px,0.76fr)]">
+                  <div className="mb-4 grid gap-4 xl:grid-cols-[minmax(0,1.28fr)_minmax(300px,0.72fr)] 2xl:grid-cols-[minmax(0,1.34fr)_minmax(340px,0.66fr)]">
                     <div className="space-y-2.5">
                       <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Before you begin</div>
-                      <div className="grid gap-2.5 sm:grid-cols-2">
+                      <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2">
                         {[
                           ['Prepare documents', 'Have the required documents ready for upload.'],
                           ['Estimated time', 'This application takes about 25-30 minutes.'],
@@ -185,7 +185,7 @@ export default function DevParentPage() {
               </div>
 
               <div className="space-y-3">
-                <SurfaceCard className="border border-white/12 bg-white/92 p-4 text-slate-950">
+                <SurfaceCard className="border border-white/12 bg-white/92 p-4 text-slate-950 xl:min-h-[280px]">
                   <div className="text-xs uppercase tracking-[0.16em] text-primary-800/70">Guidance & Tips</div>
                   <div className="mt-3.5 space-y-2.5">
                     {guidanceItems.map((item) => (
@@ -197,7 +197,7 @@ export default function DevParentPage() {
                   </div>
                 </SurfaceCard>
 
-                <SurfaceCard className="border border-white/12 bg-white/92 p-4 text-slate-950">
+                <SurfaceCard className="border border-white/12 bg-white/92 p-4 text-slate-950 xl:min-h-[236px]">
                   <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Application Summary</div>
                   <div className="mt-3.5 grid gap-2.5 text-sm">
                     <SummaryRow label="Application ID" value={featuredApplication.ref} />
@@ -210,7 +210,7 @@ export default function DevParentPage() {
                   </button>
                 </SurfaceCard>
 
-                <SurfaceCard className="border border-amber-200 bg-amber-50/80 p-4 text-slate-950">
+                <SurfaceCard className="border border-amber-200 bg-amber-50/80 p-4 text-slate-950 xl:min-h-[160px]">
                   <div className="text-xs uppercase tracking-[0.16em] text-amber-800">Progress</div>
                   <div className="mt-3.5 flex items-center gap-4">
                     <div className="flex h-20 w-20 items-center justify-center rounded-full border border-amber-200 bg-white text-2xl font-semibold text-slate-900">{progress}%</div>

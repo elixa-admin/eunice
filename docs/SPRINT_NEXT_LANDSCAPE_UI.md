@@ -21,15 +21,13 @@ The sprint should deliver:
 
 | # | Slice | Status | Why it matters |
 |---|---|---|---|
-| 1 | Shared visual shell | Now | Sets the brand frame for every preview page |
-| 2 | Parent wide flow | Next | Makes the parent journey feel calm and premium |
-| 3 | Admin review surface | Next | Makes queue health and next action obvious |
-| 4 | Preview hub polish | Later | Keeps the landing point coherent and useful |
-| 5 | Docs and handoff sync | Later | Preserves continuity for the next session |
+| 1 | Parent guided wizard uplift | Now | Biggest user-facing UX win and the most visible landscape improvement |
+| 2 | Admin split-view and detail clarity | Next | Makes queue review feel operational and fast |
+| 3 | Preview hub + docs polish | Later | Keeps the entrance point and handoff clean after the main UX upgrades |
 
 Owner: current sprint implementer on `codex/vercel-project-separation`
 Primary verification path: Vercel preview on `eunice-dev`
-Current work: Task 1, shared visual shell
+Current work: Slice 1, Parent guided wizard uplift
 
 ## Source References
 
@@ -55,213 +53,133 @@ Current work: Task 1, shared visual shell
 
 ## Sprint Order
 
-1. Finalize the shared visual shell and brand cues.
-2. Finish the Parent Portal as a true wide-screen guided flow.
-3. Elevate the Admin review surface and detail view.
-4. Tighten the preview hub and route cards.
-5. Sync durable docs and handoff state.
+1. Uplift the Parent Portal into a true guided wizard.
+2. Make the Admin review experience feel like a split-view operations console.
+3. Polish the preview hub and keep docs/handoff aligned.
 
 ## Current Slice
 
-Slice 1 is live: finalize the shared visual shell. That means the next implementation should start with the shell, nav, spacing, and brand treatment before touching flow content.
+Slice 1 is live: Parent guided wizard uplift. The next implementation should focus on the parent stepper, main content width, and right-rail support, not on the assessment surface or production promotion.
 
-## Task 1: Finalize The Shared Visual Shell
-
-### Goal
-
-Lock the reusable brand frame so every `dev/` screen feels like the same Eunice product.
-
-### Context
-
-The current shell is much wider and closer to the target, but it still needs final polish so the header, logo treatment, background rhythm, and selected states feel fully aligned with the primary Eunice brand.
-
-### Relevant files or references
-
-- [dev/components/preview-shell.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/components/preview-shell.tsx)
-- [dev/components/nav.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/components/nav.tsx)
-- [dev/app/globals.css](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/app/globals.css)
-- [dev/app/layout.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/app/layout.tsx)
-- [docs/UI_THEME_SPEC.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/UI_THEME_SPEC.md)
-
-### Proposed approach
-
-- Tune the shared page background, shadow depth, and border softness.
-- Keep the logo visible and consistent in the shell and nav.
-- Ensure active nav states use the cream/gold Eunice treatment.
-- Standardize typography scale and spacing rhythm for wide screens.
-
-### Acceptance criteria
-
-- The shell reads as a premium Eunice admissions frame on desktop.
-- The same visual language carries across parent, admin, and detail views.
-- Selected nav and brand cues feel intentional and not placeholder-like.
-
-### Verify
-
-- Open the `dev/` hub in wide desktop mode.
-- Check that header, nav, and card framing feel coherent.
-- Confirm the shell feels like a real product, not a wrapper.
-
-### Out of scope
-
-- Reworking page content.
-- Changing application logic.
-
-## Task 2: Finish The Parent Portal As A Wide Guided Flow
+## Task 1: Parent Guided Wizard Uplift
 
 ### Goal
 
-Make the parent experience feel like a calm, guided admissions journey that uses the full landscape width well.
+Make the parent portal feel like a premium, calm, multi-step admissions wizard that uses the screen width well.
 
 ### Context
 
-The parent page already has the right ingredients, but it still needs a stronger landscape layout and a more refined relationship between stepper, content, and guidance rail.
+The parent portal already contains the key ingredients, but the current composition still reads as a set of stacked cards. This slice should make the active step, the supporting guidance, and the required documents feel like one coherent admissions workflow.
 
 ### Relevant files or references
 
 - [dev/app/dev/parent/page.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/app/dev/parent/page.tsx)
 - [dev/lib/dev-preview-data.ts](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/lib/dev-preview-data.ts)
-- [src/components/parent/application-workflow.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/src/components/parent/application-workflow.tsx)
-- [docs/GUIDED_APPLICATION_FLOW_PLAN.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/GUIDED_APPLICATION_FLOW_PLAN.md)
+- [docs/brand/eunice-school-knowledgebase.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/brand/eunice-school-knowledgebase.md)
 
 ### Proposed approach
 
-- Rebalance the page into a stronger wide-screen admissions composition.
-- Keep the “before you begin” and document preparation panels prominent.
-- Make the guidance rail feel like a real support column.
-- Keep the progress and next-step cues calm and obvious.
+- Rebalance the left, center, and right columns so the center step content owns the page.
+- Keep the stepper visible and readable without compressing the page.
+- Make the “before you begin” content, required documents, and next-step guidance feel like a single flow.
+- Preserve the calm, premium, and brand-aligned look while reducing stacked-card fatigue.
 
 ### Acceptance criteria
 
-- The page feels like a premium guided application flow.
-- Required documents and expectations are visible up front.
-- The layout uses wide desktop space more effectively.
+- The parent page feels like a polished guided admissions wizard at desktop width.
+- Required documents and next steps remain visible and easy to understand.
+- The page no longer feels cramped or overly stacked.
 
 ### Verify
 
 - Open the Parent Portal in wide desktop preview.
-- Confirm the stepper, main content, and right rail feel balanced.
-- Check that the page no longer feels vertically cramped.
+- Confirm the active step, help rail, and document column feel balanced.
+- Check that the page uses the available landscape width more effectively.
 
 ### Out of scope
 
-- Workflow contract changes.
-- New form steps.
+- Reworking the assessment surface.
+- Changing application logic.
 
-## Task 3: Elevate The Admin Review Surface
+## Task 2: Admin Split-View And Detail Clarity
 
 ### Goal
 
-Make the admin preview feel like a confident admissions operations desk with queue health and clear next actions.
+Make the admin review experience feel like a focused split-view operations console with clear queue scanning and record inspection.
 
 ### Context
 
-The admin page is already visually stronger, but it should now be pushed toward the same polished landscape format as the reference screenshot family.
+The admin page already has a strong brand frame, but it still needs sharper separation between queue scanning, selected-row state, and the record detail surface so it can act like a real admissions desk.
 
 ### Relevant files or references
 
 - [dev/app/dev/admin/page.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/app/dev/admin/page.tsx)
 - [dev/app/dev/application/[id]/page.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/app/dev/application/[id]/page.tsx)
 - [dev/lib/dev-preview-data.ts](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/lib/dev-preview-data.ts)
+- [docs/brand/eunice-school-knowledgebase.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/brand/eunice-school-knowledgebase.md)
 
 ### Proposed approach
 
-- Strengthen list/detail balance so the queue feels like a working console.
-- Keep blocked, review, ready, and decision states obvious.
-- Make the detail panel feel like a proper admissions record.
-- Maintain the green/gold/cream brand system across the whole surface.
+- Strengthen list/detail balance so queue scanning is fast.
+- Give the selected application more room and clearer hierarchy.
+- Make the risk indicators and document checklist feel like working controls, not decorations.
+- Keep the same Eunice brand language while reducing visual noise.
 
 ### Acceptance criteria
 
+- The admin page feels like a real operations console.
 - Queue health is readable at a glance.
-- Selected rows are obvious but not noisy.
-- The detail page remains visually consistent with the parent view.
+- The detail pane feels clearly connected to the selected row.
 
 ### Verify
 
 - Open the admin preview at wide width.
-- Click between records and confirm the selection state remains clear.
-- Check that the detail pane feels aligned with the list.
+- Click between records and confirm the selected row and detail panel read clearly.
+- Check that the record pane uses the space better than before.
 
 ### Out of scope
 
 - Backend queue logic.
 - Real review actions.
 
-## Task 4: Tighten The Preview Hub And Route Cards
+## Task 3: Preview Hub And Docs Polish
 
 ### Goal
 
-Make the `dev/` entry surface feel polished and useful as a product preview hub.
+Keep the preview hub useful and keep the durable docs aligned after the main UX improvements.
 
 ### Context
 
-The preview hub now carries the right brand cues, but it should still feel like a carefully designed landing point rather than a generic link grid.
+The preview hub and handoff docs already exist, but they should remain aligned with the latest phase and keep the next session easy to start without rediscovery.
 
 ### Relevant files or references
 
 - [dev/app/dev/page.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/app/dev/page.tsx)
 - [dev/components/surface-card.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/components/surface-card.tsx)
+- [docs/SOURCE_OF_TRUTH.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SOURCE_OF_TRUTH.md)
+- [docs/HANDOVER_BOOTSTRAP_PROMPT.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/HANDOVER_BOOTSTRAP_PROMPT.md)
 
 ### Proposed approach
 
-- Refine the route cards and supporting callouts.
+- Refine the route cards and top-level callouts.
 - Keep the preview hub visually consistent with the rest of the `dev/` system.
-- Make the landing page feel like part of the same admissions product family.
+- Reconfirm that the docs point to the right phase, the right surface, and the right boundary rules.
 
 ### Acceptance criteria
 
-- The hub feels like a designed control center, not a card list.
-- Route cards are easy to scan and use.
-- Branding and spacing feel consistent with the rest of the preview.
+- The hub feels like a designed entrance, not just a link list.
+- The docs are aligned with the current phase and boundary rules.
+- The next session can start without rediscovery.
 
 ### Verify
 
 - Open the preview hub and scan the route cards.
-- Confirm the branding and spacing match the rest of the system.
+- Confirm the docs reflect the current phase and sprint plan.
 
 ### Out of scope
 
 - Adding new routes.
 - Changing preview data.
-
-## Task 5: Sync Docs And Handoff State
-
-### Goal
-
-Keep the sprint and bootstrap docs aligned so the next session can continue without rediscovery.
-
-### Context
-
-The work is now in a more stable layout phase, so the durable docs should explicitly point to this sprint and its order.
-
-### Relevant files or references
-
-- [docs/SOURCE_OF_TRUTH.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SOURCE_OF_TRUTH.md)
-- [docs/HANDOVER_BOOTSTRAP_PROMPT.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/HANDOVER_BOOTSTRAP_PROMPT.md)
-- [docs/SPRINT_MICRO_SLICES_NEXT.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_MICRO_SLICES_NEXT.md)
-- [docs/SESSION_INTEGRATION_MEMORY.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SESSION_INTEGRATION_MEMORY.md)
-
-### Proposed approach
-
-- Record the current landscape UI sprint as the active next sprint.
-- Update the handoff bootstrap prompt to point at this plan.
-- Keep the source-of-truth doc and sprint queue consistent.
-
-### Acceptance criteria
-
-- A fresh agent can find the current sprint direction immediately.
-- The docs point to the same live branch and primary surface.
-- The next implementation slice is unambiguous.
-
-### Verify
-
-- Read the docs from a cold start and confirm the current sprint is obvious.
-- Check that the sprint order matches the intended implementation plan.
-
-### Out of scope
-
-- Rewriting broader project governance.
 
 ## Exit Criteria
 

@@ -74,7 +74,7 @@ export default function DevAdminPage() {
       description="A premium queue review surface with clearer document health, risk indicators, and next actions."
       surface="admin"
     >
-      <div className="grid gap-3 xl:grid-cols-[220px_minmax(0,1.72fr)_320px] 2xl:grid-cols-[240px_minmax(0,1.82fr)_340px]">
+      <div className="grid gap-3 xl:grid-cols-[230px_minmax(0,1.86fr)_340px] 2xl:grid-cols-[250px_minmax(0,1.96fr)_360px]">
         <aside className="space-y-3">
           <SurfaceCard className="border border-primary-100/80 bg-white/90 p-3.5 shadow-[0_18px_42px_rgba(11,20,12,0.06)]">
             <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Admissions</div>
@@ -123,7 +123,7 @@ export default function DevAdminPage() {
                 </div>
               </div>
             </div>
-            <div className="grid gap-3 px-5 py-4 xl:grid-cols-[minmax(0,1.38fr)_minmax(280px,0.62fr)] 2xl:grid-cols-[minmax(0,1.46fr)_minmax(300px,0.54fr)]">
+            <div className="grid gap-3 px-5 py-4 xl:grid-cols-[minmax(0,1.26fr)_minmax(320px,0.74fr)] 2xl:grid-cols-[minmax(0,1.34fr)_minmax(360px,0.66fr)]">
               <div className="space-y-3.5">
                 <div className="flex flex-wrap items-center gap-3">
                   <div className="h-16 w-16 rounded-full border border-white/20 bg-white/95" />
@@ -164,7 +164,7 @@ export default function DevAdminPage() {
             </div>
           </SurfaceCard>
 
-          <div className="grid gap-3 xl:grid-cols-[minmax(0,1.28fr)_minmax(0,0.72fr)] 2xl:grid-cols-[minmax(0,1.34fr)_minmax(0,0.66fr)]">
+          <div className="grid gap-3 xl:grid-cols-[minmax(0,1.36fr)_minmax(0,0.64fr)] 2xl:grid-cols-[minmax(0,1.42fr)_minmax(0,0.58fr)]">
             <SurfaceCard className="overflow-hidden border border-slate-100 bg-white/92 p-0 shadow-[0_18px_40px_rgba(11,20,12,0.06)]">
               <div className="border-b border-slate-100 bg-[#faf7ef] px-6 py-4">
                 <SectionHeading title="Admissions Queue" description="Click any row to load the record into the review panel." />
@@ -188,7 +188,7 @@ export default function DevAdminPage() {
                         <tr
                           key={app.id}
                           onClick={() => setSelectedAppId(app.id)}
-                          className={`cursor-pointer border-l-4 transition ${isSelected ? 'border-l-accent-500 bg-[rgba(255,248,231,0.72)]' : laneMeta[appLane].row}`}
+                          className={`cursor-pointer border-l-4 transition ${isSelected ? 'border-l-accent-500 bg-[rgba(255,248,231,0.82)] shadow-[inset_0_0_0_1px_rgba(202,138,4,0.12)]' : laneMeta[appLane].row}`}
                         >
                           <td className="px-6 py-3.5">
                             <div className="font-semibold text-slate-950">{app.ref}</div>
@@ -216,7 +216,7 @@ export default function DevAdminPage() {
               </div>
             </SurfaceCard>
 
-            <div className="space-y-5">
+            <div className="space-y-4">
               <SurfaceCard className="border border-slate-100 bg-white/92 p-4">
                 <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Risk indicators</div>
                 <div className="mt-3.5 space-y-2.5 text-sm">

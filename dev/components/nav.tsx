@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -19,19 +20,14 @@ export const NavBar: React.FC = () => {
           {/* Logo and Brand */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center gap-2 group">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/20 bg-white/95 transition-all group-hover:border-white/35 group-hover:shadow-[0_10px_24px_rgba(11,20,12,0.12)]">
-                <svg
-                  viewBox="0 0 32 32"
-                  fill="none"
-                  className="h-5 w-5 stroke-primary-900"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M6 8h20M6 16h14M6 24h8"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                  />
-                </svg>
+              <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-2xl border border-white/20 bg-white/95 transition-all group-hover:border-white/35 group-hover:shadow-[0_10px_24px_rgba(11,20,12,0.12)]">
+                <Image
+                  src="/favicon.ico"
+                  alt="Eunice logo"
+                  width={28}
+                  height={28}
+                  className="h-7 w-7 object-contain"
+                />
               </div>
               <div className="leading-tight">
                 <span className="display-serif block text-[1.28rem] font-semibold tracking-tight text-white transition-colors group-hover:text-white/95">

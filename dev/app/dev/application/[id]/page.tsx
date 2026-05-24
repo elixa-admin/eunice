@@ -153,7 +153,7 @@ export default async function DevApplicationDetailPage({
             {application.documents.map((document) => (
               <div
                 key={`${document.type}-${document.uploadedAt ?? 'missing'}`}
-                className="mt-2.5 flex items-center justify-between rounded-2xl border border-primary-100 bg-primary-50/40 px-4 py-2.75"
+                className="mt-2.5 flex items-center justify-between rounded-2xl border border-primary-100 bg-primary-50/40 px-4 py-3"
               >
                 <div>
                   <div className="text-sm text-slate-700">{getPreviewDocumentLabel(document.type)}</div>
@@ -187,7 +187,7 @@ export default async function DevApplicationDetailPage({
           <SurfaceCard className="p-5">
             <h2 className="text-lg font-semibold text-slate-950">Triage actions</h2>
             <div className="mt-3.5 space-y-2.5 text-sm">
-              <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-2.75 text-rose-800">
+              <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-rose-800">
                 <div className="font-semibold">{blockingDocuments.length} blocking document{blockingDocuments.length === 1 ? '' : 's'}</div>
                 <div className="mt-1">
                   {blockingDocuments.length > 0
@@ -195,7 +195,7 @@ export default async function DevApplicationDetailPage({
                     : 'No blocking document issues are stopping the application right now.'}
                 </div>
               </div>
-              <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-2.75 text-amber-900">
+              <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-amber-900">
                 <div className="font-semibold">{reviewDocuments.length} flagged document{reviewDocuments.length === 1 ? '' : 's'}</div>
                 <div className="mt-1">
                   {reviewDocuments.length > 0
@@ -203,7 +203,7 @@ export default async function DevApplicationDetailPage({
                     : 'No document is waiting on a manual review decision.'}
                 </div>
               </div>
-              <div className="rounded-2xl border border-primary-100 bg-primary-50/60 px-4 py-2.75 text-slate-700">
+              <div className="rounded-2xl border border-primary-100 bg-primary-50/60 px-4 py-3 text-slate-700">
                 <div className="font-semibold text-slate-950">Recommended next step</div>
                 <div className="mt-1">{getPreviewNextAction(application)}</div>
               </div>
@@ -214,7 +214,7 @@ export default async function DevApplicationDetailPage({
             <h2 className="text-lg font-semibold text-slate-950">Activity</h2>
             <div className="mt-3.5 space-y-2.5">
               {application.timeline.map((entry) => (
-                <div key={`${entry.at}-${entry.title}`} className="rounded-2xl border border-primary-100 bg-primary-50/40 px-4 py-2.75">
+                <div key={`${entry.at}-${entry.title}`} className="rounded-2xl border border-primary-100 bg-primary-50/40 px-4 py-3">
                   <div className="flex items-center justify-between gap-3">
                     <div className="text-sm font-semibold text-slate-950">{entry.title}</div>
                     <div className="text-xs text-slate-500">{entry.at}</div>

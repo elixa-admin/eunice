@@ -40,6 +40,7 @@ If chat context is lost, a platform changes, or a new developer joins, start her
   - Internal admin: slightly more expressive, still brand-aligned
   - Current visual north star: the two latest screenshot references showing a deep green header, gold accents, cream surfaces, refined typography, and clear admissions queue/detail panels
   - Adopted visual north star (2026-05-23): premium academic product UI with modern professional typography, compact action-focused layouts, guided progression cues, and explicit "what happens next" messaging
+  - Next level output phase (2026-05-24): move from landscape layout shaping into finish quality, interaction polish, and broader-screen experience refinement
 - Scope discipline:
   - Prioritize coherent visual slices
   - Avoid broad architecture churn during UI sprint
@@ -48,6 +49,7 @@ If chat context is lost, a platform changes, or a new developer joins, start her
   - Lightly color cards and lane summaries by blocking / review / ready / decision state
   - Keep the parent-facing workflow aligned to the same shared document logic
   - Compress the current 13-page Eunice application pattern into a guided 4-5 step parent journey with upfront document preparation
+  - Move the parent and admin surfaces from layout progress into polished output-ready experiences
 
 ## Delivered Outcome Snapshot
 
@@ -90,6 +92,7 @@ Reference docs:
 - `docs/UI_THEME_SPEC.md`
 - `docs/GUIDED_APPLICATION_FLOW_PLAN.md`
 - `docs/SPRINT_NEXT_LANDSCAPE_UI.md`
+- `docs/phase-next-level-output/plan.md`
 - `docs/SPRINT_MICRO_SLICES_NEXT.md`
 
 ## Integration Alignment State

@@ -46,7 +46,7 @@ Hard boundary:
 Keep all active work on `dev/` until we explicitly decide to promote it. Do not touch the assessment page/surface during this stage. Production is a separate promotion step, not part of the current sprint.
 
 Current phase:
-Follow `docs/phase-brand-locked-dev-to-production/plan.md` as the active phase plan. The current implementation focus is still the landscape UI sprint and its Parent/Admin wide-screen finish.
+Follow `docs/phase-next-level-output/plan.md` as the active phase plan. The current implementation focus is now output quality: parent finish, admin finish, preview hub polish, and cross-surface consistency.
 
 Most recent product decision:
 Compress the 13-page application into an upfront preparation screen plus a guided 5-step parent flow:
@@ -58,7 +58,7 @@ Compress the 13-page application into an upfront preparation screen plus a guide
 6. Review, consent, and submit
 
 Current next slice:
-Continue the landscape UI sprint in `docs/SPRINT_NEXT_LANDSCAPE_UI.md`: finalize the shared visual shell, finish the wide Parent Portal flow, elevate the Admin review surface, and keep the preview hub and handoff docs aligned.
+Continue the next level output phase in `docs/phase-next-level-output/plan.md`: polish the Parent Portal, tighten Admin operations, refine the preview hub, and keep docs aligned.
 
 At the start of a new session, run:
 npm run session:start

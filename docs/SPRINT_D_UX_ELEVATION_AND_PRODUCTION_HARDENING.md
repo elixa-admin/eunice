@@ -1,7 +1,7 @@
 # Sprint D: UX Elevation and Production Hardening
 
 ## Status
-Planned
+Active
 
 ## Sprint Window
 - Start: 2026-06-03

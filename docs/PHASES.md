@@ -2,7 +2,7 @@
 
 ## Phase 0 — Discovery & Workflow Mapping ⭐ CRITICAL
 
-**Status:** Not started  
+**Status:** In progress (workflow reconnaissance completed on 2026-05-21 to 2026-05-22; stakeholder sign-off pending)  
 **Duration:** 1-2 weeks  
 **Effort:** High (foundational)
 
@@ -44,7 +44,7 @@ This is the **MOST important phase**. No code until this is complete.
 
 ## Phase 1 — UX/UI Prototype
 
-**Status:** Not started  
+**Status:** In progress (applied through `dev/` preview slices and UI polish passes; formal prototype sign-off pending)  
 **Duration:** 1-2 weeks  
 **Effort:** Medium
 
@@ -89,7 +89,7 @@ This is the **MOST important phase**. No code until this is complete.
 
 ## Phase 2 — MVP Development
 
-**Status:** Not started  
+**Status:** In progress (early foundation and workflow slices underway; Sprint D UX hardening in progress as of 2026-06-03)  
 **Duration:** 3-4 weeks  
 **Effort:** High
 

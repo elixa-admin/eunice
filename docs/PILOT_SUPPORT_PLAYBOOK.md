@@ -1,7 +1,7 @@
 # Pilot Support Playbook
 
 ## Scope
-Operational triage playbook for Eunice intake pilot support during Sprint C and pilot launch.
+Operational triage playbook for Eunice intake pilot support during Sprint C, Sprint D, and pilot launch.
 
 ## Incident Priorities
 - P0: Parent cannot submit application or admin cannot access queue.

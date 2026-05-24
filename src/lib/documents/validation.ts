@@ -3,6 +3,7 @@ import {
   ACCEPTED_DOCUMENT_MIME_TYPES,
   DOCUMENT_CONTRACTS,
   MAX_DOCUMENT_FILE_SIZE_BYTES,
+  getDocumentValidationGuidance,
   type DocumentType,
   type DocumentValidationState,
 } from '@/lib/documents/contracts';
@@ -33,7 +34,7 @@ export function validateDocumentUpload({
     return {
       ok: false,
       state: 'wrong_format',
-      message: 'Please upload this document as a PDF, JPG, or PNG file.',
+      message: getDocumentValidationGuidance('wrong_format'),
     };
   }
 
@@ -41,7 +42,7 @@ export function validateDocumentUpload({
     return {
       ok: false,
       state: 'wrong_format',
-      message: 'This file does not match a supported document format. Please try a PDF, JPG, or PNG version instead.',
+      message: getDocumentValidationGuidance('wrong_format'),
     };
   }
 
@@ -49,7 +50,7 @@ export function validateDocumentUpload({
     return {
       ok: false,
       state: 'too_large',
-      message: 'This file is too large. Please upload a version smaller than 5 MB.',
+      message: getDocumentValidationGuidance('too_large'),
     };
   }
 

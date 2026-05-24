@@ -40,7 +40,7 @@ Read first:
 10. docs/FAILURE_TRIAGE.md
 
 Current intent:
-Continue the latest dev-preview work on the Eunice admissions platform: keep the visual system premium and operational, tighten admin hierarchy, and preserve the guided parent-friendly flow that replaces the 13-page Google Form while still capturing the school's required data and document needs.
+Continue the latest dev-preview work on the Eunice admissions platform: apply the screenshot-driven visual system to `dev/` first, keep the UI premium and operational, tighten admin hierarchy, and preserve the guided parent-friendly flow that replaces the 13-page Google Form while still capturing the school's required data and document needs.
 
 Most recent product decision:
 Compress the 13-page application into an upfront preparation screen plus a guided 5-step parent flow:
@@ -52,7 +52,7 @@ Compress the 13-page application into an upfront preparation screen plus a guide
 6. Review, consent, and submit
 
 Current next slice:
-Continue the current dev-preview refinement slice: finish the admin dashboard hierarchy cleanup, keep the guided parent/admin flows aligned, and then move to the next smallest visual/product slice.
+Continue the current dev-preview refinement slice: establish the shared visual foundation on `dev/`, keep the guided parent/admin flows aligned, and then move to the next smallest visual/product slice.
 
 At the start of a new session, run:
 npm run session:start

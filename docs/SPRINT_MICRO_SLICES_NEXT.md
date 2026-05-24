@@ -6,7 +6,7 @@ Primary surface: `dev/`
 
 ## Sprint Goal
 
-Ship a visibly professional parent intake + admin operations experience in tiny deterministic slices, with each slice commit-ready and preview-verifiable.
+Adopt the latest screenshot references as the visual north star for the `dev/` surface, then carry that system through the parent and admin preview experiences in tiny deterministic slices.
 
 ## GitHub Coordination Note
 
@@ -21,28 +21,29 @@ Ship a visibly professional parent intake + admin operations experience in tiny 
 - After each slice: update `docs/SOURCE_OF_TRUTH.md`, push branch, verify Vercel preview status.
 - Linear update once per slice if connector is healthy; if `401`, log once and continue.
 
-## Slice 1 (Highest Visual ROI): Typography + Hierarchy Correction
+## Slice 1 (Highest Visual ROI): Dev Surface Theme Foundation
 
 ### Why this first
 
-The biggest current perception gap is typography quality and hierarchy polish.
+The biggest current perception gap is the overall brand frame: top bar, page canvas, card geometry, and the premium academic feel.
 
 ### Scope
 
-- Replace cartoonish display/body combinations with professional UI pairings already aligned in `docs/UI_THEME_SPEC.md`.
-- Tighten heading scale, card titles, metadata text, line-height, and spacing rhythm.
+- Strengthen the shared `dev/` chrome so the top bar, background, borders, and shadows match the screenshot direction.
+- Tighten heading scale, card titles, metadata text, line-height, spacing rhythm, and status chip treatment.
 - Keep existing structure and flows unchanged.
 
 ### Files (expected)
 
 - `dev/app/globals.css`
-- `dev/app/dev/admin/page.tsx`
-- `dev/app/dev/parent/page.tsx`
+- `dev/app/layout.tsx`
+- `dev/components/preview-shell.tsx`
+- `dev/components/nav.tsx`
 
 ### Done when
 
-- Header, cards, and table/list text read as product UI, not wireframe.
-- Visual hierarchy is obvious in one screen glance.
+- Header, canvas, and cards read as a cohesive admissions product frame.
+- The `dev/` preview feels closer to the screenshot reference family at a glance.
 
 ## Slice 2 (Parent Flow ROI): 13-page Compression into Guided 5-step Journey
 
@@ -110,9 +111,9 @@ If session context dies, work must continue without friction.
 
 The next sprint should stay focused on the smallest visible product improvements that make the parent and admin surfaces feel real:
 
-1. Polish typography and hierarchy so the UI reads as an admissions product.
-2. Compress the parent journey into a clearer guided flow with upfront expectations.
-3. Expose admin queue health so staff can see blocked, waiting, and ready states at a glance.
+1. Establish the `dev/` visual foundation so the screenshot theme is visible everywhere.
+2. Rework the parent preview rhythm so the guided application feels calm and premium.
+3. Recast the admin review surface so queue health and next actions are obvious.
 4. Keep the handover docs aligned so the next session can continue without reorientation.
 
 ## Stop Conditions (Token Safety)

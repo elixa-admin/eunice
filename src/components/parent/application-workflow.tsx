@@ -22,6 +22,7 @@ import {
 import {
   DOCUMENT_CONTRACTS,
   DOCUMENT_VALIDATION_LABELS,
+  getDocumentValidationGuidance,
   DOCUMENT_TYPE_LABELS,
   isDocumentStateBlocking,
   isDocumentStateReviewOnly,
@@ -381,30 +382,7 @@ function getValidationTone(state: DocumentValidationState) {
 }
 
 function getDocumentStateGuidance(state: DocumentValidationState) {
-  switch (state) {
-    case 'accepted':
-      return 'Uploaded successfully. Admissions will review this after you submit.';
-    case 'verified':
-      return 'Admissions have already confirmed this document is usable.';
-    case 'wrong_format':
-      return 'This file cannot be used yet. Please upload a PDF, JPG, or PNG version before you submit.';
-    case 'too_large':
-      return 'This file is too large to use. Please upload a smaller version before you submit.';
-    case 'corrupted':
-      return 'We could not read this file. Please upload a fresh copy before you submit.';
-    case 'blurry':
-      return 'This upload may be hard to read. You can continue, but the school may ask for a clearer copy.';
-    case 'low_confidence_ocr':
-      return 'This upload may need a manual check. You can continue and the school will review it later.';
-    case 'needs_reupload':
-      return 'Please replace this document before you submit so the school can review your application properly.';
-    case 'manual_review':
-      return 'You can continue. The school will double-check this document during review.';
-    case 'missing':
-      return 'This document is still required before you can submit.';
-    default:
-      return 'The school will review this document after submission.';
-  }
+  return getDocumentValidationGuidance(state);
 }
 
 export default function ParentApplicationWorkflow() {

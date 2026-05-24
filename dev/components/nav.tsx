@@ -12,18 +12,18 @@ export const NavBar: React.FC = () => {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-primary-100/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(250,248,241,0.95))] backdrop-blur-md shadow-[0_8px_24px_rgba(15,23,42,0.04)]">
-      <div className="h-1 w-full bg-[linear-gradient(90deg,rgba(31,109,58,0.95),rgba(184,137,7,0.95))]" />
+    <nav className="sticky top-0 z-50 w-full border-b border-[#0f3c28]/15 bg-[linear-gradient(180deg,rgba(9,48,31,0.98),rgba(13,64,40,0.96))] text-white shadow-[0_12px_32px_rgba(11,20,12,0.22)] backdrop-blur-md">
+      <div className="h-[3px] w-full bg-[linear-gradient(90deg,rgba(239,202,84,0.95),rgba(174,127,6,0.95))]" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-[68px] items-center justify-between">
           {/* Logo and Brand */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center gap-2 group">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-primary-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(240,253,244,0.92))] transition-all group-hover:border-primary-200 group-hover:shadow-[0_10px_24px_rgba(22,163,74,0.10)]">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/20 bg-white/95 transition-all group-hover:border-white/35 group-hover:shadow-[0_10px_24px_rgba(11,20,12,0.12)]">
                 <svg
                   viewBox="0 0 32 32"
                   fill="none"
-                  className="h-5 w-5 stroke-primary-800"
+                  className="h-5 w-5 stroke-primary-900"
                   aria-hidden="true"
                 >
                   <path
@@ -34,10 +34,10 @@ export const NavBar: React.FC = () => {
                 </svg>
               </div>
               <div className="leading-tight">
-                <span className="display-serif block text-[1.42rem] font-bold tracking-tight text-slate-950 transition-colors group-hover:text-primary-700">
+                <span className="display-serif block text-[1.42rem] font-semibold tracking-tight text-white transition-colors group-hover:text-white/95">
                   Eunice Admissions
                 </span>
-                <span className="type-label text-slate-500">Admissions platform preview</span>
+                <span className="type-label text-white/70">Admissions platform preview</span>
               </div>
             </Link>
           </div>
@@ -50,8 +50,8 @@ export const NavBar: React.FC = () => {
               className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
                 isActive('/parent')
                   || isActive('/dev/parent')
-                  ? 'bg-primary-900 text-white shadow-[0_12px_24px_rgba(22,163,74,0.18)]'
-                  : 'text-slate-700 hover:bg-primary-50 hover:text-primary-800'
+                  ? 'bg-white text-primary-900 shadow-[0_12px_24px_rgba(11,20,12,0.16)]'
+                  : 'text-white/85 hover:bg-white/10 hover:text-white'
               }`}
             >
               Parent Portal
@@ -62,8 +62,8 @@ export const NavBar: React.FC = () => {
               className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
                 isActive('/admin')
                   || isActive('/dev/admin')
-                  ? 'border border-accent-200 bg-accent-50 text-accent-900 shadow-[0_10px_24px_rgba(202,138,4,0.12)]'
-                  : 'text-slate-600 hover:bg-primary-50 hover:text-primary-800'
+                  ? 'border border-accent-200 bg-[rgba(255,248,231,0.96)] text-accent-900 shadow-[0_10px_24px_rgba(202,138,4,0.12)]'
+                  : 'text-white/80 hover:bg-white/10 hover:text-white'
               }`}
             >
               Admin Dashboard

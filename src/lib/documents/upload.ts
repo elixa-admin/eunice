@@ -1,4 +1,8 @@
-import type { DocumentType, DocumentValidationState } from '@/lib/documents/contracts';
+import {
+  getDocumentValidationGuidance,
+  type DocumentType,
+  type DocumentValidationState,
+} from '@/lib/documents/contracts';
 import { validateDocumentUpload } from '@/lib/documents/validation';
 import { buildDocumentStoragePath } from '@/lib/documents/storage';
 import { getDocumentStorageAdapter, getDocumentStorageBucket } from '@/lib/integrations/storage';
@@ -62,7 +66,7 @@ export async function uploadDocumentDraft({
     return {
       fileName: file.name,
       validationState: validation.state,
-      message: 'Uploaded successfully and saved to your draft. The school will review this document after you submit.',
+      message: getDocumentValidationGuidance(validation.state),
       storagePath: result.path,
       uploadedAt: new Date().toISOString(),
       uploadStatus: 'saved',

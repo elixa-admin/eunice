@@ -2,35 +2,35 @@
 
 /* ─── Eunice Design System — Base Tokens ─────────────────────────────────── */
 :root {
-  --color-primary-50:  #eef8ee;
-  --color-primary-100: #d9eadb;
-  --color-primary-200: #bcd4bf;
-  --color-primary-500: #1f6d3a;
-  --color-primary-600: #185b31;
-  --color-primary-700: #124828;
-  --color-primary-900: #0d321c;
+  --color-primary-50:  #eff6f0;
+  --color-primary-100: #dbe9df;
+  --color-primary-200: #bfd4c6;
+  --color-primary-500: #1f5d3a;
+  --color-primary-600: #184c30;
+  --color-primary-700: #113624;
+  --color-primary-900: #081c12;
 
-  --color-accent-50:   #fcf7e8;
-  --color-accent-100:  #f6e7b5;
-  --color-accent-200:  #eed583;
-  --color-accent-500:  #b88907;
-  --color-accent-600:  #8f6906;
-  --color-accent-700:  #6f5105;
+  --color-accent-50:   #fbf6e9;
+  --color-accent-100:  #f4e5b8;
+  --color-accent-200:  #ead284;
+  --color-accent-500:  #ae7f06;
+  --color-accent-600:  #896205;
+  --color-accent-700:  #664704;
 
-  --color-neutral-50:  #fbfbf8;
-  --color-neutral-100: #f5f4ef;
-  --color-neutral-200: #e7e3d8;
-  --color-neutral-700: #4d4d44;
-  --color-neutral-800: #2f2f28;
-  --color-neutral-900: #181813;
+  --color-neutral-50:  #fbfaf7;
+  --color-neutral-100: #f3efe6;
+  --color-neutral-200: #e5dcc8;
+  --color-neutral-700: #575044;
+  --color-neutral-800: #312c24;
+  --color-neutral-900: #1a1712;
 
-  --glass-bg:     rgba(255, 255, 255, 0.72);
-  --glass-border: rgba(22, 95, 54, 0.10);
-  --glass-shadow: 0 18px 50px rgba(17, 24, 39, 0.07);
+  --glass-bg:     rgba(255, 252, 244, 0.82);
+  --glass-border: rgba(22, 95, 54, 0.12);
+  --glass-shadow: 0 20px 54px rgba(17, 24, 39, 0.08);
 
-  --background: #faf9f4;
+  --background: #f7f2e6;
   --foreground: var(--color-neutral-900);
-  --surface:    #ffffff;
+  --surface:    #fffdf8;
   --font-ui-fallback: 'IBM Plex Sans';
 }
 
@@ -54,15 +54,15 @@ html {
 
 body {
   background:
-    radial-gradient(circle at top left, rgba(31, 109, 58, 0.10), transparent 28%),
-    radial-gradient(circle at top right, rgba(184, 137, 7, 0.08), transparent 24%),
-    radial-gradient(circle at bottom right, rgba(31, 109, 58, 0.05), transparent 20%),
+    radial-gradient(circle at top left, rgba(31, 109, 58, 0.14), transparent 26%),
+    radial-gradient(circle at top right, rgba(184, 137, 7, 0.12), transparent 22%),
+    radial-gradient(circle at bottom right, rgba(31, 109, 58, 0.07), transparent 20%),
     var(--background);
   color: var(--foreground);
   font-family: var(--font-sans-ui), var(--font-ui-fallback), system-ui, -apple-system, sans-serif;
   min-height: 100vh;
-  line-height: 1.5;
-  letter-spacing: -0.01em;
+  line-height: 1.55;
+  letter-spacing: -0.008em;
 }
 
 ::selection {
@@ -80,37 +80,37 @@ body {
 }
 
 .display-serif {
-  font-family: var(--font-sans-ui), var(--font-ui-fallback), system-ui, sans-serif;
-  letter-spacing: -0.025em;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  letter-spacing: -0.02em;
 }
 
 .type-display-xl {
-  font-family: var(--font-sans-ui), var(--font-ui-fallback), system-ui, sans-serif;
-  font-size: clamp(2.3rem, 4.7vw, 3.9rem);
-  line-height: 1.02;
-  letter-spacing: -0.035em;
-  font-weight: 700;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: clamp(2.3rem, 4.6vw, 3.7rem);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  font-weight: 600;
 }
 
 .type-display-lg {
-  font-family: var(--font-sans-ui), var(--font-ui-fallback), system-ui, sans-serif;
-  font-size: clamp(1.9rem, 3.8vw, 3rem);
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-  font-weight: 700;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: clamp(1.85rem, 3.7vw, 2.8rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  font-weight: 600;
 }
 
 .type-title {
   font-size: clamp(1.16rem, 1.9vw, 1.58rem);
-  line-height: 1.22;
-  letter-spacing: -0.02em;
-  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.018em;
+  font-weight: 600;
 }
 
 .type-body {
   font-size: 0.995rem;
-  line-height: 1.62;
-  letter-spacing: -0.004em;
+  line-height: 1.65;
+  letter-spacing: -0.002em;
 }
 
 .type-label {
@@ -123,7 +123,7 @@ body {
 }
 
 .type-metric {
-  font-size: clamp(1.85rem, 2.7vw, 2.6rem);
+  font-size: clamp(1.8rem, 2.6vw, 2.5rem);
   line-height: 0.98;
   letter-spacing: -0.035em;
   font-weight: 800;

@@ -30,6 +30,7 @@ If chat context is lost, a platform changes, or a new developer joins, start her
 - Theme direction:
   - External and parent-facing: structured, academic, green-and-gold Eunice-aligned
   - Internal admin: slightly more expressive, still brand-aligned
+  - Current visual north star: the two latest screenshot references showing a deep green header, gold accents, cream surfaces, refined typography, and clear admissions queue/detail panels
   - Adopted visual north star (2026-05-23): premium academic product UI with modern professional typography, compact action-focused layouts, guided progression cues, and explicit "what happens next" messaging
 - Scope discipline:
   - Prioritize coherent visual slices
@@ -49,10 +50,12 @@ If chat context is lost, a platform changes, or a new developer joins, start her
 - Guided application flow direction documented in `docs/GUIDED_APPLICATION_FLOW_PLAN.md`
 - Admin dashboard typography and hierarchy were tightened to reduce the wireframe/cartoon feel: serif headings removed, rounded geometry reduced, invalid Tailwind utility names fixed, and queue/action copy made more operational
 - Visual goal/vision aligned for handoff: parent journey, administrator review, and admin dashboard should all converge on this same premium green/gold Eunice system with dense but calm operational clarity
+- Updated visual target now explicitly mirrors the screenshot references: dark green top bars, soft cream content surfaces, gentle gold accents, restrained borders, and calmer institutional card geometry
 - Parent portal upgraded to an interactive 5-step guided wizard with preparation checklist (Step 0), care, fee-payer, and consent gates
 - Database schema migration drafted in `supabase/migrations/20260523_000003_guided_flow_schema.sql` to back the guided intake flows with sub-tables for households, medical profiles, fee payers, and consent logs
 - Admin Operations Dashboard made fully interactive, enabling sidebar detail card updates when clicking any table row
 - Stuck-state visibility chips ('Waiting on Parent', 'Needs Staff Verification', 'Ready for Decision', 'Finalized') and color-coded progress health indicators integrated into the admin list and details card
+- Screenshot-driven theme sprint now underway on the `dev/` surface first, with the preview shell and global styles as the base layer
 
 ## Environment And Configuration
 

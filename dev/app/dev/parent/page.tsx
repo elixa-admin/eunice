@@ -97,6 +97,8 @@ export default function DevParentPage() {
 
   const activeIndex = stepOrder.indexOf(activeTab);
   const progress = Math.round(((activeIndex + 1) / stepOrder.length) * 100);
+  const readinessTone =
+    workflow.blockers.length > 0 ? 'rose' : workflow.reviewOnlyWarnings.length > 0 ? 'amber' : 'emerald';
 
   return (
     <PreviewShell
@@ -177,21 +179,21 @@ export default function DevParentPage() {
                         onClick={() => setActiveTab(step)}
                         className={`min-w-[128px] rounded-2xl border p-3 text-left transition ${
                           isActive
-                            ? 'border-accent-200 bg-[rgba(255,248,231,0.98)] text-primary-950 shadow-[0_12px_24px_rgba(202,138,4,0.10)]'
+                            ? 'border-amber-300 bg-[#fff8e7] text-[#081c12] shadow-[0_12px_24px_rgba(202,138,4,0.10)]'
                             : isDone
-                              ? 'border-white/20 bg-white/12 text-white'
-                              : 'border-white/15 bg-white/6 text-white/78 hover:bg-white/10'
+                              ? 'border-white/22 bg-white/14 text-white'
+                              : 'border-white/15 bg-white/8 text-white/82 hover:bg-white/12'
                         }`}
                       >
                         <div className="flex items-center gap-3">
                           <div className={`flex h-8 w-8 items-center justify-center rounded-full border text-xs font-semibold ${
-                            isActive ? 'border-primary-900 bg-primary-900 text-white' : 'border-current/20 bg-white/10 text-current'
+                            isActive ? 'border-[#081c12] bg-[#081c12] text-white' : 'border-current/20 bg-white/12 text-current'
                           }`}>
                             {stepMeta[step].label}
                           </div>
                           <div>
-                            <div className="text-xs font-semibold uppercase tracking-[0.14em] opacity-70">{stepMeta[step].title}</div>
-                            <div className="mt-1 text-[11px] opacity-75">{stepMeta[step].subtitle}</div>
+                            <div className="text-xs font-semibold uppercase tracking-[0.14em] opacity-85">{stepMeta[step].title}</div>
+                            <div className="mt-1 text-[11px] opacity-80">{stepMeta[step].subtitle}</div>
                           </div>
                         </div>
                       </button>
@@ -200,8 +202,8 @@ export default function DevParentPage() {
                 </div>
 
                 <div className="rounded-[28px] border border-white/12 bg-white/95 p-4 text-slate-950 shadow-[0_18px_50px_rgba(11,20,12,0.10)]">
-                  <div className="mb-4 grid gap-3 xl:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)]">
-                    <div className="rounded-[24px] border border-primary-100 bg-white p-4">
+                <div className="mb-4 grid gap-3 xl:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)]">
+                    <div className="rounded-[24px] border border-primary-100 bg-white p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
                       <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Current step</div>
                       <div className="mt-2 text-lg font-semibold text-slate-950">{stepHighlights[activeTab].title}</div>
                       <div className="mt-1 text-sm leading-6 text-slate-600">{stepHighlights[activeTab].detail}</div>
@@ -222,13 +224,25 @@ export default function DevParentPage() {
                         ))}
                       </div>
                     </div>
-                    <div className="rounded-[24px] border border-primary-100 bg-[#f8f4e8] p-4">
+                    <div className={`rounded-[24px] border p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)] ${
+                      readinessTone === 'rose'
+                        ? 'border-rose-200 bg-rose-50'
+                        : readinessTone === 'amber'
+                          ? 'border-amber-200 bg-amber-50'
+                          : 'border-emerald-200 bg-emerald-50'
+                    }`}>
                       <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Progress</div>
                       <div className="mt-3 flex items-center gap-4">
-                        <div className="flex h-16 w-16 items-center justify-center rounded-full border border-primary-200 bg-white text-lg font-semibold text-slate-950">{progress}%</div>
+                        <div className={`flex h-16 w-16 items-center justify-center rounded-full border bg-white text-lg font-semibold ${
+                          readinessTone === 'rose'
+                            ? 'border-rose-200 text-rose-800'
+                            : readinessTone === 'amber'
+                              ? 'border-amber-200 text-amber-900'
+                              : 'border-emerald-200 text-emerald-800'
+                        }`}>{progress}%</div>
                         <div className="space-y-1 text-sm leading-6 text-slate-600">
-                          <p>{workflow.canSubmit ? 'Ready to review and submit.' : 'Work through the current step before moving on.'}</p>
-                          <p>
+                          <p className="font-medium text-slate-800">{workflow.canSubmit ? 'Ready to review and submit.' : 'Work through the current step before moving on.'}</p>
+                          <p className="text-slate-700">
                             {workflow.readyRequiredDocuments} of {workflow.totalRequiredDocuments} required documents are ready.
                           </p>
                         </div>
@@ -237,7 +251,7 @@ export default function DevParentPage() {
                   </div>
 
                   <div className="mb-4 grid gap-3 xl:grid-cols-[minmax(0,1.18fr)_minmax(280px,0.82fr)]">
-                    <div className="rounded-[24px] border border-primary-100 bg-[#f8f4e8] p-4">
+                    <div className="rounded-[24px] border border-primary-100 bg-[#fffdf8] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
                       <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">What this step is for</div>
                       <p className="mt-2 text-sm leading-6 text-slate-700">{stepExpectations[activeTab].purpose}</p>
                       <div className="mt-3 flex flex-wrap gap-2">
@@ -253,9 +267,9 @@ export default function DevParentPage() {
                         ) : null}
                       </div>
                     </div>
-                    <div className="rounded-[24px] border border-slate-200 bg-[#faf7ef] p-4">
-                      <div className="text-xs uppercase tracking-[0.18em] text-slate-500">What happens next</div>
-                      <div className="mt-2 space-y-2 text-sm leading-6 text-slate-600">
+                    <div className="rounded-[24px] border border-slate-200 bg-[#fffdf8] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
+                      <div className="text-xs uppercase tracking-[0.18em] text-slate-700">What happens next</div>
+                      <div className="mt-2 space-y-2 text-sm leading-6 text-slate-700">
                         <p>{stepExpectations[activeTab].prepare}</p>
                         <p>{stepExpectations[activeTab].next}</p>
                       </div>
@@ -272,16 +286,16 @@ export default function DevParentPage() {
                           ['Review clearly', 'We will show you what is required and what can be reviewed later.'],
                           ['Stay informed', 'We will explain what happens after each step.'],
                         ].map(([title, body]) => (
-                          <div key={title} className="rounded-2xl border border-primary-100 bg-primary-50/45 p-3.5">
+                          <div key={title} className="rounded-2xl border border-primary-100 bg-[#fffdf8] p-3.5 shadow-[0_8px_18px_rgba(11,20,12,0.03)]">
                             <div className="text-sm font-semibold text-slate-950">{title}</div>
-                            <div className="mt-1 text-sm leading-6 text-slate-600">{body}</div>
+                            <div className="mt-1 text-sm leading-6 text-slate-700">{body}</div>
                           </div>
                         ))}
                       </div>
                     </div>
-                    <div className="rounded-[24px] border border-slate-200 bg-[#faf7ef] p-4">
-                      <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Document readiness</div>
-                      <div className="mt-2 text-sm leading-6 text-slate-600">
+                    <div className="rounded-[24px] border border-slate-200 bg-[#fffdf8] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
+                      <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Document readiness</div>
+                      <div className="mt-2 text-sm leading-6 text-slate-700">
                         We group documents by purpose so you can see what matters most without scanning a long list.
                       </div>
                       <div className="mt-3.5 space-y-3">
@@ -290,20 +304,20 @@ export default function DevParentPage() {
                             <div className="flex items-start justify-between gap-3">
                               <div>
                                 <div className="text-sm font-semibold text-slate-950">{group.title}</div>
-                                <div className="mt-1 text-xs leading-5 text-slate-500">{group.why}</div>
+                                <div className="mt-1 text-xs leading-5 text-slate-600">{group.why}</div>
                               </div>
-                              <span className="rounded-full border border-primary-100 bg-primary-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-primary-800">
+                              <span className="rounded-full border border-primary-100 bg-[#fff8e7] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#3a2b07]">
                                 {group.items.length} items
                               </span>
                             </div>
                             <div className="mt-3 space-y-2">
                               {group.items.map((item) => (
-                                <div key={item} className="flex items-center justify-between rounded-xl border border-slate-200 bg-[#fcfaf5] px-3 py-2">
+                                <div key={item} className="flex items-center justify-between rounded-xl border border-slate-200 bg-[#fbf8f0] px-3 py-2">
                                   <div>
-                                    <div className="text-sm font-medium text-slate-950">{item}</div>
-                                    <div className="text-xs text-slate-500">Keep this ready or upload it when prompted</div>
+                                    <div className="text-sm font-semibold text-slate-950">{item}</div>
+                                    <div className="text-xs text-slate-600">Keep this ready or upload it when prompted</div>
                                   </div>
-                                  <span className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[10px] font-semibold text-amber-700">Pending</span>
+                                  <span className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[10px] font-semibold text-amber-800">Pending</span>
                                 </div>
                               ))}
                             </div>
@@ -313,9 +327,9 @@ export default function DevParentPage() {
                     </div>
                   </div>
 
-                  <div className="rounded-[24px] border border-slate-200 bg-white p-4">
-                    <div className="text-xs uppercase tracking-[0.16em] text-slate-500">{stepMeta[activeTab].title}</div>
-                    <div className="mt-2 text-sm leading-6 text-slate-600">
+                  <div className="rounded-[24px] border border-slate-200 bg-[#fffdf8] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
+                    <div className="text-xs uppercase tracking-[0.16em] text-slate-700">{stepMeta[activeTab].title}</div>
+                    <div className="mt-2 text-sm leading-6 text-slate-700">
                       {activeTab === 'checklist' && 'This first screen is your guide to what comes next. We will keep the flow short, clear, and easy to return to.'}
                       {activeTab === 'learner' && 'Capture the learner’s details exactly as they appear on official records.'}
                       {activeTab === 'household' && 'Add the parent and guardian details that admissions staff will use to contact you.'}
@@ -323,9 +337,9 @@ export default function DevParentPage() {
                       {activeTab === 'fees_docs' && 'Confirm fee responsibility and upload the required documents with clear images.'}
                       {activeTab === 'review' && 'Review everything once more before you submit it to the admissions queue.'}
                     </div>
-                    <div className="mt-4 rounded-2xl border border-primary-100 bg-primary-50/45 p-3.5">
-                      <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Helpful reminder</div>
-                      <div className="mt-1 text-sm leading-6 text-slate-600">
+                    <div className="mt-4 rounded-2xl border border-primary-100 bg-[#fff8e7] p-3.5">
+                      <div className="text-xs uppercase tracking-[0.16em] text-[#3a2b07]">Helpful reminder</div>
+                      <div className="mt-1 text-sm leading-6 text-[#3a2b07]">
                         {activeTab === 'fees_docs'
                           ? 'Documents are grouped by purpose so you can focus on the important files without feeling overwhelmed.'
                           : activeTab === 'review'
@@ -372,25 +386,25 @@ export default function DevParentPage() {
               <div className="space-y-3">
                 <SurfaceCard className="border border-white/12 bg-white/92 p-4 text-slate-950 xl:min-h-[280px]">
                   <div className="text-xs uppercase tracking-[0.16em] text-primary-800/70">Guidance & Tips</div>
-                  <div className="mt-2 rounded-2xl border border-primary-100 bg-primary-50/45 p-3">
-                    <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Expectation panel</div>
-                    <div className="mt-2 space-y-1.5 text-sm leading-6 text-slate-600">
+                  <div className="mt-2 rounded-2xl border border-primary-100 bg-[#fffdf8] p-3 shadow-[0_8px_18px_rgba(11,20,12,0.03)]">
+                    <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Expectation panel</div>
+                    <div className="mt-2 space-y-1.5 text-sm leading-6 text-slate-700">
                       <p>{stepExpectations[activeTab].purpose}</p>
                       <p>{stepExpectations[activeTab].next}</p>
                     </div>
                   </div>
                   <div className="mt-3.5 space-y-2.5">
                     {guidanceItems.map((item) => (
-                      <details key={item.title} className="group rounded-2xl border border-slate-200 bg-[#fbf8f0] p-4 transition group-open:border-accent-200">
+                      <details key={item.title} className="group rounded-2xl border border-slate-200 bg-white p-4 transition group-open:border-accent-200">
                         <summary className="cursor-pointer list-none text-sm font-semibold text-slate-950">{item.title}</summary>
-                        <p className="mt-2 text-sm leading-6 text-slate-600">{item.body}</p>
+                        <p className="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
                       </details>
                     ))}
                   </div>
                 </SurfaceCard>
 
                 <SurfaceCard className="border border-white/12 bg-white/92 p-4 text-slate-950 xl:min-h-[236px]">
-                  <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Application Summary</div>
+                  <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Application Summary</div>
                   <div className="mt-3.5 grid gap-2.5 text-sm">
                     <SummaryRow label="Application ID" value={featuredApplication.ref} />
                     <SummaryRow label="Started" value="22 May 2026" />
@@ -402,11 +416,29 @@ export default function DevParentPage() {
                   </button>
                 </SurfaceCard>
 
-                <SurfaceCard className="border border-amber-200 bg-amber-50/80 p-4 text-slate-950 xl:min-h-[160px]">
-                  <div className="text-xs uppercase tracking-[0.16em] text-amber-800">Progress</div>
+                <SurfaceCard className={`border p-4 text-slate-950 xl:min-h-[160px] ${
+                  readinessTone === 'rose'
+                    ? 'border-rose-200 bg-rose-50/80'
+                    : readinessTone === 'amber'
+                      ? 'border-amber-200 bg-amber-50/80'
+                      : 'border-emerald-200 bg-emerald-50/80'
+                }`}>
+                  <div className={`text-xs uppercase tracking-[0.16em] ${
+                    readinessTone === 'rose'
+                      ? 'text-rose-800'
+                      : readinessTone === 'amber'
+                        ? 'text-amber-800'
+                        : 'text-emerald-800'
+                  }`}>Progress</div>
                   <div className="mt-3.5 flex items-center gap-4">
-                    <div className="flex h-20 w-20 items-center justify-center rounded-full border border-amber-200 bg-white text-2xl font-semibold text-slate-900">{progress}%</div>
-                    <div className="text-sm leading-6 text-slate-600">
+                    <div className={`flex h-20 w-20 items-center justify-center rounded-full border bg-white text-2xl font-semibold ${
+                      readinessTone === 'rose'
+                        ? 'border-rose-200 text-rose-800'
+                        : readinessTone === 'amber'
+                          ? 'border-amber-200 text-amber-900'
+                          : 'border-emerald-200 text-emerald-800'
+                    }`}>{progress}%</div>
+                    <div className="text-sm leading-6 text-slate-700">
                       Your application is moving forward. Keep documents ready so the admissions team can review it faster.
                     </div>
                   </div>
@@ -422,8 +454,8 @@ export default function DevParentPage() {
 
 function SummaryRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-[#fcfaf5] px-4 py-3">
-      <div className="text-xs uppercase tracking-[0.16em] text-slate-500">{label}</div>
+    <div className="flex items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-[#fbf8f0] px-4 py-3">
+      <div className="text-xs uppercase tracking-[0.16em] text-slate-700">{label}</div>
       <div className="text-sm font-semibold text-slate-950">{value}</div>
     </div>
   );

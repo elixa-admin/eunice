@@ -1367,9 +1367,9 @@ export default function ParentApplicationWorkflow() {
                   <div className="rounded-2xl border border-primary-100 bg-primary-50/70 p-4 shadow-sm">
                     <div className="text-sm font-semibold text-slate-950">Next steps</div>
                     <div className="mt-2 grid gap-2 text-sm leading-6 text-slate-600 sm:grid-cols-3">
-                      <p>1. Upload one file per card.</p>
-                      <p>2. Keep files clear and under 5 MB.</p>
-                      <p>3. Replace any file that is flagged.</p>
+                      <p>1. Upload one clear file per card.</p>
+                      <p>2. Keep files under 5 MB.</p>
+                      <p>3. Replace anything flagged for review.</p>
                     </div>
                   </div>
 
@@ -1411,11 +1411,11 @@ export default function ParentApplicationWorkflow() {
                                         {getDocumentStateGuidance(document.validationState)}
                                       </p>
                                       {document.fileName ? (
-                                        <p className="mt-2 text-xs font-medium text-slate-600">File: {document.fileName}</p>
+                                        <p className="mt-2 text-xs font-medium text-slate-600">Saved: {document.fileName}</p>
                                       ) : null}
                                       {document.uploadedAt ? (
                                         <p className="mt-1 text-xs text-slate-500">
-                                          Saved on {new Date(document.uploadedAt).toLocaleDateString()}.
+                                          Updated {new Date(document.uploadedAt).toLocaleDateString()}.
                                         </p>
                                       ) : null}
                                     </div>
@@ -1484,6 +1484,9 @@ export default function ParentApplicationWorkflow() {
                 </div>
                 <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700">
                   After you submit, the school will review your file and contact you if anything still needs attention.
+                </div>
+                <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm leading-6 text-slate-700 sm:hidden">
+                  Keep the file names simple and only replace items that are marked for review.
                 </div>
               </div>
             )}

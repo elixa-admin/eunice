@@ -14,6 +14,7 @@
 - [x] Concise per-card helper text
 - [x] State-based action labels
 - [x] Review-step finish guidance
+- [x] Mobile-friendly upload copy cleanup
 - [ ] Mobile pass on upload cards
 
 ## Track 3 — Docs and Handoff

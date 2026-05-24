@@ -784,6 +784,21 @@ export default function ParentApplicationWorkflow() {
   async function handleFileSelect(documentType: DocumentType, file: File | null) {
     if (!file) return;
 
+    const existingDocument = draft.documents[documentType];
+    if (
+      existingDocument.fileName &&
+      existingDocument.fileName.toLowerCase() === file.name.toLowerCase() &&
+      existingDocument.uploadStatus === 'saved'
+    ) {
+      updateDocument(documentType, {
+        ...existingDocument,
+        validationState: 'manual_review',
+        message:
+          'This looks like the same file you already uploaded. If you meant to replace it, choose a newer scan or photo.',
+      });
+      return;
+    }
+
     setUploadingDocument(documentType);
 
     try {
@@ -825,6 +840,12 @@ export default function ParentApplicationWorkflow() {
       }
     } catch (err) {
       console.error('Error uploading or saving document meta:', err);
+      updateDocument(documentType, {
+        ...draft.documents[documentType],
+        validationState: 'needs_reupload',
+        uploadStatus: 'error',
+        message: 'Upload failed. Check your connection, then choose this file again to retry.',
+      });
     } finally {
       setUploadingDocument(null);
     }

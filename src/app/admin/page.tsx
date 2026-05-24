@@ -62,7 +62,8 @@ type DocumentSummary = {
   verified: number;
 };
 
-type TriageLane = 'missing_documents' | 'review_ready' | 'under_review' | 'decision_pending' | 'closed' | 'incomplete';
+type TriageLane = 'blocked' | 'review_ready' | 'in_review' | 'decision_pending' | 'closed' | 'incomplete';
+type QueueFilter = 'all' | `triage:${TriageLane}` | 'missing_docs' | 'recent_submitted' | 'awaiting_parent' | ApplicationStatus;
 
 const ADMIN_REQUIRED_DOCUMENT_TYPES = getRequiredDocumentTypes();
 const ADMIN_DOCUMENT_REQUIREMENTS = getApplicationDocumentRequirements();
@@ -86,15 +87,15 @@ const ADMIN_DOCUMENT_CATEGORY_LABELS: Record<ApplicationDocumentRequirement['cat
 };
 
 const TRIAGE_LANE_LABELS: Record<TriageLane, string> = {
-  missing_documents: 'Missing docs',
+  blocked: 'Blocked',
   review_ready: 'Review ready',
-  under_review: 'Under review',
+  in_review: 'In review',
   decision_pending: 'Decision pending',
   closed: 'Closed',
   incomplete: 'Incomplete',
 };
 
-const TRIAGE_FILTERS: TriageLane[] = ['missing_documents', 'review_ready', 'under_review', 'decision_pending'];
+const TRIAGE_FILTERS: TriageLane[] = ['blocked', 'review_ready', 'in_review', 'decision_pending'];
 
 function summarizeDocumentsForApp(applicationId: string, docs: DocumentRecord[]): DocumentSummary {
   const documentByType = new Map(
@@ -129,10 +130,10 @@ function summarizeDocumentsForApp(applicationId: string, docs: DocumentRecord[])
 function getTriageLane(app: Application): TriageLane {
   if (app.status === 'accepted' || app.status === 'rejected') return 'closed';
   if (app.documentSummary.blocking > 0 || app.documentSummary.missingRequired > 0 || app.status === 'awaiting_documents') {
-    return 'missing_documents';
+    return 'blocked';
   }
   if (app.documentSummary.reviewOnly > 0) return 'review_ready';
-  if (app.status === 'under_review') return 'under_review';
+  if (app.status === 'under_review') return 'in_review';
   if (app.status === 'decision_pending') return 'decision_pending';
   if (app.status === 'submitted' || app.status === 'ready_for_review') return 'review_ready';
   return 'incomplete';
@@ -197,7 +198,7 @@ export default function AdminDashboard() {
   const [flaggingDocId, setFlaggingDocId] = useState<string | null>(null);
   const [reuploadReason, setReuploadReason] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [statusFilter, setStatusFilter] = useState<QueueFilter>('all');
   const [notesLoading, setNotesLoading] = useState(false);
   const [docsLoading, setDocsLoading] = useState(false);
   const [previewDoc, setPreviewDoc] = useState<any | null>(null);
@@ -568,7 +569,10 @@ export default function AdminDashboard() {
       (app.previous_school_name && app.previous_school_name.toLowerCase().includes(searchTerm.toLowerCase()));
 
     const matchesStatus = statusFilter === 'all'
-      || (statusFilter.startsWith('triage:') && getTriageLane(app) === statusFilter.replace('triage:', ''))
+      || (statusFilter.startsWith('triage:') && getTriageLane(app) === statusFilter.replace('triage:', '') as TriageLane)
+      || (statusFilter === 'missing_docs' && (app.documentSummary.missingRequired > 0 || app.documentSummary.blocking > 0))
+      || (statusFilter === 'recent_submitted' && (Date.now() - new Date(app.created_at).getTime()) <= 1000 * 60 * 60 * 24 * 2)
+      || (statusFilter === 'awaiting_parent' && app.status === 'awaiting_documents')
       || app.status === statusFilter;
 
     return matchesSearch && matchesStatus;
@@ -577,7 +581,7 @@ export default function AdminDashboard() {
   // Calculate statistics
   const total = applications.length;
   const activeQueue = applications.filter(app => app.status !== 'accepted' && app.status !== 'rejected').length;
-  const missingDocuments = applications.filter(app => getTriageLane(app) === 'missing_documents').length;
+  const missingDocuments = applications.filter(app => getTriageLane(app) === 'blocked').length;
   const readyForReview = applications.filter(app => getTriageLane(app) === 'review_ready').length;
   const accepted = applications.filter(app => app.status === 'accepted').length;
 
@@ -747,6 +751,36 @@ export default function AdminDashboard() {
                   {TRIAGE_LANE_LABELS[lane]}
                 </button>
               ))}
+              <button
+                onClick={() => setStatusFilter('missing_docs')}
+                className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all cursor-pointer ${
+                  statusFilter === 'missing_docs'
+                    ? 'bg-amber-500 border-amber-500 text-emerald-950 font-bold shadow-[0_0_12px_rgba(202,138,4,0.3)]'
+                    : 'bg-emerald-950/40 border-emerald-500/20 text-emerald-300 hover:bg-emerald-900/40 hover:text-white'
+                }`}
+              >
+                Missing documents
+              </button>
+              <button
+                onClick={() => setStatusFilter('recent_submitted')}
+                className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all cursor-pointer ${
+                  statusFilter === 'recent_submitted'
+                    ? 'bg-amber-500 border-amber-500 text-emerald-950 font-bold shadow-[0_0_12px_rgba(202,138,4,0.3)]'
+                    : 'bg-emerald-950/40 border-emerald-500/20 text-emerald-300 hover:bg-emerald-900/40 hover:text-white'
+                }`}
+              >
+                Recent submissions
+              </button>
+              <button
+                onClick={() => setStatusFilter('awaiting_parent')}
+                className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all cursor-pointer ${
+                  statusFilter === 'awaiting_parent'
+                    ? 'bg-amber-500 border-amber-500 text-emerald-950 font-bold shadow-[0_0_12px_rgba(202,138,4,0.3)]'
+                    : 'bg-emerald-950/40 border-emerald-500/20 text-emerald-300 hover:bg-emerald-900/40 hover:text-white'
+                }`}
+              >
+                Awaiting parent action
+              </button>
               {(['submitted', 'under_review', 'awaiting_documents', 'decision_pending', 'accepted', 'rejected'] as ApplicationStatus[]).map((status) => (
                 <button
                   key={status}

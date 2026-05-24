@@ -77,20 +77,20 @@ export default async function DevApplicationDetailPage({
 
         <SurfaceCard className="p-5">
           <div className="grid gap-2.5 sm:grid-cols-3">
-            <div className="rounded-2xl border border-primary-100 bg-primary-50/60 p-3.5 shadow-sm">
+            <div className="rounded-2xl border border-accent-100 bg-[rgba(255,248,231,0.85)] p-3.5 shadow-sm">
               <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Parent</div>
               <div className="mt-2 text-sm font-semibold text-slate-950">{application.parentName}</div>
             </div>
-            <div className="rounded-2xl border border-primary-100 bg-primary-50/60 p-3.5 shadow-sm">
+            <div className="rounded-2xl border border-accent-100 bg-[rgba(255,248,231,0.85)] p-3.5 shadow-sm">
               <div className="text-xs uppercase tracking-[0.16em] text-slate-500">School year</div>
               <div className="mt-2 text-sm font-semibold text-slate-950">{application.schoolYear}</div>
             </div>
-            <div className="rounded-2xl border border-primary-100 bg-primary-50/60 p-3.5 shadow-sm">
+            <div className="rounded-2xl border border-accent-100 bg-[rgba(255,248,231,0.85)] p-3.5 shadow-sm">
               <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Reviewer</div>
               <div className="mt-2 text-sm font-semibold text-slate-950">{application.assignedTo}</div>
             </div>
           </div>
-          <div className="mt-3.5 rounded-2xl border border-accent-200 bg-accent-50 p-3.5 text-sm leading-6 text-accent-900">
+          <div className="mt-3.5 rounded-2xl border border-accent-200 bg-[rgba(255,248,231,0.98)] p-3.5 text-sm leading-6 text-accent-900">
             {getPreviewNextAction(application)}
           </div>
         </SurfaceCard>
@@ -99,18 +99,18 @@ export default async function DevApplicationDetailPage({
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
         <SurfaceCard className="p-5">
           <div className="mb-5 grid gap-3 md:grid-cols-3">
-            <div className="rounded-2xl border border-primary-100 bg-primary-50/50 p-3.5">
+            <div className="rounded-2xl border border-accent-100 bg-[rgba(255,248,231,0.82)] p-3.5">
               <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Parent</div>
               <div className="mt-2 text-sm font-semibold text-slate-950">{application.parentName}</div>
               <div className="mt-1 text-sm text-slate-600">{application.parentEmail}</div>
               <div className="text-sm text-slate-600">{application.parentPhone}</div>
             </div>
-            <div className="rounded-2xl border border-primary-100 bg-primary-50/50 p-3.5">
+            <div className="rounded-2xl border border-accent-100 bg-[rgba(255,248,231,0.82)] p-3.5">
               <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Previous school</div>
               <div className="mt-2 text-sm font-semibold text-slate-950">{application.previousSchool}</div>
               <div className="mt-1 text-sm text-slate-600">{application.schoolYear}</div>
             </div>
-            <div className="rounded-2xl border border-primary-100 bg-primary-50/50 p-3.5">
+            <div className="rounded-2xl border border-accent-100 bg-[rgba(255,248,231,0.82)] p-3.5">
               <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Assigned reviewer</div>
               <div className="mt-2 text-sm font-semibold text-slate-950">{application.assignedTo}</div>
               <div className="mt-1 text-sm text-slate-600">{application.completion}% complete</div>

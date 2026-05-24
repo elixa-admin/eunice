@@ -56,7 +56,11 @@ export default function DevParentPage() {
               {['Dashboard', 'Messages', 'Documents', 'Payments', 'Calendar', 'FAQs'].map((label, index) => (
                 <div
                   key={label}
-                  className={`flex items-center justify-between rounded-xl px-3 py-2 ${index === 0 ? 'bg-primary-50 text-primary-900' : 'text-slate-600 hover:bg-slate-50'}`}
+                  className={`flex items-center justify-between rounded-xl px-3 py-2 transition ${
+                    index === 0
+                      ? 'border border-accent-200 bg-[rgba(255,248,231,0.96)] text-primary-950 shadow-[0_10px_24px_rgba(202,138,4,0.10)]'
+                      : 'text-slate-600 hover:bg-[#f8f4e8] hover:text-slate-900'
+                  }`}
                 >
                   <span>{label}</span>
                   {label === 'Messages' ? <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-800">1</span> : null}
@@ -106,7 +110,7 @@ export default function DevParentPage() {
                         onClick={() => setActiveTab(step)}
                         className={`min-w-[128px] rounded-2xl border p-3 text-left transition ${
                           isActive
-                            ? 'border-white/35 bg-white text-primary-900 shadow-[0_12px_24px_rgba(11,20,12,0.18)]'
+                            ? 'border-accent-200 bg-[rgba(255,248,231,0.98)] text-primary-950 shadow-[0_12px_24px_rgba(202,138,4,0.10)]'
                             : isDone
                               ? 'border-white/20 bg-white/12 text-white'
                               : 'border-white/15 bg-white/6 text-white/78 hover:bg-white/10'
@@ -173,8 +177,8 @@ export default function DevParentPage() {
                       {activeTab === 'review' && 'Review everything once more before you submit it to the admissions queue.'}
                     </div>
                     <div className="mt-4 flex flex-wrap gap-3">
-                      <button type="button" className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-semibold text-slate-700">Back</button>
-                      <button type="button" className="rounded-xl bg-primary-900 px-4 py-2.5 text-sm font-semibold text-white">Continue</button>
+                      <button type="button" className="rounded-xl border border-slate-200 bg-[#fcfaf5] px-4 py-2.5 text-sm font-semibold text-slate-700">Back</button>
+                      <button type="button" className="rounded-xl bg-primary-900 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(11,20,12,0.16)]">Continue</button>
                     </div>
                   </div>
                 </div>
@@ -185,7 +189,7 @@ export default function DevParentPage() {
                   <div className="text-xs uppercase tracking-[0.16em] text-primary-800/70">Guidance & Tips</div>
                   <div className="mt-3.5 space-y-2.5">
                     {guidanceItems.map((item) => (
-                      <details key={item.title} className="group rounded-2xl border border-slate-200 bg-[#fbf8f0] p-4">
+                      <details key={item.title} className="group rounded-2xl border border-slate-200 bg-[#fbf8f0] p-4 transition group-open:border-accent-200">
                         <summary className="cursor-pointer list-none text-sm font-semibold text-slate-950">{item.title}</summary>
                         <p className="mt-2 text-sm leading-6 text-slate-600">{item.body}</p>
                       </details>

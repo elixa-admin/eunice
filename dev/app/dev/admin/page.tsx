@@ -87,7 +87,11 @@ export default function DevAdminPage() {
               {['Dashboard', 'Queue Review', 'Applications', 'Document Triage', 'Reports'].map((label, index) => (
                 <div
                   key={label}
-                  className={`flex items-center justify-between rounded-xl px-3 py-2 ${index === 1 ? 'bg-primary-50 text-primary-900' : 'text-slate-600 hover:bg-slate-50'}`}
+                  className={`flex items-center justify-between rounded-xl px-3 py-2 transition ${
+                    index === 1
+                      ? 'border border-accent-200 bg-[rgba(255,248,231,0.96)] text-primary-950 shadow-[0_10px_24px_rgba(202,138,4,0.10)]'
+                      : 'text-slate-600 hover:bg-[#f8f4e8] hover:text-slate-900'
+                  }`}
                 >
                   <span>{label}</span>
                   {label === 'Queue Review' ? <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">2</span> : null}
@@ -184,7 +188,7 @@ export default function DevAdminPage() {
                         <tr
                           key={app.id}
                           onClick={() => setSelectedAppId(app.id)}
-                          className={`cursor-pointer border-l-4 transition ${isSelected ? 'border-l-primary-800 bg-primary-50/30' : laneMeta[appLane].row}`}
+                          className={`cursor-pointer border-l-4 transition ${isSelected ? 'border-l-accent-500 bg-[rgba(255,248,231,0.72)]' : laneMeta[appLane].row}`}
                         >
                           <td className="px-6 py-3.5">
                             <div className="font-semibold text-slate-950">{app.ref}</div>

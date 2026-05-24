@@ -79,6 +79,7 @@ Expected environment variables:
 
 Reference docs:
 
+- `docs/brand/eunice-school-knowledgebase.md`
 - `docs/HANDOVER_BOOTSTRAP_PROMPT.md`
 - `docs/SESSION_INTEGRATION_MEMORY.md`
 - `docs/PLATFORM_RELAY_PROTOCOL.md`

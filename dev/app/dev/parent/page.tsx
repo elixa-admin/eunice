@@ -292,7 +292,7 @@ export default function DevParentPage() {
                                 <div className="mt-1 text-xs leading-5 text-slate-500">{group.why}</div>
                               </div>
                               <span className="rounded-full border border-primary-100 bg-primary-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-primary-800">
-                                {group.items.length} item{group.items.length === 1 ? '' : 's'}
+                                {group.items.length} items
                               </span>
                             </div>
                             <div className="mt-3 space-y-2">

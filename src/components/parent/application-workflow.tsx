@@ -141,6 +141,24 @@ const WORKFLOW_HIGHLIGHTS = [
   },
 ] as const;
 
+const GUIDANCE_SECTIONS = [
+  {
+    key: 'expect',
+    title: 'What to expect',
+    body: 'A short guided journey with one step at a time and a clear end point.',
+  },
+  {
+    key: 'prepare',
+    title: 'What to prepare',
+    body: 'The required checklist is shown first so families can get ready before starting.',
+  },
+  {
+    key: 'finish',
+    title: 'How to finish',
+    body: 'Every required upload gets a clear saved state before you move on.',
+  },
+] as const;
+
 const JOURNEY_OVERVIEW = [
   {
     title: '1. Read the whole journey',
@@ -457,6 +475,7 @@ export default function ParentApplicationWorkflow() {
   const [submitState, setSubmitState] = useState<'idle' | 'saving' | 'submitted' | 'error'>('idle');
   const [draftState, setDraftState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [draftNotice, setDraftNotice] = useState<string | null>(null);
+  const [openGuidance, setOpenGuidance] = useState<'expect' | 'prepare' | 'finish'>('expect');
 
   useEffect(() => {
     async function checkAuthAndLoadData() {
@@ -752,6 +771,8 @@ export default function ParentApplicationWorkflow() {
   const profileComplete = parentComplete && learnerComplete && schoolComplete && roleComplete;
 
   const isReadyToSubmit = readinessConfirmed && profileComplete && requiredDocsAccepted;
+  const visibleRequiredDocs = requiredDocumentRequirements.slice(0, 4);
+  const hiddenRequiredDocs = requiredDocumentRequirements.slice(4);
 
   const stepStates: Record<StepKey, boolean> = {
     checklist: readinessConfirmed,
@@ -1016,9 +1037,11 @@ export default function ParentApplicationWorkflow() {
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">Admissions Workspace</p>
-            <h2 className="display-serif mt-2 text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-950 via-amber-800 to-emerald-900 sm:text-4xl">Complete your application dossier</h2>
+            <h2 className="display-serif mt-2 text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-950 via-amber-800 to-emerald-900 sm:text-4xl">
+              Start your application with confidence
+            </h2>
             <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-600">
-              A refined admissions experience designed for families. Enter details and upload documents to lock in your child's placement.
+              We will show the full checklist first, then guide you through a simple upload path with a clear end point.
             </p>
           </div>
 
@@ -1070,7 +1093,7 @@ export default function ParentApplicationWorkflow() {
           </div>
         </div>
 
-          <div className="mt-6 grid gap-4 md:grid-cols-3">
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
           {WORKFLOW_HIGHLIGHTS.map((item) => (
             <div key={item.title} className="rounded-2xl border border-slate-100 bg-white px-5 py-4 shadow-sm">
               <div className="text-sm font-semibold text-slate-950">{item.title}</div>
@@ -1157,34 +1180,59 @@ export default function ParentApplicationWorkflow() {
                     You can save and return later, but the clearest path is to have the required documents ready before you begin.
                   </p>
                 </div>
-
-                <div className="grid gap-4 lg:grid-cols-2">
-                  <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                    <div className="text-sm font-semibold text-slate-950">How the application works</div>
-                    <div className="mt-3 space-y-3">
-                      {JOURNEY_OVERVIEW.map((item) => (
-                        <div key={item.title} className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-3">
-                          <div className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-800">{item.title}</div>
-                          <p className="mt-1 text-sm leading-6 text-slate-600">{item.body}</p>
-                        </div>
-                      ))}
-                    </div>
+                <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                  <div className="text-sm font-semibold text-slate-950">How the application works</div>
+                  <div className="mt-3 grid gap-3 sm:grid-cols-3">
+                    {GUIDANCE_SECTIONS.map((section) => (
+                      <button
+                        key={section.key}
+                        type="button"
+                        onClick={() => setOpenGuidance(section.key)}
+                        className={`rounded-2xl border px-4 py-4 text-left transition ${
+                          openGuidance === section.key
+                            ? 'border-emerald-400 bg-emerald-50'
+                            : 'border-slate-200 bg-slate-50 hover:bg-white'
+                        }`}
+                      >
+                        <div className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-800">{section.title}</div>
+                        <p className="mt-2 text-sm leading-6 text-slate-600">{section.body}</p>
+                      </button>
+                    ))}
                   </div>
-                  <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                    <div className="text-sm font-semibold text-slate-950">Required documents to have ready</div>
-                    <div className="mt-3 space-y-2">
-                      {requiredDocumentRequirements.map((requirement) => (
-                        <div key={requirement.id} className="flex gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-3">
-                          <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border border-emerald-300 bg-white text-[10px] font-bold text-emerald-800">
-                            ✓
-                          </span>
-                          <div>
-                            <div className="text-sm font-semibold text-slate-950">{requirement.label}</div>
-                            <p className="mt-1 text-sm leading-6 text-slate-600">{requirement.reason}</p>
-                          </div>
-                        </div>
-                      ))}
+                  <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-600">
+                    {GUIDANCE_SECTIONS.find((section) => section.key === openGuidance)?.body}
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <div className="text-sm font-semibold text-slate-950">Required documents to have ready</div>
+                      <p className="mt-1 text-sm leading-6 text-slate-600">
+                        These are the first items to prepare so the process stays short and clear.
+                      </p>
                     </div>
+                    <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                      {requiredDocumentRequirements.length} total
+                    </span>
+                  </div>
+                  <div className="mt-3 grid gap-2">
+                    {visibleRequiredDocs.map((requirement) => (
+                      <div key={requirement.id} className="flex gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-3">
+                        <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border border-emerald-300 bg-white text-[10px] font-bold text-emerald-800">
+                          ✓
+                        </span>
+                        <div>
+                          <div className="text-sm font-semibold text-slate-950">{requirement.label}</div>
+                          <p className="mt-1 text-sm leading-6 text-slate-600">{requirement.reason}</p>
+                        </div>
+                      </div>
+                    ))}
+                    {hiddenRequiredDocs.length > 0 && (
+                      <div className="rounded-xl border border-dashed border-slate-200 bg-white px-3 py-3 text-sm text-slate-500">
+                        {hiddenRequiredDocs.length} more required item{hiddenRequiredDocs.length === 1 ? '' : 's'} will appear later in the guided upload step.
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -1426,10 +1474,10 @@ export default function ParentApplicationWorkflow() {
                 <div className="pt-4 border-t border-slate-200 space-y-4">
                   <div className="rounded-2xl border border-primary-100 bg-primary-50/70 p-4 shadow-sm">
                     <div className="text-sm font-semibold text-slate-950">Upload plan</div>
-                    <div className="mt-2 grid gap-2 text-sm leading-6 text-slate-600 sm:grid-cols-3">
-                      <p>1. Upload the required documents first.</p>
-                      <p>2. Add conditional items only if they apply.</p>
-                      <p>3. Replace anything marked for review before submitting.</p>
+                    <div className="mt-2 grid gap-2 text-sm leading-6 text-slate-600 sm:grid-cols-2 lg:grid-cols-3">
+                      <p>1. Upload the next required document only.</p>
+                      <p>2. Check the saved state before moving on.</p>
+                      <p>3. Add conditional items only if they apply.</p>
                     </div>
                   </div>
 
@@ -1450,16 +1498,24 @@ export default function ParentApplicationWorkflow() {
                         {requiredDocumentRequirements.map((requirement) => {
                           const documentType = requirement.documentType;
                           const document = draft.documents[documentType];
+                          const isPrimary = visibleRequiredDocs.some((doc) => doc.id === requirement.id);
 
                           return (
-                            <div key={requirement.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm">
+                            <div
+                              key={requirement.id}
+                              className={`rounded-2xl border p-4 shadow-sm ${
+                                isPrimary ? 'border-emerald-200 bg-emerald-50/40' : 'border-slate-200 bg-slate-50'
+                              }`}
+                            >
                               <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                                 <div>
                                   <div className="flex items-center gap-2 flex-wrap">
                                     <h5 className="text-sm font-semibold text-slate-950">{requirement.label}</h5>
-                                    <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-700">
-                                      Required now
-                                    </span>
+                                    {isPrimary && (
+                                      <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-700">
+                                        Required now
+                                      </span>
+                                    )}
                                     <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
                                       {documentCategoryLabels[requirement.category]}
                                     </span>
@@ -1506,6 +1562,15 @@ export default function ParentApplicationWorkflow() {
                         })}
                       </div>
                     </div>
+
+                    {hiddenRequiredDocs.length > 0 && (
+                      <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-4 shadow-sm">
+                        <div className="text-sm font-semibold text-slate-950">More required items</div>
+                        <p className="mt-1 text-sm leading-6 text-slate-600">
+                          These stay tucked away until you reach the next part of the upload sequence.
+                        </p>
+                      </div>
+                    )}
 
                     {conditionalDocumentRequirements.length > 0 && (
                       <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
@@ -1721,6 +1786,7 @@ export default function ParentApplicationWorkflow() {
                     <div>
                       <div className="text-sm font-semibold text-slate-950">{DOCUMENT_TYPE_LABELS[documentType]}</div>
                       <div className="mt-1 text-xs leading-5 text-slate-500">{getDocumentStateGuidance(document.validationState)}</div>
+                      {document.fileName ? <div className="mt-1 text-xs font-medium text-slate-600">Saved: {document.fileName}</div> : null}
                     </div>
                     <div className="text-right">
                       <span className={`rounded-full border px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider ${getValidationTone(document.validationState)}`}>

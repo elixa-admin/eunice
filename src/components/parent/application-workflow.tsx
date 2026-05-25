@@ -1367,9 +1367,9 @@ export default function ParentApplicationWorkflow() {
                   <div className="rounded-2xl border border-primary-100 bg-primary-50/70 p-4 shadow-sm">
                     <div className="text-sm font-semibold text-slate-950">Next steps</div>
                     <div className="mt-2 grid gap-2 text-sm leading-6 text-slate-600 sm:grid-cols-3">
-                      <p>1. Upload one clear file per card.</p>
-                      <p>2. Keep files under 5 MB.</p>
-                      <p>3. Replace anything flagged for review.</p>
+                      <p>Upload one clear file per card.</p>
+                      <p>Keep files under 5 MB.</p>
+                      <p>Replace only flagged items.</p>
                     </div>
                   </div>
 
@@ -1480,13 +1480,13 @@ export default function ParentApplicationWorkflow() {
                   </div>
                 </div>
                 <div className="rounded-2xl border border-primary-100 bg-primary-50 p-4 text-sm leading-6 text-slate-700">
-                  If a file is blurry or wrong, replace it now.
+                  Replace any blurry or wrong file before submitting.
                 </div>
                 <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700">
                   After you submit, the school will review your file and contact you if anything still needs attention.
                 </div>
                 <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm leading-6 text-slate-700 sm:hidden">
-                  Keep file names simple and only replace flagged items.
+                  Keep file names simple and replace only flagged items.
                 </div>
               </div>
             )}

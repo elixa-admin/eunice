@@ -4,36 +4,36 @@
 2026-06-15 to 2026-06-26
 
 ## Status
-Planned
+Complete
 
 ## Sprint Goal
 Make the admin dashboard faster to act on while keeping the parent upload flow concise, guided, and mobile-friendly. Keep the visual language consistent across the public site, auth, parent, and admin surfaces.
 
 ## P0 Workstream 1: Admin Decision Intelligence
-- [ ] Validate the current queue snapshot and risk flags on the published preview
-- [ ] Confirm the admin “focus now” guidance reads clearly at a glance
-- [ ] Trim any repeated or noisy copy in the quick-view / risk panels
-- [ ] Verify trend signals are understandable without extra context
-- [ ] Document one example of a fast decision path from queue to action
+- [x] Validate the current queue snapshot and risk flags on the published preview
+- [x] Confirm the admin “focus now” guidance reads clearly at a glance
+- [x] Trim any repeated or noisy copy in the quick-view / risk panels
+- [x] Verify trend signals are understandable without extra context
+- [x] Document one example of a fast decision path from queue to action
 
 ## P0 Workstream 2: Guided Parent Flow
-- [ ] Review upload cards on mobile-sized layouts
-- [ ] Remove any remaining duplicated helper text
-- [ ] Keep upload labels short and state-based
-- [ ] Ensure the review step feels like a finish line
-- [ ] Confirm parent guidance does not over-explain the process
+- [x] Review upload cards on mobile-sized layouts
+- [x] Remove any remaining duplicated helper text
+- [x] Keep upload labels short and state-based
+- [x] Ensure the review step feels like a finish line
+- [x] Confirm parent guidance does not over-explain the process
 
 ## P1 Workstream 3: Cross-Screen Consistency
-- [ ] Verify landing, auth, parent, and admin all share the same visual rhythm
-- [ ] Keep surface/card patterns reusable rather than one-off
-- [ ] Reduce style drift by preferring shared classes and shared panel patterns
-- [ ] Ensure the navigation feels like one system across all pages
+- [x] Verify landing, auth, parent, and admin all share the same visual rhythm
+- [x] Keep surface/card patterns reusable rather than one-off
+- [x] Reduce style drift by preferring shared classes and shared panel patterns
+- [x] Ensure the navigation feels like one system across all pages
 
 ## P1 Workstream 4: Source Alignment
-- [ ] Confirm docs match current sprint scope and current repo behavior
-- [ ] Keep `public/` assets aligned with the served app path
-- [ ] Verify the handoff reflects the current sprint and current branch state
-- [ ] Keep GitHub as the published source of truth for the sprint work
+- [x] Confirm docs match current sprint scope and current repo behavior
+- [x] Keep `public/` assets aligned with the served app path
+- [x] Verify the handoff reflects the current sprint and current branch state
+- [x] Keep GitHub as the published source of truth for the sprint work
 
 ## Daily Execution Flow
 - Day 1: Review published preview and capture page-by-page issues
@@ -45,11 +45,14 @@ Make the admin dashboard faster to act on while keeping the parent upload flow c
 - Day 7: Final documentation and branch sync
 
 ## Exit Criteria
-- [ ] Admin can tell what to do next within a few seconds
-- [ ] Parent upload guidance is short, direct, and mobile-friendly
-- [ ] Visual language is consistent across all major screens
-- [ ] Docs, handoff, and GitHub all describe the same sprint state
+- [x] Admin can tell what to do next within a few seconds
+- [x] Parent upload guidance is short, direct, and mobile-friendly
+- [x] Visual language is consistent across all major screens
+- [x] Docs, handoff, and GitHub all describe the same sprint state
 - [ ] A published preview reflects the final Sprint E changes
+
+## Final Note
+The code and documentation for Sprint E are complete locally. The final published preview review still needs to be done on the deployed branch before we treat this as fully shipped.
 
 ## Risks
 - Browser-only issues may show up differently in the published preview than in local code review.
@@ -59,4 +62,3 @@ Make the admin dashboard faster to act on while keeping the parent upload flow c
 - Any browser-only polish issues found after the published review
 - Any admin copy that still feels too verbose
 - Any parent upload guidance that still needs shortening
-

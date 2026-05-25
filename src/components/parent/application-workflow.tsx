@@ -10,7 +10,6 @@ import {
 } from '@/lib/domain/applications';
 import {
   getApplicationDocumentRequirements,
-  getReadinessChecklist,
   getRequiredDocumentTypes,
 } from '@/lib/domain/application-requirements';
 import {
@@ -86,7 +85,7 @@ const STEP_META: Record<StepKey, StepMeta> = {
   checklist: {
     eyebrow: 'Step 0',
     title: 'Preparation & Checklist',
-    description: 'Confirm you have the required documents and understand the admissions journey before starting.',
+    description: 'See the full journey, confirm the required documents, and understand what happens before you begin.',
   },
   learner: {
     eyebrow: 'Step 1',
@@ -106,7 +105,7 @@ const STEP_META: Record<StepKey, StepMeta> = {
   fees_docs: {
     eyebrow: 'Step 4',
     title: 'Fee Payer & Uploads',
-    description: 'Select fee-payer responsibility and upload all required checklist documents.',
+    description: 'Select fee-payer responsibility and upload the required documents in a clear, finite sequence.',
   },
   review: {
     eyebrow: 'Step 5',
@@ -139,6 +138,25 @@ const WORKFLOW_HIGHLIGHTS = [
   {
     title: 'See the status',
     body: 'Parents can quickly see what is complete, what still needs action, and what is under review.',
+  },
+] as const;
+
+const JOURNEY_OVERVIEW = [
+  {
+    title: '1. Read the whole journey',
+    body: 'See the stages up front so there are no surprise asks later.',
+  },
+  {
+    title: '2. Check the document list',
+    body: 'Prepare the required documents first, then note anything conditional.',
+  },
+  {
+    title: '3. Upload one step at a time',
+    body: 'Each file is confirmed before you move on to the next part.',
+  },
+  {
+    title: '4. Review before sending',
+    body: 'The final step shows exactly what is still missing, if anything.',
   },
 ] as const;
 
@@ -705,18 +723,11 @@ export default function ParentApplicationWorkflow() {
     financialStatus: draft.financialStatus,
   };
   const documentRequirements = getApplicationDocumentRequirements(requirementInput);
-  const readinessChecklist = getReadinessChecklist(requirementInput);
   const requiredDocumentTypes = getRequiredDocumentTypes(requirementInput);
-  const documentCategoryOrder: Array<'identity' | 'school' | 'family' | 'medical' | 'financial' | 'legal' | 'supporting'> = [
-    'identity',
-    'school',
-    'family',
-    'medical',
-    'financial',
-    'legal',
-    'supporting',
-  ];
-  const documentCategoryLabels: Record<(typeof documentCategoryOrder)[number], string> = {
+  const documentCategoryLabels: Record<
+    'identity' | 'school' | 'family' | 'medical' | 'financial' | 'legal' | 'supporting',
+    string
+  > = {
     identity: 'Identity',
     school: 'School',
     family: 'Family',
@@ -725,6 +736,8 @@ export default function ParentApplicationWorkflow() {
     legal: 'Legal',
     supporting: 'Supporting',
   };
+  const requiredDocumentRequirements = documentRequirements.filter((requirement) => requirement.required);
+  const conditionalDocumentRequirements = documentRequirements.filter((requirement) => !requirement.required);
   const requiredDocsAccepted = requiredDocumentTypes.every((documentType) =>
     isDocumentStateSubmissionReady(draft.documents[documentType].validationState),
   );
@@ -1141,27 +1154,74 @@ export default function ParentApplicationWorkflow() {
                     Estimated completion time: <span className="font-semibold">{PROCESS_ESTIMATE}</span>
                   </p>
                   <p className="mt-1 text-sm leading-6 text-slate-700">
-                    You can save and return later, but having these documents ready will make the process much faster.
+                    You can save and return later, but the clearest path is to have the required documents ready before you begin.
                   </p>
                 </div>
 
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-4 lg:grid-cols-2">
                   <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                    <div className="text-sm font-semibold text-slate-950">Required documents checklist</div>
-                    <ul className="mt-2 space-y-2 text-sm leading-6 text-slate-600">
-                      {readinessChecklist.map((item) => (
-                        <li key={item}>• {item}</li>
+                    <div className="text-sm font-semibold text-slate-950">How the application works</div>
+                    <div className="mt-3 space-y-3">
+                      {JOURNEY_OVERVIEW.map((item) => (
+                        <div key={item.title} className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-3">
+                          <div className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-800">{item.title}</div>
+                          <p className="mt-1 text-sm leading-6 text-slate-600">{item.body}</p>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                   </div>
                   <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                    <div className="text-sm font-semibold text-slate-950">Upload quality rules</div>
-                    <ul className="mt-2 space-y-2 text-sm leading-6 text-slate-600">
-                      {QUALITY_TIPS.map((tip) => (
-                        <li key={tip}>• {tip}</li>
+                    <div className="text-sm font-semibold text-slate-950">Required documents to have ready</div>
+                    <div className="mt-3 space-y-2">
+                      {requiredDocumentRequirements.map((requirement) => (
+                        <div key={requirement.id} className="flex gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-3">
+                          <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border border-emerald-300 bg-white text-[10px] font-bold text-emerald-800">
+                            ✓
+                          </span>
+                          <div>
+                            <div className="text-sm font-semibold text-slate-950">{requirement.label}</div>
+                            <p className="mt-1 text-sm leading-6 text-slate-600">{requirement.reason}</p>
+                          </div>
+                        </div>
                       ))}
-                    </ul>
+                    </div>
                   </div>
+                </div>
+
+                {conditionalDocumentRequirements.length > 0 && (
+                  <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                    <div className="text-sm font-semibold text-slate-950">Only if this applies to your family</div>
+                    <p className="mt-1 text-sm leading-6 text-slate-600">
+                      These documents only appear when your answers make them relevant.
+                    </p>
+                    <div className="mt-3 space-y-2">
+                      {conditionalDocumentRequirements.map((requirement) => (
+                        <div key={requirement.id} className="flex gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-3">
+                          <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border border-slate-300 bg-white text-[10px] font-bold text-slate-500">
+                            +
+                          </span>
+                          <div>
+                            <div className="flex flex-wrap items-center gap-2">
+                              <div className="text-sm font-semibold text-slate-950">{requirement.label}</div>
+                              <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-amber-800">
+                                Conditional
+                              </span>
+                            </div>
+                            <p className="mt-1 text-sm leading-6 text-slate-600">{requirement.reason}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                  <div className="text-sm font-semibold text-slate-950">Upload quality rules</div>
+                  <ul className="mt-2 space-y-2 text-sm leading-6 text-slate-600">
+                    {QUALITY_TIPS.map((tip) => (
+                      <li key={tip}>• {tip}</li>
+                    ))}
+                  </ul>
                 </div>
 
                 <label className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700">
@@ -1172,7 +1232,7 @@ export default function ParentApplicationWorkflow() {
                     className="mt-0.5 h-4 w-4 rounded border-slate-300 text-primary-700 focus:ring-primary-300"
                   />
                   <span>
-                    I understand the full requirements and I am ready to continue with the application stages.
+                    I understand the full checklist and I am ready to continue with the application stages.
                   </span>
                 </label>
               </div>
@@ -1365,90 +1425,162 @@ export default function ParentApplicationWorkflow() {
 
                 <div className="pt-4 border-t border-slate-200 space-y-4">
                   <div className="rounded-2xl border border-primary-100 bg-primary-50/70 p-4 shadow-sm">
-                    <div className="text-sm font-semibold text-slate-950">Next steps</div>
+                    <div className="text-sm font-semibold text-slate-950">Upload plan</div>
                     <div className="mt-2 grid gap-2 text-sm leading-6 text-slate-600 sm:grid-cols-3">
-                      <p>Upload one clear file per card.</p>
-                      <p>Keep files under 5 MB.</p>
-                      <p>Replace only flagged items.</p>
+                      <p>1. Upload the required documents first.</p>
+                      <p>2. Add conditional items only if they apply.</p>
+                      <p>3. Replace anything marked for review before submitting.</p>
                     </div>
                   </div>
 
-                  <div className="space-y-5">
-                    {documentCategoryOrder.map((category) => {
-                      const categoryRequirements = documentRequirements.filter((requirement) => requirement.category === category);
-                      if (categoryRequirements.length === 0) return null;
+                  <div className="space-y-4">
+                    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <h4 className="text-sm font-semibold text-slate-950">Required documents</h4>
+                          <p className="mt-1 text-sm leading-6 text-slate-600">
+                            Upload these first. They are the core items the school expects for every application.
+                          </p>
+                        </div>
+                        <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                          {requiredDocumentRequirements.length} items
+                        </span>
+                      </div>
+                      <div className="mt-4 grid gap-4">
+                        {requiredDocumentRequirements.map((requirement) => {
+                          const documentType = requirement.documentType;
+                          const document = draft.documents[documentType];
 
-                      return (
-                        <div key={category} className="space-y-3">
-                          <div className="flex items-center justify-between">
-                            <h4 className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-                              {documentCategoryLabels[category]}
-                            </h4>
-                            <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
-                              {categoryRequirements.length} items
-                            </span>
-                          </div>
-                          <div className="grid gap-4">
-                            {categoryRequirements.map((requirement) => {
-                              const documentType = requirement.documentType;
-                              const document = draft.documents[documentType];
-
-                              return (
-                                <div key={requirement.id} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                                    <div>
-                                      <div className="flex items-center gap-2 flex-wrap">
-                                        <h5 className="text-sm font-semibold text-slate-950">{requirement.label}</h5>
-                                        <span className="rounded-full bg-primary-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-primary-700">
-                                          {requirement.required ? 'Required' : 'Conditional'}
-                                        </span>
-                                        <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
-                                          {documentCategoryLabels[category]}
-                                        </span>
-                                      </div>
-                                      <p className="mt-1 text-sm leading-6 text-slate-600">{DOCUMENT_UPLOAD_GUIDANCE[documentType]}</p>
-                                      <p className="mt-1 text-xs leading-5 text-slate-500">
-                                        {getDocumentStateGuidance(document.validationState)}
-                                      </p>
-                                      {document.fileName ? (
-                                        <p className="mt-2 text-xs font-medium text-slate-600">Saved: {document.fileName}</p>
-                                      ) : null}
-                                      {document.uploadedAt ? (
-                                        <p className="mt-1 text-xs text-slate-500">
-                                          Updated {new Date(document.uploadedAt).toLocaleDateString()}.
-                                        </p>
-                                      ) : null}
-                                    </div>
-                                    <div className={`rounded-2xl border px-3 py-2 text-sm font-medium ${getValidationTone(document.validationState)}`}>
-                                      {DOCUMENT_VALIDATION_LABELS[document.validationState]}
-                                    </div>
+                          return (
+                            <div key={requirement.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm">
+                              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                                <div>
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <h5 className="text-sm font-semibold text-slate-950">{requirement.label}</h5>
+                                    <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-700">
+                                      Required now
+                                    </span>
+                                    <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                                      {documentCategoryLabels[requirement.category]}
+                                    </span>
                                   </div>
+                                  <p className="mt-1 text-sm leading-6 text-slate-600">{requirement.reason}</p>
+                                  <p className="mt-1 text-sm leading-6 text-slate-600">{DOCUMENT_UPLOAD_GUIDANCE[documentType]}</p>
+                                  <p className="mt-1 text-xs leading-5 text-slate-500">
+                                    {getDocumentStateGuidance(document.validationState)}
+                                  </p>
+                                  {document.fileName ? (
+                                    <p className="mt-2 text-xs font-medium text-slate-600">Saved: {document.fileName}</p>
+                                  ) : null}
+                                  {document.uploadedAt ? (
+                                    <p className="mt-1 text-xs text-slate-500">
+                                      Updated {new Date(document.uploadedAt).toLocaleDateString()}.
+                                    </p>
+                                  ) : null}
+                                </div>
+                                <div className={`rounded-2xl border px-3 py-2 text-sm font-medium ${getValidationTone(document.validationState)}`}>
+                                  {DOCUMENT_VALIDATION_LABELS[document.validationState]}
+                                </div>
+                              </div>
 
-                                  <div className="mt-4 flex flex-wrap gap-3">
-                                    <label className="inline-flex cursor-pointer items-center rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-primary-200 hover:bg-primary-50">
-                                      {uploadingDocument === documentType ? 'Saving...' : getUploadActionLabel(document)}
-                                      <input
-                                        type="file"
-                                        className="sr-only"
-                                        accept={DOCUMENT_CONTRACTS[documentType].acceptedMimeTypes.join(',')}
-                                        onChange={(event) => handleFileSelect(documentType, event.target.files?.[0] ?? null)}
-                                      />
-                                    </label>
-                                    <button
-                                      type="button"
-                                      onClick={() => clearDocument(documentType)}
-                                      className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
-                                    >
-                                      Clear
-                                    </button>
+                              <div className="mt-4 flex flex-wrap gap-3">
+                                <label className="inline-flex cursor-pointer items-center rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-primary-200 hover:bg-primary-50">
+                                  {uploadingDocument === documentType ? 'Saving...' : getUploadActionLabel(document)}
+                                  <input
+                                    type="file"
+                                    className="sr-only"
+                                    accept={DOCUMENT_CONTRACTS[documentType].acceptedMimeTypes.join(',')}
+                                    onChange={(event) => handleFileSelect(documentType, event.target.files?.[0] ?? null)}
+                                  />
+                                </label>
+                                <button
+                                  type="button"
+                                  onClick={() => clearDocument(documentType)}
+                                  className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+                                >
+                                  Clear
+                                </button>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {conditionalDocumentRequirements.length > 0 && (
+                      <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                        <div className="flex items-center justify-between gap-3">
+                          <div>
+                            <h4 className="text-sm font-semibold text-slate-950">Conditional documents</h4>
+                            <p className="mt-1 text-sm leading-6 text-slate-600">
+                              Only upload these when your family situation makes them relevant.
+                            </p>
+                          </div>
+                          <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                            {conditionalDocumentRequirements.length} items
+                          </span>
+                        </div>
+                        <div className="mt-4 grid gap-4">
+                          {conditionalDocumentRequirements.map((requirement) => {
+                            const documentType = requirement.documentType;
+                            const document = draft.documents[documentType];
+
+                            return (
+                              <div key={requirement.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm">
+                                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                                  <div>
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                      <h5 className="text-sm font-semibold text-slate-950">{requirement.label}</h5>
+                                      <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-amber-800">
+                                        Conditional
+                                      </span>
+                                      <span className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                                        {documentCategoryLabels[requirement.category]}
+                                      </span>
+                                    </div>
+                                    <p className="mt-1 text-sm leading-6 text-slate-600">{requirement.reason}</p>
+                                    <p className="mt-1 text-sm leading-6 text-slate-600">{DOCUMENT_UPLOAD_GUIDANCE[documentType]}</p>
+                                    <p className="mt-1 text-xs leading-5 text-slate-500">
+                                      {getDocumentStateGuidance(document.validationState)}
+                                    </p>
+                                    {document.fileName ? (
+                                      <p className="mt-2 text-xs font-medium text-slate-600">Saved: {document.fileName}</p>
+                                    ) : null}
+                                    {document.uploadedAt ? (
+                                      <p className="mt-1 text-xs text-slate-500">
+                                        Updated {new Date(document.uploadedAt).toLocaleDateString()}.
+                                      </p>
+                                    ) : null}
+                                  </div>
+                                  <div className={`rounded-2xl border px-3 py-2 text-sm font-medium ${getValidationTone(document.validationState)}`}>
+                                    {DOCUMENT_VALIDATION_LABELS[document.validationState]}
                                   </div>
                                 </div>
-                              );
-                            })}
-                          </div>
+
+                                <div className="mt-4 flex flex-wrap gap-3">
+                                  <label className="inline-flex cursor-pointer items-center rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-primary-200 hover:bg-primary-50">
+                                    {uploadingDocument === documentType ? 'Saving...' : getUploadActionLabel(document)}
+                                    <input
+                                      type="file"
+                                      className="sr-only"
+                                      accept={DOCUMENT_CONTRACTS[documentType].acceptedMimeTypes.join(',')}
+                                      onChange={(event) => handleFileSelect(documentType, event.target.files?.[0] ?? null)}
+                                    />
+                                  </label>
+                                  <button
+                                    type="button"
+                                    onClick={() => clearDocument(documentType)}
+                                    className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+                                  >
+                                    Clear
+                                  </button>
+                                </div>
+                              </div>
+                            );
+                          })}
                         </div>
-                      );
-                    })}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -1480,7 +1612,7 @@ export default function ParentApplicationWorkflow() {
                   </div>
                 </div>
                 <div className="rounded-2xl border border-primary-100 bg-primary-50 p-4 text-sm leading-6 text-slate-700">
-                  Replace any blurry or wrong file before submitting.
+                  If a file is blurry or wrong, replace it now.
                 </div>
                 <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700">
                   After you submit, the school will review your file and contact you if anything still needs attention.

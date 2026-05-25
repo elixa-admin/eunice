@@ -1,4 +1,4 @@
-# Compact Handoff — Sprint F Rebase
+# Compact Handoff — Sprint G Parent Flow
 
 ## Date
 2026-05-25
@@ -44,6 +44,9 @@
 7. Sprint F was scoped to restore a single source of truth and deployment stability:
    - `docs/SPRINT_F_DEPLOYMENT_STABILITY_AND_SOURCE_OF_TRUTH.md`
    - `docs/SPRINT_F_IMPLEMENTATION_TRACKER.md`
+8. Sprint G was defined to simplify the parent journey and keep uploads document-first:
+   - `docs/SPRINT_G_GUIDED_PARENT_ONBOARDING_AND_DOCUMENT_FIRST_UPLOADS.md`
+   - `docs/SPRINT_G_IMPLEMENTATION_TRACKER.md`
 
 ## Active Working Files
 - `src/components/parent/application-workflow.tsx`
@@ -80,6 +83,12 @@
 3. Remove ambiguity between temporary recovery work and the published source of truth
 4. Document the stable setup so the next sprint starts from a clean baseline
 
+## Sprint G Focus
+1. Explain the whole parent journey before the form begins
+2. Show the required document checklist up front
+3. Guide uploads one step at a time without surprise follow-on requirements
+4. Keep the parent experience calm, finite, and easy to recover
+
 ## Definition of Done Gate
 - P0 complete and verified
 - P1 complete (or explicit carry-over risks)
@@ -88,7 +97,7 @@
 - Pilot-planning summary ready for stakeholder review
 
 ## Immediate Next Action
-Lock in the Sprint F source-of-truth notes, then verify the live Vercel project settings match `/dev` and the canonical GitHub branch.
+Begin Sprint G from the existing parent flow and trim it toward document-first onboarding.
 
 ## Deployment Recovery Note
 - If Vercel reports that the root directory is missing, first confirm the project is using `dev/` as the app root.

@@ -1,0 +1,22 @@
+# Local workspace handoff notes
+AGENTS.md
+CODEX_HANDOFF.md
+SESSION_BOOTSTRAP_PROMPT.md
+src/AGENTS.md
+src/CLAUDE.md
+src/README.md
+
+# Generated Supabase CLI state
+supabase/.temp/
+.codex-home-supabase/
+
+# Common editor and build artifacts
+.DS_Store
+.env*
+!.env.example
+.vercel
+.codegraph/
+*.tsbuildinfo
+**/node_modules/
+**/.next/
+**/.vercel/

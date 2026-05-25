@@ -1,6 +1,8 @@
 # Sprint E Implementation Tracker
 
-**Status:** Active
+**Status:** Planned
+
+See [SPRINT_E_EXECUTION_CHECKLIST.md](./SPRINT_E_EXECUTION_CHECKLIST.md) for the day-by-day execution plan.
 
 ## Track 1 — Admin Decision Intelligence
 - [x] Live queue snapshot
@@ -22,3 +24,4 @@
 - [x] Sprint E plan written
 - [x] Local handoff updated
 - [x] Repository sync note
+- [x] Execution checklist written

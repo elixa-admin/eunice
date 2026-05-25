@@ -1486,7 +1486,7 @@ export default function ParentApplicationWorkflow() {
                   After you submit, the school will review your file and contact you if anything still needs attention.
                 </div>
                 <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm leading-6 text-slate-700 sm:hidden">
-                  Keep file names simple and replace only flagged items.
+                  Keep file names simple and only replace flagged items.
                 </div>
               </div>
             )}

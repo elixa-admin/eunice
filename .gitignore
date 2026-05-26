@@ -27,4 +27,7 @@ supabase/.temp/
 coverage/
 out/
 .git-corrupt-backups/
+.git-backup-pre-repair-2026-05-26/
+.git-nested-backups/
 .eslintcache
+.workspace-orphans/

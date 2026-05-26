@@ -1,6 +1,6 @@
 # Sprint J — Repo Health and Shared Cleanup
 
-**Status:** P0/P1 partially executed on 2026-05-26
+**Status:** P0/P1 executed on 2026-05-26
 
 ## Goal
 
@@ -37,6 +37,9 @@ Use a clean clone/worktree as the canonical publish path if Git status remains s
 ### Completed
 
 - Removed the remaining `dev` lint warnings by replacing logo `<img>` tags with `next/image`.
+- Extracted admin dashboard helper logic into `src/lib/admin-dashboard.tsx`.
+- Extracted parent workflow draft/config helper logic into `src/lib/parent-application.ts`.
+- Reduced helper and config sprawl inside the largest `src` route files.
 - Reran both verification commands successfully.
 
 ### Verified
@@ -52,8 +55,12 @@ Use a clean clone/worktree as the canonical publish path if Git status remains s
 - `dev/app/dev/page.tsx`
 - `dev/components/nav.tsx`
 - `dev/components/preview-shell.tsx`
+- `src/lib/admin-dashboard.tsx`
+- `src/lib/parent-application.ts`
+- `src/app/admin/page.tsx`
+- `src/components/parent/application-workflow.tsx`
 - `docs/SPRINT_J_REPO_HEALTH_AND_SHARED_CLEANUP.md`
 
 ## Next Sprint Slice
 
-Proceed with P1 shared system consolidation only after Git status is either stable or the team agrees to use a clean clone as the publish path.
+Proceed with shared system consolidation in `dev/` and selective component extraction now that the clean clone is the agreed publish path.

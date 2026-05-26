@@ -44,8 +44,8 @@ export default function SignIn() {
       } else {
         router.push('/parent');
       }
-    } catch (err: any) {
-      setError(err.message || 'An error occurred during sign in.');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'An error occurred during sign in.');
     } finally {
       setLoading(false);
     }
@@ -117,7 +117,7 @@ export default function SignIn() {
         </form>
 
         <div className="mt-8 text-center border-t border-white/5 pt-6 text-sm text-primary-200">
-          Don't have an account?{' '}
+          Don&apos;t have an account?{' '}
           <Link href="/auth/signup" className="text-white font-semibold hover:underline">
             Create account
           </Link>

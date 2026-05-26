@@ -1,0 +1,145 @@
+@import "tailwindcss";
+
+/* ─── Eunice Design System — Base Tokens ─────────────────────────────────── */
+:root {
+  /* Brand colours (aligned with tailwind.config.ts) */
+  --color-primary-50:  #f0fdf4;
+  --color-primary-100: #dcfce7;
+  --color-primary-500: #0b7a5b;
+  --color-primary-600: #08664b;
+  --color-primary-900: #005c42;
+
+  --color-accent-500:  #d6aa3a;
+  --color-accent-600:  #b88d28;
+
+  --color-neutral-50:  #fafafa;
+  --color-neutral-100: #f5f5f5;
+  --color-neutral-200: #e5e5e5;
+  --color-neutral-700: #404040;
+  --color-neutral-800: #262626;
+  --color-neutral-900: #171717;
+
+  /* Glassmorphism */
+  --glass-bg:     rgba(255, 255, 255, 0.15);
+  --glass-border: rgba(255, 255, 255, 0.25);
+  --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+
+  /* Semantic aliases */
+  --background: var(--color-neutral-50);
+  --foreground: var(--color-neutral-900);
+  --surface:    #ffffff;
+  --border-subtle: rgba(15, 23, 42, 0.08);
+  --shadow-soft: 0 18px 60px rgba(15, 23, 42, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --glass-bg:     rgba(0, 0, 0, 0.25);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --background: var(--color-neutral-900);
+    --foreground: var(--color-neutral-50);
+    --surface:    var(--color-neutral-800);
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-serif);
+}
+
+/* ─── Base Styles ─────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background:
+    radial-gradient(circle at top left, rgba(11, 122, 91, 0.10), transparent 32%),
+    radial-gradient(circle at top right, rgba(214, 170, 58, 0.08), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(8, 102, 75, 0.06), transparent 24%),
+    linear-gradient(180deg, rgba(255,255,255,0.45), rgba(255,255,255,0)),
+    var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), 'Inter', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+::selection {
+  background: rgba(22, 163, 74, 0.18);
+  color: var(--color-neutral-900);
+}
+
+::placeholder {
+  color: rgba(71, 85, 105, 0.55);
+}
+
+a, button, input, textarea, select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a {
+  transition:
+    transform 160ms ease,
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid rgba(214, 170, 58, 0.85);
+  outline-offset: 2px;
+}
+
+body::-webkit-scrollbar {
+  width: 12px;
+}
+
+body::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.04);
+}
+
+body::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.18);
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+.surface-card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(18px);
+}
+
+/* ─── Utility: Glass Card ─────────────────────────────────────────────────── */
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.display-serif {
+  font-family: var(--font-serif), Georgia, 'Times New Roman', serif;
+}

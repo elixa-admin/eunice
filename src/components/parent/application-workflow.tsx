@@ -1,7 +1,7 @@
 'use client';
 
 import type { FormEvent } from 'react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import supabase from '@/lib/supabase';
 import {
   APPLICATION_STATUS_DESCRIPTIONS,
@@ -13,7 +13,6 @@ import {
   getRequiredDocumentTypes,
 } from '@/lib/domain/application-requirements';
 import {
-  INTAKE_ROLE_LABELS,
   createDefaultIntakeRoleState,
   type IntakeRoleProfileField,
   type IntakeRoleState,
@@ -30,6 +29,22 @@ import {
   type DocumentValidationState,
 } from '@/lib/documents/contracts';
 import { uploadDocumentDraft } from '@/lib/documents/upload';
+
+type AuthUser = {
+  id: string;
+  email?: string | null;
+};
+
+
+
+type DocumentRecord = {
+  file_name: string;
+  upload_status: DocumentValidationState;
+  review_notes: string | null;
+  file_path: string;
+  uploaded_at: string;
+  document_type: DocumentType;
+};
 
 const STEP_KEYS = ['checklist', 'learner', 'household', 'medical', 'fees_docs', 'review'] as const;
 type StepKey = (typeof STEP_KEYS)[number];
@@ -159,24 +174,6 @@ const GUIDANCE_SECTIONS = [
   },
 ] as const;
 
-const JOURNEY_OVERVIEW = [
-  {
-    title: '1. Read the whole journey',
-    body: 'See the stages up front so there are no surprise asks later.',
-  },
-  {
-    title: '2. Check the document list',
-    body: 'Prepare the required documents first, then note anything conditional.',
-  },
-  {
-    title: '3. Upload one step at a time',
-    body: 'Each file is confirmed before you move on to the next part.',
-  },
-  {
-    title: '4. Review before sending',
-    body: 'The final step shows exactly what is still missing, if anything.',
-  },
-] as const;
 
 const DOCUMENT_UPLOAD_GUIDANCE: Record<DocumentType, string> = {
   birth_cert: 'Upload a clear scan or photo of the birth certificate.',
@@ -407,6 +404,10 @@ function readStoredDraftSnapshot(): StoredApplicationDraftSnapshot | null {
   }
 }
 
+function createReferenceNumber() {
+  return `EUN-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+}
+
 function createInitialDraft(): ApplicationDraft {
   return {
     parentFirstName: '',
@@ -468,8 +469,7 @@ export default function ParentApplicationWorkflow() {
   const [mounted, setMounted] = useState(false);
   const [readinessConfirmed, setReadinessConfirmed] = useState(false);
   const [uploadingDocument, setUploadingDocument] = useState<DocumentType | null>(null);
-  const [user, setUser] = useState<any>(null);
-  const [profile, setProfile] = useState<any>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [appId, setAppId] = useState<string | null>(null);
   const [schoolId, setSchoolId] = useState<string | null>(null);
   const [submitState, setSubmitState] = useState<'idle' | 'saving' | 'submitted' | 'error'>('idle');
@@ -498,8 +498,6 @@ export default function ParentApplicationWorkflow() {
             .single();
             
           if (profileErr) throw profileErr;
-          setProfile(profileData);
-          
           const defaultSchoolId = profileData.school_id || '00000000-0000-0000-0000-000000000000';
           setSchoolId(defaultSchoolId);
           
@@ -510,6 +508,8 @@ export default function ParentApplicationWorkflow() {
             .eq('parent_id', authUser.id)
             .maybeSingle();
             
+          if (appErr) throw appErr;
+
           if (appData) {
             setAppId(appData.id);
             
@@ -521,13 +521,13 @@ export default function ParentApplicationWorkflow() {
               
             const documentsDraft = createInitialDocumentDrafts();
             if (docsData) {
-              docsData.forEach((doc: any) => {
+              (docsData as DocumentRecord[]).forEach((doc) => {
                 const type = doc.document_type as DocumentType;
                 if (documentsDraft[type]) {
                   documentsDraft[type] = {
                     fileName: doc.file_name,
-                    validationState: doc.upload_status as DocumentValidationState,
-                    message: doc.review_notes || getDocumentStateGuidance(doc.upload_status as DocumentValidationState),
+                    validationState: doc.upload_status,
+                    message: doc.review_notes || getDocumentStateGuidance(doc.upload_status),
                     storagePath: doc.file_path,
                     uploadedAt: doc.uploaded_at,
                     uploadStatus: 'saved',
@@ -535,7 +535,7 @@ export default function ParentApplicationWorkflow() {
                 }
               });
             }
-            
+
             const serverDraft: ApplicationDraft = {
               parentFirstName: profileData.first_name,
               parentLastName: profileData.last_name,
@@ -620,9 +620,6 @@ export default function ParentApplicationWorkflow() {
       STORAGE_KEY,
       JSON.stringify(snapshot),
     );
-    if (!user) {
-      setLastSavedAt(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-    }
   }, [activeStep, draft, mounted, readinessConfirmed, user]);
 
   useEffect(() => {
@@ -641,9 +638,7 @@ export default function ParentApplicationWorkflow() {
       setDraftState('saving');
       setDraftNotice('Saving draft changes...');
       const isInsert = !appId;
-      const refNum = isInsert
-        ? `EUN-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`
-        : undefined;
+      const refNum = isInsert ? createReferenceNumber() : undefined;
 
       const payload = {
         school_id: schoolId,
@@ -693,7 +688,7 @@ export default function ParentApplicationWorkflow() {
     if (appId) return appId;
     if (!user || !schoolId) throw new Error('Auth session required to save draft data.');
 
-    const refNum = `EUN-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+    const refNum = createReferenceNumber();
     const { data, error } = await supabase
       .from('applications')
       .insert({
@@ -712,12 +707,6 @@ export default function ParentApplicationWorkflow() {
     if (error) throw error;
     setAppId(data.id);
     return data.id;
-  }
-
-  async function handleSignOut() {
-    await supabase.auth.signOut();
-    window.localStorage.removeItem(STORAGE_KEY);
-    window.location.reload();
   }
 
   const parentComplete = Boolean(
@@ -783,10 +772,8 @@ export default function ParentApplicationWorkflow() {
     review: isReadyToSubmit,
   };
 
-  const completion = useMemo(() => {
-    const completedSections = Object.values(stepStates).filter(Boolean).length;
-    return Math.round((completedSections / STEP_KEYS.length) * 100);
-  }, [stepStates]);
+  const completedSections = Object.values(stepStates).filter(Boolean).length;
+  const completion = Math.round((completedSections / STEP_KEYS.length) * 100);
 
   function updateField<K extends keyof ApplicationDraft>(key: K, value: ApplicationDraft[K]) {
     const updated = {

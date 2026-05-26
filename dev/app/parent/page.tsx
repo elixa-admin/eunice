@@ -109,8 +109,8 @@ export default function ParentDashboard() {
       setLearnerFirstName('');
       setLearnerLastName('');
       setGrade('Grade 8');
-    } catch (err: any) {
-      setFormError(err.message || 'Failed to create application.');
+    } catch (err: unknown) {
+      setFormError(err instanceof Error ? err.message : 'Failed to create application.');
     } finally {
       setSubmitting(false);
     }
@@ -138,7 +138,7 @@ export default function ParentDashboard() {
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Parent Portal</h1>
             <p className="text-primary-200 text-sm mt-1">
-              Welcome back, <span className="text-white font-semibold">{profile?.first_name} {profile?.last_name}</span>. Manage your child's applications below.
+              Welcome back, <span className="text-white font-semibold">{profile?.first_name} {profile?.last_name}</span>. Manage your child&apos;s applications below.
             </p>
           </div>
           <div className="flex gap-3 w-full sm:w-auto">
@@ -235,7 +235,7 @@ export default function ParentDashboard() {
             <div>
               <h3 className="text-2xl font-bold text-white">New Application</h3>
               <p className="text-primary-200 text-sm mt-1">
-                Enter your child's information to initiate a new admission request.
+                Enter your child&apos;s information to initiate a new admission request.
               </p>
             </div>
 
@@ -248,14 +248,14 @@ export default function ParentDashboard() {
             <form onSubmit={handleCreateApplication} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-primary-100 mb-1.5" htmlFor="child-first-name">
-                  Child's First Name
+                  Child&apos;s First Name
                 </label>
                 <input
                   id="child-first-name"
                   type="text"
                   required
                   className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-primary-300 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all text-sm"
-                  placeholder="Learner's first name"
+                  placeholder="Learner&apos;s first name"
                   value={learnerFirstName}
                   onChange={(e) => setLearnerFirstName(e.target.value)}
                 />
@@ -263,14 +263,14 @@ export default function ParentDashboard() {
 
               <div>
                 <label className="block text-sm font-medium text-primary-100 mb-1.5" htmlFor="child-last-name">
-                  Child's Last Name
+                  Child&apos;s Last Name
                 </label>
                 <input
                   id="child-last-name"
                   type="text"
                   required
                   className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-primary-300 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all text-sm"
-                  placeholder="Learner's last name"
+                  placeholder="Learner&apos;s last name"
                   value={learnerLastName}
                   onChange={(e) => setLearnerLastName(e.target.value)}
                 />

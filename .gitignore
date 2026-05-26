@@ -20,3 +20,11 @@ supabase/.temp/
 **/node_modules/
 **/.next/
 **/.vercel/
+
+# Eunice local/generated artifacts
+.env.local
+.env*.local
+coverage/
+out/
+.git-corrupt-backups/
+.eslintcache

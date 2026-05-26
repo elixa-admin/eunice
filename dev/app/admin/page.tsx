@@ -96,7 +96,7 @@ export default function AdminDashboard() {
               learner_first_name: app.learner_first_name,
               learner_last_name: app.learner_last_name,
               grade_applying_for: app.grade_applying_for,
-              status: app.status as any,
+              status: app.status,
               created_at: app.created_at,
               parent: parentProfile ? {
                 first_name: parentProfile.first_name,
@@ -133,7 +133,7 @@ export default function AdminDashboard() {
       setApplications(prev =>
         prev.map(app => (app.id === appId ? { ...app, status: newStatus } : app))
       );
-    } catch (err) {
+    } catch {
       alert('Failed to update status.');
     } finally {
       setActioningId(null);

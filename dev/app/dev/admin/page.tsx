@@ -57,8 +57,6 @@ export default function DevAdminPage() {
   const featured = previewApplications.find((app) => app.id === selectedAppId) ?? previewApplications[0];
   const reviewState = getPreviewReviewState(featured);
   const counts = getPreviewDocumentCounts(featured);
-  const lane = getAdminQueueLane(featured);
-
   const laneCounts = previewApplications.reduce(
     (acc, app) => {
       acc[getAdminQueueLane(app)] += 1;

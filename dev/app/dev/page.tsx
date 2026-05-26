@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { previewApplications } from '@/lib/dev-preview-data';
 import { PreviewShell } from '@/components/preview-shell';
@@ -43,7 +44,7 @@ export default function DevIndexPage() {
             <div>
               <div className="mb-3 flex items-center gap-3">
                 <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl border border-primary-100 bg-white shadow-[0_10px_24px_rgba(11,20,12,0.10)]">
-                  <img src="/eunice-school-logo.svg" alt="Eunice Girls School logo" className="h-8 w-8 object-contain" />
+                  <Image src="/eunice-school-logo.svg" alt="Eunice Girls School logo" width={32} height={32} className="h-8 w-8 object-contain" />
                 </div>
                 <p className="text-xs uppercase tracking-[0.18em] text-primary-700/75">Current focus</p>
               </div>

@@ -32,6 +32,11 @@ interface Profile {
   school_id: string | null;
 }
 
+type AuthUser = {
+  id: string;
+  email?: string | null;
+};
+
 interface Application {
   id: string;
   reference_number: string;
@@ -62,6 +67,45 @@ type DocumentSummary = {
   reviewOnly: number;
   verified: number;
 };
+
+type AdminDocument = {
+  id: string;
+  application_id: string;
+  document_type: DocumentType;
+  upload_status: DocumentValidationState;
+  review_notes?: string | null;
+  file_path?: string | null;
+  file_name?: string | null;
+  verified_at?: string | null;
+  uploaded_at?: string | null;
+  file_size?: number | null;
+};
+
+type AdminNote = {
+  id: string;
+  note_text: string;
+  created_at: string;
+  admin_id: string;
+  profiles?: {
+    first_name: string;
+    last_name: string;
+  } | null;
+};
+
+type RawAdminNote = Omit<AdminNote, 'profiles'> & {
+  profiles?: AdminNote['profiles'] | AdminNote['profiles'][];
+};
+
+function normalizeAdminNote(note: RawAdminNote): AdminNote {
+  return {
+    ...note,
+    profiles: Array.isArray(note.profiles) ? note.profiles[0] ?? null : note.profiles ?? null,
+  };
+}
+
+function normalizeAdminNotes(notes: RawAdminNote[]): AdminNote[] {
+  return notes.map(normalizeAdminNote);
+}
 
 type TriageLane = 'blocked' | 'review_ready' | 'in_review' | 'decision_pending' | 'closed' | 'incomplete';
 type QueueFilter = 'all' | `triage:${TriageLane}` | 'missing_docs' | 'recent_submitted' | 'awaiting_parent' | ApplicationStatus;
@@ -272,9 +316,9 @@ function getPercentChange(current: number, previous: number) {
 
 export default function AdminDashboard() {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
-  const tenantConfig = getTenantConfig(profile?.school_id);
+  const tenantConfig = getTenantConfig(profile?.school_id ?? null);
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [actioningId, setActioningId] = useState<string | null>(null);
@@ -282,8 +326,8 @@ export default function AdminDashboard() {
   // Master-Detail Triage States
   const [selectedAppId, setSelectedAppId] = useState<string | null>(null);
   const [selectedApp, setSelectedApp] = useState<Application | null>(null);
-  const [documents, setDocuments] = useState<any[]>([]);
-  const [notes, setNotes] = useState<any[]>([]);
+  const [documents, setDocuments] = useState<AdminDocument[]>([]);
+  const [notes, setNotes] = useState<AdminNote[]>([]);
   const [newNote, setNewNote] = useState('');
   const [flaggingDocId, setFlaggingDocId] = useState<string | null>(null);
   const [reuploadReason, setReuploadReason] = useState('');
@@ -291,8 +335,9 @@ export default function AdminDashboard() {
   const [statusFilter, setStatusFilter] = useState<QueueFilter>('all');
   const [notesLoading, setNotesLoading] = useState(false);
   const [docsLoading, setDocsLoading] = useState(false);
-  const [previewDoc, setPreviewDoc] = useState<any | null>(null);
+  const [previewDoc, setPreviewDoc] = useState<AdminDocument | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [analyticsNow] = useState(() => Date.now());
 
   // Operational Analytics calculations
   const totalUploaded = applications.reduce((acc, app) => acc + app.documentSummary.verified, 0);
@@ -420,7 +465,7 @@ export default function AdminDashboard() {
         .eq('application_id', app.id);
       
       if (docsErr) throw docsErr;
-      setDocuments(docsData || []);
+      setDocuments((docsData || []) as AdminDocument[]);
 
       // 2. Fetch admin notes
       const { data: notesData, error: notesErr } = await supabase
@@ -439,7 +484,7 @@ export default function AdminDashboard() {
         .order('created_at', { ascending: false });
 
       if (notesErr) throw notesErr;
-      setNotes(notesData || []);
+      setNotes(normalizeAdminNotes(notesData || []));
     } catch (err) {
       console.error('Error loading application details:', err);
     } finally {
@@ -472,7 +517,7 @@ export default function AdminDashboard() {
     }
   };
 
-  const syncSelectedDocumentSummary = (nextDocuments: any[]) => {
+  const syncSelectedDocumentSummary = (nextDocuments: AdminDocument[]) => {
     if (!selectedAppId) return null;
 
     const documentRecords = nextDocuments.map((doc) => ({
@@ -520,7 +565,7 @@ export default function AdminDashboard() {
       if (error) throw error;
 
       if (data) {
-        setNotes(prev => [data, ...prev]);
+        setNotes(prev => [normalizeAdminNote(data), ...prev]);
         setNewNote('');
       }
     } catch (err) {
@@ -548,7 +593,7 @@ export default function AdminDashboard() {
         doc.id === docId
           ? {
               ...doc,
-              upload_status: 'verified',
+              upload_status: 'verified' as DocumentValidationState,
               review_notes: 'Document verified by admissions.',
               verified_at: new Date().toISOString()
             }
@@ -596,7 +641,7 @@ export default function AdminDashboard() {
         doc.id === docId
           ? {
               ...doc,
-              upload_status: 'needs_reupload',
+              upload_status: 'needs_reupload' as DocumentValidationState,
               review_notes: reuploadReason.trim()
             }
           : doc
@@ -626,9 +671,10 @@ export default function AdminDashboard() {
     }
   };
 
-  const handlePreviewFile = (doc: any) => {
+  const handlePreviewFile = (doc: AdminDocument) => {
     setPreviewDoc(doc);
-    if (doc.file_path.startsWith('preview/')) {
+    const filePath = doc.file_path || '';
+    if (filePath.startsWith('preview/')) {
       if (doc.document_type === 'birth_cert') {
         // Mock a PDF document preview for birth certificate
         setPreviewUrl('https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf');
@@ -636,7 +682,7 @@ export default function AdminDashboard() {
         setPreviewUrl('https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=1000');
       }
     } else {
-      const { data } = supabase.storage.from('documents').getPublicUrl(doc.file_path);
+      const { data } = supabase.storage.from('documents').getPublicUrl(filePath);
       if (data?.publicUrl) {
         setPreviewUrl(data.publicUrl);
       } else {
@@ -663,7 +709,7 @@ export default function AdminDashboard() {
         statusFilter === 'all' ||
         (statusFilter.startsWith('triage:') && (getTriageLane(app) === statusFilter.replace('triage:', '') as TriageLane)) ||
         (statusFilter === 'missing_docs' && (app.documentSummary.missingRequired > 0 || app.documentSummary.blocking > 0)) ||
-        (statusFilter === 'recent_submitted' && Date.now() - new Date(app.created_at).getTime() <= 1000 * 60 * 60 * 24 * 2) ||
+        (statusFilter === 'recent_submitted' && analyticsNow - new Date(app.created_at).getTime() <= 1000 * 60 * 60 * 24 * 2) ||
         (statusFilter === 'awaiting_parent' && app.status === 'awaiting_documents') ||
         app.status === statusFilter;
 
@@ -687,7 +733,7 @@ export default function AdminDashboard() {
   const completedRate = total > 0 ? Math.round((reviewedOrClosed / total) * 100) : 0;
   const activeApplications = applications.filter((app) => app.status !== 'accepted' && app.status !== 'rejected');
   const averageAgeDays = activeApplications.length > 0
-    ? (activeApplications.reduce((sum, app) => sum + ((Date.now() - new Date(app.created_at).getTime()) / (1000 * 60 * 60 * 24)), 0) / activeApplications.length).toFixed(1)
+    ? (activeApplications.reduce((sum, app) => sum + ((analyticsNow - new Date(app.created_at).getTime()) / (1000 * 60 * 60 * 24)), 0) / activeApplications.length).toFixed(1)
     : '0.0';
   const workloadSpark = [
     applications.filter((app) => getTriageLane(app) === 'blocked').length,
@@ -696,7 +742,7 @@ export default function AdminDashboard() {
     applications.filter((app) => getTriageLane(app) === 'decision_pending').length,
     applications.filter((app) => getTriageLane(app) === 'closed').length,
   ];
-  const now = Date.now();
+  const now = analyticsNow;
   const recentWindowMs = 1000 * 60 * 60 * 24 * 7;
   const recentSubmittedCount = applications.filter((app) => now - new Date(app.created_at).getTime() <= recentWindowMs).length;
   const previousSubmittedCount = applications.filter((app) => {
@@ -1383,7 +1429,7 @@ export default function AdminDashboard() {
                                           <div className="mt-2 text-xs text-slate-300 space-y-1">
                                             <p className="truncate font-medium text-amber-300/80">File: {doc.file_name}</p>
                                             <p className="text-[10px] text-slate-400">
-                                              Uploaded: {new Date(doc.uploaded_at).toLocaleString()} · Size: {Math.round(doc.file_size / 1024)} KB
+                                              Uploaded: {doc.uploaded_at ? new Date(doc.uploaded_at).toLocaleString() : 'Not available'} · Size: {doc.file_size ? `${Math.round(doc.file_size / 1024)} KB` : 'Not available'}
                                             </p>
                                             {doc.review_notes && (
                                               <p className="bg-amber-500/10 border border-amber-500/20 text-amber-200 text-[11px] p-2 rounded-xl mt-2 max-w-xl">
@@ -1452,7 +1498,7 @@ export default function AdminDashboard() {
                                         </div>
                                         <div className="flex gap-2">
                                           <button
-                                            onClick={() => handleFlagDoc(doc.id)}
+                                            onClick={() => doc && handleFlagDoc(doc.id)}
                                             className="bg-amber-500 hover:bg-amber-600 text-emerald-950 font-bold px-3 py-1.5 rounded-lg text-xs transition-all cursor-pointer shadow-[0_0_10px_rgba(245,158,11,0.4)]"
                                           >
                                             Send Request

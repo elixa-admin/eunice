@@ -5,12 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import supabase from '@/lib/supabase';
 import { getPostAuthRoute } from '@/lib/auth-routing';
-import {
-  AUTH_CARD_CLASS_NAME,
-  AUTH_INPUT_CLASS_NAME,
-  AUTH_PAGE_BACKGROUND_CLASS_NAME,
-  SURFACE_CARD_CLASS_NAME,
-} from '@/lib/ui-classes';
+import { AUTH_INPUT_CLASS_NAME, SURFACE_CARD_CLASS_NAME } from '@/lib/ui-classes';
 
 export default function SignIn() {
   const router = useRouter();
@@ -59,12 +54,12 @@ export default function SignIn() {
   };
 
   return (
-    <div className={AUTH_PAGE_BACKGROUND_CLASS_NAME}>
+    <div className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center overflow-hidden bg-gradient-to-br from-primary-950 via-primary-900 to-accent-950 p-4">
       {/* Ambient backgrounds */}
       <div className="pointer-events-none absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-primary-500/10 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-40 -right-40 h-[500px] w-[500px] rounded-full bg-accent-500/10 blur-3xl" />
 
-      <div className={`${SURFACE_CARD_CLASS_NAME} ${AUTH_CARD_CLASS_NAME} max-w-md`}>
+      <div className={`${SURFACE_CARD_CLASS_NAME} relative z-10 w-full max-w-md rounded-[2rem] border border-white/10 bg-white/10 p-8 shadow-2xl backdrop-blur-xl sm:p-10`}>
         <div className="mb-8 text-center">
           <div className="mx-auto inline-flex items-center rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary-100">
             Secure access

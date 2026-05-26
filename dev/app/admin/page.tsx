@@ -3,20 +3,23 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import supabase from '@/lib/supabase';
+import {
+  APPLICATION_STATUS_LABELS,
+  type ApplicationStatus,
+} from '@eunice-shared/domain/applications';
+import type { Database } from '@eunice-shared/integrations/supabase';
 
-interface Profile {
-  first_name: string;
-  last_name: string;
-  role: string;
-  school_id: string | null;
-}
+type Profile = Pick<
+  Database['public']['Tables']['profiles']['Row'],
+  'first_name' | 'last_name' | 'role' | 'school_id'
+>;
 
 interface Application {
   id: string;
   learner_first_name: string;
   learner_last_name: string;
   grade_applying_for: string;
-  status: 'draft' | 'submitted' | 'under_review' | 'accepted' | 'rejected';
+  status: ApplicationStatus;
   created_at: string;
   parent: {
     first_name: string;
@@ -79,7 +82,8 @@ export default function AdminDashboard() {
 
         if (appsData && appsData.length > 0) {
           // Fetch parent profiles for these applications in a single query
-          const parentIds = Array.from(new Set(appsData.map(app => app.parent_id)));
+          const typedAppsData = appsData as Array<Application & { parent_id: string }>;
+          const parentIds = Array.from(new Set(typedAppsData.map((app) => app.parent_id)));
           const { data: parentsData, error: parentsError } = await supabase
             .from('profiles')
             .select('id, first_name, last_name')
@@ -87,9 +91,14 @@ export default function AdminDashboard() {
 
           if (parentsError) throw parentsError;
 
-          const parentsMap = new Map(parentsData?.map(p => [p.id, p]));
+          const typedParentsData = (parentsData ?? []) as Array<{
+            id: string;
+            first_name: string | null;
+            last_name: string | null;
+          }>;
+          const parentsMap = new Map(typedParentsData.map((parent) => [parent.id, parent]));
 
-          const enrichedApps: Application[] = appsData.map(app => {
+          const enrichedApps: Application[] = typedAppsData.map((app) => {
             const parentProfile = parentsMap.get(app.parent_id);
             return {
               id: app.id,
@@ -99,8 +108,8 @@ export default function AdminDashboard() {
               status: app.status,
               created_at: app.created_at,
               parent: parentProfile ? {
-                first_name: parentProfile.first_name,
-                last_name: parentProfile.last_name
+                first_name: parentProfile.first_name ?? 'Unknown',
+                last_name: parentProfile.last_name ?? 'Parent',
               } : null
             };
           });
@@ -119,7 +128,10 @@ export default function AdminDashboard() {
     loadAdminData();
   }, [router]);
 
-  const handleUpdateStatus = async (appId: string, newStatus: 'under_review' | 'accepted' | 'rejected') => {
+  const handleUpdateStatus = async (
+    appId: string,
+    newStatus: Extract<ApplicationStatus, 'under_review' | 'accepted' | 'rejected'>,
+  ) => {
     setActioningId(appId);
     try {
       const { error } = await supabase
@@ -239,7 +251,7 @@ export default function AdminDashboard() {
                           app.status === 'under_review' ? 'bg-amber-500/20 text-amber-300' :
                           'bg-white/10 text-white/80'
                         }`}>
-                          {app.status.replace('_', ' ')}
+                          {APPLICATION_STATUS_LABELS[app.status] ?? app.status.replace('_', ' ')}
                         </span>
                       </td>
                       <td className="py-4 px-4 text-right">

@@ -1,3 +1,6 @@
+import {
+  isSupabaseConfigured,
+} from '@eunice-shared/integrations/supabase';
 import type { StorageAdapter } from '@/lib/integrations/types';
 
 const DOCUMENT_BUCKET = process.env.NEXT_PUBLIC_SUPABASE_DOCUMENT_BUCKET || 'application-documents';
@@ -29,7 +32,7 @@ export function createSupabaseStorageAdapter(): StorageAdapter {
 }
 
 export function getDocumentStorageAdapter() {
-  return process.env.NEXT_PUBLIC_ENABLE_SUPABASE_UPLOADS === 'true'
+  return process.env.NEXT_PUBLIC_ENABLE_SUPABASE_UPLOADS === 'true' && isSupabaseConfigured()
     ? createSupabaseStorageAdapter()
     : createPreviewStorageAdapter();
 }

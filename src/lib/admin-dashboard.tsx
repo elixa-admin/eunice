@@ -10,6 +10,8 @@ import {
   type DocumentType,
   type DocumentValidationState,
 } from '@/lib/documents/contracts';
+import { getDefaultTenantId } from '@/lib/domain/tenant-config';
+import type { Database, SupabaseRole } from '@eunice-shared/integrations/supabase';
 
 export interface AdminApplication {
   id: string;
@@ -27,6 +29,29 @@ export interface AdminApplication {
   } | null;
   documentSummary: DocumentSummary;
 }
+
+export type AdminProfile = Pick<
+  Database['public']['Tables']['profiles']['Row'],
+  'id' | 'first_name' | 'last_name' | 'role' | 'school_id'
+>;
+
+export type ParentProfileRow = Pick<
+  Database['public']['Tables']['profiles']['Row'],
+  'id' | 'first_name' | 'last_name' | 'phone_number'
+>;
+
+export type AdminApplicationRow = Pick<
+  Database['public']['Tables']['applications']['Row'],
+  | 'id'
+  | 'reference_number'
+  | 'learner_first_name'
+  | 'learner_last_name'
+  | 'grade_applying_for'
+  | 'previous_school_name'
+  | 'status'
+  | 'created_at'
+  | 'parent_id'
+>;
 
 export type DocumentRecord = {
   application_id: string;
@@ -129,6 +154,44 @@ export const TRIAGE_LANE_PRIORITY: Record<TriageLane, number> = {
 };
 
 export const TRIAGE_FILTERS: TriageLane[] = ['blocked', 'review_ready', 'in_review', 'decision_pending'];
+
+export function isAdminRole(role: SupabaseRole) {
+  return role === 'admin' || role === 'superadmin';
+}
+
+export function getDefaultSchoolId(schoolId: string | null) {
+  return schoolId || getDefaultTenantId();
+}
+
+export function mapAdminApplications(
+  apps: AdminApplicationRow[],
+  parents: ParentProfileRow[],
+  documentRecords: DocumentRecord[],
+): AdminApplication[] {
+  const parentsMap = new Map(parents.map((parent) => [parent.id, parent]));
+
+  return apps.map((app) => {
+    const parentProfile = parentsMap.get(app.parent_id);
+    return {
+      id: app.id,
+      reference_number: app.reference_number ?? 'Pending reference',
+      learner_first_name: app.learner_first_name,
+      learner_last_name: app.learner_last_name,
+      grade_applying_for: app.grade_applying_for,
+      previous_school_name: app.previous_school_name,
+      status: app.status,
+      created_at: app.created_at,
+      parent: parentProfile
+        ? {
+            first_name: parentProfile.first_name ?? 'Unknown',
+            last_name: parentProfile.last_name ?? 'Parent',
+            phone_number: parentProfile.phone_number,
+          }
+        : null,
+      documentSummary: summarizeDocumentsForApp(app.id, documentRecords),
+    };
+  });
+}
 
 export function normalizeAdminNote(note: RawAdminNote): AdminNote {
   return {

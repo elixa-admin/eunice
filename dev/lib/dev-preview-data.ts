@@ -8,14 +8,11 @@ import {
   type DocumentType,
   type DocumentValidationState,
 } from '@eunice-shared/documents/contracts';
+import type { ApplicationStatus } from '@eunice-shared/domain/applications';
 
 export type PreviewStatus =
-  | 'draft'
-  | 'submitted'
-  | 'under_review'
-  | 'incomplete'
-  | 'accepted'
-  | 'rejected';
+  | Extract<ApplicationStatus, 'draft' | 'submitted' | 'under_review' | 'accepted' | 'rejected'>
+  | 'incomplete';
 
 export type PreviewDocument = {
   type: DocumentType;

@@ -6,6 +6,9 @@ import { PreviewShell } from '@/components/preview-shell';
 import { SectionHeading } from '@/components/section-heading';
 import { SurfaceCard } from '@/components/surface-card';
 import { StatusBadge } from '@/components/status-badge';
+import { MetricCard } from '@/components/metric-card';
+import { RiskRow } from '@/components/risk-row';
+import { StatusBarometer } from '@/components/status-barometer';
 import {
   getAdminQueueLane,
   getPreviewDocumentCounts,
@@ -270,70 +273,5 @@ export default function DevAdminPage() {
         </main>
       </div>
     </PreviewShell>
-  );
-}
-
-function MetricCard({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-[24px] border border-white/12 bg-white/12 p-4 backdrop-blur-md">
-      <div className="text-xs uppercase tracking-[0.16em] text-white/70">{label}</div>
-      <div className="mt-2 text-sm font-semibold text-white">{value}</div>
-    </div>
-  );
-}
-
-function StatusBarometer({
-  label,
-  value,
-  tone,
-  detail,
-}: {
-  label: string;
-  value: number;
-  tone: 'rose' | 'amber' | 'emerald';
-  detail: string;
-}) {
-  const ring =
-    tone === 'rose'
-      ? 'border-rose-200 text-rose-800'
-      : tone === 'amber'
-        ? 'border-amber-200 text-amber-900'
-        : 'border-emerald-200 text-emerald-800';
-  const accent =
-    tone === 'rose'
-      ? 'bg-rose-500'
-      : tone === 'amber'
-        ? 'bg-amber-500'
-        : 'bg-emerald-500';
-
-  return (
-    <div className="rounded-[24px] border border-white/15 bg-white/12 p-3.5 backdrop-blur-md">
-      <div className="flex items-center justify-between gap-3">
-        <div>
-          <div className="text-xs uppercase tracking-[0.16em] text-white/70">{label}</div>
-          <div className="mt-1 text-sm font-semibold text-white/95">{detail}</div>
-        </div>
-        <div className={`flex h-12 w-12 items-center justify-center rounded-full border bg-white text-sm font-semibold ${ring}`}>{value}</div>
-      </div>
-      <div className={`mt-3 h-1.5 w-full overflow-hidden rounded-full bg-white/12`}>
-        <div className={`h-full rounded-full ${accent}`} style={{ width: `${Math.max(18, Math.min(100, value * 22))}%` }} />
-      </div>
-    </div>
-  );
-}
-
-function RiskRow({ label, value, tone }: { label: string; value: number; tone: 'rose' | 'amber' | 'emerald' }) {
-  const toneClass =
-    tone === 'rose'
-      ? 'bg-rose-100 text-rose-700'
-      : tone === 'amber'
-        ? 'bg-amber-100 text-amber-700'
-        : 'bg-emerald-100 text-emerald-700';
-
-  return (
-    <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-[#fbf8f0] px-4 py-3">
-      <div className="text-sm text-slate-700">{label}</div>
-      <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${toneClass}`}>{value}</span>
-    </div>
   );
 }

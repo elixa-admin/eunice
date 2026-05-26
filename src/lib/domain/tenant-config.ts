@@ -51,7 +51,13 @@ export const TENANT_CONFIGS: Record<string, SchoolTenantConfig> = {
   [ROYAL_BLUE_CONFIG.id]: ROYAL_BLUE_CONFIG,
 };
 
+export const DEFAULT_TENANT_ID = EUNICE_CONFIG.id;
+
 export function getTenantConfig(schoolId: string | null): SchoolTenantConfig {
   if (!schoolId) return EUNICE_CONFIG;
   return TENANT_CONFIGS[schoolId] || EUNICE_CONFIG;
+}
+
+export function getDefaultTenantId() {
+  return DEFAULT_TENANT_ID;
 }

@@ -24,31 +24,29 @@ import {
   TRIAGE_FILTERS,
   TRIAGE_LANE_LABELS,
   TRIAGE_LANE_PRIORITY,
+  getDefaultSchoolId,
   getAdminQueueTone,
   getDocumentStatusTone,
   getInsightTone,
+  isAdminRole,
   getNextActionLabel,
   getPercentChange,
   getTriageLane,
+  mapAdminApplications,
   normalizeAdminNote,
   normalizeAdminNotes,
   summarizeDocumentsForApp,
+  type AdminApplicationRow,
   type AdminApplication as Application,
   type AdminDocument,
   type AdminNote,
+  type AdminProfile,
   type DocumentRecord,
   type InsightLevel,
+  type ParentProfileRow,
   type QueueFilter,
   type TriageLane,
 } from '@/lib/admin-dashboard';
-
-interface Profile {
-  id: string;
-  first_name: string;
-  last_name: string;
-  role: string;
-  school_id: string | null;
-}
 
 type AuthUser = {
   id: string;
@@ -58,7 +56,7 @@ type AuthUser = {
 export default function AdminDashboard() {
   const router = useRouter();
   const [user, setUser] = useState<AuthUser | null>(null);
-  const [profile, setProfile] = useState<Profile | null>(null);
+  const [profile, setProfile] = useState<AdminProfile | null>(null);
   const tenantConfig = getTenantConfig(profile?.school_id ?? null);
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
@@ -104,7 +102,7 @@ export default function AdminDashboard() {
           .single();
 
         if (profileError) throw profileError;
-        if (profileData.role !== 'admin' && profileData.role !== 'superadmin') {
+        if (!isAdminRole(profileData.role)) {
           console.warn('Unauthorized access to admin dashboard, redirecting to parent portal');
           router.push('/parent');
           return;
@@ -112,7 +110,7 @@ export default function AdminDashboard() {
         setProfile(profileData);
 
         // 3. Load all applications for the admin's school
-        const defaultSchoolId = profileData.school_id || '00000000-0000-0000-0000-000000000000';
+        const defaultSchoolId = getDefaultSchoolId(profileData.school_id);
 
         const { data: appsData, error: appsError } = await supabase
           .from('applications')
@@ -134,7 +132,8 @@ export default function AdminDashboard() {
 
         if (appsData && appsData.length > 0) {
           // Fetch parent profiles for these applications in a single query
-          const parentIds = Array.from(new Set(appsData.map(app => app.parent_id)));
+          const typedAppsData = appsData as AdminApplicationRow[];
+          const parentIds = Array.from(new Set(typedAppsData.map((app) => app.parent_id)));
           const { data: parentsData, error: parentsError } = await supabase
             .from('profiles')
             .select('id, first_name, last_name, phone_number')
@@ -150,30 +149,14 @@ export default function AdminDashboard() {
 
           if (documentsError) throw documentsError;
 
-          const parentsMap = new Map(parentsData?.map(p => [p.id, p]));
           const documentRecords = (documentsData ?? []) as DocumentRecord[];
-
-          const enrichedApps: Application[] = appsData.map(app => {
-            const parentProfile = parentsMap.get(app.parent_id);
-            return {
-              id: app.id,
-              reference_number: app.reference_number,
-              learner_first_name: app.learner_first_name,
-              learner_last_name: app.learner_last_name,
-              grade_applying_for: app.grade_applying_for,
-              previous_school_name: app.previous_school_name,
-              status: app.status as ApplicationStatus,
-              created_at: app.created_at,
-              parent: parentProfile ? {
-                first_name: parentProfile.first_name,
-                last_name: parentProfile.last_name,
-                phone_number: parentProfile.phone_number
-              } : null,
-              documentSummary: summarizeDocumentsForApp(app.id, documentRecords),
-            };
-          });
-
-          setApplications(enrichedApps);
+          setApplications(
+            mapAdminApplications(
+              typedAppsData,
+              (parentsData ?? []) as ParentProfileRow[],
+              documentRecords,
+            ),
+          );
         } else {
           setApplications([]);
         }
@@ -351,6 +334,10 @@ export default function AdminDashboard() {
   const handleFlagDoc = async (docId: string) => {
     if (!reuploadReason.trim()) {
       alert('Please provide a reason for requesting a re-upload.');
+      return;
+    }
+    if (!selectedAppId) {
+      alert('Select an application before flagging a document.');
       return;
     }
 

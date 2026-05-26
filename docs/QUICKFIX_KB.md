@@ -60,6 +60,203 @@ Any caveats or things to avoid next time.
 
 ## Recent QuickFixes
 
+### Node 25 causes false-negative lint/typecheck failures
+
+**Symptom**
+
+- ESLint or TypeScript exits with environment-looking errors instead of normal code errors.
+- Examples seen:
+  - `/usr/bin/env: bad interpreter: Operation canceled`
+  - `ECANCELED: operation canceled, read`
+- Re-running the same checks can waste time because the failures look like unstable lint issues.
+
+**Classification**
+
+- config
+
+**Root Cause**
+
+- The workspace was running under Node 25, while the current Next/ESLint/TypeScript toolchain is stable under Node 20 LTS.
+- A local Homebrew Node 22 install was also unusable because it referenced a missing `simdjson` dylib.
+
+**Fix**
+
+- Use Node 20 for this repo.
+- Keep the root `.nvmrc` set to `20`.
+- Reinstall dependencies with the Node 20/npm 10 toolchain when the environment has drifted.
+
+**Fallback**
+
+- If the local shell still defaults to Node 25, run checks through temporary npm 10:
+  - `cd src && npx -y npm@10 run check`
+  - `cd dev && npx -y npm@10 run check`
+- If network access is blocked, rerun the `npx` command with approved network access instead of debugging lint first.
+
+**Commands / Checks**
+
+- `node -v`
+- `npm -v`
+- `cat .nvmrc`
+- `cd src && npx -y npm@10 run check`
+- `cd dev && npx -y npm@10 run check`
+- `npm run verify:src`
+- `npm run verify:dev`
+
+**Last Verified**
+
+- 2026-05-26 in the Eunice workspace.
+
+**Notes**
+
+- Do not treat this as a code regression until Node 20 has been confirmed.
+- Do not run `npm audit fix --force` as part of this recovery.
+
+### Supabase public env vars missing in local workspace
+
+**Symptom**
+
+- Auth, admin, parent, or `/api/ping` routes fail before reaching normal Supabase behavior.
+- The root `.env.local` may contain unrelated keys, but not:
+  - `NEXT_PUBLIC_SUPABASE_URL`
+  - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- Before Sprint K hardening, importing the Supabase client could throw immediately.
+
+**Classification**
+
+- config
+
+**Root Cause**
+
+- The local workspace did not have the public Supabase browser env vars configured.
+- The app assumed Supabase was present at module import time.
+
+**Fix**
+
+- Add the required public Supabase env vars in the app-local environment.
+- Keep `/api/ping` behavior explicit: it should report `configured: false` and list missing keys when env is absent.
+- Keep document uploads on preview storage unless both `NEXT_PUBLIC_ENABLE_SUPABASE_UPLOADS=true` and Supabase public env vars are present.
+
+**Fallback**
+
+- Use preview/local storage behavior for document uploads while Supabase env is absent.
+- Check `/api/ping` before debugging route-level auth or database code.
+
+**Commands / Checks**
+
+- `node -e "const fs=require('fs'); console.log(fs.readFileSync('.env.local','utf8').split(/\\n/).filter(Boolean).map(l=>l.split('=')[0]).join('\\n'))"`
+- `npm run verify:src`
+- `npm run verify:dev`
+- With the app running, open `/api/ping` and confirm it reports either configured Supabase or the missing keys.
+
+**Last Verified**
+
+- 2026-05-26 in the Eunice workspace.
+
+**Notes**
+
+- Do not paste secret values into docs or logs.
+- `LINEAR_API_KEY` alone does not mean Supabase is configured.
+
+### Supabase typed client collapses table results to `never`
+
+**Symptom**
+
+- After adding or editing the shared Supabase `Database` type, TypeScript reports many unrelated-looking errors such as:
+  - `Property 'role' does not exist on type 'never'`
+  - `Object literal may only specify known properties ... does not exist in type 'never[]'`
+  - `Argument of type '{ ... }' is not assignable to parameter of type 'never'`
+- The errors appear across admin, auth, parent workflow, inserts, updates, and selects at the same time.
+
+**Classification**
+
+- code
+
+**Root Cause**
+
+- The Supabase SDK expects each table shape to include `Row`, `Insert`, `Update`, and `Relationships`.
+- The database namespace also needs `Tables`, `Views`, `Functions`, `Enums`, and `CompositeTypes`.
+- If the shared schema type is incomplete, query builder inference can collapse to `never`, creating a noisy cascade.
+
+**Fix**
+
+- Define the shared schema in `shared/integrations/supabase.ts`.
+- Ensure every table has:
+  - `Row`
+  - `Insert`
+  - `Update`
+  - `Relationships: []`
+- Ensure `Database['public']` also includes:
+  - `Views: Record<string, never>`
+  - `Functions: Record<string, never>`
+  - `Enums: Record<string, never>`
+  - `CompositeTypes: Record<string, never>`
+- Add new columns to the shared schema before using them in route/component code.
+
+**Fallback**
+
+- Fix the shared schema first.
+- Avoid casting many query results locally just to silence the cascade; that hides the real type contract problem.
+
+**Commands / Checks**
+
+- `cd src && npx -y npm@10 run typecheck`
+- `cd dev && npx -y npm@10 run typecheck`
+- `npm run verify:src`
+- `npm run verify:dev`
+
+**Last Verified**
+
+- 2026-05-26 in the Eunice workspace.
+
+**Notes**
+
+- If a single new column causes one type error, add the column to the shared schema.
+- If many tables suddenly become `never`, inspect the database type shape before editing application logic.
+
+### CodeGraph not initialized after workspace repair
+
+**Symptom**
+
+- CodeGraph MCP returns that no project is loaded or no `.codegraph/` directory exists.
+- Structural questions cannot use `codegraph_*` tools even though the project instructions prefer them.
+
+**Classification**
+
+- config
+
+**Root Cause**
+
+- The repaired main workspace did not yet have a local CodeGraph index.
+- The MCP server may also need an explicit `projectPath` because it can launch outside the workspace root.
+
+**Fix**
+
+- Initialize CodeGraph from the repo root:
+  - `codegraph init -i`
+- When using MCP tools, pass:
+  - `projectPath: "/Users/brandondienar/Documents/Codex/Projects/Eunice"`
+- Confirm index health before structural refactors.
+
+**Fallback**
+
+- If CodeGraph is unavailable, use `rg` for literal text and keep exploration narrow.
+- Do not repeatedly query CodeGraph without `projectPath` if the first call reports workspace detection trouble.
+
+**Commands / Checks**
+
+- `codegraph init -i`
+- CodeGraph MCP status with explicit project path
+- Check that `.codegraph/` exists
+
+**Last Verified**
+
+- 2026-05-26 in the Eunice workspace.
+
+**Notes**
+
+- `codegraph init -i` also created `.cursor/rules/codegraph.mdc`.
+- The repo already ignores `.codegraph/`; review whether `.cursor/` should be committed or ignored before publishing.
+
 ### Lint verification times out in both `verify:src` and `verify:dev`
 
 **Symptom**

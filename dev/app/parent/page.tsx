@@ -3,20 +3,23 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import supabase from '@/lib/supabase';
+import {
+  APPLICATION_STATUS_LABELS,
+  type ApplicationStatus,
+} from '@eunice-shared/domain/applications';
+import type { Database } from '@eunice-shared/integrations/supabase';
 
-interface Profile {
-  first_name: string;
-  last_name: string;
-  role: string;
-  school_id: string | null;
-}
+type Profile = Pick<
+  Database['public']['Tables']['profiles']['Row'],
+  'first_name' | 'last_name' | 'role' | 'school_id'
+>;
 
 interface Application {
   id: string;
   learner_first_name: string;
   learner_last_name: string;
   grade_applying_for: string;
-  status: 'draft' | 'submitted' | 'under_review' | 'accepted' | 'rejected';
+  status: ApplicationStatus;
   created_at: string;
 }
 
@@ -209,7 +212,7 @@ export default function ParentDashboard() {
                           app.status === 'under_review' ? 'bg-amber-500/20 text-amber-300' :
                           'bg-white/10 text-white/80'
                         }`}>
-                          {app.status.replace('_', ' ')}
+                          {APPLICATION_STATUS_LABELS[app.status] ?? app.status.replace('_', ' ')}
                         </span>
                       </td>
                       <td className="py-4 px-4 text-primary-300">

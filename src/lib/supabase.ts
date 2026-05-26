@@ -1,12 +1,32 @@
-import { createClient } from '@supabase/supabase-js';
+import {
+  getSupabaseIntegrationErrorMessage,
+  getSupabaseIntegrationStatus,
+  type Database,
+} from '@eunice-shared/integrations/supabase';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+function createUnavailableSupabaseClient(message: string) {
+  const throwMissingConfig = () => {
+    throw new Error(message);
+  };
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables for the Eunice app.');
+  const handler: ProxyHandler<(...args: unknown[]) => never> = {
+    get() {
+      return new Proxy(throwMissingConfig, handler);
+    },
+    apply() {
+      throwMissingConfig();
+    },
+  };
+
+  return new Proxy(throwMissingConfig, handler) as unknown as SupabaseClient<Database>;
 }
 
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+const integrationStatus = getSupabaseIntegrationStatus();
+const supabase = integrationStatus.configured && integrationStatus.url && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  ? createClient<Database>(integrationStatus.url, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+  : createUnavailableSupabaseClient(getSupabaseIntegrationErrorMessage('the Eunice app'));
 
+export type { Database };
+export { getSupabaseIntegrationStatus };
 export default supabase;

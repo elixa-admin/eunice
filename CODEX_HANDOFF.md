@@ -1,105 +1,80 @@
-# Compact Handoff — Sprint G Parent Flow
+# Compact Handoff — Repo Repaired, Clean Sprint Ready
 
 ## Date
-2026-05-25
+2026-05-26
 
-## Current Working Root
-`/dev`
+## Canonical Workspace
+`/Users/brandondienar/Documents/Codex/Projects/Eunice`
 
 ## Current Branch
 `codex/vercel-project-separation`
 
-## Verified Live State
-- GitHub remote: `https://github.com/elixa-admin/eunice.git`
-- Vercel project linked: `eunice-dev`
-- Local app root: `dev/`
-- Vercel build settings should point at the `dev` root and Next.js framework preset
+## Current Head
+`b70d454`
 
-## What Was Completed
-1. Sprint C execution kickoff for P0/P1 with initial product updates:
-   - parent duplicate upload signaling
-   - admin queue high-value filters
-2. Pilot operations docs added:
-   - support playbook
-   - KPI baseline/cadence
-   - daily checkpoint template
-   - Sprint C execution checkpoint
-3. Sprint D plan authored and activated:
-   - `docs/SPRINT_D_UX_ELEVATION_AND_PRODUCTION_HARDENING.md`
-4. UI/UX polish passes applied to:
-   - global visual system
-   - admin dashboard density and scanability
-   - parent application workspace
-   - auth screens
-   - landing page messaging
-   - admin analytics and quick-view layer
-   - admin smart insights and risk flags
-5. Sprint E package drafted locally:
-   - `docs/SPRINT_E_ADMIN_DECISION_INTELLIGENCE_AND_GUIDED_PARENT_FLOW.md`
-   - `docs/SPRINT_E_IMPLEMENTATION_TRACKER.md`
-   - `docs/SPRINT_E_EXECUTION_CHECKLIST.md`
-6. Shared UI primitives introduced:
-   - `src/lib/ui-classes.ts`
-   - reused across auth, landing, parent, and admin shells to reduce style drift
-7. Sprint F was scoped to restore a single source of truth and deployment stability:
-   - `docs/SPRINT_F_DEPLOYMENT_STABILITY_AND_SOURCE_OF_TRUTH.md`
-   - `docs/SPRINT_F_IMPLEMENTATION_TRACKER.md`
-8. Sprint G was defined to simplify the parent journey and keep uploads document-first:
-   - `docs/SPRINT_G_GUIDED_PARENT_ONBOARDING_AND_DOCUMENT_FIRST_UPLOADS.md`
-   - `docs/SPRINT_G_IMPLEMENTATION_TRACKER.md`
+## Current State
+- Main workspace Git metadata was repaired and is now usable again.
+- Main workspace now returns a clean `git status`.
+- The main workspace has been realigned to the healthy clean-clone branch state.
+- Local-only clutter was removed from the working tree and archived so the repo can stay clean going forward.
+- Sprint K P0 shared-domain and integration hardening has started.
+- CodeGraph has been initialized in the repaired main workspace.
 
-## Active Working Files
-- `src/components/parent/application-workflow.tsx`
-- `src/app/admin/page.tsx`
-- `docs/SPRINT_D_UX_ELEVATION_AND_PRODUCTION_HARDENING.md`
-- `docs/SPRINT_D_IMPLEMENTATION_TRACKER.md`
-- `docs/RLS_AND_ACCESS_VERIFICATION_CHECKLIST.md`
-- `docs/CHECKPOINT_SPRINT_D_2026-06-03.md`
-- `docs/PILOT_SUPPORT_PLAYBOOK.md`
-- `docs/PILOT_KPI_BASELINE_AND_CADENCE.md`
-- `docs/DAILY_PILOT_CHECKPOINT_TEMPLATE.md`
-- `docs/CHECKPOINT_SPRINT_C_EXECUTION_2026-05-24.md`
-- `docs/SPRINT_F_DEPLOYMENT_STABILITY_AND_SOURCE_OF_TRUTH.md`
-- `docs/SPRINT_F_IMPLEMENTATION_TRACKER.md`
+## What Was Fixed
+1. Broken Git metadata in the main workspace:
+   - corrupted `.git` state was replaced from the healthy clean clone
+   - stray nested repo at `src/.git` was removed
+   - Git fetch and status now work again from the main workspace
+2. Verification reliability:
+   - `scripts/verify-workspace.mjs` now uses a safer timeout, cache, changed-file targeting, and a short Git lookup timeout
+3. Clean-sprint refactor:
+   - extracted admin helper logic into [src/lib/admin-dashboard.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/src/lib/admin-dashboard.tsx)
+   - extracted parent workflow helper logic into [src/lib/parent-application.ts](/Users/brandondienar/Documents/Codex/Projects/Eunice/src/lib/parent-application.ts)
+   - slimmed [src/app/admin/page.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/src/app/admin/page.tsx)
+   - slimmed [src/components/parent/application-workflow.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/src/components/parent/application-workflow.tsx)
+4. Dev warning cleanup:
+   - removed remaining image warnings in `dev` by switching logo images to `next/image`
 
-## Sprint D Autonomous Implementation Order
-1. Parent form UX hardening (pending/error/submit safety)
-2. RLS + role-scope verification pass
-3. Admin queue table-driven usability uplift
-4. Upload recovery clarity completion
-5. Observability + KPI instrumentation and daily checkpoint evidence
-6. Smart insight panel and trend-delta polish
+## Verified Checks
+- `git status --short --untracked-files=normal` returns clean in the main workspace
+- `git fetch origin codex/vercel-project-separation --prune` worked from the main workspace
+- `npm run verify:dev` passed in the main workspace
+- `npm --prefix src run typecheck` passed in the main workspace
+- `npm run verify:src` passed fully in the healthy clean clone
 
-## Sprint E Focus
-1. Admin decision intelligence and risk flags
-2. Guided parent upload flow refinement
-3. Cross-screen visual consistency and browser verification
-4. Shared UI primitives and code-smell reduction
-5. Sprint E execution checklist and day-by-day delivery flow
+## Important Local Archive Paths
+- Main cleanup backup:
+  - `/private/tmp/eunice-main-cleanup-backup-2026-05-26`
+- Local archived extras kept out of Git:
+  - `/Users/brandondienar/Documents/Codex/Projects/Eunice/.workspace-orphans`
 
-## Sprint F Focus
-1. Keep `/dev` as the active app root
-2. Keep Vercel pointed at the correct app root and canonical branch
-3. Remove ambiguity between temporary recovery work and the published source of truth
-4. Document the stable setup so the next sprint starts from a clean baseline
+## Current Source Of Truth
+- Branch source of truth:
+  - `codex/vercel-project-separation`
+- Main local workspace is now aligned to that branch head.
+- The emergency clean clone at `/private/tmp/eunice-clean-sprint-j` is no longer required as the only safe path, but it remains a valid fallback.
 
-## Sprint G Focus
-1. Explain the whole parent journey before the form begins
-2. Show the required document checklist up front
-3. Guide uploads one step at a time without surprise follow-on requirements
-4. Keep the parent experience calm, finite, and easy to recover
+## Current Docs To Reference
+- [docs/NEXT_3_SPRINTS_PLAN.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/NEXT_3_SPRINTS_PLAN.md)
+- [docs/SPRINT_K_PLAN.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_K_PLAN.md)
+- [docs/SPRINT_J_REPO_HEALTH_AND_SHARED_CLEANUP.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_J_REPO_HEALTH_AND_SHARED_CLEANUP.md)
+- [docs/QUICKFIX_KB.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/QUICKFIX_KB.md)
+- [docs/SPRINT_I_IMPLEMENTATION_TRACKER.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_I_IMPLEMENTATION_TRACKER.md)
 
-## Definition of Done Gate
-- P0 complete and verified
-- P1 complete (or explicit carry-over risks)
-- Parent/admin critical regressions pass
-- KPI evidence captured in checkpoint docs
-- Pilot-planning summary ready for stakeholder review
+## Suggested Next Sprint Slice
+Continue the clean sprint before new feature expansion:
+1. Follow the three-sprint sequence in [docs/NEXT_3_SPRINTS_PLAN.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/NEXT_3_SPRINTS_PLAN.md)
+2. Finish Sprint L foundation and preview extraction
+3. Prove Supabase/auth/storage behavior in Sprint M
+4. Resume parent/admin product improvements in Sprint N
 
-## Immediate Next Action
-Begin Sprint G from the existing parent flow and trim it toward document-first onboarding.
+## Suggested Skills
+- `handoff`
+- `refactor`
+- `implement`
+- `review`
 
-## Deployment Recovery Note
-- If Vercel reports that the root directory is missing, first confirm the project is using `dev/` as the app root.
-- If Vercel reports that Next.js cannot be detected, confirm `dev/package.json` is the package Vercel is reading and that it includes `next`.
-- Do not use the temporary recovery branch as the normal publish source once the canonical branch is healthy again.
+## Notes
+- This is not a Git problem anymore.
+- Use CodeGraph with explicit `projectPath: "/Users/brandondienar/Documents/Codex/Projects/Eunice"` if the MCP server reports workspace detection trouble.
+- Check [docs/QUICKFIX_KB.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/QUICKFIX_KB.md) before repeating Node, Supabase, typed-client, CodeGraph, or Git recovery paths.

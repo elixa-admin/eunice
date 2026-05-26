@@ -17,6 +17,7 @@ import {
   type IntakeRoleProfileField,
   type IntakeRoleState,
 } from '@/lib/domain/intake-roles';
+import { getDefaultTenantId } from '@/lib/domain/tenant-config';
 import {
   DOCUMENT_CONTRACTS,
   DOCUMENT_VALIDATION_LABELS,
@@ -96,7 +97,7 @@ export default function ParentApplicationWorkflow() {
             .single();
             
           if (profileErr) throw profileErr;
-          const defaultSchoolId = profileData.school_id || '00000000-0000-0000-0000-000000000000';
+          const defaultSchoolId = profileData.school_id || getDefaultTenantId();
           setSchoolId(defaultSchoolId);
           
           // Load active application draft
@@ -135,8 +136,8 @@ export default function ParentApplicationWorkflow() {
             }
 
             const serverDraft: ApplicationDraft = {
-              parentFirstName: profileData.first_name,
-              parentLastName: profileData.last_name,
+              parentFirstName: profileData.first_name ?? '',
+              parentLastName: profileData.last_name ?? '',
               parentEmail: authUser.email || '',
               parentPhone: profileData.phone_number || '',
               learnerFirstName: appData.learner_first_name,
@@ -163,14 +164,14 @@ export default function ParentApplicationWorkflow() {
             setLastSavedAt(
               storedSnapshot?.savedAt
                 ? new Date(storedSnapshot.savedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                : new Date(appData.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                : new Date(appData.updated_at || appData.created_at || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
             );
           } else {
             const baseDraft = mergeDraftState(createInitialDraft(), storedSnapshot?.draft);
             setDraft({
               ...baseDraft,
-              parentFirstName: profileData.first_name,
-              parentLastName: profileData.last_name,
+              parentFirstName: profileData.first_name ?? '',
+              parentLastName: profileData.last_name ?? '',
               parentEmail: authUser.email || '',
               parentPhone: profileData.phone_number || '',
             });
@@ -478,7 +479,7 @@ export default function ParentApplicationWorkflow() {
       const activeAppId = user ? await ensureApplicationExists() : 'parent-portal-draft';
 
       const uploadedDocument = await uploadDocumentDraft({
-        schoolId: schoolId || 'eunice',
+        schoolId: schoolId || getDefaultTenantId(),
         applicationId: activeAppId,
         documentType,
         file,

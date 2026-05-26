@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import supabase from '@/lib/supabase';
 import { getPostAuthRoute } from '@/lib/auth-routing';
+import { getDefaultTenantId, EUNICE_CONFIG } from '@/lib/domain/tenant-config';
 import { AUTH_INPUT_CLASS_NAME, SURFACE_CARD_CLASS_NAME } from '@/lib/ui-classes';
 
 interface School {
@@ -38,13 +39,15 @@ export default function SignUp() {
           setSchools(data);
           if (data.length > 0) {
             setSchoolId(data[0].id);
+          } else {
+            setSchools([{ id: EUNICE_CONFIG.id, name: EUNICE_CONFIG.name }]);
+            setSchoolId(getDefaultTenantId());
           }
         }
       } catch (err) {
-        console.warn('Failed to load schools, using default placeholder:', err);
-        // Pre-populate with a fallback school if DB query is blocked or empty
-        setSchools([{ id: 'fallback-school-id', name: 'Eunice High School' }]);
-        setSchoolId('fallback-school-id');
+        console.warn('Failed to load schools, using the default tenant:', err);
+        setSchools([{ id: EUNICE_CONFIG.id, name: EUNICE_CONFIG.name }]);
+        setSchoolId(getDefaultTenantId());
       }
     }
     loadSchools();
@@ -66,15 +69,11 @@ export default function SignUp() {
       if (signUpError) throw signUpError;
       if (!data.user) throw new Error('Sign up failed — user object not returned.');
 
-      // 2. Create row in public.profiles table
-      // If using fallback school id, set school_id to null or a valid uuid
-      const finalSchoolId = schoolId === 'fallback-school-id' ? null : schoolId;
-
       const { error: profileError } = await supabase
         .from('profiles')
         .insert({
           id: data.user.id,
-          school_id: finalSchoolId,
+          school_id: schoolId || getDefaultTenantId(),
           role: 'parent',
           first_name: firstName,
           last_name: lastName,

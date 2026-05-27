@@ -1,6 +1,6 @@
 # Sprint Q — Workflow Automation and Communication Trail
 
-**Status:** Planned
+**Status:** Complete
 
 ## Sprint Goal
 
@@ -148,3 +148,9 @@ Sprint Q is successful if:
 - `cd dev && npm run check`
 - Browser review of `/dev/admin` and `/dev/application/app-001`
 - Read-through review of the notification map and reupload flow contracts
+
+## Implementation Notes
+
+- Communication history is surfaced in the `/dev` admin and detail surfaces.
+- The notification plan lives in the shared domain and mirrors into the preview shared copy.
+- Re-upload routes exist in both `src` and `/dev` as lightweight scaffolds for a later magic-link flow.

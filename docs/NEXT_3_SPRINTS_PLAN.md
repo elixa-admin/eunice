@@ -37,7 +37,7 @@ Turn the `/dev` admin workspace into a clearer decision workbench.
 
 ## Sprint Q — Workflow Automation and Communication Trail
 
-**Status:** Planned
+**Status:** Complete
 
 **Goal**
 
@@ -78,9 +78,9 @@ Improve document quality and reviewer confidence with the lightest useful valida
 
 ## Recommended Order
 
-1. Finish Sprint P and review the updated `/dev/admin` and `/dev/application/[id]` surfaces in browser.
-2. Start Sprint Q with communication history and notification mapping.
-3. Leave Sprint R as the next follow-up once the workflow layer is visibly useful.
+1. Review the deployed Sprint Q preview and confirm the communication trail feels useful.
+2. Start Sprint R with upload-quality guidance and lightweight validation cues.
+3. Keep the document-intelligence path lean until the workflow proves its value.
 
 ## Non-Goals For This Window
 

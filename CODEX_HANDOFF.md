@@ -1,4 +1,4 @@
-# Compact Handoff — Sprint Q Ready
+# Compact Handoff — Sprint Q Delivered
 
 ## Date
 2026-05-27
@@ -13,9 +13,9 @@
 - `/dev` remains the active product-shaping lane.
 - Sprint O is complete: parent calm-flow simplification landed.
 - Sprint P is now implemented locally: admin decision-engine simplification for `/dev/admin` and `/dev/application/[id]`.
+- Sprint Q is implemented and deployed: communication trail, notification plan, and re-upload scaffolds are live in the latest `/dev` preview.
 - A quick health sweep removed obvious duplicate local artifacts and added ignore rules for local numbered copies and `.cursor/`.
 - Focused `dev` checks are green.
-- Sprint Q is now the next planned sprint and is focused on workflow automation and communication history.
 
 ## What Landed Most Recently
 1. Parent calm-flow and document grouping in the real and preview parent surfaces.
@@ -40,16 +40,17 @@
 ## Current Files To Review First
 - [dev/app/dev/admin/page.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/app/dev/admin/page.tsx)
 - [dev/app/dev/application/[id]/page.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/app/dev/application/[id]/page.tsx)
+- [dev/app/dev/parent/reupload/[token]/page.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/app/dev/parent/reupload/[token]/page.tsx)
 - [docs/SPRINT_P_ADMIN_DECISION_ENGINE.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_P_ADMIN_DECISION_ENGINE.md)
 - [docs/SPRINT_Q_WORKFLOW_AUTOMATION_AND_COMMS.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_Q_WORKFLOW_AUTOMATION_AND_COMMS.md)
 - [docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md)
 
 ## Next Sprint
-Sprint Q should shift from layout simplification into lightweight operational workflow support:
-1. communication history rail in admin
-2. notification templates and status-change map
-3. magic-link reupload path scaffolding
-4. keep the implementation light and compatible with later `n8n` orchestration
+Sprint R should focus on document intake intelligence and upload-quality guidance:
+1. improve upload feedback for blurry, low-confidence, and duplicate files
+2. surface clearer quality cues for parents before upload
+3. keep the validation and OCR path lightweight and preview-friendly
+4. avoid heavy AI or orchestration until the workflow proves useful
 
 ## Notes
 - Keep the parent side calm and the admin side operationally denser.

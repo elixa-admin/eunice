@@ -428,3 +428,28 @@ export function getValidationTone(state: DocumentValidationState) {
 export function getDocumentStateGuidance(state: DocumentValidationState) {
   return getDocumentValidationGuidance(state);
 }
+
+export function getDocumentQualityCue(state: DocumentValidationState) {
+  switch (state) {
+    case 'wrong_format':
+      return 'Use a PDF, JPG, or PNG so the school can open it quickly.';
+    case 'too_large':
+      return 'A smaller file is easier to save and usually easier to review on mobile.';
+    case 'corrupted':
+      return 'Try exporting or re-saving the file before uploading it again.';
+    case 'blurry':
+      return 'Retake the photo in brighter light and keep the full page in frame.';
+    case 'low_confidence_ocr':
+      return 'The text is hard to read, so a sharper scan or photo will help the school review it faster.';
+    case 'needs_reupload':
+      return 'Replace this with a clearer version so the file can move forward.';
+    case 'manual_review':
+      return 'This is readable, but a staff member will check it by hand.';
+    case 'verified':
+    case 'accepted':
+      return 'This upload is clear enough for the current review.';
+    case 'missing':
+    default:
+      return 'When you upload this item, we will help you check that it is clear enough.';
+  }
+}

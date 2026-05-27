@@ -27,6 +27,14 @@ export type PreviewTimelineEntry = {
   at: string;
 };
 
+export type PreviewCommunicationEntry = {
+  channel: 'SMS' | 'Email';
+  subject: string;
+  status: 'sent' | 'queued' | 'draft';
+  at: string;
+  detail: string;
+};
+
 export type PreviewApplication = {
   id: string;
   ref: string;
@@ -46,6 +54,7 @@ export type PreviewApplication = {
   documents: PreviewDocument[];
   note: string;
   timeline: PreviewTimelineEntry[];
+  communication: PreviewCommunicationEntry[];
 };
 
 export type PreviewReviewState = 'blocked' | 'review' | 'ready' | 'complete';
@@ -91,6 +100,11 @@ export const previewApplications: PreviewApplication[] = [
       { title: 'Admissions review started', detail: 'Queue assigned to admissions officer.', at: '2026-05-16' },
       { title: 'Residence proof flagged', detail: 'Reviewer requested one final address check.', at: '2026-05-19' },
     ],
+    communication: [
+      { channel: 'Email', subject: 'Application received', status: 'sent', at: '2026-05-14', detail: 'Confirmation sent after submission.' },
+      { channel: 'SMS', subject: 'Review in progress', status: 'sent', at: '2026-05-16', detail: 'Parent was notified that the file entered review.' },
+      { channel: 'Email', subject: 'Address check required', status: 'sent', at: '2026-05-19', detail: 'Requested a clearer proof of residence.' },
+    ],
   },
   {
     id: 'app-002',
@@ -119,6 +133,11 @@ export const previewApplications: PreviewApplication[] = [
       { title: 'Submitted by parent', detail: 'Draft converted to submitted application.', at: '2026-05-12' },
       { title: 'Missing report flagged', detail: 'School report required before review can start.', at: '2026-05-15' },
       { title: 'Reminder prepared', detail: 'Parent communication ready to send.', at: '2026-05-18' },
+    ],
+    communication: [
+      { channel: 'Email', subject: 'Application received', status: 'sent', at: '2026-05-12', detail: 'Confirmation sent after the draft was submitted.' },
+      { channel: 'SMS', subject: 'Missing report reminder', status: 'sent', at: '2026-05-15', detail: 'Parent was asked to re-upload the school report.' },
+      { channel: 'Email', subject: 'Reminder prepared', status: 'queued', at: '2026-05-18', detail: 'Follow-up message ready for release.' },
     ],
   },
   {
@@ -149,6 +168,11 @@ export const previewApplications: PreviewApplication[] = [
       { title: 'Admissions review complete', detail: 'Documents and learner profile fully verified.', at: '2026-05-14' },
       { title: 'Principal approved acceptance', detail: 'Offer letter queued for release.', at: '2026-05-17' },
     ],
+    communication: [
+      { channel: 'Email', subject: 'Application received', status: 'sent', at: '2026-05-08', detail: 'Submission confirmation sent.' },
+      { channel: 'Email', subject: 'Acceptance prepared', status: 'sent', at: '2026-05-17', detail: 'Offer letter queued for parent release.' },
+      { channel: 'SMS', subject: 'Offer ready', status: 'sent', at: '2026-05-17', detail: 'Parent notified that the acceptance was ready.' },
+    ],
   },
   {
     id: 'app-004',
@@ -175,6 +199,10 @@ export const previewApplications: PreviewApplication[] = [
     note: 'Fresh submission awaiting queue assignment.',
     timeline: [
       { title: 'Submitted by parent', detail: 'Initial application entered the admissions queue.', at: '2026-05-20' },
+    ],
+    communication: [
+      { channel: 'Email', subject: 'Application received', status: 'sent', at: '2026-05-20', detail: 'Confirmation sent as soon as the file arrived.' },
+      { channel: 'SMS', subject: 'Queue assignment pending', status: 'queued', at: '2026-05-20', detail: 'Queued for release once the file is assigned.' },
     ],
   },
 ];

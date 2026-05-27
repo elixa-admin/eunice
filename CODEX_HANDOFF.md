@@ -1,7 +1,7 @@
-# Compact Handoff — Dev UX Sprint Closed
+# Compact Handoff — Sprint Q Ready
 
 ## Date
-2026-05-26
+2026-05-27
 
 ## Canonical Workspace
 `/Users/brandondienar/Documents/Codex/Projects/Eunice`
@@ -9,57 +9,50 @@
 ## Current Branch
 `codex/vercel-project-separation`
 
-## Current Head
-`e1a6485`
-
 ## Current State
-- The `/dev` preview lane is now the active product-shaping surface.
-- The latest UX sprint for `/dev` is complete and documented.
-- The current live `/dev` Vercel preview is:
-  - `https://dev-a5y0q5vy2-elixa-admins-projects.vercel.app`
-- Verification is currently green for `/dev`.
+- `/dev` remains the active product-shaping lane.
+- Sprint O is complete: parent calm-flow simplification landed.
+- Sprint P is now implemented locally: admin decision-engine simplification for `/dev/admin` and `/dev/application/[id]`.
+- A quick health sweep removed obvious duplicate local artifacts and added ignore rules for local numbered copies and `.cursor/`.
+- Focused `dev` checks are green.
+- Sprint Q is now the next planned sprint and is focused on workflow automation and communication history.
 
-## What Landed In This Sprint
-1. `/dev` deployment path was stabilized:
-   - the `/dev` app now deploys as its own Vercel project
-   - shared preview contracts were mirrored into `dev/eunice-shared/` so Vercel no longer breaks on sibling imports
-2. Parent preview extraction and UX uplift:
-   - extracted [dev/components/parent-workflow-stepper.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/components/parent-workflow-stepper.tsx)
-   - extracted [dev/components/parent-workflow-sidebar.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/components/parent-workflow-sidebar.tsx)
-   - shifted [dev/app/dev/parent/page.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/app/dev/parent/page.tsx) from passive guidance into stronger next-action framing
-3. Admin preview readability uplift:
-   - improved contrast and legibility in [dev/app/dev/admin/page.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/app/dev/admin/page.tsx)
-   - strengthened reusable display treatments in [dev/components/metric-card.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/components/metric-card.tsx) and [dev/components/status-barometer.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/components/status-barometer.tsx)
-4. Application detail stretch pass:
-   - brought [dev/app/dev/application/[id]/page.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/app/dev/application/[id]/page.tsx) up to the same actionability and readability standard as the admin and parent surfaces
-5. Sprint documentation:
-   - created and completed [docs/DEV_UX_SPRINT_P0_P2.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/DEV_UX_SPRINT_P0_P2.md)
-   - updated [docs/QUICKFIX_KB.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/QUICKFIX_KB.md) with the Vercel `/dev` deployment fix path
+## What Landed Most Recently
+1. Parent calm-flow and document grouping in the real and preview parent surfaces.
+2. Admin hierarchy simplification in [dev/app/dev/admin/page.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/app/dev/admin/page.tsx):
+   - fewer competing blocks
+   - stronger selected-applicant anchor
+   - issue-first worklist
+   - evidence grouped by state
+3. Application detail alignment in [dev/app/dev/application/[id]/page.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/app/dev/application/[id]/page.tsx):
+   - one decision lens
+   - one evidence section
+   - shorter reviewer/context rail
+4. Sprint P planning doc created:
+   - [docs/SPRINT_P_ADMIN_DECISION_ENGINE.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_P_ADMIN_DECISION_ENGINE.md)
+5. Repo hygiene pass:
+   - duplicate `CODEX_HANDOFF`, `.eslintcache`, and `package-lock` copy artifacts removed
+   - `.gitignore` now hides `.cursor/` and numbered duplicate local artifacts
 
 ## Verified Checks
-- `npm run verify:dev` passed after the UX and deployment changes
-- `cd dev && npm run build` passed
-- Vercel `/dev` preview deployment completed successfully
+- `cd dev && npm run check` passed
 
-## Current Docs To Reference
-- [docs/DEV_UX_SPRINT_P0_P2.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/DEV_UX_SPRINT_P0_P2.md)
-- [docs/NEXT_3_SPRINTS_PLAN.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/NEXT_3_SPRINTS_PLAN.md)
-- [docs/QUICKFIX_KB.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/QUICKFIX_KB.md)
-- [docs/UX_BRAINSTORM_AND_SPRINT_TRACK.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/UX_BRAINSTORM_AND_SPRINT_TRACK.md)
-- [docs/SPRINT_O_PARENT_CALM_FLOW_SIMPLIFICATION.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_O_PARENT_CALM_FLOW_SIMPLIFICATION.md)
+## Current Files To Review First
+- [dev/app/dev/admin/page.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/app/dev/admin/page.tsx)
+- [dev/app/dev/application/[id]/page.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/app/dev/application/[id]/page.tsx)
+- [docs/SPRINT_P_ADMIN_DECISION_ENGINE.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_P_ADMIN_DECISION_ENGINE.md)
+- [docs/SPRINT_Q_WORKFLOW_AUTOMATION_AND_COMMS.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_Q_WORKFLOW_AUTOMATION_AND_COMMS.md)
 - [docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md)
 
-## Tomorrow’s Next Sprint
-Start Sprint M from the roadmap, but keep it grounded in the working `/dev` deployment path:
-1. verify live `/api/ping` behavior on the deployed preview
-2. prove the Supabase auth and role-routing path
-3. prove the document upload/storage path
-4. only after that, decide which `/dev` UX patterns should graduate back into `src`
+## Next Sprint
+Sprint Q should shift from layout simplification into lightweight operational workflow support:
+1. communication history rail in admin
+2. notification templates and status-change map
+3. magic-link reupload path scaffolding
+4. keep the implementation light and compatible with later `n8n` orchestration
 
 ## Notes
-- Do not reopen assessment-heavy UI work unless a shared infrastructure blocker forces it.
-- Use the `/dev` Vercel project for browser review, not local dev servers.
-- Check [docs/QUICKFIX_KB.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/QUICKFIX_KB.md) before repeating Vercel, Node, Supabase, or CodeGraph recovery work.
-- The next UX direction is to reduce explanatory text, separate parent and admin visuals more aggressively, and turn the admin queue into a more clearly decision-centric surface.
-- The next sprint draft is parent calm-flow simplification; start there before widening back into admin decision-engine work.
-- Product and architecture decisions should favor lightweight, low-cost tooling and avoid heavy orchestration unless the workflow benefit is obvious.
+- Keep the parent side calm and the admin side operationally denser.
+- Do not add heavy infrastructure for automation yet; scaffold the workflow contracts first.
+- Keep using `/dev` preview plus Vercel for browser review.
+- Check [docs/QUICKFIX_KB.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/QUICKFIX_KB.md) before revisiting Vercel, Supabase, or runtime loops.

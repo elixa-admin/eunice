@@ -16,10 +16,16 @@ supabase/.temp/
 !.env.example
 .vercel
 .codegraph/
+.cursor/
 *.tsbuildinfo
 **/node_modules/
 **/.next/
 **/.vercel/
+
+# Accidental duplicate local artifacts
+CODEX_HANDOFF [0-9]*.md
+**/.eslintcache [0-9]*
+**/package-lock [0-9]*.json
 
 # Eunice local/generated artifacts
 .env.local

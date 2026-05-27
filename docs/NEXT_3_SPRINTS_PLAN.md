@@ -4,7 +4,7 @@
 
 ## Planning Intent
 
-Keep Eunice moving toward a lightweight admissions operating system by sequencing the next three sprints around clarity first, then workflow support, then practical document intelligence.
+Keep Eunice moving toward a lightweight admissions operating system by sequencing the next three sprints around parent calm, admin decisiveness, and the lightest useful automation layer.
 
 ## Shared Direction
 
@@ -15,72 +15,77 @@ Keep Eunice moving toward a lightweight admissions operating system by sequencin
 - Prefer low-cost, low-complexity implementation paths.
 - Prepare for `n8n`, `Tesseract OCR`, and multi-school support without overbuilding them now.
 
-## Sprint P — Admin Decision Engine
+## Sprint S — Parent Capture and Calm Upload Flow
 
-**Status:** In progress
+**Status:** Planned
 
 **Goal**
 
-Turn the `/dev` admin workspace into a clearer decision workbench.
+Reduce parent-side friction by making capture, consent, and upload feel calmer and more guided on mobile.
 
 **Focus**
 
-- selected-applicant anchor
-- issue-first queue rows
-- grouped evidence by state
-- less equal-weight card clutter
-- detail page alignment
+- POPIA consent gating
+- clearer upload guidance
+- client-side WebP compression before upload
+- mobile capture assistance
+- document accordion grouping:
+  - Always Required
+  - Conditional
+  - Supporting
+
+**Primary doc**
+
+- [docs/SPRINT_O_PARENT_CALM_FLOW_SIMPLIFICATION.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_O_PARENT_CALM_FLOW_SIMPLIFICATION.md)
+- [docs/UX_BRAINSTORM_AND_SPRINT_TRACK.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/UX_BRAINSTORM_AND_SPRINT_TRACK.md)
+
+## Sprint T — Admin Decision Acceleration
+
+**Status:** Planned
+
+**Goal**
+
+Make the admin workspace faster to scan and easier to act on by increasing decision density while reducing visual clutter.
+
+**Focus**
+
+- stronger issue-first queue hierarchy
+- speed triage mode for bulk review
+- role-based document compartmentalization
+- zone / context tags for early routing
+- tighter evidence and outcome framing
 
 **Primary doc**
 
 - [docs/SPRINT_P_ADMIN_DECISION_ENGINE.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_P_ADMIN_DECISION_ENGINE.md)
+- [docs/UX_BRAINSTORM_AND_SPRINT_TRACK.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/UX_BRAINSTORM_AND_SPRINT_TRACK.md)
 
-## Sprint Q — Workflow Automation and Communication Trail
+## Sprint U — Lightweight Automation and School Foundation
 
-**Status:** Complete
+**Status:** Planned
 
 **Goal**
 
-Add the lightest useful operational workflow support so communication and follow-up become visible and structured.
+Make the core workflow operationally complete with lightweight automation hooks and a clean path toward later multi-school support.
 
 **Focus**
 
-- communication history in admin
-- status-to-notification mapping
-- magic-link reupload scaffolding
-- later compatibility with `n8n`
+- status-based notification wiring
+- communication history and audit trail
+- magic-link reupload completion path
+- lightweight `n8n` readiness
+- school configuration and template shape
 
 **Primary doc**
 
 - [docs/SPRINT_Q_WORKFLOW_AUTOMATION_AND_COMMS.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_Q_WORKFLOW_AUTOMATION_AND_COMMS.md)
-
-## Sprint R — Document Intake Intelligence
-
-**Status:** Complete
-
-**Goal**
-
-Improve document quality and reviewer confidence with the lightest useful validation layer.
-
-**Focus**
-
-- upload quality guidance
-- readability and confidence signals
-- duplicate detection heuristics
-- OCR-first extraction direction, starting from `Tesseract OCR`
-- calmer parent feedback when a document needs replacement
-
-**Expected shape**
-
-- start with UI contracts and local validation heuristics
-- avoid expensive AI pipelines
-- keep storage and workflow impact transparent to staff
+- [docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md)
 
 ## Recommended Order
 
-1. Review the deployed Sprint Q preview and confirm the communication trail feels useful.
-2. Review the Sprint R document-intake cues in the preview and confirm the shape feels lightweight.
-3. Move into the next sprint only after the document-intake path feels calm and readable.
+1. Start Sprint S by making parent capture and upload feel calmer on mobile.
+2. Move into Sprint T once the parent flow feels less crowded and more reassuring.
+3. Use Sprint U to make the workflow operationally complete without adding heavy infrastructure.
 
 ## Non-Goals For This Window
 

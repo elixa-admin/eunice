@@ -17,6 +17,10 @@
 - Sprint R is complete: upload-quality guidance, lightweight validation signals, and OCR-ready intake metadata are now in place.
 - A quick health sweep removed obvious duplicate local artifacts and added ignore rules for local numbered copies and `.cursor/`.
 - Focused `dev` checks are green.
+- The next three-sprint roadmap now points to:
+  - Sprint S: parent capture and calm upload flow
+  - Sprint T: admin decision acceleration
+  - Sprint U: lightweight automation and school foundation
 
 ## What Landed Most Recently
 1. Parent calm-flow and document grouping in the real and preview parent surfaces.
@@ -47,7 +51,7 @@
 - [docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md)
 
 ## Next Sprint
-Sprint R is complete. The next sprint should start from the now-lightweight document-intake contract and focus on the next operational improvement, without introducing heavy OCR or orchestration yet.
+Start with Sprint S. The parent experience still has the biggest leverage for lowering friction, and the roadmap now sequences the next three sprints as parent calm flow, admin decision acceleration, and lightweight automation/foundation work.
 
 ## Notes
 - Keep the parent side calm and the admin side operationally denser.

@@ -140,6 +140,14 @@ export const APPLICATION_NOTIFICATION_PLAN: Record<ApplicationStatus, Applicatio
   },
 };
 
+export function getApplicationNotificationPlan(status: ApplicationStatus) {
+  return APPLICATION_NOTIFICATION_PLAN[status];
+}
+
+export function getApplicationNotificationTemplates(status: ApplicationStatus) {
+  return getApplicationNotificationPlan(status).templates;
+}
+
 export const APPLICATION_STATUS_TRANSITIONS: Record<ApplicationStatus, ApplicationStatus[]> = {
   draft: ['submitted'],
   submitted: ['awaiting_documents', 'ready_for_review', 'under_review'],

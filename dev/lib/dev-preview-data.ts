@@ -51,6 +51,7 @@ export type PreviewApplication = {
   submittedAt: string;
   updatedAt: string;
   assignedTo: string;
+  zoneTag: string;
   completion: number;
   missingItems: string[];
   documents: PreviewDocument[];
@@ -88,6 +89,7 @@ export const previewApplications: PreviewApplication[] = [
     submittedAt: '2026-05-14',
     updatedAt: '2026-05-19',
     assignedTo: 'A. van Wyk',
+    zoneTag: 'Zone 1 (Feeder Zone)',
     completion: 92,
     missingItems: ['Proof of residence flagged for manual review'],
     documents: [
@@ -133,6 +135,7 @@ export const previewApplications: PreviewApplication[] = [
     submittedAt: '2026-05-12',
     updatedAt: '2026-05-18',
     assignedTo: 'N. Jacobs',
+    zoneTag: 'Zone 3 (Out of Zone)',
     completion: 74,
     missingItems: ['Previous school report needs re-upload'],
     documents: [
@@ -177,6 +180,7 @@ export const previewApplications: PreviewApplication[] = [
     submittedAt: '2026-05-08',
     updatedAt: '2026-05-17',
     assignedTo: 'Principal Review',
+    zoneTag: 'Zone 1 (Feeder Zone)',
     completion: 100,
     missingItems: [],
     documents: [
@@ -211,6 +215,7 @@ export const previewApplications: PreviewApplication[] = [
     submittedAt: '2026-05-20',
     updatedAt: '2026-05-20',
     assignedTo: 'Unassigned',
+    zoneTag: 'Zone 3 (Out of Zone)',
     completion: 86,
     missingItems: ['Queue assignment', 'Document review'],
     documents: [

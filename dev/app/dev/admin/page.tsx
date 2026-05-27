@@ -6,7 +6,7 @@ import { PreviewShell } from '@/components/preview-shell';
 import { SectionHeading } from '@/components/section-heading';
 import { SurfaceCard } from '@/components/surface-card';
 import { StatusBadge } from '@/components/status-badge';
-import { APPLICATION_NOTIFICATION_PLAN } from '@eunice-shared/domain/applications';
+import { getApplicationNotificationPlan } from '@eunice-shared/domain/applications';
 import {
   getAdminQueueLane,
   getPreviewDocumentCounts,
@@ -104,6 +104,9 @@ function formatQueueIssue(application: PreviewApplication) {
 
 export default function DevAdminPage() {
   const [selectedAppId, setSelectedAppId] = useState(previewApplications[0].id);
+  const [viewMode, setViewMode] = useState<'decision' | 'triage'>('decision');
+  const [selectedTriageIds, setSelectedTriageIds] = useState<string[]>([]);
+  const [bulkNotice, setBulkNotice] = useState<string | null>(null);
   const featured = previewApplications.find((app) => app.id === selectedAppId) ?? previewApplications[0];
   const reviewState = getPreviewReviewState(featured);
   const counts = getPreviewDocumentCounts(featured);
@@ -112,6 +115,7 @@ export default function DevAdminPage() {
   const queuePriority =
     counts.blocking > 0 ? 'Clear blockers first' : counts.reviewOnly > 0 ? 'Make the reviewer call next' : reviewState === 'complete' ? 'Prepare communication handoff' : 'Move to decision';
   const notificationStatus = (featured.status === 'incomplete' ? 'awaiting_documents' : featured.status) as ApplicationStatus;
+  const notificationPlan = getApplicationNotificationPlan(notificationStatus);
   const laneCounts = previewApplications.reduce(
     (acc, app) => {
       acc[getAdminQueueLane(app)] += 1;
@@ -120,6 +124,23 @@ export default function DevAdminPage() {
     { blocking: 0, review: 0, ready: 0, decision: 0 } as Record<QueueLane, number>,
   );
   const primaryEvidence = groupedDocuments.blocking[0] ?? groupedDocuments.review[0] ?? groupedDocuments.ready[0] ?? groupedDocuments.other[0];
+
+  function toggleTriageSelection(applicationId: string) {
+    setSelectedTriageIds((current) =>
+      current.includes(applicationId)
+        ? current.filter((id) => id !== applicationId)
+        : [...current, applicationId],
+    );
+  }
+
+  function runBulkAction(action: string) {
+    if (selectedTriageIds.length === 0) {
+      setBulkNotice('Select one or more files first.');
+      return;
+    }
+
+    setBulkNotice(`${action} prepared for ${selectedTriageIds.length} selected application${selectedTriageIds.length === 1 ? '' : 's'}.`);
+  }
 
   return (
     <PreviewShell
@@ -173,6 +194,26 @@ export default function DevAdminPage() {
                   <span className="text-white">{featured.ref}</span>
                 </div>
                 <div className="flex items-center gap-3">
+                  <div className="rounded-full border border-white/12 bg-white/8 p-1">
+                    <button
+                      type="button"
+                      onClick={() => setViewMode('decision')}
+                      className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+                        viewMode === 'decision' ? 'bg-white text-[#073820]' : 'text-white/70 hover:text-white'
+                      }`}
+                    >
+                      Decision view
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setViewMode('triage')}
+                      className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+                        viewMode === 'triage' ? 'bg-white text-[#073820]' : 'text-white/70 hover:text-white'
+                      }`}
+                    >
+                      Speed triage
+                    </button>
+                  </div>
                   <button className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white">Queue overview</button>
                   <Link href={`/dev/application/${featured.id}`} className="rounded-full border border-[#e7d39a]/35 bg-[#b88907] px-4 py-2 text-sm font-semibold text-[#052716]">
                     Open full record
@@ -212,6 +253,11 @@ export default function DevAdminPage() {
                         <div className="mt-1 text-xs text-white/72">Updated {featured.updatedAt}</div>
                       </div>
                       <div className="rounded-2xl border border-white/12 bg-white/8 px-3 py-3">
+                        <div className="text-[11px] uppercase tracking-[0.18em] text-white/68">Zone</div>
+                        <div className="mt-1 text-sm font-medium text-white">{featured.zoneTag}</div>
+                        <div className="mt-1 text-xs text-white/72">Routing and catchment context</div>
+                      </div>
+                      <div className="rounded-2xl border border-white/12 bg-white/8 px-3 py-3">
                         <div className="text-[11px] uppercase tracking-[0.18em] text-white/68">Evidence</div>
                         <div className="mt-1 text-sm font-medium text-white">{counts.ready}/{counts.total} usable now</div>
                         <div className="mt-1 text-xs text-white/72">{counts.blocking} blocking · {counts.reviewOnly} flagged</div>
@@ -247,6 +293,77 @@ export default function DevAdminPage() {
                   </div>
                 </div>
               </div>
+
+              {viewMode === 'triage' ? (
+                <SurfaceCard className="border border-[#e7d39a]/25 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(249,247,240,0.98)_100%)] p-4 shadow-[0_14px_28px_rgba(0,0,0,0.08)]">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Speed triage</div>
+                      <div className="mt-1 text-sm text-slate-700">Select several applications, then prepare the next queue action in one pass.</div>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        { label: 'Approve selected', tone: 'border-emerald-200 bg-emerald-50 text-emerald-800' },
+                        { label: 'Request docs', tone: 'border-amber-200 bg-amber-50 text-amber-800' },
+                        { label: 'Send email', tone: 'border-slate-200 bg-white text-slate-700' },
+                      ].map((action) => (
+                        <button
+                          key={action.label}
+                          type="button"
+                          onClick={() => runBulkAction(action.label)}
+                          className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${action.tone}`}
+                        >
+                          {action.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {bulkNotice ? (
+                    <div className="mt-3 rounded-2xl border border-slate-200 bg-white/80 px-3 py-2.5 text-xs text-slate-600">
+                      {bulkNotice}
+                    </div>
+                  ) : null}
+
+                  <div className="mt-4 grid gap-2">
+                    {previewApplications.map((app) => {
+                      const appLane = getAdminQueueLane(app);
+                      const isSelected = selectedTriageIds.includes(app.id);
+                      return (
+                        <label
+                          key={app.id}
+                          className={`flex cursor-pointer items-start gap-3 rounded-2xl border px-4 py-3 transition ${
+                            isSelected ? 'border-[#e7d39a] bg-white shadow-[0_12px_24px_rgba(185,137,7,0.10)]' : 'border-slate-200 bg-white/70 hover:bg-white'
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() => toggleTriageSelection(app.id)}
+                            className="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-900"
+                          />
+                          <div className="min-w-0 flex-1">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <div className="font-semibold text-slate-950">{app.learnerName}</div>
+                              <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500">
+                                {app.zoneTag}
+                              </span>
+                              <span className={`rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] ${laneMeta[appLane].chip}`}>
+                                {laneMeta[appLane].label}
+                              </span>
+                            </div>
+                            <div className="mt-1 text-xs text-slate-600">{app.ref} · {app.assignedTo} · {formatQueueIssue(app)}</div>
+                          </div>
+                          <div className="text-right text-xs text-slate-500">
+                            <div>Updated {app.updatedAt}</div>
+                            <div className="mt-1 font-semibold text-slate-700">{getPreviewNextAction(app)}</div>
+                          </div>
+                        </label>
+                      );
+                    })}
+                  </div>
+                </SurfaceCard>
+              ) : null}
 
               <div className="space-y-3">
                 <div className="rounded-[24px] border border-[#e7d39a]/25 bg-[linear-gradient(180deg,rgba(17,73,47,0.99)_0%,rgba(9,62,37,0.99)_100%)] p-3.5 shadow-[0_14px_30px_rgba(0,0,0,0.16)] ring-1 ring-white/6">
@@ -306,10 +423,10 @@ export default function DevAdminPage() {
 
                 <div className="rounded-[24px] border border-[#e7d39a]/25 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(249,247,240,0.98)_100%)] p-4 shadow-[0_14px_28px_rgba(0,0,0,0.08)]">
                   <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Notification plan</div>
-                  <div className="mt-2 text-sm font-semibold text-slate-950">{APPLICATION_NOTIFICATION_PLAN[notificationStatus].label}</div>
-                  {APPLICATION_NOTIFICATION_PLAN[notificationStatus].templates.length > 0 ? (
+                  <div className="mt-2 text-sm font-semibold text-slate-950">{notificationPlan.label}</div>
+                  {notificationPlan.templates.length > 0 ? (
                     <div className="mt-3 space-y-2.5">
-                      {APPLICATION_NOTIFICATION_PLAN[notificationStatus].templates.map((template) => (
+                      {notificationPlan.templates.map((template) => (
                         <div key={`${template.channel}-${template.subject}`} className="rounded-2xl border border-slate-200 bg-white/80 px-3 py-2.5">
                           <div className="flex items-center justify-between gap-3">
                             <div className="text-sm font-semibold text-slate-950">{template.subject}</div>

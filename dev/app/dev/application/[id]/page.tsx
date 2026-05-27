@@ -3,7 +3,7 @@ import { PreviewShell } from '@/components/preview-shell';
 import { SectionHeading } from '@/components/section-heading';
 import { StatusBadge } from '@/components/status-badge';
 import { SurfaceCard } from '@/components/surface-card';
-import { APPLICATION_NOTIFICATION_PLAN } from '@eunice-shared/domain/applications';
+import { getApplicationNotificationPlan } from '@eunice-shared/domain/applications';
 import {
   PREVIEW_REVIEW_STATE_CLASSES,
   PREVIEW_REVIEW_STATE_LABELS,
@@ -43,6 +43,7 @@ export default async function DevApplicationDetailPage({
   const readyDocuments = application.documents.filter((document) => isDocumentStateSubmissionReady(document.status));
   const readinessTone = counts.blocking > 0 ? 'rose' : counts.reviewOnly > 0 ? 'amber' : 'emerald';
   const notificationStatus = (application.status === 'incomplete' ? 'awaiting_documents' : application.status) as ApplicationStatus;
+  const notificationPlan = getApplicationNotificationPlan(notificationStatus);
 
   return (
     <PreviewShell
@@ -266,11 +267,11 @@ export default async function DevApplicationDetailPage({
             <p className="mt-2.5 text-sm leading-6 text-slate-700">This shows the lightweight message shape we can eventually wire into automation.</p>
             <div className="mt-3.5 rounded-2xl border border-slate-200 bg-white px-4 py-3">
               <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Current state</div>
-              <div className="mt-1 text-sm font-semibold text-slate-950">{APPLICATION_NOTIFICATION_PLAN[notificationStatus].label}</div>
+              <div className="mt-1 text-sm font-semibold text-slate-950">{notificationPlan.label}</div>
             </div>
             <div className="mt-3.5 space-y-2.5">
-              {APPLICATION_NOTIFICATION_PLAN[notificationStatus].templates.length > 0 ? (
-                APPLICATION_NOTIFICATION_PLAN[notificationStatus].templates.map((template) => (
+              {notificationPlan.templates.length > 0 ? (
+                notificationPlan.templates.map((template) => (
                   <div key={`${template.channel}-${template.subject}`} className="rounded-2xl border border-slate-200 bg-white px-4 py-3">
                     <div className="flex items-center justify-between gap-3">
                       <div className="text-sm font-semibold text-slate-950">{template.subject}</div>

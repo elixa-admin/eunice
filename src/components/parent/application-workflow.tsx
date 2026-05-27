@@ -26,6 +26,7 @@ import {
   isDocumentStateBlocking,
   isDocumentStateReviewOnly,
   isDocumentStateSubmissionReady,
+  type DocumentIntakeSignal,
   type DocumentType,
 } from '@/lib/documents/contracts';
 import { uploadDocumentDraft } from '@/lib/documents/upload';
@@ -63,12 +64,16 @@ type AuthUser = {
   email?: string | null;
 };
 
+const POPIA_CONSENT_KEY = 'eunice-popia-consent-v1';
+
 export default function ParentApplicationWorkflow() {
   const [activeStep, setActiveStep] = useState<StepKey>('checklist');
   const [draft, setDraft] = useState<ApplicationDraft>(createInitialDraft);
   const [lastSavedAt, setLastSavedAt] = useState('Not saved yet');
   const [mounted, setMounted] = useState(false);
   const [readinessConfirmed, setReadinessConfirmed] = useState(false);
+  const [popiaConsentAccepted, setPopiaConsentAccepted] = useState(false);
+  const [popiaConsentChecked, setPopiaConsentChecked] = useState(false);
   const [uploadingDocument, setUploadingDocument] = useState<DocumentType | null>(null);
   const [user, setUser] = useState<AuthUser | null>(null);
   const [appId, setAppId] = useState<string | null>(null);
@@ -81,8 +86,12 @@ export default function ParentApplicationWorkflow() {
       try {
         const storedSnapshot = readStoredDraftSnapshot();
         const storedReadiness = storedSnapshot?.readinessConfirmed ?? false;
+        const storedConsent = typeof window !== 'undefined' ? window.localStorage.getItem(POPIA_CONSENT_KEY) : null;
         if (storedReadiness) {
           setReadinessConfirmed(true);
+        }
+        if (storedConsent === 'true') {
+          setPopiaConsentAccepted(true);
         }
 
         const { data: { user: authUser } } = await supabase.auth.getUser();
@@ -123,10 +132,38 @@ export default function ParentApplicationWorkflow() {
               (docsData as DocumentRecord[]).forEach((doc) => {
                 const type = doc.document_type as DocumentType;
                 if (documentsDraft[type]) {
+                  const qualitySignals: DocumentIntakeSignal[] =
+                    doc.upload_status === 'blurry'
+                      ? ['blurry']
+                      : doc.upload_status === 'low_confidence_ocr'
+                        ? ['low_confidence_ocr']
+                        : doc.review_notes?.toLowerCase().includes('duplicate') || doc.review_notes?.toLowerCase().includes('repeat')
+                          ? ['possible_duplicate']
+                          : [];
                   documentsDraft[type] = {
                     fileName: doc.file_name,
                     validationState: doc.upload_status,
                     message: doc.review_notes || getDocumentStateGuidance(doc.upload_status),
+                    intake: {
+                      processingStatus:
+                        doc.upload_status === 'manual_review'
+                          ? 'manual_review'
+                          : doc.upload_status === 'blurry' || doc.upload_status === 'low_confidence_ocr'
+                            ? 'running'
+                            : isDocumentStateBlocking(doc.upload_status)
+                              ? 'failed'
+                              : 'queued',
+                      qualitySignals,
+                      ocrText: null,
+                      confidenceScore:
+                        doc.upload_status === 'blurry'
+                          ? 0.67
+                          : doc.upload_status === 'low_confidence_ocr'
+                            ? 0.64
+                            : doc.upload_status === 'manual_review'
+                              ? 0.56
+                              : 0.92,
+                    },
                     storagePath: doc.file_path,
                     uploadedAt: doc.uploaded_at,
                     uploadStatus: 'saved',
@@ -225,6 +262,11 @@ export default function ParentApplicationWorkflow() {
     if (!mounted || typeof window === 'undefined') return;
     window.localStorage.setItem(READINESS_KEY, readinessConfirmed ? 'true' : 'false');
   }, [mounted, readinessConfirmed]);
+
+  useEffect(() => {
+    if (!mounted || typeof window === 'undefined' || !popiaConsentAccepted) return;
+    window.localStorage.setItem(POPIA_CONSENT_KEY, 'true');
+  }, [mounted, popiaConsentAccepted]);
 
   async function saveApplicationState(updatedDraft = draft) {
     if (!user || !schoolId) {
@@ -471,6 +513,12 @@ export default function ParentApplicationWorkflow() {
         validationState: 'manual_review',
         message:
           'This looks like the same file you already uploaded. If you meant to replace it, choose a newer scan or photo.',
+        intake: {
+          processingStatus: 'manual_review',
+          qualitySignals: ['possible_duplicate'],
+          ocrText: null,
+          confidenceScore: 0.56,
+        },
       });
       return;
     }
@@ -523,17 +571,17 @@ export default function ParentApplicationWorkflow() {
     } catch (err) {
       console.error('Error uploading or saving document meta:', err);
       setDraftNotice('Upload failed. Please retry with the same document or a clearer replacement.');
-      updateDocument(documentType, {
-        ...draft.documents[documentType],
-        validationState: 'needs_reupload',
-        uploadStatus: 'error',
-        message: 'Upload failed. Check your connection, then choose this file again to retry.',
-        intake: {
-          processingStatus: 'failed',
-          qualitySignals: [],
-          ocrText: null,
-          confidenceScore: null,
-        },
+    updateDocument(documentType, {
+      ...draft.documents[documentType],
+      validationState: 'needs_reupload',
+      uploadStatus: 'error',
+      message: 'Upload failed. Check your connection, then choose this file again to retry.',
+      intake: {
+        processingStatus: 'failed',
+        qualitySignals: [],
+        ocrText: null,
+        confidenceScore: null,
+      },
       });
     } finally {
       setUploadingDocument(null);
@@ -545,6 +593,7 @@ export default function ParentApplicationWorkflow() {
       fileName: '',
       validationState: 'missing',
       message: 'Document removed from the draft.',
+      intake: undefined,
       storagePath: null,
       uploadedAt: null,
       uploadStatus: 'idle',
@@ -627,7 +676,39 @@ export default function ParentApplicationWorkflow() {
   }
 
   return (
-    <section className="surface-card rounded-[2.5rem] overflow-hidden">
+    <>
+      {!popiaConsentAccepted ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/55 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-xl rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_30px_100px_rgba(15,23,42,0.22)] sm:p-8">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">POPIA consent</p>
+            <h3 className="display-serif mt-3 text-3xl font-semibold tracking-tight text-slate-950">Before you continue</h3>
+            <p className="mt-3 text-sm leading-7 text-slate-600">
+              Eunice needs to collect and store the information you enter so the admissions team can review your child’s application. Please confirm you understand and consent to this use before you continue.
+            </p>
+            <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 text-sm text-slate-700">
+              <input
+                type="checkbox"
+                checked={popiaConsentChecked}
+                onChange={(event) => setPopiaConsentChecked(event.target.checked)}
+                className="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-900 focus:ring-emerald-900"
+              />
+              <span>I understand and consent to the school using my details for the admissions process.</span>
+            </label>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <button
+                type="button"
+                onClick={() => setPopiaConsentAccepted(true)}
+                disabled={!popiaConsentChecked}
+                className="rounded-xl bg-emerald-950 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-900 disabled:cursor-not-allowed disabled:bg-slate-300"
+              >
+                Confirm and continue
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      <section className="surface-card rounded-[2.5rem] overflow-hidden">
       <div className="border-b border-slate-100 bg-gradient-to-r from-emerald-900/5 via-white to-amber-500/5 px-6 py-6 sm:px-8">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
@@ -1170,8 +1251,23 @@ export default function ParentApplicationWorkflow() {
                                     </p>
                                   ) : null}
                                 </div>
-                                <div className={`rounded-2xl border px-3 py-2 text-sm font-medium ${getValidationTone(document.validationState)}`}>
-                                  {DOCUMENT_VALIDATION_LABELS[document.validationState]}
+                              <div className={`rounded-2xl border px-3 py-2 text-sm font-medium ${getValidationTone(document.validationState)}`}>
+                                {DOCUMENT_VALIDATION_LABELS[document.validationState]}
+                              </div>
+                            </div>
+
+                              <div className="mt-3 rounded-2xl border border-dashed border-emerald-200 bg-emerald-50/70 p-3 sm:hidden">
+                                <div className="flex items-start gap-3">
+                                  <svg viewBox="0 0 64 40" className="mt-0.5 h-10 w-16 shrink-0 text-emerald-900" fill="none" aria-hidden="true">
+                                    <rect x="6" y="6" width="52" height="28" rx="4" stroke="currentColor" strokeWidth="1.8" strokeDasharray="3 3" />
+                                    <path d="M12 12h8M12 12v8M52 12h-8M52 12v8M12 28h8M12 28v-8M52 28h-8M52 28v-8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                                  </svg>
+                                  <div>
+                                    <div className="text-sm font-semibold text-emerald-950">Keep the page inside the frame</div>
+                                    <p className="mt-1 text-xs leading-5 text-emerald-900/80">
+                                      A steadier, brighter photo helps us review the file faster and reduces the chance of a re-upload.
+                                    </p>
+                                  </div>
                                 </div>
                               </div>
 
@@ -1266,6 +1362,21 @@ export default function ParentApplicationWorkflow() {
                                   </div>
                                   <div className={`rounded-2xl border px-3 py-2 text-sm font-medium ${getValidationTone(document.validationState)}`}>
                                     {DOCUMENT_VALIDATION_LABELS[document.validationState]}
+                                  </div>
+                                </div>
+
+                                <div className="mt-3 rounded-2xl border border-dashed border-emerald-200 bg-emerald-50/70 p-3 sm:hidden">
+                                  <div className="flex items-start gap-3">
+                                    <svg viewBox="0 0 64 40" className="mt-0.5 h-10 w-16 shrink-0 text-emerald-900" fill="none" aria-hidden="true">
+                                      <rect x="6" y="6" width="52" height="28" rx="4" stroke="currentColor" strokeWidth="1.8" strokeDasharray="3 3" />
+                                      <path d="M12 12h8M12 12v8M52 12h-8M52 12v8M12 28h8M12 28v-8M52 28h-8M52 28v-8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                                    </svg>
+                                    <div>
+                                      <div className="text-sm font-semibold text-emerald-950">Keep the page inside the frame</div>
+                                      <p className="mt-1 text-xs leading-5 text-emerald-900/80">
+                                        A steadier, brighter photo helps us review the file faster and reduces the chance of a re-upload.
+                                      </p>
+                                    </div>
                                   </div>
                                 </div>
 
@@ -1481,6 +1592,7 @@ export default function ParentApplicationWorkflow() {
         </aside>
       </div>
     </section>
+    </>
   );
 }
 

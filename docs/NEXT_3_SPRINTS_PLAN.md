@@ -83,9 +83,9 @@ Make the core workflow operationally complete with lightweight automation hooks 
 
 ## Recommended Order
 
-1. Sprint Z - Workflow Automation and Communication History
-2. Sprint AA - Document Intelligence Lite
-3. Sprint AB - Browser QA and Pattern Lockdown
+1. Sprint AA - Document Intelligence Lite
+2. Sprint AB - Browser QA and Pattern Lockdown
+3. Sprint AC - Multi-School Foundation Kickoff
 
 ## Sprint Y - Parent Upload Confidence and Admin Decision Speed
 
@@ -108,7 +108,7 @@ Deliver the biggest UI/UX win for the least implementation churn by making the p
 
 ## Sprint Z - Workflow Automation and Communication History
 
-**Status:** Planned
+**Status:** Implemented
 
 **Goal**
 
@@ -161,6 +161,26 @@ Verify the parent and admin changes in browser, then capture the winning visual 
 **Primary doc**
 
 - [docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md)
+
+## Sprint AC - Multi-School Foundation Kickoff
+
+**Status:** Planned
+
+**Goal**
+
+Prepare the platform for a clean multi-school expansion without adding unnecessary infrastructure or workflow weight now.
+
+**Focus**
+
+- school-level configuration shape
+- branding and template separation
+- role and permission boundaries
+- document requirement profiles
+- lightweight path for future school onboarding
+
+**Primary doc**
+
+- [docs/SPRINT_AC_MULTI_SCHOOL_FOUNDATION_KICKOFF.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_AC_MULTI_SCHOOL_FOUNDATION_KICKOFF.md)
 
 ## Non-Goals For This Window
 

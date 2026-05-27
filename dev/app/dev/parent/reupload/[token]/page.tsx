@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { PreviewShell } from '@/components/preview-shell';
 import { SurfaceCard } from '@/components/surface-card';
+import { getApplicationNotificationPlan } from '@eunice-shared/domain/applications';
 
 type ReuploadPageProps = {
   params: Promise<{ token: string }>;
@@ -8,6 +9,8 @@ type ReuploadPageProps = {
 
 export default async function DevParentReuploadPage({ params }: ReuploadPageProps) {
   const { token } = await params;
+  const reuploadStatus = 'awaiting_documents' as const;
+  const notificationPlan = getApplicationNotificationPlan(reuploadStatus);
 
   return (
     <PreviewShell
@@ -40,9 +43,26 @@ export default async function DevParentReuploadPage({ params }: ReuploadPageProp
               <div className="mt-2 break-all rounded-2xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700">
                 {token || 'No token provided'}
               </div>
-              <p className="mt-3 text-xs leading-5 text-slate-500">
-                This is intentionally lightweight. A later sprint can connect a short-lived token and route straight into a single upload slot.
-              </p>
+              <div className="mt-3 rounded-2xl border border-primary-100 bg-white px-3 py-3">
+                <div className="text-[11px] uppercase tracking-[0.16em] text-primary-800/70">Triggered by</div>
+                <div className="mt-1 text-sm font-semibold text-slate-950">{notificationPlan.label}</div>
+                <div className="mt-1 text-xs leading-5 text-slate-600">
+                  This scaffold keeps the parent on one replacement document and later can plug into a short-lived magic link.
+                </div>
+                <div className="mt-3 space-y-2">
+                  {notificationPlan.templates.map((template) => (
+                    <div key={`${template.channel}-${template.subject}`} className="rounded-2xl border border-slate-200 bg-[#fcfaf5] px-3 py-2">
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="text-sm font-semibold text-slate-950">{template.subject}</div>
+                        <span className="rounded-full border border-slate-200 bg-white px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-600">
+                          {template.channel}
+                        </span>
+                      </div>
+                      <div className="mt-1 text-xs leading-5 text-slate-600">{template.body}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 

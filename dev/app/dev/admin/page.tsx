@@ -418,6 +418,7 @@ export default function DevAdminPage() {
                 <div className="rounded-[24px] border border-[#e7d39a]/25 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(249,247,240,0.98)_100%)] p-4 shadow-[0_14px_28px_rgba(0,0,0,0.08)]">
                   <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Workflow trail</div>
                   <div className="mt-2 text-sm font-semibold text-slate-950">{notificationPlan.label}</div>
+                  <div className="mt-1 text-xs text-slate-500">Triggered by {notificationPlan.trigger}</div>
                   <div className="mt-3 grid gap-3">
                     <div className="rounded-2xl border border-slate-200 bg-white/80 px-3 py-2.5">
                       <div className="text-xs uppercase tracking-[0.12em] text-slate-500">Communication trail</div>

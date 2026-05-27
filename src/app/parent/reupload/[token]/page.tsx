@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { getApplicationNotificationPlan } from '@/lib/domain/applications';
 
 type ReuploadPageProps = {
   params: Promise<{ token: string }>;
@@ -7,6 +8,8 @@ type ReuploadPageProps = {
 
 export default async function ParentReuploadPage({ params }: ReuploadPageProps) {
   const { token } = await params;
+  const reuploadStatus = 'awaiting_documents' as const;
+  const notificationPlan = getApplicationNotificationPlan(reuploadStatus);
 
   if (!token) {
     notFound();
@@ -36,9 +39,26 @@ export default async function ParentReuploadPage({ params }: ReuploadPageProps) 
               <div className="mt-2 break-all rounded-2xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700">
                 {token}
               </div>
-              <p className="mt-3 text-xs leading-5 text-slate-500">
-                This is a scaffolded route for now. Later, a short-lived magic link can route directly into a single-slot upload experience.
-              </p>
+              <div className="mt-3 rounded-2xl border border-primary-100 bg-white px-3 py-3">
+                <div className="text-[11px] uppercase tracking-[0.16em] text-primary-800/70">Triggered by</div>
+                <div className="mt-1 text-sm font-semibold text-slate-950">{notificationPlan.label}</div>
+                <div className="mt-1 text-xs leading-5 text-slate-600">
+                  This route is shaped for a single document replacement request, so the parent can fix one file and leave.
+                </div>
+                <div className="mt-3 space-y-2">
+                  {notificationPlan.templates.map((template) => (
+                    <div key={`${template.channel}-${template.subject}`} className="rounded-2xl border border-slate-200 bg-[#fcfaf5] px-3 py-2">
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="text-sm font-semibold text-slate-950">{template.subject}</div>
+                        <span className="rounded-full border border-slate-200 bg-white px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-600">
+                          {template.channel}
+                        </span>
+                      </div>
+                      <div className="mt-1 text-xs leading-5 text-slate-600">{template.body}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 

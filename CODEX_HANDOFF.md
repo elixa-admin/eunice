@@ -15,7 +15,7 @@
 - Latest verified root preview after the fix:
   - `https://eunice-freqr38r7-elixa-admins-projects.vercel.app`
 - Sprint V - Admin Readability Reset is complete.
-- Sprint Y - Parent Upload Confidence and Admin Decision Speed is the next planned sprint.
+- Sprint Y - Parent Upload Confidence and Admin Decision Speed is complete.
 - The earlier W/X parent-admin split has been consolidated into Sprint Y so we keep the next phase tighter and higher-value.
 - Latest verified `/dev` preview:
   - `https://dev-kp2d24u8n-elixa-admins-projects.vercel.app`
@@ -27,12 +27,15 @@
 - Sprint P is now implemented locally: admin decision-engine simplification for `/dev/admin` and `/dev/application/[id]`.
 - Sprint Q is implemented and deployed: communication trail, notification plan, and re-upload scaffolds are live in the latest `/dev` preview.
 - Sprint R is complete: upload-quality guidance, lightweight validation signals, and OCR-ready intake metadata are now in place.
+- Sprint Z is complete: workflow automation triggers, communication history visibility, and re-upload link messaging are now visible in the latest `/dev` preview.
+- Latest verified `/dev` preview:
+  - `https://dev-fy353oec0-elixa-admins-projects.vercel.app`
 - A quick health sweep removed obvious duplicate local artifacts and added ignore rules for local numbered copies and `.cursor/`.
 - Focused `dev` checks are green.
 - The next three-sprint roadmap now points to:
-  - Sprint Z: workflow automation and communication history
   - Sprint AA: document intelligence lite
   - Sprint AB: browser QA and pattern lockdown
+  - Sprint AC: multi-school foundation kickoff
 - Sprint S/T/U implementation is now pushed at `f14f3a5`:
   - parent POPIA consent, WebP compression, capture cue, and intake metadata
   - admin speed triage mode and zone tags
@@ -67,7 +70,7 @@
 - [docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md)
 
 ## Next Sprint
-Start Sprint Z from the current preview baseline. Keep the first pass focused on workflow automation and communication history, then move to document intelligence and browser QA in the next two sprints.
+Start Sprint AA from the current preview baseline. Keep the first pass focused on document intelligence lite, then move to browser QA and pattern lockdown, and only then the multi-school foundation kickoff.
 
 ## Notes
 - Keep the parent side calm and the admin side operationally denser.

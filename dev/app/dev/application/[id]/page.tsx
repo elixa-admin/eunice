@@ -268,6 +268,7 @@ export default async function DevApplicationDetailPage({
             <div className="mt-3.5 rounded-2xl border border-slate-200 bg-white px-4 py-3">
               <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Current state</div>
               <div className="mt-1 text-sm font-semibold text-slate-950">{notificationPlan.label}</div>
+              <div className="mt-1 text-xs text-slate-500">Triggered by {notificationPlan.trigger}</div>
             </div>
             <div className="mt-3.5 space-y-2.5">
               {notificationPlan.templates.length > 0 ? (

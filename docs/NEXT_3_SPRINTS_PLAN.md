@@ -83,9 +83,64 @@ Make the core workflow operationally complete with lightweight automation hooks 
 
 ## Recommended Order
 
-1. Review the Sprint S/T/U preview in browser, focusing on parent consent/capture, admin speed triage, and notification plan consistency.
-2. Tighten anything that feels too heavy or visually noisy before adding deeper workflow logic.
-3. Move into the next phase only after the parent and admin surfaces still feel calm and usable with the new controls.
+1. Sprint V - Admin Readability Reset
+2. Sprint W - Parent/Admin Surface Separation Polish
+3. Sprint X - Browser QA and Pattern Lockdown
+
+## Sprint V - Admin Readability Reset
+
+**Status:** Planned
+
+**Goal**
+
+Restore the admin dashboard to a clean light surface with strong readability, while keeping the school's green and gold brand language visible in accents and emphasis.
+
+**Focus**
+
+- light-mode admin base
+- readable text across cards and bubbles
+- brand-color accents without contrast loss
+- preserve the selected applicant as the anchor
+
+**Primary doc**
+
+- [docs/SPRINT_V_ADMIN_READABILITY_RESET.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_V_ADMIN_READABILITY_RESET.md)
+
+## Sprint W - Parent/Admin Surface Separation Polish
+
+**Status:** Planned
+
+**Goal**
+
+Keep the parent side calm and spacious while making sure the admin side stays operationally dense but visually clean.
+
+**Focus**
+
+- sharpen the parent/admin visual split
+- reduce any shared visual noise that makes the admin surface feel too dark or too heavy
+- keep the workflow cues obvious on both personas
+
+**Primary doc**
+
+- [docs/UX_BRAINSTORM_AND_SPRINT_TRACK.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/UX_BRAINSTORM_AND_SPRINT_TRACK.md)
+
+## Sprint X - Browser QA and Pattern Lockdown
+
+**Status:** Planned
+
+**Goal**
+
+Verify the readability and hierarchy changes in browser, then lock the winning patterns so we can reuse them without re-litigating the theme.
+
+**Focus**
+
+- browser review of the updated admin preview
+- confirm contrast is clean in light mode
+- capture reusable visual rules for future dashboard work
+
+**Primary doc**
+
+- [docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md)
 
 ## Non-Goals For This Window
 

@@ -128,6 +128,23 @@ export function getDocumentValidationGuidance(state: DocumentValidationState) {
 
 export type DocumentProcessingStatus = 'queued' | 'running' | 'passed' | 'failed' | 'manual_review';
 
+export const DOCUMENT_PROCESSING_STATUS_LABELS: Record<DocumentProcessingStatus, string> = {
+  queued: 'Queued for checks',
+  running: 'Checking now',
+  passed: 'Ready',
+  failed: 'Needs another upload',
+  manual_review: 'Manual review',
+};
+
+export type DocumentIntakeSignal = 'blurry' | 'low_confidence_ocr' | 'possible_duplicate';
+
+export type DocumentIntakeMetadata = {
+  processingStatus: DocumentProcessingStatus;
+  qualitySignals: DocumentIntakeSignal[];
+  ocrText: string | null;
+  confidenceScore: number | null;
+};
+
 export type DocumentContract = {
   type: DocumentType;
   required: boolean;

@@ -56,7 +56,7 @@ Add the lightest useful operational workflow support so communication and follow
 
 ## Sprint R — Document Intake Intelligence
 
-**Status:** In progress
+**Status:** Complete
 
 **Goal**
 
@@ -79,8 +79,8 @@ Improve document quality and reviewer confidence with the lightest useful valida
 ## Recommended Order
 
 1. Review the deployed Sprint Q preview and confirm the communication trail feels useful.
-2. Start Sprint R with upload-quality guidance and lightweight validation cues.
-3. Keep the document-intelligence path lean until the workflow proves its value.
+2. Review the Sprint R document-intake cues in the preview and confirm the shape feels lightweight.
+3. Move into the next sprint only after the document-intake path feels calm and readable.
 
 ## Non-Goals For This Window
 

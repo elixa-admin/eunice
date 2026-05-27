@@ -1,6 +1,6 @@
 # Sprint R — Document Intake Intelligence
 
-**Status:** In progress
+**Status:** Complete
 
 ## Sprint Goal
 
@@ -101,8 +101,9 @@ Sprint R is successful if:
 
 - P0 upload-quality guidance has been added to the parent workflow.
 - The preview lane now shows `blurry`, `low_confidence_ocr`, and manual-review-style repeat uploads so the states are visible in-browser.
+- The upload contract now carries lightweight OCR-ready intake metadata, including processing status and quality signals.
 - The `src` route health issue on `/app/dev/admin` has been cleaned up so the verifier passes again.
-- The sprint is still intentionally lightweight; no heavy OCR or AI pipeline has been introduced yet.
+- The implementation stays lightweight; no heavy OCR or AI pipeline has been introduced yet.
 
 ## Verify
 

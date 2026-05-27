@@ -1,4 +1,4 @@
-# Compact Handoff — Sprint Q Delivered
+# Compact Handoff — Sprint R Delivered
 
 ## Date
 2026-05-27
@@ -14,7 +14,7 @@
 - Sprint O is complete: parent calm-flow simplification landed.
 - Sprint P is now implemented locally: admin decision-engine simplification for `/dev/admin` and `/dev/application/[id]`.
 - Sprint Q is implemented and deployed: communication trail, notification plan, and re-upload scaffolds are live in the latest `/dev` preview.
-- Sprint R is now underway and focused on document intake intelligence plus upload-quality guidance.
+- Sprint R is complete: upload-quality guidance, lightweight validation signals, and OCR-ready intake metadata are now in place.
 - A quick health sweep removed obvious duplicate local artifacts and added ignore rules for local numbered copies and `.cursor/`.
 - Focused `dev` checks are green.
 
@@ -47,11 +47,7 @@
 - [docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md)
 
 ## Next Sprint
-Sprint R should focus on document intake intelligence and upload-quality guidance:
-1. improve upload feedback for blurry, low-confidence, and duplicate files
-2. surface clearer quality cues for parents before upload
-3. keep the validation and OCR path lightweight and preview-friendly
-4. avoid heavy AI or orchestration until the workflow proves useful
+Sprint R is complete. The next sprint should start from the now-lightweight document-intake contract and focus on the next operational improvement, without introducing heavy OCR or orchestration yet.
 
 ## Notes
 - Keep the parent side calm and the admin side operationally denser.

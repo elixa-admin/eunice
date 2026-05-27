@@ -2,7 +2,16 @@ import {
   createDefaultIntakeRoleState,
   type IntakeRoleState,
 } from '@/lib/domain/intake-roles';
-import { getDocumentValidationGuidance, isDocumentStateBlocking, isDocumentStateReviewOnly, isDocumentStateSubmissionReady, type DocumentType, type DocumentValidationState } from '@/lib/documents/contracts';
+import {
+  DOCUMENT_PROCESSING_STATUS_LABELS,
+  getDocumentValidationGuidance,
+  isDocumentStateBlocking,
+  isDocumentStateReviewOnly,
+  isDocumentStateSubmissionReady,
+  type DocumentIntakeMetadata,
+  type DocumentType,
+  type DocumentValidationState,
+} from '@/lib/documents/contracts';
 import type { ApplicationStatus } from '@/lib/domain/applications';
 
 export type DocumentRecord = {
@@ -21,6 +30,7 @@ export type DocumentDraft = {
   fileName: string;
   validationState: DocumentValidationState;
   message: string;
+  intake?: DocumentIntakeMetadata;
   storagePath: string | null;
   uploadedAt: string | null;
   uploadStatus: 'idle' | 'saved' | 'error';
@@ -452,4 +462,28 @@ export function getDocumentQualityCue(state: DocumentValidationState) {
     default:
       return 'When you upload this item, we will help you check that it is clear enough.';
   }
+}
+
+export function getDocumentIntakeCue(document: DocumentDraft) {
+  if (!document.intake) return null;
+
+  const processingLabel = DOCUMENT_PROCESSING_STATUS_LABELS[document.intake.processingStatus];
+
+  if (document.intake.processingStatus === 'queued') {
+    return `${processingLabel}. We can keep this ready for later OCR checks.`;
+  }
+
+  if (document.intake.processingStatus === 'running') {
+    return `${processingLabel}. The file is being checked now.`;
+  }
+
+  if (document.intake.processingStatus === 'manual_review') {
+    return `${processingLabel}. A staff member will confirm it by hand.`;
+  }
+
+  if (document.intake.processingStatus === 'passed') {
+    return `${processingLabel}. It is ready for the next step.`;
+  }
+
+  return `${processingLabel}. Please replace this file before continuing.`;
 }

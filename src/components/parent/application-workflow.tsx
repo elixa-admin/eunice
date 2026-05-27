@@ -22,6 +22,7 @@ import {
   DOCUMENT_CONTRACTS,
   DOCUMENT_VALIDATION_LABELS,
   DOCUMENT_TYPE_LABELS,
+  DOCUMENT_PROCESSING_STATUS_LABELS,
   isDocumentStateBlocking,
   isDocumentStateReviewOnly,
   isDocumentStateSubmissionReady,
@@ -44,6 +45,7 @@ import {
   getDocumentCounts,
   getDocumentStateGuidance,
   getDocumentQualityCue,
+  getDocumentIntakeCue,
   getStepIndex,
   getUploadActionLabel,
   getValidationTone,
@@ -489,6 +491,7 @@ export default function ParentApplicationWorkflow() {
         fileName: uploadedDocument.fileName,
         validationState: uploadedDocument.validationState,
         message: uploadedDocument.message,
+        intake: uploadedDocument.intake,
         storagePath: uploadedDocument.storagePath,
         uploadedAt: uploadedDocument.uploadedAt,
         uploadStatus: uploadedDocument.uploadStatus,
@@ -525,6 +528,12 @@ export default function ParentApplicationWorkflow() {
         validationState: 'needs_reupload',
         uploadStatus: 'error',
         message: 'Upload failed. Check your connection, then choose this file again to retry.',
+        intake: {
+          processingStatus: 'failed',
+          qualitySignals: [],
+          ocrText: null,
+          confidenceScore: null,
+        },
       });
     } finally {
       setUploadingDocument(null);
@@ -1147,6 +1156,11 @@ export default function ParentApplicationWorkflow() {
                                   {document.uploadStatus !== 'idle' ? (
                                     <p className="mt-1 text-xs leading-5 text-slate-500">{document.message}</p>
                                   ) : null}
+                                  {document.intake ? (
+                                    <p className="mt-1 text-xs leading-5 text-slate-500">
+                                      {getDocumentIntakeCue(document)}
+                                    </p>
+                                  ) : null}
                                   {document.fileName ? (
                                     <p className="mt-2 text-xs font-medium text-slate-600">Saved: {document.fileName}</p>
                                   ) : null}
@@ -1235,6 +1249,11 @@ export default function ParentApplicationWorkflow() {
                                     </p>
                                     {document.uploadStatus !== 'idle' ? (
                                       <p className="mt-1 text-xs leading-5 text-slate-500">{document.message}</p>
+                                    ) : null}
+                                    {document.intake ? (
+                                      <p className="mt-1 text-xs leading-5 text-slate-500">
+                                        {getDocumentIntakeCue(document)}
+                                      </p>
                                     ) : null}
                                     {document.fileName ? (
                                       <p className="mt-2 text-xs font-medium text-slate-600">Saved: {document.fileName}</p>
@@ -1442,6 +1461,11 @@ export default function ParentApplicationWorkflow() {
                     <div>
                       <div className="text-sm font-semibold text-slate-950">{DOCUMENT_TYPE_LABELS[documentType]}</div>
                       <div className="mt-1 text-xs leading-5 text-slate-500">{getDocumentStateGuidance(document.validationState)}</div>
+                      {document.intake ? (
+                        <div className="mt-1 text-xs leading-5 text-slate-500">
+                          {DOCUMENT_PROCESSING_STATUS_LABELS[document.intake.processingStatus]}
+                        </div>
+                      ) : null}
                       {document.fileName ? <div className="mt-1 text-xs font-medium text-slate-600">Saved: {document.fileName}</div> : null}
                     </div>
                     <div className="text-right">

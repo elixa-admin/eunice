@@ -20,7 +20,12 @@ import {
   type PreviewDocument,
 } from '@/lib/dev-preview-data';
 import type { ApplicationStatus } from '@eunice-shared/domain/applications';
-import { isDocumentStateBlocking, isDocumentStateReviewOnly, isDocumentStateSubmissionReady } from '@eunice-shared/documents/contracts';
+import {
+  DOCUMENT_PROCESSING_STATUS_LABELS,
+  isDocumentStateBlocking,
+  isDocumentStateReviewOnly,
+  isDocumentStateSubmissionReady,
+} from '@eunice-shared/documents/contracts';
 
 type QueueLane = 'blocking' | 'review' | 'ready' | 'decision';
 
@@ -265,6 +270,11 @@ export default function DevAdminPage() {
                     <>
                       <div className="mt-2 text-base font-semibold text-white">{getPreviewDocumentLabel(primaryEvidence.type)}</div>
                       <div className="mt-1 text-sm text-white/76">{primaryEvidence.note ?? 'No note added yet.'}</div>
+                      {primaryEvidence.intake ? (
+                        <div className="mt-1 text-xs text-white/68">
+                          {DOCUMENT_PROCESSING_STATUS_LABELS[primaryEvidence.intake.processingStatus]}
+                        </div>
+                      ) : null}
                       <div className="mt-3 flex items-center justify-between gap-3 text-xs text-white/70">
                         <span className={`inline-flex rounded-full px-2.5 py-1 font-semibold capitalize ${previewDocumentClasses[primaryEvidence.status]}`}>
                           {getPreviewDocumentStatusLabel(primaryEvidence.status)}
@@ -403,6 +413,11 @@ export default function DevAdminPage() {
                             <div key={`${key}-${document.type}-${document.uploadedAt ?? 'missing'}`} className="rounded-xl border border-current/10 bg-white/60 px-3 py-2.5">
                               <div className="text-sm font-semibold text-slate-950">{getPreviewDocumentLabel(document.type)}</div>
                               <div className="mt-1 text-xs leading-5 text-slate-600">{document.note ?? 'No note yet.'}</div>
+                              {document.intake ? (
+                                <div className="mt-1 text-[11px] uppercase tracking-[0.12em] text-slate-500">
+                                  {DOCUMENT_PROCESSING_STATUS_LABELS[document.intake.processingStatus]}
+                                </div>
+                              ) : null}
                             </div>
                           ))}
                         </div>

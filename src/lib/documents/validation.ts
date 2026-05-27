@@ -3,6 +3,7 @@ import {
   DOCUMENT_CONTRACTS,
   MAX_DOCUMENT_FILE_SIZE_BYTES,
   getDocumentValidationGuidance,
+  type DocumentIntakeSignal,
   type DocumentType,
   type DocumentValidationState,
 } from '@/lib/documents/contracts';
@@ -14,7 +15,7 @@ export type DocumentValidationResult = {
   qualitySignals: DocumentQualitySignal[];
 };
 
-export type DocumentQualitySignal = 'blurry' | 'low_confidence_ocr' | 'possible_duplicate';
+export type DocumentQualitySignal = DocumentIntakeSignal;
 
 type ValidateDocumentInput = {
   documentType: DocumentType;

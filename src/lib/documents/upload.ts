@@ -1,4 +1,5 @@
 import {
+  type DocumentIntakeMetadata,
   type DocumentType,
   type DocumentValidationState,
 } from '@/lib/documents/contracts';
@@ -10,6 +11,7 @@ export type UploadedDocumentDraft = {
   fileName: string;
   validationState: DocumentValidationState;
   message: string;
+  intake: DocumentIntakeMetadata;
   storagePath: string | null;
   uploadedAt: string | null;
   uploadStatus: 'saved' | 'error';
@@ -35,12 +37,19 @@ export async function uploadDocumentDraft({
     mimeType: file.type || 'application/octet-stream',
     fileSizeBytes: file.size,
   });
+  const intake: DocumentIntakeMetadata = {
+    processingStatus: validation.ok ? 'queued' : 'failed',
+    qualitySignals: validation.qualitySignals,
+    ocrText: null,
+    confidenceScore: null,
+  };
 
   if (!validation.ok) {
     return {
       fileName: file.name,
       validationState: validation.state,
       message: validation.message,
+      intake,
       storagePath: null,
       uploadedAt: null,
       uploadStatus: 'error',
@@ -66,6 +75,7 @@ export async function uploadDocumentDraft({
       fileName: file.name,
       validationState: validation.state,
       message: validation.message,
+      intake,
       storagePath: result.path,
       uploadedAt: new Date().toISOString(),
       uploadStatus: 'saved',
@@ -77,6 +87,12 @@ export async function uploadDocumentDraft({
       validationState: 'manual_review',
       message:
         'The file looks valid, but we could not save it properly just now. Please try again later or continue and let admissions know if this repeats.',
+      intake: {
+        processingStatus: 'failed',
+        qualitySignals: validation.qualitySignals,
+        ocrText: null,
+        confidenceScore: null,
+      },
       storagePath: null,
       uploadedAt: null,
       uploadStatus: 'error',

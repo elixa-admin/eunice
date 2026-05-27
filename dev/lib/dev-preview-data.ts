@@ -5,6 +5,7 @@ import {
   isDocumentStateBlocking,
   isDocumentStateReviewOnly,
   isDocumentStateSubmissionReady,
+  type DocumentIntakeMetadata,
   type DocumentType,
   type DocumentValidationState,
 } from '@eunice-shared/documents/contracts';
@@ -19,6 +20,7 @@ export type PreviewDocument = {
   status: DocumentValidationState;
   uploadedAt?: string;
   note?: string;
+  intake?: DocumentIntakeMetadata;
 };
 
 export type PreviewTimelineEntry = {
@@ -91,7 +93,18 @@ export const previewApplications: PreviewApplication[] = [
     documents: [
       { type: 'birth_cert', status: 'verified', uploadedAt: '2026-05-14', note: 'Certified copy received.' },
       { type: 'school_report', status: 'verified', uploadedAt: '2026-05-14', note: 'Term 1 report accepted.' },
-      { type: 'proof_residence', status: 'low_confidence_ocr', uploadedAt: '2026-05-15', note: 'Utility bill is readable, but the text needs a sharper capture.' },
+      {
+        type: 'proof_residence',
+        status: 'low_confidence_ocr',
+        uploadedAt: '2026-05-15',
+        note: 'Utility bill is readable, but the text needs a sharper capture.',
+        intake: {
+          processingStatus: 'queued',
+          qualitySignals: ['low_confidence_ocr'],
+          ocrText: null,
+          confidenceScore: null,
+        },
+      },
       { type: 'id_copy', status: 'verified', uploadedAt: '2026-05-14', note: 'ID number captured.' },
     ],
     note: 'Proof of residence uploaded, waiting for final verification.',
@@ -124,7 +137,17 @@ export const previewApplications: PreviewApplication[] = [
     missingItems: ['Previous school report needs re-upload'],
     documents: [
       { type: 'birth_cert', status: 'verified', uploadedAt: '2026-05-12', note: 'Accepted.' },
-      { type: 'school_report', status: 'blurry', note: 'Camera photo is usable, but the file should be retaken more clearly.' },
+      {
+        type: 'school_report',
+        status: 'blurry',
+        note: 'Camera photo is usable, but the file should be retaken more clearly.',
+        intake: {
+          processingStatus: 'running',
+          qualitySignals: ['blurry'],
+          ocrText: null,
+          confidenceScore: null,
+        },
+      },
       { type: 'proof_residence', status: 'verified', uploadedAt: '2026-05-12', note: 'Municipal statement accepted.' },
       { type: 'id_copy', status: 'verified', uploadedAt: '2026-05-12', note: 'Readable copy received.' },
     ],
@@ -191,7 +214,18 @@ export const previewApplications: PreviewApplication[] = [
     completion: 86,
     missingItems: ['Queue assignment', 'Document review'],
     documents: [
-      { type: 'birth_cert', status: 'manual_review', uploadedAt: '2026-05-20', note: 'Possible repeat upload; staff should confirm the newest copy.' },
+      {
+        type: 'birth_cert',
+        status: 'manual_review',
+        uploadedAt: '2026-05-20',
+        note: 'Possible repeat upload; staff should confirm the newest copy.',
+        intake: {
+          processingStatus: 'manual_review',
+          qualitySignals: ['possible_duplicate'],
+          ocrText: null,
+          confidenceScore: null,
+        },
+      },
       { type: 'school_report', status: 'accepted', uploadedAt: '2026-05-20', note: 'Awaiting reviewer check.' },
       { type: 'proof_residence', status: 'accepted', uploadedAt: '2026-05-20', note: 'Awaiting reviewer check.' },
       { type: 'id_copy', status: 'accepted', uploadedAt: '2026-05-20', note: 'Awaiting reviewer check.' },

@@ -16,7 +16,12 @@ import {
   previewDocumentClasses,
 } from '@/lib/dev-preview-data';
 import type { ApplicationStatus } from '@eunice-shared/domain/applications';
-import { isDocumentStateBlocking, isDocumentStateReviewOnly, isDocumentStateSubmissionReady } from '@eunice-shared/documents/contracts';
+import {
+  DOCUMENT_PROCESSING_STATUS_LABELS,
+  isDocumentStateBlocking,
+  isDocumentStateReviewOnly,
+  isDocumentStateSubmissionReady,
+} from '@eunice-shared/documents/contracts';
 
 export default async function DevApplicationDetailPage({
   params,
@@ -195,6 +200,11 @@ export default async function DevApplicationDetailPage({
                         <div>
                           <div className="text-sm font-semibold text-slate-950">{getPreviewDocumentLabel(document.type)}</div>
                           <div className="mt-1 text-xs text-slate-700">{document.note ?? 'No note added yet.'}</div>
+                          {document.intake ? (
+                            <div className="mt-1 text-[11px] uppercase tracking-[0.12em] text-slate-500">
+                              {DOCUMENT_PROCESSING_STATUS_LABELS[document.intake.processingStatus]}
+                            </div>
+                          ) : null}
                         </div>
                         <div className="text-right">
                           <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold capitalize ${previewDocumentClasses[document.status]}`}>

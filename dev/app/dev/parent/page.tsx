@@ -1,12 +1,10 @@
 'use client';
 
-import type React from 'react';
 import { useState } from 'react';
 import { PreviewShell } from '@/components/preview-shell';
 import { SurfaceCard } from '@/components/surface-card';
 import { StatusBadge } from '@/components/status-badge';
 import { ParentWorkflowSidebar } from '@/components/parent-workflow-sidebar';
-import { ParentWorkflowStepper } from '@/components/parent-workflow-stepper';
 import { getParentWorkflowSnapshot, previewApplications, type ParentWorkflowStepKey } from '@/lib/dev-preview-data';
 
 const stepOrder: ParentWorkflowStepKey[] = ['checklist', 'learner', 'household', 'medical', 'fees_docs', 'review'];
@@ -21,9 +19,9 @@ const stepMeta: Record<ParentWorkflowStepKey, { title: string; subtitle: string;
 };
 
 const guidanceItems = [
-  { title: 'Start with the right adult', body: 'The guardian who will own the file should begin so contact details, decisions, and follow-up stay consistent.' },
-  { title: 'Keep the essentials close', body: 'Having the key documents ready turns this into a guided submission instead of a stop-start search for files.' },
-  { title: 'See the finish line early', body: 'Each step shows what it unlocks next, so families can move forward with less uncertainty.' },
+  { title: 'Start with the right adult', body: 'The parent or guardian who will manage the file should begin so follow-up stays simple.' },
+  { title: 'Keep the essentials close', body: 'Having the main documents nearby turns this into a short guided task instead of a stop-start search.' },
+  { title: 'You can pause safely', body: 'Progress is saved, so families can step away and return later without losing their place.' },
 ] as const;
 
 const stepExpectations: Record<ParentWorkflowStepKey, { purpose: string; prepare: string; next: string; timing: string }> = {
@@ -31,7 +29,7 @@ const stepExpectations: Record<ParentWorkflowStepKey, { purpose: string; prepare
     purpose: 'Start here. We will keep the journey short and clear.',
     prepare: 'Have your ID, the learner’s basic details, and a few key documents nearby.',
     next: 'Once you begin, we will guide you one step at a time.',
-    timing: 'This first screen usually only takes a minute or two.',
+    timing: 'This first screen only takes a minute or two.',
   },
   learner: {
     purpose: 'We ask for the learner’s details first so the application follows the right school and grade path.',
@@ -81,13 +79,18 @@ const documentGroups = [
     why: 'These appear only when the parent’s answers make them necessary.',
     items: ['Immunisation record', 'Special support or custody-related documents'],
   },
+  {
+    title: 'Supporting later',
+    why: 'These can be added later if admissions asks for extra context.',
+    items: ['Fee-payer proof', 'Additional supporting documents'],
+  },
 ] as const;
 
 const stepHighlights: Record<ParentWorkflowStepKey, { title: string; detail: string }> = {
   checklist: { title: 'Start here', detail: 'See what to prepare before you begin.' },
   learner: { title: 'About your child', detail: 'Capture the learner’s basic details and grade context.' },
   household: { title: 'Who to contact', detail: 'Tell us who is responsible and how we should reach you.' },
-  medical: { title: 'Support information', detail: 'Share only the details Eunice needs to support your child.' },
+  medical: { title: 'Support information', detail: 'Share only the details Eunice needs to support your child well.' },
   fees_docs: { title: 'Uploads and fees', detail: 'Keep the important documents together and upload them when prompted.' },
   review: { title: 'Check and send', detail: 'Review the full application before you submit it.' },
 };
@@ -162,15 +165,8 @@ export default function DevParentPage() {
 
   const activeIndex = stepOrder.indexOf(activeTab);
   const progress = Math.round(((activeIndex + 1) / stepOrder.length) * 100);
-  const readinessTone =
-    workflow.blockers.length > 0 ? 'rose' : workflow.reviewOnlyWarnings.length > 0 ? 'amber' : 'emerald';
+  const readinessTone = workflow.blockers.length > 0 ? 'rose' : workflow.reviewOnlyWarnings.length > 0 ? 'amber' : 'emerald';
   const stepAction = stepActionMeta[activeTab];
-  const momentumLabel =
-    workflow.blockers.length > 0
-      ? 'Resolve blockers'
-      : workflow.reviewOnlyWarnings.length > 0
-        ? 'Finish remaining checks'
-        : 'Ready to submit';
   const advanceStep = () => {
     const nextStep = stepOrder[Math.min(stepOrder.length - 1, activeIndex + 1)];
     setActiveTab(nextStep);
@@ -201,9 +197,7 @@ export default function DevParentPage() {
                 <div
                   key={label}
                   className={`flex items-center justify-between rounded-xl px-3 py-2 transition ${
-                    index === 0
-                      ? 'border border-accent-200 bg-[rgba(255,248,231,0.96)] text-primary-950 shadow-[0_10px_24px_rgba(202,138,4,0.10)]'
-                      : 'text-slate-600 hover:bg-[#f8f4e8] hover:text-slate-900'
+                    index === 0 ? 'border border-accent-200 bg-[rgba(255,248,231,0.96)] text-primary-950 shadow-[0_10px_24px_rgba(202,138,4,0.10)]' : 'text-slate-600 hover:bg-[#f8f4e8] hover:text-slate-900'
                   }`}
                 >
                   <span>{label}</span>
@@ -243,260 +237,160 @@ export default function DevParentPage() {
               </div>
             </div>
 
-            <div className="grid gap-3 px-5 py-4 xl:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.55fr)] 2xl:grid-cols-[minmax(0,1.56fr)_minmax(360px,0.44fr)]">
+            <div className="grid gap-4 px-5 py-4 xl:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)]">
+              <div className="rounded-[24px] border border-primary-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(255,248,231,0.95)_100%)] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.05)]">
+                <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Current step</div>
+                <div className="mt-2 text-lg font-semibold text-slate-950">{stepHighlights[activeTab].title}</div>
+                <div className="mt-1 text-sm leading-6 text-slate-600">{stepHighlights[activeTab].detail}</div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {stepOrder.map((step, index) => (
+                    <span
+                      key={step}
+                      className={`rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] ${
+                        step === activeTab ? 'bg-primary-900 text-white' : index < activeIndex ? 'bg-primary-50 text-primary-800' : 'bg-slate-100 text-slate-600'
+                      }`}
+                    >
+                      {stepMeta[step].label}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-[24px] border border-primary-200 bg-[linear-gradient(180deg,rgba(255,248,231,0.98)_0%,rgba(255,243,216,0.98)_100%)] p-4 shadow-[0_12px_30px_rgba(11,20,12,0.06)]">
+                <div className="text-xs uppercase tracking-[0.18em] text-primary-900/70">Do this now</div>
+                <div className="mt-2 text-lg font-semibold text-slate-950">{stepAction.title}</div>
+                <p className="mt-2 text-sm leading-6 text-slate-700">{stepAction.summary}</p>
+                <div className="mt-4 grid gap-2">
+                  {stepAction.actions.map((action) => (
+                    <div key={action} className="flex items-start gap-3 rounded-2xl border border-primary-200 bg-white/85 px-3 py-3">
+                      <span className="mt-0.5 flex h-6 w-6 items-center justify-center rounded-full bg-primary-900 text-[11px] font-semibold text-white">+</span>
+                      <span className="text-sm leading-6 text-slate-800">{action}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <span className="rounded-full border border-primary-200 bg-white px-3 py-1 text-xs font-medium text-slate-700">{stepExpectations[activeTab].timing}</span>
+                  <button
+                    type="button"
+                    onClick={advanceStep}
+                    className="rounded-full bg-primary-900 px-3 py-1 text-xs font-semibold text-white"
+                  >
+                    {stepAction.ctaLabel}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid gap-4 px-5 pb-5 xl:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.55fr)] 2xl:grid-cols-[minmax(0,1.48fr)_minmax(320px,0.52fr)]">
               <div className="space-y-4">
-                <div className="grid gap-3 sm:grid-cols-3">
-                  <div className="rounded-[24px] border border-white/12 bg-white/8 p-4 shadow-[0_14px_28px_rgba(0,0,0,0.10)]">
-                    <div className="text-[11px] uppercase tracking-[0.18em] text-[#e8dcae]">Journey status</div>
-                    <div className="mt-2 text-base font-semibold text-white">{momentumLabel}</div>
-                    <p className="mt-1 text-sm leading-6 text-white/72">
-                      The page should always tell parents whether they are preparing, progressing, or ready to send.
-                    </p>
-                  </div>
-                  <SurfaceCard className={`border p-4 ${readinessTone === 'rose' ? 'border-rose-200 bg-rose-50/90' : readinessTone === 'amber' ? 'border-amber-200 bg-amber-50/90' : 'border-emerald-200 bg-emerald-50/90'}`}>
-                    <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Progress</div>
-                    <div className="mt-3 flex items-center gap-4">
-                      <div className={`flex h-16 w-16 items-center justify-center rounded-full border bg-white text-lg font-semibold ${
-                        readinessTone === 'rose'
-                          ? 'border-rose-200 text-rose-800'
-                          : readinessTone === 'amber'
-                            ? 'border-amber-200 text-amber-900'
-                            : 'border-emerald-200 text-emerald-800'
-                      }`}>{progress}%</div>
-                      <div className="space-y-1 text-sm leading-6 text-slate-600">
-                        <p className="font-medium text-slate-800">{workflow.canSubmit ? 'Ready to review and send.' : 'Work through the current step before moving on.'}</p>
-                        <p className="text-slate-700">
-                          {workflow.readyRequiredDocuments} of {workflow.totalRequiredDocuments} required documents are ready.
-                        </p>
+                <div className="rounded-[28px] border border-primary-100 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(250,247,240,0.98)_100%)] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
+                  <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Before you begin</div>
+                  <div className="mt-3 grid gap-3 md:grid-cols-3">
+                    {[
+                      ['Learner details', 'Name, date of birth, grade, and school background.'],
+                      ['Parent contact', 'Phone number, email address, and the adult responsible.'],
+                      ['Key documents', 'Birth certificate, latest report, and anything else shown later.'],
+                    ].map(([title, body]) => (
+                      <div key={title} className="rounded-2xl border border-primary-100 bg-white p-3 shadow-[0_8px_18px_rgba(11,20,12,0.03)]">
+                        <div className="text-sm font-semibold text-slate-950">{title}</div>
+                        <div className="mt-1 text-sm leading-6 text-slate-700">{body}</div>
                       </div>
-                    </div>
-                  </SurfaceCard>
-                  <div className="rounded-[24px] border border-white/12 bg-white/8 p-4 shadow-[0_14px_28px_rgba(0,0,0,0.10)]">
-                    <div className="text-[11px] uppercase tracking-[0.18em] text-[#e8dcae]">Next step</div>
-                    <div className="mt-2 text-base font-semibold text-white">{stepAction.ctaLabel}</div>
-                    <p className="mt-1 text-sm leading-6 text-white/72">
-                      Keep one task in view, complete it, then move on with confidence.
-                    </p>
+                    ))}
+                  </div>
+                  <div className="mt-4 rounded-2xl border border-dashed border-primary-200 bg-primary-50/35 px-3 py-2 text-sm leading-6 text-slate-700">
+                    You can save and come back at any point, so this never has to be finished in one sitting.
                   </div>
                 </div>
 
-                <ParentWorkflowStepper
-                  activeIndex={activeIndex}
-                  activeTab={activeTab}
-                  onStepChange={setActiveTab}
-                  stepMeta={stepMeta}
-                  stepOrder={stepOrder}
-                />
-
-                <div className="rounded-[28px] border border-white/12 bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(251,248,240,0.98)_100%)] p-4 text-slate-950 shadow-[0_18px_50px_rgba(11,20,12,0.10)]">
-                <div className="mb-4 grid gap-3 xl:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)]">
-                  <div className="rounded-[24px] border border-primary-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(255,248,231,0.95)_100%)] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.05)]">
-                    <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Current step</div>
-                    <div className="mt-2 text-lg font-semibold text-slate-950">{stepHighlights[activeTab].title}</div>
-                    <div className="mt-1 text-sm leading-6 text-slate-600">{stepHighlights[activeTab].detail}</div>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {stepOrder.map((step, index) => (
-                        <span
-                          key={step}
-                          className={`rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] ${
-                            step === activeTab
-                              ? 'bg-primary-900 text-white'
-                              : index < activeIndex
-                                ? 'bg-primary-50 text-primary-800'
-                                : 'bg-slate-100 text-slate-600'
-                          }`}
-                        >
-                          {stepMeta[step].label}
-                        </span>
-                      ))}
+                <div className="rounded-[24px] border border-slate-200 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(249,247,240,0.98)_100%)] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
+                  <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Document readiness</div>
+                  <div className="mt-2 text-sm leading-6 text-slate-700">
+                    We group documents by purpose so you can see what to prepare first without a long list in the way.
+                  </div>
+                  <div className="mt-3 grid gap-3 sm:grid-cols-3">
+                    <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 px-4 py-4">
+                      <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-emerald-800">Ready now</div>
+                      <div className="mt-2 text-lg font-semibold text-slate-950">{workflow.readyRequiredDocuments}</div>
+                      <div className="mt-1 text-sm leading-6 text-slate-700">Required documents already safe for review.</div>
+                    </div>
+                    <div className="rounded-2xl border border-rose-200 bg-rose-50/70 px-4 py-4">
+                      <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-rose-800">Needs attention</div>
+                      <div className="mt-2 text-lg font-semibold text-slate-950">{workflow.blockers.length}</div>
+                      <div className="mt-1 text-sm leading-6 text-slate-700">Uploads that still need a clearer or missing file.</div>
+                    </div>
+                    <div className="rounded-2xl border border-amber-200 bg-amber-50/70 px-4 py-4">
+                      <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-amber-800">School will check</div>
+                      <div className="mt-2 text-lg font-semibold text-slate-950">{workflow.reviewOnlyWarnings.length}</div>
+                      <div className="mt-1 text-sm leading-6 text-slate-700">Items that can still move forward while staff review them.</div>
                     </div>
                   </div>
-
-                  <div className="mb-4 grid gap-3 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
-                    <div className="rounded-[24px] border border-primary-200 bg-[linear-gradient(180deg,rgba(255,248,231,0.98)_0%,rgba(255,243,216,0.98)_100%)] p-4 shadow-[0_12px_30px_rgba(11,20,12,0.06)]">
-                      <div className="text-xs uppercase tracking-[0.18em] text-primary-900/70">Do this now</div>
-                      <div className="mt-2 text-lg font-semibold text-slate-950">{stepAction.title}</div>
-                      <p className="mt-2 text-sm leading-6 text-slate-700">{stepAction.summary}</p>
-                      <div className="mt-4 grid gap-2">
-                        {stepAction.actions.map((action) => (
-                          <div key={action} className="flex items-start gap-3 rounded-2xl border border-primary-200 bg-white/85 px-3 py-3">
-                            <span className="mt-0.5 flex h-6 w-6 items-center justify-center rounded-full bg-primary-900 text-[11px] font-semibold text-white">+</span>
-                            <span className="text-sm leading-6 text-slate-800">{action}</span>
+                  <div className="mt-3.5 space-y-3">
+                    {documentGroups.map((group) => (
+                      <details key={group.title} className="rounded-2xl border border-slate-200 bg-white p-3.5" open={group.title === 'Always needed'}>
+                        <summary className="flex cursor-pointer list-none items-start justify-between gap-3">
+                          <div>
+                            <div className="text-sm font-semibold text-slate-950">{group.title}</div>
+                            <div className="mt-1 text-xs leading-5 text-slate-600">{group.why}</div>
                           </div>
-                        ))}
-                      </div>
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        <span className="rounded-full border border-primary-200 bg-white px-3 py-1 text-xs font-medium text-slate-700">{stepExpectations[activeTab].timing}</span>
-                        <button
-                          type="button"
-                          onClick={advanceStep}
-                          className="rounded-full bg-primary-900 px-3 py-1 text-xs font-semibold text-white"
-                        >
-                          {stepAction.ctaLabel}
-                        </button>
-                      </div>
-                    </div>
-                    <div className="rounded-[24px] border border-slate-200 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(249,247,240,0.98)_100%)] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
-                      <div className="text-xs uppercase tracking-[0.18em] text-slate-700">This helps you</div>
-                      <div className="mt-2 space-y-3 text-sm leading-6 text-slate-700">
-                        <p>{stepExpectations[activeTab].prepare}</p>
-                        <div className="rounded-2xl border border-slate-200 bg-white px-3 py-3">
-                          <div className="text-[11px] uppercase tracking-[0.16em] text-slate-500">After this step</div>
-                          <p className="mt-1">{stepExpectations[activeTab].next}</p>
-                        </div>
-                        <div className="rounded-2xl border border-primary-100 bg-primary-50/45 px-3 py-3 text-slate-700">
-                          <div className="text-[11px] uppercase tracking-[0.16em] text-primary-800/70">Action cue</div>
-                          <p className="mt-1 text-sm leading-6">
-                            The main job here is to complete one step, then keep moving. The page should always show the next decision clearly.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mb-4 grid gap-4 xl:grid-cols-[minmax(0,1.35fr)_minmax(280px,0.65fr)] 2xl:grid-cols-[minmax(0,1.42fr)_minmax(320px,0.58fr)]">
-                    <div className="space-y-2.5">
-                      <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Before you begin</div>
-                  <div className="rounded-[28px] border border-primary-100 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(250,247,240,0.98)_100%)] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
-                        <div className="grid gap-4 md:grid-cols-[auto_minmax(0,1fr)]">
-                          <div className="flex items-start gap-3 md:pt-1">
-                            <div className="flex flex-col items-center gap-1">
-                              {['1', '2', '3'].map((step, index) => (
-                                <div key={step} className="flex flex-col items-center">
-                                  <div
-                                    className={`flex h-9 w-9 items-center justify-center rounded-full border text-xs font-semibold ${
-                                      index === 0
-                                        ? 'border-primary-900 bg-primary-900 text-white'
-                                        : index === 1
-                                          ? 'border-[#b88907] bg-[#fff8e7] text-[#3a2b07]'
-                                          : 'border-slate-300 bg-white text-slate-600'
-                                    }`}
-                                  >
-                                    {step}
-                                  </div>
-                                  {index < 2 ? <div className="h-8 w-px bg-slate-200" /> : null}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                          <div className="min-w-0 space-y-3">
-                            <div>
-                              <div className="text-sm font-semibold text-slate-950">What to have ready</div>
-                              <div className="mt-1 text-sm leading-6 text-slate-700">
-                                Keep the learner’s details, your contact information, and the main documents nearby.
-                              </div>
-                            </div>
-                            <div className="rounded-2xl border border-primary-100 bg-white p-3">
-                              <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Why we ask for it</div>
-                              <div className="mt-1 text-sm leading-6 text-slate-700">
-                                These details help Eunice match the application to the right learner, contact the right adult, and review the file without delays.
-                              </div>
-                            </div>
-                            <div className="grid gap-2 sm:grid-cols-3">
-                              {[
-                                ['Learner details', 'Name, date of birth, and school background.'],
-                                ['Parent contact', 'Phone number and email address.'],
-                                ['Key documents', 'Birth certificate and latest report.'],
-                              ].map(([title, body]) => (
-                                <div key={title} className="rounded-2xl border border-primary-100 bg-white p-3 shadow-[0_8px_18px_rgba(11,20,12,0.03)]">
-                                  <div className="text-sm font-semibold text-slate-950">{title}</div>
-                                  <div className="mt-1 text-sm leading-6 text-slate-700">{body}</div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                        <div className="mt-4 rounded-2xl border border-dashed border-primary-200 bg-primary-50/35 px-3 py-2 text-sm leading-6 text-slate-700">
-                          You can save and come back at any point, so this never has to be finished in one sitting.
-                        </div>
-                      </div>
-                    </div>
-                    <div className="rounded-[24px] border border-slate-200 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(249,247,240,0.98)_100%)] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
-                      <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Document readiness</div>
-                      <div className="mt-2 text-sm leading-6 text-slate-700">
-                        We group documents by purpose so you can see what to prepare first without a long list in the way.
-                      </div>
-                      <div className="mt-3.5 space-y-3">
-                        {documentGroups.map((group) => (
-                          <div key={group.title} className="rounded-2xl border border-slate-200 bg-white p-3.5">
-                            <div className="flex items-start justify-between gap-3">
+                          <span className="rounded-full border border-slate-200 bg-[#fbf8f0] px-2.5 py-1 text-[10px] font-semibold text-slate-600">
+                            {group.items.length} items
+                          </span>
+                        </summary>
+                        <div className="mt-3 space-y-2">
+                          {group.items.slice(0, 2).map((item) => (
+                            <div key={item} className="flex items-center justify-between rounded-xl border border-slate-200 bg-[#fbf8f0] px-3 py-2">
                               <div>
-                                <div className="text-sm font-semibold text-slate-950">{group.title}</div>
-                                <div className="mt-1 text-xs leading-5 text-slate-600">{group.why}</div>
+                                <div className="text-sm font-semibold text-slate-950">{item}</div>
+                                <div className="text-xs text-slate-600">Keep this ready or upload it when prompted</div>
                               </div>
+                              <span className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[10px] font-semibold text-amber-800">Pending</span>
                             </div>
-                            <div className="mt-3 space-y-2">
-                              {group.items.slice(0, 2).map((item) => (
-                                <div key={item} className="flex items-center justify-between rounded-xl border border-slate-200 bg-[#fbf8f0] px-3 py-2">
-                                  <div>
-                                    <div className="text-sm font-semibold text-slate-950">{item}</div>
-                                    <div className="text-xs text-slate-600">Keep this ready or upload it when prompted</div>
-                                  </div>
-                                  <span className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[10px] font-semibold text-amber-800">Pending</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="rounded-[24px] border border-slate-200 bg-[#fffdf8] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
-                    <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Keep moving</div>
-                    <div className="mt-2 text-sm leading-6 text-slate-700">
-                      {activeTab === 'checklist' && 'This first screen helps you understand the journey before you begin. We keep it short, clear, and easy to return to.'}
-                      {activeTab === 'learner' && 'Capture the learner’s details exactly as they appear on official records.'}
-                      {activeTab === 'household' && 'Add the parent or guardian details that admissions staff will use to contact you.'}
-                      {activeTab === 'medical' && 'Share only the care, medical, and support details that help Eunice support your child well.'}
-                      {activeTab === 'fees_docs' && 'Confirm fee responsibility and upload the required documents with clear images.'}
-                      {activeTab === 'review' && 'Review everything once more before you send it to the admissions queue.'}
-                    </div>
-                    <div className="mt-4 rounded-2xl border border-primary-100 bg-[#fff8e7] p-3.5">
-                      <div className="text-xs uppercase tracking-[0.16em] text-[#3a2b07]">Helpful reminder</div>
-                      <div className="mt-1 text-sm leading-6 text-[#3a2b07]">
-                        {activeTab === 'fees_docs'
-                          ? 'Documents are grouped by purpose so you can focus on the important files without feeling overwhelmed.'
-                          : activeTab === 'review'
-                            ? 'If something is missing, we’ll show it clearly before you send the application.'
-                            : 'You can save and return at any time if you need a break.'}
-                      </div>
-                    </div>
-                    <div className="mt-4 flex flex-wrap gap-3">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const currentIndex = stepOrder.indexOf(activeTab);
-                          const prevStep = stepOrder[Math.max(0, currentIndex - 1)];
-                          setActiveTab(prevStep);
-                        }}
-                        className="rounded-xl border border-slate-200 bg-[#fcfaf5] px-4 py-2.5 text-sm font-semibold text-slate-700"
-                      >
-                        Back
-                      </button>
-                      <button type="button" onClick={advanceStep} className="rounded-xl bg-primary-900 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(11,20,12,0.16)]">{stepAction.ctaLabel}</button>
-                    </div>
+                          ))}
+                        </div>
+                      </details>
+                    ))}
                   </div>
                 </div>
 
-                  <div className="rounded-[28px] border border-white/12 bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(250,247,240,0.98)_100%)] p-4 text-slate-950 shadow-[0_18px_50px_rgba(11,20,12,0.10)]">
-                  <div className="text-xs uppercase tracking-[0.16em] text-primary-800/70">What this means for you</div>
-                  <div className="mt-2 grid gap-3 sm:grid-cols-3">
-                    <div className="rounded-2xl border border-primary-100 bg-primary-50/45 p-3">
-                      <div className="text-sm font-semibold text-slate-950">No surprises</div>
-                      <div className="mt-1 text-sm leading-6 text-slate-600">You always see what comes next before you move on.</div>
-                    </div>
-                    <div className="rounded-2xl border border-primary-100 bg-primary-50/45 p-3">
-                      <div className="text-sm font-semibold text-slate-950">Easy to recover</div>
-                      <div className="mt-1 text-sm leading-6 text-slate-600">You can save, return, and fix things without starting over.</div>
-                    </div>
-                    <div className="rounded-2xl border border-primary-100 bg-primary-50/45 p-3">
-                      <div className="text-sm font-semibold text-slate-950">Better submissions</div>
-                      <div className="mt-1 text-sm leading-6 text-slate-600">Clear guidance helps the school receive cleaner, more complete information.</div>
+                <div className="rounded-[24px] border border-slate-200 bg-[#fffdf8] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
+                  <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Stay on track</div>
+                  <div className="mt-2 text-sm leading-6 text-slate-700">
+                    {activeTab === 'checklist' && 'This first screen helps you understand the journey before you begin. We keep it short, clear, and easy to return to.'}
+                    {activeTab === 'learner' && 'Capture the learner’s details exactly as they appear on official records.'}
+                    {activeTab === 'household' && 'Add the parent or guardian details that admissions staff will use to contact you.'}
+                    {activeTab === 'medical' && 'Share only the care, medical, and support details that help Eunice support your child well.'}
+                    {activeTab === 'fees_docs' && 'Confirm fee responsibility and upload the required documents with clear images.'}
+                    {activeTab === 'review' && 'Review everything once more before you send it to the admissions queue.'}
+                  </div>
+                  <div className="mt-4 rounded-2xl border border-primary-100 bg-[#fff8e7] p-3.5">
+                    <div className="text-xs uppercase tracking-[0.16em] text-[#3a2b07]">Helpful reminder</div>
+                    <div className="mt-1 text-sm leading-6 text-[#3a2b07]">
+                      {activeTab === 'fees_docs'
+                        ? 'Documents are grouped by purpose so you can focus on the important files without feeling overwhelmed.'
+                        : activeTab === 'review'
+                          ? 'If something is missing, we’ll show it clearly before you send the application.'
+                          : 'You can save and return at any time if you need a break.'}
                     </div>
                   </div>
-                  <div className="mt-4 rounded-2xl border border-primary-100 bg-white px-4 py-3 text-sm leading-6 text-slate-700">
-                    The cue cards should now read like useful prompts that turn into action, not just extra explanation.
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const currentIndex = stepOrder.indexOf(activeTab);
+                        const prevStep = stepOrder[Math.max(0, currentIndex - 1)];
+                        setActiveTab(prevStep);
+                      }}
+                      className="rounded-xl border border-slate-200 bg-[#fcfaf5] px-4 py-2.5 text-sm font-semibold text-slate-700"
+                    >
+                      Back
+                    </button>
+                    <button
+                      type="button"
+                      onClick={advanceStep}
+                      className="rounded-xl bg-primary-900 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(11,20,12,0.16)]"
+                    >
+                      {stepAction.ctaLabel}
+                    </button>
                   </div>
                 </div>
               </div>

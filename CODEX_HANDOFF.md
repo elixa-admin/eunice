@@ -45,6 +45,9 @@
 - [docs/DEV_UX_SPRINT_P0_P2.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/DEV_UX_SPRINT_P0_P2.md)
 - [docs/NEXT_3_SPRINTS_PLAN.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/NEXT_3_SPRINTS_PLAN.md)
 - [docs/QUICKFIX_KB.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/QUICKFIX_KB.md)
+- [docs/UX_BRAINSTORM_AND_SPRINT_TRACK.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/UX_BRAINSTORM_AND_SPRINT_TRACK.md)
+- [docs/SPRINT_O_PARENT_CALM_FLOW_SIMPLIFICATION.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_O_PARENT_CALM_FLOW_SIMPLIFICATION.md)
+- [docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md)
 
 ## Tomorrow’s Next Sprint
 Start Sprint M from the roadmap, but keep it grounded in the working `/dev` deployment path:
@@ -57,3 +60,6 @@ Start Sprint M from the roadmap, but keep it grounded in the working `/dev` depl
 - Do not reopen assessment-heavy UI work unless a shared infrastructure blocker forces it.
 - Use the `/dev` Vercel project for browser review, not local dev servers.
 - Check [docs/QUICKFIX_KB.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/QUICKFIX_KB.md) before repeating Vercel, Node, Supabase, or CodeGraph recovery work.
+- The next UX direction is to reduce explanatory text, separate parent and admin visuals more aggressively, and turn the admin queue into a more clearly decision-centric surface.
+- The next sprint draft is parent calm-flow simplification; start there before widening back into admin decision-engine work.
+- Product and architecture decisions should favor lightweight, low-cost tooling and avoid heavy orchestration unless the workflow benefit is obvious.

@@ -16,7 +16,7 @@ export interface SchoolTenantConfig {
 
 export const EUNICE_CONFIG: SchoolTenantConfig = {
   id: '00000000-0000-0000-0000-000000000000', // Default UUID
-  name: 'Eunice High School',
+  name: 'Eunice Primary School',
   shortName: 'Eunice',
   crestPath: '/crest_eunice.png',
   tagline: 'She conquers who conquers herself.',

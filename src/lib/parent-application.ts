@@ -67,33 +67,33 @@ export type StepMeta = {
 export const STEP_META: Record<StepKey, StepMeta> = {
   checklist: {
     eyebrow: 'Step 0',
-    title: 'Preparation & Checklist',
-    description: 'See the full journey, confirm the required documents, and understand what happens before you begin.',
+    title: 'Before you begin',
+    description: 'See the essentials, confirm the important documents, and start when you feel ready.',
   },
   learner: {
     eyebrow: 'Step 1',
-    title: 'Learner & Admission Details',
-    description: 'Capture basic learner legal names, grade applied, and previous school context.',
+    title: 'About your child',
+    description: 'Add the learner details so the application follows the right grade path.',
   },
   household: {
     eyebrow: 'Step 2',
-    title: 'Parent & Household Info',
-    description: 'Capture details of the submitting parent, legacy sibling status, and co-parent contexts.',
+    title: 'Parent and contact details',
+    description: 'Tell us who is responsible and how Eunice should contact your family.',
   },
   medical: {
     eyebrow: 'Step 3',
-    title: 'Medical Care & Support',
-    description: 'Disclose healthcare support plans, doctor contacts, and boarding house requests.',
+    title: 'Care and support',
+    description: 'Share only the health or support details that help Eunice care well for your child.',
   },
   fees_docs: {
     eyebrow: 'Step 4',
-    title: 'Fee Payer & Uploads',
-    description: 'Select fee-payer responsibility and upload the required documents in a clear, finite sequence.',
+    title: 'Fees and documents',
+    description: 'Confirm fee responsibility and upload the documents that let admissions move forward.',
   },
   review: {
     eyebrow: 'Step 5',
-    title: 'Review & Submit',
-    description: 'Audit your completed information and submit your file to the admissions queue.',
+    title: 'Review and submit',
+    description: 'Check the full application once more before sending it to the admissions team.',
   },
 };
 
@@ -111,16 +111,16 @@ export const QUALITY_TIPS = [
 
 export const WORKFLOW_HIGHLIGHTS = [
   {
-    title: 'Keep moving',
-    body: 'Save progress as you go and return any time without losing context.',
+    title: 'Save and return',
+    body: 'Your progress stays with you, so this never has to be finished in one sitting.',
   },
   {
-    title: 'Know what matters',
-    body: 'Required, conditional, and optional documents are separated clearly.',
+    title: 'Know what matters first',
+    body: 'Required and conditional documents are separated so families can focus on the essentials.',
   },
   {
-    title: 'See the status',
-    body: 'Parents can quickly see what is complete, what still needs action, and what is under review.',
+    title: 'Stay clear on progress',
+    body: 'The portal shows what is complete, what still needs action, and what is already under review.',
   },
 ] as const;
 

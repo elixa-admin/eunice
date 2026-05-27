@@ -56,7 +56,7 @@ export function PreviewShell({
                   <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl border border-white/20 bg-white/95 shadow-[0_10px_24px_rgba(11,20,12,0.12)]">
                     <Image src="/eunice-school-logo.svg" alt="Eunice Girls School logo" width={32} height={32} className="h-8 w-8 object-contain" />
                   </div>
-                  <div className="text-sm uppercase tracking-[0.22em] text-white/75">Eunice High School</div>
+                  <div className="text-sm uppercase tracking-[0.22em] text-white/75">Eunice Primary School</div>
                 </div>
                 <p className="type-label text-white/80">{eyebrow}</p>
                 <h1 className="display-serif type-display-lg max-w-4xl text-white">

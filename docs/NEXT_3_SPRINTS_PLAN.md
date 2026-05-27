@@ -14,6 +14,7 @@ Sequence the next three sprints so Eunice finishes the current foundation work, 
 - Use Node 20 as the known-good runtime and check [docs/QUICKFIX_KB.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/QUICKFIX_KB.md) before repeating Node, Supabase, CodeGraph, or Git recovery paths.
 - Use CodeGraph with explicit `projectPath: "/Users/brandondienar/Documents/Codex/Projects/Eunice"` for structural refactor planning.
 - Do not rely on live Supabase behavior until `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are present and `/api/ping` confirms the integration is configured.
+- Keep the platform direction lightweight: prefer simple PostgreSQL-centered workflows, pragmatic Supabase usage, and low-cost automation rather than heavier infrastructure.
 
 ## Sprint L — Finish Foundation and Preview Extraction
 
@@ -308,3 +309,32 @@ Write a compact release checklist covering Node version, verification commands, 
 - Schema migrations beyond what is needed to support already-used tables and columns.
 - Aggressive package upgrades or `npm audit fix --force`.
 - Broad visual redesigns that are not tied to completion, review, or operational clarity.
+
+## Forward UX Brainstorm — Decision Acceleration And Emotional Clarity
+
+The current three-sprint sequence should stay intact, but the next product-design track is now clearer. The strongest near-term opportunity is to simplify the parent experience, sharpen the admin dashboard into a decision engine, and then add document intelligence and workflow automation in a way that reduces manual work instead of increasing surface area.
+
+Reference the working brainstorm here:
+
+- [docs/UX_BRAINSTORM_AND_SPRINT_TRACK.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/UX_BRAINSTORM_AND_SPRINT_TRACK.md)
+
+### Directional principles
+
+- Keep the forest-green and gold identity.
+- Reduce explanatory prose and let structure do more of the work.
+- Make parent screens calmer, more linear, and more reassuring.
+- Make admin screens denser, faster, and more decision-centric.
+- Use progressive disclosure so details are available without cluttering the main view.
+- Prefer lightweight implementation choices such as `n8n` for automation and `Tesseract OCR` for early OCR needs when these features are introduced.
+
+### Likely next sprint order after Sprint N
+
+1. Parent calm-flow simplification
+2. Admin decision engine
+3. Workflow automation and communication history
+4. Document intelligence and moat features
+
+## Next Sprint Draft
+
+- [docs/SPRINT_O_PARENT_CALM_FLOW_SIMPLIFICATION.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_O_PARENT_CALM_FLOW_SIMPLIFICATION.md)
+- [docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md)

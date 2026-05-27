@@ -59,18 +59,6 @@ export function ParentWorkflowSidebar({
         </div>
       </div>
 
-      <div className="space-y-2.5">
-        <div className="text-xs uppercase tracking-[0.16em] text-primary-800/70">For families</div>
-        <div className="space-y-2.5">
-          {guidanceItems.map((item) => (
-            <details key={item.title} className="group rounded-2xl border border-slate-200 bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(249,247,240,0.98)_100%)] p-4 transition group-open:border-accent-200">
-              <summary className="cursor-pointer list-none text-sm font-semibold text-slate-950">{item.title}</summary>
-              <p className="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
-            </details>
-          ))}
-        </div>
-      </div>
-
       <div className="rounded-[24px] border border-white/12 bg-[linear-gradient(180deg,rgba(255,255,255,0.96)_0%,rgba(250,247,240,0.98)_100%)] p-4 text-slate-950 shadow-[0_12px_28px_rgba(11,20,12,0.06)] xl:min-h-[236px]">
         <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Application Summary</div>
         <div className="mt-3.5 grid gap-2.5 text-sm">
@@ -95,6 +83,18 @@ export function ParentWorkflowSidebar({
           </div>
         </div>
       </div>
+
+      <details className="group rounded-[24px] border border-slate-200 bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(249,247,240,0.98)_100%)] p-4 shadow-[0_12px_28px_rgba(11,20,12,0.06)]">
+        <summary className="cursor-pointer list-none text-sm font-semibold text-slate-950">Need a little help?</summary>
+        <div className="mt-3 space-y-2.5">
+          {guidanceItems.map((item) => (
+            <div key={item.title} className="rounded-2xl border border-slate-200 bg-white/85 px-3 py-3">
+              <div className="text-sm font-semibold text-slate-950">{item.title}</div>
+              <p className="mt-1 text-sm leading-6 text-slate-700">{item.body}</p>
+            </div>
+          ))}
+        </div>
+      </details>
     </div>
   );
 }

@@ -8,7 +8,6 @@ import { SurfaceCard } from '@/components/surface-card';
 import { StatusBadge } from '@/components/status-badge';
 import { MetricCard } from '@/components/metric-card';
 import { RiskRow } from '@/components/risk-row';
-import { StatusBarometer } from '@/components/status-barometer';
 import {
   getAdminQueueLane,
   getPreviewDocumentCounts,
@@ -128,24 +127,8 @@ export default function DevAdminPage() {
                 </div>
               </div>
             </div>
-            <div className="grid gap-3 px-5 py-4 xl:grid-cols-[minmax(0,1.42fr)_minmax(340px,0.58fr)] 2xl:grid-cols-[minmax(0,1.55fr)_minmax(380px,0.45fr)]">
+            <div className="grid gap-3 px-5 py-4 xl:grid-cols-[minmax(0,1.48fr)_minmax(320px,0.52fr)] 2xl:grid-cols-[minmax(0,1.6fr)_minmax(360px,0.4fr)]">
               <div className="space-y-3.5">
-                <div className="grid gap-3 sm:grid-cols-3">
-                  <div className="rounded-[24px] border border-white/12 bg-white/8 p-4 shadow-[0_14px_28px_rgba(0,0,0,0.10)]">
-                    <div className="text-[11px] uppercase tracking-[0.18em] text-[#e8dcae]">Triage rule</div>
-                    <div className="mt-2 text-base font-semibold text-white">Blockers, then review, then ready</div>
-                    <p className="mt-1 text-sm leading-6 text-white/72">
-                      The queue should read from most urgent to least urgent without needing a second pass.
-                    </p>
-                  </div>
-                  <MetricCard label="Queue priority" value={queuePriority} detail="What the reviewer should do next" />
-                  <MetricCard
-                    label="Document health"
-                    value={`${counts.ready}/${counts.total} ready`}
-                    detail={counts.blocking > 0 ? `${counts.blocking} blocking issue(s)` : counts.reviewOnly > 0 ? `${counts.reviewOnly} items need a decision` : 'No blockers on file'}
-                  />
-                </div>
-
                 <div className="grid gap-3 sm:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
                   <div className="rounded-[24px] border border-[#e7d39a]/25 bg-[linear-gradient(180deg,rgba(12,75,43,0.98)_0%,rgba(7,56,32,0.98)_100%)] p-4 shadow-[0_16px_34px_rgba(0,0,0,0.16)] ring-1 ring-white/6">
                     <div className="text-xs uppercase tracking-[0.18em] text-[#e8dcae]">Selected application</div>
@@ -173,6 +156,10 @@ export default function DevAdminPage() {
                         <div className="mt-1 text-xs text-white/72">{nextAction}</div>
                       </div>
                     </div>
+                    <div className="mt-4 rounded-2xl border border-amber-200/20 bg-amber-100/10 px-4 py-3 text-sm leading-6 text-white/88">
+                      <div className="text-[11px] uppercase tracking-[0.16em] text-[#e8dcae]">Decision focus</div>
+                      <p className="mt-1">{nextAction}</p>
+                    </div>
                   </div>
                   <div className="grid gap-2.5 sm:grid-cols-2">
                     <MetricCard label="Assigned reviewer" value={featured.assignedTo} detail="Current record owner" />
@@ -181,17 +168,11 @@ export default function DevAdminPage() {
                     <MetricCard label="Document health" value={`${counts.ready}/${counts.total} ready`} detail={counts.blocking > 0 ? `${counts.blocking} blocking issue(s)` : counts.reviewOnly > 0 ? `${counts.reviewOnly} flagged for review` : 'No blockers on file'} />
                   </div>
                 </div>
-
-                <div className="grid gap-3 sm:grid-cols-3">
-                  <StatusBarometer label="Blocking" value={laneCounts.blocking} tone="rose" detail="Needs attention" />
-                  <StatusBarometer label="Needs review" value={laneCounts.review} tone="amber" detail="Staff decision" />
-                  <StatusBarometer label="Ready" value={laneCounts.ready} tone="emerald" detail="Clear for next step" />
-                </div>
               </div>
 
               <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-1">
                 <div className="rounded-[24px] border border-[#e7d39a]/25 bg-[linear-gradient(180deg,rgba(17,73,47,0.99)_0%,rgba(9,62,37,0.99)_100%)] p-3.5 shadow-[0_14px_30px_rgba(0,0,0,0.16)] ring-1 ring-white/6">
-                  <div className="text-xs uppercase tracking-[0.16em] text-[#e8dcae]">For reviewers</div>
+                  <div className="text-xs uppercase tracking-[0.16em] text-[#e8dcae]">Queue states</div>
                   <div className="mt-2.5 grid gap-2">
                     {(['blocking', 'review', 'ready', 'decision'] as const).map((key) => (
                       <div
@@ -207,8 +188,15 @@ export default function DevAdminPage() {
                     ))}
                   </div>
                   <div className="mt-3 rounded-2xl border border-white/12 bg-white/8 px-3 py-2 text-xs leading-5 text-white/74">
-                    Read this top to bottom: blockers first, then reviewed items, then ready-to-move records. It is a quick triage map, not a full report.
+                    Read this top to bottom: blockers first, then reviewer items, then ready-to-move records.
                   </div>
+                </div>
+                <div className="rounded-[24px] border border-white/12 bg-white/8 p-4 shadow-[0_14px_28px_rgba(0,0,0,0.10)]">
+                  <div className="text-[11px] uppercase tracking-[0.18em] text-[#e8dcae]">Queue priority</div>
+                  <div className="mt-2 text-base font-semibold text-white">{queuePriority}</div>
+                  <p className="mt-1 text-sm leading-6 text-white/72">
+                    Keep the reviewer focused on the next decision instead of reading the full record first.
+                  </p>
                 </div>
                 <div className="rounded-[24px] border border-amber-200/35 bg-[linear-gradient(180deg,rgba(255,243,207,0.98)_0%,rgba(255,237,184,0.98)_100%)] p-3.5 text-slate-950 shadow-[0_14px_30px_rgba(0,0,0,0.10)]">
                   <div className="text-xs uppercase tracking-[0.16em] text-amber-900/70">Next action</div>

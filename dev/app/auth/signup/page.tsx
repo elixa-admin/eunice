@@ -42,7 +42,7 @@ export default function SignUp() {
       } catch (err) {
         console.warn('Failed to load schools, using default placeholder:', err);
         // Pre-populate with a fallback school if DB query is blocked or empty
-        setSchools([{ id: 'fallback-school-id', name: 'Eunice High School' }]);
+        setSchools([{ id: 'fallback-school-id', name: 'Eunice Primary School' }]);
         setSchoolId('fallback-school-id');
       }
     }

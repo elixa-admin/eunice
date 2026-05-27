@@ -30,7 +30,6 @@ import {
 import { uploadDocumentDraft } from '@/lib/documents/upload';
 import {
   DOCUMENT_UPLOAD_GUIDANCE,
-  GUIDANCE_SECTIONS,
   PROCESS_ESTIMATE,
   QUALITY_TIPS,
   READINESS_KEY,
@@ -74,8 +73,6 @@ export default function ParentApplicationWorkflow() {
   const [submitState, setSubmitState] = useState<'idle' | 'saving' | 'submitted' | 'error'>('idle');
   const [draftState, setDraftState] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [draftNotice, setDraftNotice] = useState<string | null>(null);
-  const [openGuidance, setOpenGuidance] = useState<'expect' | 'prepare' | 'finish'>('expect');
-
   useEffect(() => {
     async function checkAuthAndLoadData() {
       try {
@@ -345,6 +342,8 @@ export default function ParentApplicationWorkflow() {
   };
   const requiredDocumentRequirements = documentRequirements.filter((requirement) => requirement.required);
   const conditionalDocumentRequirements = documentRequirements.filter((requirement) => !requirement.required);
+  const supportingDocumentRequirements = conditionalDocumentRequirements.filter((requirement) => requirement.category === 'supporting');
+  const contextDocumentRequirements = conditionalDocumentRequirements.filter((requirement) => requirement.category !== 'supporting');
   const requiredDocsAccepted = requiredDocumentTypes.every((documentType) =>
     isDocumentStateSubmissionReady(draft.documents[documentType].validationState),
   );
@@ -622,12 +621,12 @@ export default function ParentApplicationWorkflow() {
       <div className="border-b border-slate-100 bg-gradient-to-r from-emerald-900/5 via-white to-amber-500/5 px-6 py-6 sm:px-8">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">Admissions Workspace</p>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-800">Application journey</p>
             <h2 className="display-serif mt-2 text-3xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-950 via-amber-800 to-emerald-900 sm:text-4xl">
               Start your application with confidence
             </h2>
             <p className="mt-2 max-w-2xl text-sm leading-7 text-slate-600">
-              We will show the full checklist first, then guide you through a simple upload path with a clear end point.
+              We will show the essentials first, then guide you through the form and uploads one clear step at a time.
             </p>
           </div>
 
@@ -763,30 +762,24 @@ export default function ParentApplicationWorkflow() {
                     Estimated completion time: <span className="font-semibold">{PROCESS_ESTIMATE}</span>
                   </p>
                   <p className="mt-1 text-sm leading-6 text-slate-700">
-                    You can save and return later, but the clearest path is to have the required documents ready before you begin.
+                    You can save and return later, but the smoothest path is to have the main details and documents nearby before you begin.
                   </p>
                 </div>
                 <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                  <div className="text-sm font-semibold text-slate-950">How the application works</div>
+                  <div className="text-sm font-semibold text-slate-950">The journey in three parts</div>
                   <div className="mt-3 grid gap-3 sm:grid-cols-3">
-                    {GUIDANCE_SECTIONS.map((section) => (
-                      <button
-                        key={section.key}
-                        type="button"
-                        onClick={() => setOpenGuidance(section.key)}
-                        className={`rounded-2xl border px-4 py-4 text-left transition ${
-                          openGuidance === section.key
-                            ? 'border-emerald-400 bg-emerald-50'
-                            : 'border-slate-200 bg-slate-50 hover:bg-white'
-                        }`}
-                      >
-                        <div className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-800">{section.title}</div>
-                        <p className="mt-2 text-sm leading-6 text-slate-600">{section.body}</p>
-                      </button>
-                    ))}
-                  </div>
-                  <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-600">
-                    {GUIDANCE_SECTIONS.find((section) => section.key === openGuidance)?.body}
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
+                      <div className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-800">1. Add details</div>
+                      <p className="mt-2 text-sm leading-6 text-slate-600">Tell us about the learner and the adult responsible for the application.</p>
+                    </div>
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
+                      <div className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-800">2. Upload documents</div>
+                      <p className="mt-2 text-sm leading-6 text-slate-600">Start with the required documents, then add anything conditional only if it applies.</p>
+                    </div>
+                    <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
+                      <div className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-800">3. Review and send</div>
+                      <p className="mt-2 text-sm leading-6 text-slate-600">Check the final summary once, then send the file into the admissions queue.</p>
+                    </div>
                   </div>
                 </div>
 
@@ -850,7 +843,7 @@ export default function ParentApplicationWorkflow() {
                 )}
 
                 <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                  <div className="text-sm font-semibold text-slate-950">Upload quality rules</div>
+                  <div className="text-sm font-semibold text-slate-950">For the clearest uploads</div>
                   <ul className="mt-2 space-y-2 text-sm leading-6 text-slate-600">
                     {QUALITY_TIPS.map((tip) => (
                       <li key={tip}>• {tip}</li>
@@ -877,7 +870,7 @@ export default function ParentApplicationWorkflow() {
                 <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:col-span-2 shadow-sm">
                   <div className="text-sm font-semibold text-slate-950">Learner & Admission Details</div>
                   <p className="mt-1 text-sm leading-6 text-slate-600">
-                    Provide basic details of the child applying for admission to Eunice High School.
+                    Provide basic details of the child applying for admission to Eunice Primary School.
                   </p>
                 </div>
                 <Field
@@ -992,6 +985,24 @@ export default function ParentApplicationWorkflow() {
 
             {activeStep === 'fees_docs' && (
               <div className="mt-6 space-y-6">
+                <div className="grid gap-3 sm:grid-cols-3">
+                  <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4 shadow-sm">
+                    <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-800">Ready now</div>
+                    <div className="mt-2 text-xl font-semibold text-slate-950">{documentCounts.complete}</div>
+                    <p className="mt-1 text-sm leading-6 text-slate-700">Required documents already safe for review.</p>
+                  </div>
+                  <div className="rounded-2xl border border-rose-200 bg-rose-50/70 p-4 shadow-sm">
+                    <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-rose-800">Needs attention</div>
+                    <div className="mt-2 text-xl font-semibold text-slate-950">{documentCounts.blocking}</div>
+                    <p className="mt-1 text-sm leading-6 text-slate-700">Files that still need a clearer or missing upload.</p>
+                  </div>
+                  <div className="rounded-2xl border border-amber-200 bg-amber-50/70 p-4 shadow-sm">
+                    <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-amber-800">School will check</div>
+                    <div className="mt-2 text-xl font-semibold text-slate-950">{documentCounts.reviewOnly}</div>
+                    <p className="mt-1 text-sm leading-6 text-slate-700">Files that can still move forward while staff review them.</p>
+                  </div>
+                </div>
+
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:col-span-2 shadow-sm">
                     <div className="text-sm font-semibold text-slate-950">Fee Payer Alignment & Legal Guardians</div>
@@ -1067,9 +1078,27 @@ export default function ParentApplicationWorkflow() {
                     </div>
                   </div>
 
+                  <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                    <div className="text-sm font-semibold text-slate-950">How the document groups work</div>
+                    <div className="mt-3 grid gap-3 md:grid-cols-3">
+                      <div className="rounded-2xl border border-emerald-200 bg-emerald-50/60 px-4 py-4">
+                        <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-emerald-800">Always required</div>
+                        <p className="mt-2 text-sm leading-6 text-slate-700">These are the core documents Eunice needs for every application.</p>
+                      </div>
+                      <div className="rounded-2xl border border-amber-200 bg-amber-50/60 px-4 py-4">
+                        <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-amber-800">Only if relevant</div>
+                        <p className="mt-2 text-sm leading-6 text-slate-700">These appear when your family situation makes them necessary.</p>
+                      </div>
+                      <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
+                        <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-700">Supporting</div>
+                        <p className="mt-2 text-sm leading-6 text-slate-700">Extra supporting files can be added later if admissions asks for them.</p>
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="space-y-4">
-                    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                      <div className="flex items-center justify-between gap-3">
+                    <details className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm" open>
+                      <summary className="flex cursor-pointer list-none items-center justify-between gap-3">
                         <div>
                           <h4 className="text-sm font-semibold text-slate-950">Required documents</h4>
                           <p className="mt-1 text-sm leading-6 text-slate-600">
@@ -1079,7 +1108,7 @@ export default function ParentApplicationWorkflow() {
                         <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
                           {requiredDocumentRequirements.length} items
                         </span>
-                      </div>
+                      </summary>
                       <div className="mt-4 grid gap-4">
                         {requiredDocumentRequirements.map((requirement) => {
                           const documentType = requirement.documentType;
@@ -1147,7 +1176,7 @@ export default function ParentApplicationWorkflow() {
                           );
                         })}
                       </div>
-                    </div>
+                    </details>
 
                     {hiddenRequiredDocs.length > 0 && (
                       <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-4 shadow-sm">
@@ -1158,21 +1187,21 @@ export default function ParentApplicationWorkflow() {
                       </div>
                     )}
 
-                    {conditionalDocumentRequirements.length > 0 && (
-                      <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                        <div className="flex items-center justify-between gap-3">
+                    {contextDocumentRequirements.length > 0 && (
+                      <details className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                        <summary className="flex cursor-pointer list-none items-center justify-between gap-3">
                           <div>
                             <h4 className="text-sm font-semibold text-slate-950">Conditional documents</h4>
                             <p className="mt-1 text-sm leading-6 text-slate-600">
                               Only upload these when your family situation makes them relevant.
                             </p>
                           </div>
-                          <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
-                            {conditionalDocumentRequirements.length} items
-                          </span>
-                        </div>
+                            <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                              {contextDocumentRequirements.length} items
+                            </span>
+                        </summary>
                         <div className="mt-4 grid gap-4">
-                          {conditionalDocumentRequirements.map((requirement) => {
+                          {contextDocumentRequirements.map((requirement) => {
                             const documentType = requirement.documentType;
                             const document = draft.documents[documentType];
 
@@ -1230,8 +1259,36 @@ export default function ParentApplicationWorkflow() {
                             );
                           })}
                         </div>
-                      </div>
+                      </details>
                     )}
+
+                    <details className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                      <summary className="flex cursor-pointer list-none items-center justify-between gap-3">
+                        <div>
+                          <h4 className="text-sm font-semibold text-slate-950">Supporting documents</h4>
+                          <p className="mt-1 text-sm leading-6 text-slate-600">
+                            Keep these for later or upload them only if admissions asks for extra context.
+                          </p>
+                        </div>
+                        <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                          {supportingDocumentRequirements.length > 0 ? `${supportingDocumentRequirements.length} item${supportingDocumentRequirements.length === 1 ? '' : 's'}` : 'Optional'}
+                        </span>
+                      </summary>
+                      <div className="mt-4 space-y-3">
+                        {supportingDocumentRequirements.length > 0 ? (
+                          supportingDocumentRequirements.map((requirement) => (
+                            <div key={requirement.id} className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4">
+                              <div className="text-sm font-semibold text-slate-950">{requirement.label}</div>
+                              <p className="mt-1 text-sm leading-6 text-slate-600">{requirement.reason}</p>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-4 py-4 text-sm leading-6 text-slate-600">
+                            No extra supporting documents are needed right now. If the school needs more context later, it will ask clearly.
+                          </div>
+                        )}
+                      </div>
+                    </details>
                   </div>
                 </div>
               </div>

@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   title: 'Eunice Admissions Platform',
   description:
     'Digital school admissions for South African schools. Apply, track, and manage learner applications in one place.',
-  keywords: ['school admissions', 'South Africa', 'Eunice High School', 'parent portal'],
+  keywords: ['school admissions', 'South Africa', 'Eunice Primary School', 'parent portal'],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -83,61 +83,59 @@ Make the core workflow operationally complete with lightweight automation hooks 
 
 ## Recommended Order
 
-1. Sprint W - Parent Portal Confidence Lift
-2. Sprint X - Admin Portal Decision Clarity
-3. Sprint Y - Browser QA and Pattern Lockdown
+1. Sprint Y - Parent Upload Confidence and Admin Decision Speed
+2. Sprint Z - Workflow Automation and Communication History
+3. Sprint AA - Browser QA and Pattern Lockdown
 
-## Sprint W - Parent Portal Confidence Lift
-
-**Status:** In progress
-
-**Goal**
-
-Make the parent experience feel calmer, safer, and more obviously guided on mobile and desktop, with the highest possible reduction in friction for the least implementation churn.
-
-**Focus**
-
-- one primary action at a time
-- stronger upload reassurance and progress cues
-- lighter, more readable document grouping
-- clearer consent, autosave, and next-step feedback
-- reduce explanatory copy in favor of visual progression
-
-**Primary doc**
-
-- [docs/SPRINT_W_PARENT_PORTAL_CONFIDENCE_LIFT.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_W_PARENT_PORTAL_CONFIDENCE_LIFT.md)
-
-## Sprint X - Admin Portal Decision Clarity
+## Sprint Y - Parent Upload Confidence and Admin Decision Speed
 
 **Status:** In progress
 
 **Goal**
 
-Keep the admin portal light, readable, and operational while making the selected applicant, next action, and queue state instantly obvious.
+Deliver the biggest UI/UX win for the least implementation churn by making the parent upload path feel unmistakably safe and guided, while making the admin queue faster to scan and act on.
 
 **Focus**
 
-- preserve the clean light surface for staff
-- increase hierarchy between queue, decision, and evidence
-- collapse secondary details behind progressive disclosure
-- keep brand colors in accents rather than as a legibility burden
-- reduce equal-weight card clutter
+- parent upload confidence and guidance
+- upload quality feedback and visual reassurance
+- admin decision speed and queue scanability
+- keep parent and admin visibly distinct in intent
 
 **Primary doc**
 
-- [docs/SPRINT_X_ADMIN_PORTAL_DECISION_CLARITY.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_X_ADMIN_PORTAL_DECISION_CLARITY.md)
+- [docs/SPRINT_Y_PARENT_UPLOAD_CONFIDENCE_AND_ADMIN_SPEED.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_Y_PARENT_UPLOAD_CONFIDENCE_AND_ADMIN_SPEED.md)
 
-## Sprint Y - Browser QA and Pattern Lockdown
+## Sprint Z - Workflow Automation and Communication History
 
 **Status:** Planned
 
 **Goal**
 
-Verify the parent and admin updates in browser, then capture the winning visual patterns so we can reuse them without reopening theme debates.
+Reduce follow-up friction and make status transitions feel operationally complete.
 
 **Focus**
 
-- browser review of the latest preview
+- passwordless re-upload magic links
+- lightweight `n8n` notification contracts
+- communication history visibility in the admin timeline
+- status-triggered message scaffolding
+
+**Primary doc**
+
+- [docs/SPRINT_Q_WORKFLOW_AUTOMATION_AND_COMMS.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_Q_WORKFLOW_AUTOMATION_AND_COMMS.md)
+
+## Sprint AA - Browser QA and Pattern Lockdown
+
+**Status:** Planned
+
+**Goal**
+
+Verify the parent and admin changes in browser, then capture the winning visual patterns so we can reuse them without reopening theme debates.
+
+**Focus**
+
+- browser review of the updated latest preview
 - confirm contrast and hierarchy in light surfaces
 - lock reusable visual rules for parent and admin surfaces
 

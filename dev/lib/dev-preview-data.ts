@@ -356,6 +356,43 @@ export function getPreviewNextAction(application: PreviewApplication) {
   return 'Continue the admissions review and prepare the next decision.';
 }
 
+export type PreviewUploadConfidenceLevel = 'ready' | 'mixed' | 'needs_attention';
+
+export function getPreviewUploadConfidence(application: PreviewApplication) {
+  const counts = getPreviewDocumentCounts(application);
+
+  if (counts.blocking > 0) {
+    return {
+      level: 'needs_attention' as const,
+      label: 'Needs another look',
+      summary: `${counts.blocking} required file${counts.blocking === 1 ? '' : 's'} still need a clearer capture or replacement.`,
+      readyCount: counts.ready,
+      reviewCount: counts.reviewOnly,
+      blockingCount: counts.blocking,
+    };
+  }
+
+  if (counts.reviewOnly > 0) {
+    return {
+      level: 'mixed' as const,
+      label: 'Mostly ready',
+      summary: `${counts.reviewOnly} item${counts.reviewOnly === 1 ? '' : 's'} still need staff review before final movement.`,
+      readyCount: counts.ready,
+      reviewCount: counts.reviewOnly,
+      blockingCount: counts.blocking,
+    };
+  }
+
+  return {
+    level: 'ready' as const,
+    label: 'Ready to move',
+    summary: 'The required documents are clear enough to keep the application moving forward.',
+    readyCount: counts.ready,
+    reviewCount: counts.reviewOnly,
+    blockingCount: counts.blocking,
+  };
+}
+
 function buildStepStates(
   activeStep: ParentWorkflowStepKey,
   canSubmit: boolean,

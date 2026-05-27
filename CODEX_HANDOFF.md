@@ -15,12 +15,13 @@
 - Latest verified root preview after the fix:
   - `https://eunice-freqr38r7-elixa-admins-projects.vercel.app`
 - Sprint V - Admin Readability Reset is complete.
-- Sprint W - Parent Portal Confidence Lift is in progress.
-- Sprint X - Admin Portal Decision Clarity is in progress.
+- Sprint Y - Parent Upload Confidence and Admin Decision Speed is the next planned sprint.
+- The earlier W/X parent-admin split has been consolidated into Sprint Y so we keep the next phase tighter and higher-value.
 - Latest verified `/dev` preview:
-  - `https://dev-2w8gz7tl3-elixa-admins-projects.vercel.app`
+  - `https://dev-kp2d24u8n-elixa-admins-projects.vercel.app`
 - The admin dashboard now stays on a light, readable surface while keeping the school's green/gold brand identity in accents and emphasis.
 - The parent portal now feels calmer and less operational, with the main workflow kept on a light surface.
+- Sprint Y has started with upload-confidence cues for parents and a quicker scan signal for admins.
 - `/dev` remains the active product-shaping lane.
 - Sprint O is complete: parent calm-flow simplification landed.
 - Sprint P is now implemented locally: admin decision-engine simplification for `/dev/admin` and `/dev/application/[id]`.
@@ -29,9 +30,9 @@
 - A quick health sweep removed obvious duplicate local artifacts and added ignore rules for local numbered copies and `.cursor/`.
 - Focused `dev` checks are green.
 - The next three-sprint roadmap now points to:
-  - Sprint S: parent capture and calm upload flow
-  - Sprint T: admin decision acceleration
-  - Sprint U: lightweight automation and school foundation
+  - Sprint Y: parent upload confidence and admin decision speed
+  - Sprint Z: workflow automation and communication history
+  - Sprint AA: browser QA and pattern lockdown
 - Sprint S/T/U implementation is now pushed at `f14f3a5`:
   - parent POPIA consent, WebP compression, capture cue, and intake metadata
   - admin speed triage mode and zone tags
@@ -66,7 +67,7 @@
 - [docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md)
 
 ## Next Sprint
-Continue Sprint W and Sprint X with browser-led polish only if needed. The current preview is ready for review at the URL above, and the next phase should focus on whichever portal gives the biggest UI/UX return with the least churn.
+Continue Sprint Y from the current preview baseline. Keep the first pass focused on upload confidence for parents and queue scan speed for admins, with browser QA only after the layout shift settles.
 
 ## Notes
 - Keep the parent side calm and the admin side operationally denser.

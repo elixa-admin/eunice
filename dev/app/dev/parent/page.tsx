@@ -5,7 +5,12 @@ import { PreviewShell } from '@/components/preview-shell';
 import { SurfaceCard } from '@/components/surface-card';
 import { StatusBadge } from '@/components/status-badge';
 import { ParentWorkflowSidebar } from '@/components/parent-workflow-sidebar';
-import { getParentWorkflowSnapshot, previewApplications, type ParentWorkflowStepKey } from '@/lib/dev-preview-data';
+import {
+  getParentWorkflowSnapshot,
+  getPreviewUploadConfidence,
+  previewApplications,
+  type ParentWorkflowStepKey,
+} from '@/lib/dev-preview-data';
 
 const stepOrder: ParentWorkflowStepKey[] = ['checklist', 'learner', 'household', 'medical', 'fees_docs', 'review'];
 
@@ -161,6 +166,7 @@ const stepActionMeta: Record<ParentWorkflowStepKey, { title: string; summary: st
 export default function DevParentPage() {
   const featuredApplication = previewApplications[0];
   const workflow = getParentWorkflowSnapshot(featuredApplication);
+  const uploadConfidence = getPreviewUploadConfidence(featuredApplication);
   const [activeTab, setActiveTab] = useState<ParentWorkflowStepKey>('checklist');
 
   const activeIndex = stepOrder.indexOf(activeTab);
@@ -306,6 +312,22 @@ export default function DevParentPage() {
                   <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Document readiness</div>
                   <div className="mt-2 text-sm leading-6 text-slate-700">
                     We group documents by purpose so you can see what to prepare first without a long list in the way.
+                  </div>
+                  <div className="mt-3 rounded-2xl border border-primary-100 bg-white px-4 py-3 shadow-[0_8px_18px_rgba(11,20,12,0.03)]">
+                    <div className="text-[11px] uppercase tracking-[0.16em] text-primary-800/70">Upload confidence</div>
+                    <div className="mt-1 text-sm font-semibold text-slate-950">{uploadConfidence.label}</div>
+                    <div className="mt-1 text-sm leading-6 text-slate-700">{uploadConfidence.summary}</div>
+                    <div className="mt-3 flex flex-wrap gap-2 text-[11px] font-semibold uppercase tracking-[0.12em]">
+                      <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-emerald-800">
+                        {uploadConfidence.readyCount} clear
+                      </span>
+                      <span className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-amber-800">
+                        {uploadConfidence.reviewCount} review
+                      </span>
+                      <span className="rounded-full border border-rose-200 bg-rose-50 px-2.5 py-1 text-rose-800">
+                        {uploadConfidence.blockingCount} blocked
+                      </span>
+                    </div>
                   </div>
                   <div className="mt-3 grid gap-3 sm:grid-cols-3">
                     <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 px-4 py-4">

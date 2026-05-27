@@ -14,6 +14,7 @@ import {
   getPreviewDocumentStatusLabel,
   getPreviewNextAction,
   getPreviewReviewState,
+  getPreviewUploadConfidence,
   previewApplications,
   previewDocumentClasses,
   type PreviewApplication,
@@ -125,6 +126,7 @@ export default function DevAdminPage() {
   );
   const primaryEvidence = groupedDocuments.blocking[0] ?? groupedDocuments.review[0] ?? groupedDocuments.ready[0] ?? groupedDocuments.other[0];
   const latestCommunication = featured.communication.at(-1);
+  const uploadConfidence = getPreviewUploadConfidence(featured);
 
   function toggleTriageSelection(applicationId: string) {
     setSelectedTriageIds((current) =>
@@ -282,6 +284,11 @@ export default function DevAdminPage() {
                     <div className="text-[11px] uppercase tracking-[0.16em] text-primary-700/72">Work this file next</div>
                     <div className="mt-2 text-lg font-semibold text-slate-950">{queuePriority}</div>
                     <p className="mt-2 leading-6 text-slate-600">{nextAction}</p>
+                    <div className="mt-3 rounded-2xl border border-white/70 bg-white/80 px-3 py-2.5">
+                      <div className="text-[11px] uppercase tracking-[0.16em] text-slate-500">Upload confidence</div>
+                      <div className="mt-1 text-sm font-semibold text-slate-950">{uploadConfidence.label}</div>
+                      <div className="mt-1 text-xs leading-5 text-slate-600">{uploadConfidence.summary}</div>
+                    </div>
                     <div className="mt-4 space-y-2.5">
                       {[
                         { label: '1. Clear blockers', active: counts.blocking > 0, helper: counts.blocking > 0 ? `${counts.blocking} issue${counts.blocking === 1 ? '' : 's'} preventing progress` : 'Nothing blocking this file' },

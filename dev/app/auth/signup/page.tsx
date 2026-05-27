@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import supabase from '@/lib/supabase';
+import { AUTH_INPUT_CLASS_NAME } from '@/lib/ui-classes';
 
 interface School {
   id: string;
@@ -119,7 +120,7 @@ export default function SignUp() {
                 id="first-name"
                 type="text"
                 required
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-primary-300 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all text-sm"
+                className={AUTH_INPUT_CLASS_NAME}
                 placeholder="John"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
@@ -133,7 +134,7 @@ export default function SignUp() {
                 id="last-name"
                 type="text"
                 required
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-primary-300 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all text-sm"
+                className={AUTH_INPUT_CLASS_NAME}
                 placeholder="Doe"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
@@ -148,7 +149,7 @@ export default function SignUp() {
             <input
               id="phone"
               type="tel"
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-primary-300 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all text-sm"
+              className={AUTH_INPUT_CLASS_NAME}
               placeholder="+27 82 123 4567"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
@@ -161,7 +162,7 @@ export default function SignUp() {
             </label>
             <select
               id="school"
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white/20 transition-all text-sm appearance-none"
+              className={`${AUTH_INPUT_CLASS_NAME} appearance-none`}
               value={schoolId}
               onChange={(e) => setSchoolId(e.target.value)}
             >
@@ -181,7 +182,7 @@ export default function SignUp() {
               id="email"
               type="email"
               required
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-primary-300 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all text-sm"
+              className={AUTH_INPUT_CLASS_NAME}
               placeholder="name@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -197,7 +198,7 @@ export default function SignUp() {
               type="password"
               required
               minLength={6}
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-primary-300 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all text-sm"
+              className={AUTH_INPUT_CLASS_NAME}
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

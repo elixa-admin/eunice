@@ -22,12 +22,30 @@ const previewLinks = [
   },
 ];
 
+const journeyCards = [
+  {
+    title: 'Families',
+    body: 'A calmer portal for starting, saving, and tracking an application.',
+    accent: 'border-emerald-200 bg-emerald-50/80',
+  },
+  {
+    title: 'Admissions staff',
+    body: 'A clearer review surface for checking documents, status, and next actions.',
+    accent: 'border-amber-200 bg-amber-50/80',
+  },
+  {
+    title: 'Shared rules',
+    body: 'One system of truth for role-based access and application status.',
+    accent: 'border-slate-200 bg-slate-50/80',
+  },
+];
+
 export default function DevIndexPage() {
   return (
     <PreviewShell
       eyebrow="Eunice Platform Preview"
-      title="Admissions product preview"
-      description="A focused product sandbox for the Eunice platform. This is where we shape the parent and staff experience while keeping it separate from the assessment workflow."
+      title="A polished admissions front door"
+      description="The preview now mirrors the direction of the final product: a public entry point that explains the two portals, then a set of route previews for families and staff."
       surface="hub"
       meta={(
         <div className="rounded-3xl border border-primary-100 bg-white px-5 py-4 text-sm text-slate-700 shadow-[0_16px_40px_rgba(31,109,58,0.10)]">
@@ -37,8 +55,8 @@ export default function DevIndexPage() {
         </div>
       )}
     >
-      <div className="mb-6 grid gap-4 xl:grid-cols-[minmax(0,1.42fr)_minmax(360px,0.58fr)]">
-        <SurfaceCard className="overflow-hidden border border-primary-100 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(255,248,231,0.96)_100%)] p-7 xl:min-h-[320px]">
+      <div className="mb-6 grid gap-4 xl:grid-cols-[minmax(0,1.36fr)_minmax(360px,0.64fr)]">
+        <SurfaceCard className="overflow-hidden border border-primary-100 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(255,248,231,0.96)_100%)] p-7 xl:min-h-[340px]">
           <div className="-mx-7 -mt-7 mb-6 h-1 bg-[#b88907]" />
           <div className="mb-5 flex items-start justify-between gap-4">
             <div>
@@ -48,17 +66,27 @@ export default function DevIndexPage() {
                 </div>
                 <p className="text-xs uppercase tracking-[0.18em] text-primary-700/75">Current focus</p>
               </div>
-              <h2 className="display-serif mt-2 text-3xl font-semibold text-slate-950">A polished admissions website, not a wireframe</h2>
+              <h2 className="display-serif mt-2 text-3xl font-semibold text-slate-950">One platform, two distinct experiences</h2>
               <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
-                The goal is to make the preview feel like a finished school admissions product: structured, trustworthy,
-                and elegant enough to feel real at first glance.
+                The public-facing direction is now clearer: families should feel guided, staff should feel equipped, and the
+                portal split should be obvious before anyone signs in.
               </p>
             </div>
             <div className="rounded-full border border-accent-100 bg-accent-50 px-4 py-2 text-xs font-medium uppercase tracking-[0.16em] text-accent-700">
               Active lane
             </div>
           </div>
-          <div className="mb-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+
+          <div className="grid gap-3 md:grid-cols-3">
+            {journeyCards.map((card) => (
+              <div key={card.title} className={`rounded-3xl border px-4 py-4 shadow-sm ${card.accent}`}>
+                <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary-700/75">{card.title}</div>
+                <div className="mt-2 text-sm font-semibold text-slate-950">{card.body}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-5 grid gap-3 md:grid-cols-4">
             {[
               ['Discover', 'Website entry point', 'Homepage and admissions routes'],
               ['Apply', 'Form-led journey', 'Parents submit and save progress'],
@@ -72,36 +100,22 @@ export default function DevIndexPage() {
               </div>
             ))}
           </div>
-          <div className="grid gap-3 md:grid-cols-3">
-            <div className="rounded-2xl border border-primary-100 bg-white/88 px-4 py-3">
-              <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Public flow</div>
-              <div className="mt-2 text-sm font-semibold text-slate-950">Academic and calm</div>
-            </div>
-            <div className="rounded-2xl border border-primary-100 bg-white/88 px-4 py-3">
-              <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Admin flow</div>
-              <div className="mt-2 text-sm font-semibold text-slate-950">Operational and richer</div>
-            </div>
-            <div className="rounded-2xl border border-primary-100 bg-white/88 px-4 py-3">
-              <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Brand mode</div>
-              <div className="mt-2 text-sm font-semibold text-slate-950">Green and gold aligned</div>
-            </div>
-          </div>
         </SurfaceCard>
 
-        <SurfaceCard className="overflow-hidden bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(247,243,232,0.98)_100%)] p-7 xl:min-h-[320px]">
-          <p className="text-xs uppercase tracking-[0.18em] text-primary-700/75">Site cues</p>
-          <div className="mt-4 grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
+        <SurfaceCard className="overflow-hidden bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(247,243,232,0.98)_100%)] p-7 xl:min-h-[340px]">
+          <p className="text-xs uppercase tracking-[0.18em] text-primary-700/75">Portal split</p>
+          <div className="mt-4 space-y-3">
             <div className="rounded-2xl border border-primary-100 bg-primary-50/55 px-4 py-3">
-              <div className="text-sm font-semibold text-slate-950">School website rhythm</div>
-              <div className="mt-1 text-sm text-slate-600">The landing frame should feel designed, not assembled.</div>
+              <div className="text-sm font-semibold text-slate-950">Parent Portal</div>
+              <div className="mt-1 text-sm text-slate-600">Families see what to do next, what is still needed, and how to keep moving.</div>
             </div>
             <div className="rounded-2xl border border-primary-100 bg-primary-50/55 px-4 py-3">
-              <div className="text-sm font-semibold text-slate-950">Admissions clarity</div>
-              <div className="mt-1 text-sm text-slate-600">Each surface should answer the next obvious question.</div>
+              <div className="text-sm font-semibold text-slate-950">Admin Dashboard</div>
+              <div className="mt-1 text-sm text-slate-600">Admissions staff get the queue, triage, and decision context in one place.</div>
             </div>
             <div className="rounded-2xl border border-primary-100 bg-primary-50/55 px-4 py-3">
-              <div className="text-sm font-semibold text-slate-950">Consistent brand feel</div>
-              <div className="mt-1 text-sm text-slate-600">Green, gold, and restrained academic polish everywhere.</div>
+              <div className="text-sm font-semibold text-slate-950">Public entry point</div>
+              <div className="mt-1 text-sm text-slate-600">The home page should explain the product before it asks for a login.</div>
             </div>
           </div>
         </SurfaceCard>

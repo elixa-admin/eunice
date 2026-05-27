@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import supabase from '@/lib/supabase';
+import { AUTH_INPUT_CLASS_NAME } from '@/lib/ui-classes';
 
 export default function SignIn() {
   const router = useRouter();
@@ -80,7 +81,7 @@ export default function SignIn() {
               id="email"
               type="email"
               required
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-primary-300 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all text-sm"
+              className={AUTH_INPUT_CLASS_NAME}
               placeholder="name@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -95,7 +96,7 @@ export default function SignIn() {
               id="password"
               type="password"
               required
-              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-primary-300 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all text-sm"
+              className={AUTH_INPUT_CLASS_NAME}
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

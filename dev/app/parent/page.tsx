@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import supabase from '@/lib/supabase';
+import { AUTH_INPUT_CLASS_NAME } from '@/lib/ui-classes';
 import {
   APPLICATION_STATUS_LABELS,
   type ApplicationStatus,
@@ -257,7 +258,7 @@ export default function ParentDashboard() {
                   id="child-first-name"
                   type="text"
                   required
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-primary-300 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all text-sm"
+                  className={AUTH_INPUT_CLASS_NAME}
                   placeholder="Learner&apos;s first name"
                   value={learnerFirstName}
                   onChange={(e) => setLearnerFirstName(e.target.value)}
@@ -272,7 +273,7 @@ export default function ParentDashboard() {
                   id="child-last-name"
                   type="text"
                   required
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-primary-300 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all text-sm"
+                  className={AUTH_INPUT_CLASS_NAME}
                   placeholder="Learner&apos;s last name"
                   value={learnerLastName}
                   onChange={(e) => setLearnerLastName(e.target.value)}
@@ -285,7 +286,7 @@ export default function ParentDashboard() {
                 </label>
                 <select
                   id="grade-select"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white/20 transition-all text-sm appearance-none"
+                  className={`${AUTH_INPUT_CLASS_NAME} appearance-none`}
                   value={grade}
                   onChange={(e) => setGrade(e.target.value)}
                 >

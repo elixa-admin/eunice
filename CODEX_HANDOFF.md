@@ -18,6 +18,9 @@
 - Latest verified `/dev` preview:
   - `https://dev-26rs37xxp-elixa-admins-projects.vercel.app`
 - The admin dashboard now stays on a light, readable surface while keeping the school's green/gold brand identity in accents and emphasis.
+- The next two planned sprints are now persona-specific:
+  - Sprint W - Parent Portal Confidence Lift
+  - Sprint X - Admin Portal Decision Clarity
 - `/dev` remains the active product-shaping lane.
 - Sprint O is complete: parent calm-flow simplification landed.
 - Sprint P is now implemented locally: admin decision-engine simplification for `/dev/admin` and `/dev/application/[id]`.
@@ -63,7 +66,7 @@
 - [docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md)
 
 ## Next Sprint
-Start the next sprint from the admin readability reset baseline. Focus on whichever of the planned output sprints gives the most value now: parent confidence, workflow automation, or document intelligence.
+Start Sprint W with the parent portal confidence lift. Keep it calm, mobile-first, and low-friction so we get the biggest UI/UX return for the least implementation churn.
 
 ## Notes
 - Keep the parent side calm and the admin side operationally denser.

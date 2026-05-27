@@ -83,60 +83,63 @@ Make the core workflow operationally complete with lightweight automation hooks 
 
 ## Recommended Order
 
-1. Sprint V - Admin Readability Reset
-2. Sprint W - Parent/Admin Surface Separation Polish
-3. Sprint X - Browser QA and Pattern Lockdown
+1. Sprint W - Parent Portal Confidence Lift
+2. Sprint X - Admin Portal Decision Clarity
+3. Sprint Y - Browser QA and Pattern Lockdown
 
-## Sprint V - Admin Readability Reset
+## Sprint W - Parent Portal Confidence Lift
 
 **Status:** Planned
 
 **Goal**
 
-Restore the admin dashboard to a clean light surface with strong readability, while keeping the school's green and gold brand language visible in accents and emphasis.
+Make the parent experience feel calmer, safer, and more obviously guided on mobile and desktop, with the highest possible reduction in friction for the least implementation churn.
 
 **Focus**
 
-- light-mode admin base
-- readable text across cards and bubbles
-- brand-color accents without contrast loss
-- preserve the selected applicant as the anchor
+- one primary action at a time
+- stronger upload reassurance and progress cues
+- lighter, more readable document grouping
+- clearer consent, autosave, and next-step feedback
+- reduce explanatory copy in favor of visual progression
 
 **Primary doc**
 
-- [docs/SPRINT_V_ADMIN_READABILITY_RESET.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_V_ADMIN_READABILITY_RESET.md)
+- [docs/SPRINT_W_PARENT_PORTAL_CONFIDENCE_LIFT.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_W_PARENT_PORTAL_CONFIDENCE_LIFT.md)
 
-## Sprint W - Parent/Admin Surface Separation Polish
+## Sprint X - Admin Portal Decision Clarity
 
 **Status:** Planned
 
 **Goal**
 
-Keep the parent side calm and spacious while making sure the admin side stays operationally dense but visually clean.
+Keep the admin portal light, readable, and operational while making the selected applicant, next action, and queue state instantly obvious.
 
 **Focus**
 
-- sharpen the parent/admin visual split
-- reduce any shared visual noise that makes the admin surface feel too dark or too heavy
-- keep the workflow cues obvious on both personas
+- preserve the clean light surface for staff
+- increase hierarchy between queue, decision, and evidence
+- collapse secondary details behind progressive disclosure
+- keep brand colors in accents rather than as a legibility burden
+- reduce equal-weight card clutter
 
 **Primary doc**
 
-- [docs/UX_BRAINSTORM_AND_SPRINT_TRACK.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/UX_BRAINSTORM_AND_SPRINT_TRACK.md)
+- [docs/SPRINT_X_ADMIN_PORTAL_DECISION_CLARITY.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_X_ADMIN_PORTAL_DECISION_CLARITY.md)
 
-## Sprint X - Browser QA and Pattern Lockdown
+## Sprint Y - Browser QA and Pattern Lockdown
 
 **Status:** Planned
 
 **Goal**
 
-Verify the readability and hierarchy changes in browser, then lock the winning patterns so we can reuse them without re-litigating the theme.
+Verify the parent and admin updates in browser, then capture the winning visual patterns so we can reuse them without reopening theme debates.
 
 **Focus**
 
-- browser review of the updated admin preview
-- confirm contrast is clean in light mode
-- capture reusable visual rules for future dashboard work
+- browser review of the latest preview
+- confirm contrast and hierarchy in light surfaces
+- lock reusable visual rules for parent and admin surfaces
 
 **Primary doc**
 

@@ -30,9 +30,9 @@
 - A quick health sweep removed obvious duplicate local artifacts and added ignore rules for local numbered copies and `.cursor/`.
 - Focused `dev` checks are green.
 - The next three-sprint roadmap now points to:
-  - Sprint Y: parent upload confidence and admin decision speed
   - Sprint Z: workflow automation and communication history
-  - Sprint AA: browser QA and pattern lockdown
+  - Sprint AA: document intelligence lite
+  - Sprint AB: browser QA and pattern lockdown
 - Sprint S/T/U implementation is now pushed at `f14f3a5`:
   - parent POPIA consent, WebP compression, capture cue, and intake metadata
   - admin speed triage mode and zone tags
@@ -67,7 +67,7 @@
 - [docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md)
 
 ## Next Sprint
-Continue Sprint Y from the current preview baseline. Keep the first pass focused on upload confidence for parents and queue scan speed for admins, with browser QA only after the layout shift settles.
+Start Sprint Z from the current preview baseline. Keep the first pass focused on workflow automation and communication history, then move to document intelligence and browser QA in the next two sprints.
 
 ## Notes
 - Keep the parent side calm and the admin side operationally denser.

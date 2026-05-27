@@ -83,9 +83,9 @@ Make the core workflow operationally complete with lightweight automation hooks 
 
 ## Recommended Order
 
-1. Sprint Y - Parent Upload Confidence and Admin Decision Speed
-2. Sprint Z - Workflow Automation and Communication History
-3. Sprint AA - Browser QA and Pattern Lockdown
+1. Sprint Z - Workflow Automation and Communication History
+2. Sprint AA - Document Intelligence Lite
+3. Sprint AB - Browser QA and Pattern Lockdown
 
 ## Sprint Y - Parent Upload Confidence and Admin Decision Speed
 
@@ -125,7 +125,26 @@ Reduce follow-up friction and make status transitions feel operationally complet
 
 - [docs/SPRINT_Q_WORKFLOW_AUTOMATION_AND_COMMS.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_Q_WORKFLOW_AUTOMATION_AND_COMMS.md)
 
-## Sprint AA - Browser QA and Pattern Lockdown
+## Sprint AA - Document Intelligence Lite
+
+**Status:** Planned
+
+**Goal**
+
+Keep document quality checks lightweight, useful, and cheap to run so parents get clearer upload guidance and staff get fewer low-quality files in the queue.
+
+**Focus**
+
+- simple readability and quality cues for uploads
+- blur, orientation, and partial-capture guidance
+- duplicate-style upload detection hints
+- confidence/readability scoring that stays lightweight
+
+**Primary doc**
+
+- [docs/SPRINT_AA_DOCUMENT_INTELLIGENCE_LITE.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_AA_DOCUMENT_INTELLIGENCE_LITE.md)
+
+## Sprint AB - Browser QA and Pattern Lockdown
 
 **Status:** Planned
 

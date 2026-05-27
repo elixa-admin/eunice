@@ -10,6 +10,10 @@
 `codex/vercel-project-separation`
 
 ## Current State
+- The main `eunice` Vercel project was fixed on 2026-05-27 by setting its root directory to `src` in Vercel project settings.
+- The root deployment failure was not a code regression; it was a project-settings mismatch.
+- Latest verified root preview after the fix:
+  - `https://eunice-freqr38r7-elixa-admins-projects.vercel.app`
 - `/dev` remains the active product-shaping lane.
 - Sprint O is complete: parent calm-flow simplification landed.
 - Sprint P is now implemented locally: admin decision-engine simplification for `/dev/admin` and `/dev/application/[id]`.

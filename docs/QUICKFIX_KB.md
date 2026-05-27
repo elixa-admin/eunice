@@ -349,6 +349,53 @@ Any caveats or things to avoid next time.
 
 - This is not an app build failure when the deployment itself is `Ready`; it is an access path issue.
 
+### Main `eunice` Vercel project fails instantly with `No Next.js version detected`
+
+**Symptom**
+
+- Root `eunice` preview deployments fail in about `0-2s`.
+- The deployment page shows:
+  - `No Next.js version detected. Make sure your package.json has "next" in either "dependencies" or "devDependencies". Also check your Root Directory setting matches the directory of your package.json file.`
+- `/dev` deployments can still succeed, which makes this look like a random branch or code regression at first.
+
+**Classification**
+
+- config
+
+**Root Cause**
+
+- The main `eunice` Vercel project was pointed at the repo root `./`.
+- The actual main Next.js app lives in `src/`, while the repo-root `package.json` is only a workspace runner and does not declare `next` as a direct dependency.
+- Vercel therefore tried to detect Next.js from the wrong `package.json` and failed before the build meaningfully started.
+
+**Fix**
+
+- In Vercel project settings for `elixa-admins-projects/eunice`, set:
+  - `Settings -> Build and Deployment -> Root Directory -> src`
+- Then redeploy the `eunice` project.
+- Sync local Vercel metadata afterwards with:
+  - `vercel pull --yes --environment preview`
+
+**Fallback**
+
+- If the main `eunice` project is still blocked and a review build is needed immediately, keep using the separate `/dev` preview project while the root project settings are corrected.
+
+**Commands / Checks**
+
+- `vercel project inspect eunice --scope elixa-admins-projects`
+- `vercel inspect <failed-deployment> --scope elixa-admins-projects`
+- `vercel --yes --scope elixa-admins-projects`
+- `vercel pull --yes --environment preview --scope elixa-admins-projects`
+
+**Last Verified**
+
+- 2026-05-27 in the Eunice workspace.
+
+**Notes**
+
+- A successful post-fix root preview was `https://eunice-freqr38r7-elixa-admins-projects.vercel.app`.
+- The synced local `.vercel/project.json` should show `"rootDirectory": "src"`.
+
 ### Lint verification times out in both `verify:src` and `verify:dev`
 
 **Symptom**

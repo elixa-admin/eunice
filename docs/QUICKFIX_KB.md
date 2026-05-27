@@ -257,6 +257,98 @@ Any caveats or things to avoid next time.
 - `codegraph init -i` also created `.cursor/rules/codegraph.mdc`.
 - The repo already ignores `.codegraph/`; review whether `.cursor/` should be committed or ignored before publishing.
 
+### Vercel `/dev` preview fails when the app imports sibling workspace code
+
+**Symptom**
+
+- The `/dev` Vercel preview either fails to build or shows `Module not found` errors for paths like:
+  - `@eunice-shared/documents/contracts`
+  - `@eunice-shared/domain/applications`
+  - `@eunice-shared/integrations/supabase`
+- Local `next build` can still pass, which makes the deployment failure look inconsistent.
+
+**Classification**
+
+- config
+
+**Root Cause**
+
+- The `/dev` preview was deployed as its own Vercel project rooted in `dev/`.
+- That project only uploads the `dev/` folder during build, so imports that reach into `../shared` are unavailable in Vercel even if they work locally.
+
+**Fix**
+
+- Keep the `/dev` project self-contained for deployment.
+- Point `dev/tsconfig.json` alias resolution at `./eunice-shared/*`.
+- Mirror the small shared contracts needed by the preview into:
+  - `dev/eunice-shared/documents/contracts.ts`
+  - `dev/eunice-shared/domain/applications.ts`
+  - `dev/eunice-shared/integrations/supabase.ts`
+
+**Fallback**
+
+- If the main `eunice` Vercel project is still mis-rooted or broken, deploy the preview directly with:
+  - `vercel deploy --cwd dev --yes --scope elixa-admins-projects --target preview`
+
+**Commands / Checks**
+
+- `cd dev && npm run build`
+- `cd dev && vercel pull --yes --environment preview`
+- `cd dev && vercel build --yes`
+- `vercel deploy --cwd dev --yes --scope elixa-admins-projects --target preview`
+
+**Last Verified**
+
+- 2026-05-26 in the Eunice workspace.
+
+**Notes**
+
+- The current working `/dev` preview project is `elixa-admins-projects/dev`.
+- A successful preview URL from this fix path was `https://dev-a5y0q5vy2-elixa-admins-projects.vercel.app`.
+
+### Deployed `/api/ping` checks are blocked by interactive deployment protection
+
+**Symptom**
+
+- `curl` against deployed `/dev` `/api/ping` returns the Vercel authentication wall HTML instead of JSON.
+- `vercel curl /api/ping --deployment <preview-url>` can still return the auth wall even after auto-generating a bypass token.
+
+**Classification**
+
+- config
+
+**Root Cause**
+
+- Deployment protection on the preview requires an interactive authenticated flow in this environment for API-route access.
+- The generated protection bypass token was insufficient on its own for this protected endpoint path in the current automation context.
+
+**Fix**
+
+- Validate `/api/ping` from an authenticated browser session (logged in to the protected team/project), or use a known-good deployment protection bypass secret with explicit access.
+- Capture and document the JSON response from that authenticated path.
+
+**Fallback**
+
+- Confirm deployment health first via:
+  - `vercel ls dev --scope elixa-admins-projects`
+  - `vercel inspect <preview-url> --scope elixa-admins-projects`
+- Mark P0.1 as blocked-on-protection until authenticated endpoint access is available.
+
+**Commands / Checks**
+
+- `curl -sS https://<preview>/api/ping`
+- `vercel curl /api/ping --deployment https://<preview> --scope elixa-admins-projects`
+- `vercel ls dev --scope elixa-admins-projects`
+- `vercel inspect https://<preview> --scope elixa-admins-projects`
+
+**Last Verified**
+
+- 2026-05-26 in the Eunice workspace.
+
+**Notes**
+
+- This is not an app build failure when the deployment itself is `Ready`; it is an access path issue.
+
 ### Lint verification times out in both `verify:src` and `verify:dev`
 
 **Symptom**

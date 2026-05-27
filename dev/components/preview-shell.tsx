@@ -74,7 +74,7 @@ export function PreviewShell({
             </div>
 
             <div className="flex flex-col gap-3">
-              <div className="rounded-[24px] border border-white/22 bg-white/10 p-5 backdrop-blur-md">
+              <div className="rounded-[24px] border border-white/22 bg-white/12 p-5 shadow-[0_18px_40px_rgba(0,0,0,0.10)] backdrop-blur-md">
                 <div className="type-label text-white/80">Preview frame</div>
                 <p className="type-body mt-2 text-white/95">{surfaceInfo.lead}</p>
               </div>

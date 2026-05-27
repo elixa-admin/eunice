@@ -5,7 +5,8 @@ import { useState } from 'react';
 import { PreviewShell } from '@/components/preview-shell';
 import { SurfaceCard } from '@/components/surface-card';
 import { StatusBadge } from '@/components/status-badge';
-import { SummaryRow } from '@/components/summary-row';
+import { ParentWorkflowSidebar } from '@/components/parent-workflow-sidebar';
+import { ParentWorkflowStepper } from '@/components/parent-workflow-stepper';
 import { getParentWorkflowSnapshot, previewApplications, type ParentWorkflowStepKey } from '@/lib/dev-preview-data';
 
 const stepOrder: ParentWorkflowStepKey[] = ['checklist', 'learner', 'household', 'medical', 'fees_docs', 'review'];
@@ -20,9 +21,9 @@ const stepMeta: Record<ParentWorkflowStepKey, { title: string; subtitle: string;
 };
 
 const guidanceItems = [
-  { title: 'Who should start this?', body: 'The parent or legal guardian who will manage the application should begin here. If someone is helping, keep them nearby for the final check.' },
-  { title: 'Admissions criteria', body: 'Keep the key documents close by so we can explain each one before you upload it.' },
-  { title: 'What happens next?', body: 'After you submit, Eunice reviews the application and lets you know if anything still needs attention.' },
+  { title: 'Start with the right adult', body: 'The guardian who will own the file should begin so contact details, decisions, and follow-up stay consistent.' },
+  { title: 'Keep the essentials close', body: 'Having the key documents ready turns this into a guided submission instead of a stop-start search for files.' },
+  { title: 'See the finish line early', body: 'Each step shows what it unlocks next, so families can move forward with less uncertainty.' },
 ] as const;
 
 const stepExpectations: Record<ParentWorkflowStepKey, { purpose: string; prepare: string; next: string; timing: string }> = {
@@ -91,6 +92,69 @@ const stepHighlights: Record<ParentWorkflowStepKey, { title: string; detail: str
   review: { title: 'Check and send', detail: 'Review the full application before you submit it.' },
 };
 
+const stepActionMeta: Record<ParentWorkflowStepKey, { title: string; summary: string; actions: string[]; ctaLabel: string }> = {
+  checklist: {
+    title: 'Get ready to start',
+    summary: 'Spend one minute getting the essentials close by so the application feels easy instead of stop-start.',
+    actions: [
+      'Keep the learner details and your contact information beside you.',
+      'Check that the main documents are clear and easy to upload later.',
+      'Start the form once you know who will complete the application.',
+    ],
+    ctaLabel: 'Start learner details',
+  },
+  learner: {
+    title: 'Complete the learner section',
+    summary: 'Capture the learner details exactly once so the rest of the journey follows the right school and grade path.',
+    actions: [
+      'Use official spellings and dates from school records.',
+      'Confirm the grade and previous school before moving on.',
+      'Finish this step so we can move to parent or guardian details.',
+    ],
+    ctaLabel: 'Continue to household details',
+  },
+  household: {
+    title: 'Add the responsible adult',
+    summary: 'Make sure admissions can contact the right parent or guardian without needing a follow-up call.',
+    actions: [
+      'Use the email address and phone number checked most often.',
+      'Confirm who is financially and administratively responsible.',
+      'Complete this step before any support or document questions.',
+    ],
+    ctaLabel: 'Continue to care and support',
+  },
+  medical: {
+    title: 'Share only what helps',
+    summary: 'Give Eunice the context needed to support the learner well, without turning this into a long medical form.',
+    actions: [
+      'Add only care or support details that genuinely matter.',
+      'Skip anything that does not apply to your child.',
+      'Move on once the important support information is clear.',
+    ],
+    ctaLabel: 'Continue to fees and documents',
+  },
+  fees_docs: {
+    title: 'Get the file ready for review',
+    summary: 'This is the step that most directly affects whether admissions can move quickly, so keep it practical and complete.',
+    actions: [
+      'Upload the required files first before optional extras.',
+      'Replace any unclear or flagged document now.',
+      'Finish this step so the final review feels simple.',
+    ],
+    ctaLabel: 'Continue to review',
+  },
+  review: {
+    title: 'Prepare to submit',
+    summary: 'Use this final pass to catch anything missing before the admissions team sees the file.',
+    actions: [
+      'Scan each section once for missing answers.',
+      'Check that every required document is ready or acknowledged.',
+      'Submit only when the application feels complete and accurate.',
+    ],
+    ctaLabel: 'Review before submission',
+  },
+};
+
 export default function DevParentPage() {
   const featuredApplication = previewApplications[0];
   const workflow = getParentWorkflowSnapshot(featuredApplication);
@@ -100,6 +164,11 @@ export default function DevParentPage() {
   const progress = Math.round(((activeIndex + 1) / stepOrder.length) * 100);
   const readinessTone =
     workflow.blockers.length > 0 ? 'rose' : workflow.reviewOnlyWarnings.length > 0 ? 'amber' : 'emerald';
+  const stepAction = stepActionMeta[activeTab];
+  const advanceStep = () => {
+    const nextStep = stepOrder[Math.min(stepOrder.length - 1, activeIndex + 1)];
+    setActiveTab(nextStep);
+  };
 
   return (
     <PreviewShell
@@ -170,44 +239,20 @@ export default function DevParentPage() {
 
             <div className="grid gap-3 px-5 py-4 xl:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.55fr)] 2xl:grid-cols-[minmax(0,1.56fr)_minmax(360px,0.44fr)]">
               <div className="space-y-4">
-                <div className="flex items-center gap-2.5 overflow-x-auto pb-1">
-                  {stepOrder.map((step, index) => {
-                    const isActive = activeTab === step;
-                    const isDone = index < activeIndex;
-                    return (
-                      <button
-                        key={step}
-                        onClick={() => setActiveTab(step)}
-                        className={`min-w-[128px] rounded-2xl border p-3 text-left transition ${
-                          isActive
-                            ? 'border-amber-300 bg-[#fff8e7] text-[#081c12] shadow-[0_12px_24px_rgba(202,138,4,0.10)]'
-                            : isDone
-                              ? 'border-white/22 bg-white/14 text-white'
-                              : 'border-white/15 bg-white/8 text-white/82 hover:bg-white/12'
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className={`flex h-8 w-8 items-center justify-center rounded-full border text-xs font-semibold ${
-                            isActive ? 'border-[#081c12] bg-[#081c12] text-white' : 'border-current/20 bg-white/12 text-current'
-                          }`}>
-                            {stepMeta[step].label}
-                          </div>
-                          <div>
-                            <div className="text-xs font-semibold uppercase tracking-[0.14em] opacity-85">{stepMeta[step].title}</div>
-                            <div className="mt-1 text-[11px] opacity-80">{stepMeta[step].subtitle}</div>
-                          </div>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
+                <ParentWorkflowStepper
+                  activeIndex={activeIndex}
+                  activeTab={activeTab}
+                  onStepChange={setActiveTab}
+                  stepMeta={stepMeta}
+                  stepOrder={stepOrder}
+                />
 
-                <div className="rounded-[28px] border border-white/12 bg-white/95 p-4 text-slate-950 shadow-[0_18px_50px_rgba(11,20,12,0.10)]">
-                <div className="mb-4 grid gap-3 xl:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)]">
-                    <div className="rounded-[24px] border border-primary-100 bg-white p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
-                      <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Current step</div>
-                      <div className="mt-2 text-lg font-semibold text-slate-950">{stepHighlights[activeTab].title}</div>
-                      <div className="mt-1 text-sm leading-6 text-slate-600">{stepHighlights[activeTab].detail}</div>
+                <div className="rounded-[28px] border border-white/12 bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(251,248,240,0.98)_100%)] p-4 text-slate-950 shadow-[0_18px_50px_rgba(11,20,12,0.10)]">
+                  <div className="mb-4 grid gap-3 xl:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)]">
+                  <div className="rounded-[24px] border border-primary-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(255,248,231,0.95)_100%)] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.05)]">
+                    <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Current step</div>
+                    <div className="mt-2 text-lg font-semibold text-slate-950">{stepHighlights[activeTab].title}</div>
+                    <div className="mt-1 text-sm leading-6 text-slate-600">{stepHighlights[activeTab].detail}</div>
                       <div className="mt-3 flex flex-wrap gap-2">
                         {stepOrder.map((step, index) => (
                           <span
@@ -248,31 +293,50 @@ export default function DevParentPage() {
                           </p>
                         </div>
                       </div>
+                      <div className="mt-3 rounded-2xl border border-white/70 bg-white/75 px-3 py-2 text-xs leading-5 text-slate-700">
+                        This panel keeps the next decision visible so you always know whether to continue, upload, or review.
+                      </div>
                     </div>
                   </div>
 
-                  <div className="mb-4 grid gap-3 xl:grid-cols-[minmax(0,1.18fr)_minmax(280px,0.82fr)]">
-                    <div className="rounded-[24px] border border-primary-100 bg-[#fffdf8] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
-                      <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">What this step is for</div>
-                      <p className="mt-2 text-sm leading-6 text-slate-700">{stepExpectations[activeTab].purpose}</p>
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        <span className="rounded-full border border-primary-100 bg-white px-3 py-1 text-xs font-medium text-slate-700">{stepExpectations[activeTab].timing}</span>
-                        {activeTab === 'checklist' ? (
-                          <button
-                            type="button"
-                            onClick={() => setActiveTab('learner')}
-                            className="rounded-full bg-primary-900 px-3 py-1 text-xs font-semibold text-white"
-                          >
-                            Start application
-                          </button>
-                        ) : null}
+                  <div className="mb-4 grid gap-3 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
+                    <div className="rounded-[24px] border border-primary-200 bg-[linear-gradient(180deg,rgba(255,248,231,0.98)_0%,rgba(255,243,216,0.98)_100%)] p-4 shadow-[0_12px_30px_rgba(11,20,12,0.06)]">
+                      <div className="text-xs uppercase tracking-[0.18em] text-primary-900/70">Do this now</div>
+                      <div className="mt-2 text-lg font-semibold text-slate-950">{stepAction.title}</div>
+                      <p className="mt-2 text-sm leading-6 text-slate-700">{stepAction.summary}</p>
+                      <div className="mt-4 grid gap-2">
+                        {stepAction.actions.map((action) => (
+                          <div key={action} className="flex items-start gap-3 rounded-2xl border border-primary-200 bg-white/85 px-3 py-3">
+                            <span className="mt-0.5 flex h-6 w-6 items-center justify-center rounded-full bg-primary-900 text-[11px] font-semibold text-white">+</span>
+                            <span className="text-sm leading-6 text-slate-800">{action}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        <span className="rounded-full border border-primary-200 bg-white px-3 py-1 text-xs font-medium text-slate-700">{stepExpectations[activeTab].timing}</span>
+                        <button
+                          type="button"
+                          onClick={advanceStep}
+                          className="rounded-full bg-primary-900 px-3 py-1 text-xs font-semibold text-white"
+                        >
+                          {stepAction.ctaLabel}
+                        </button>
                       </div>
                     </div>
-                    <div className="rounded-[24px] border border-slate-200 bg-[#fffdf8] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
-                      <div className="text-xs uppercase tracking-[0.18em] text-slate-700">Next up</div>
-                      <div className="mt-2 space-y-2 text-sm leading-6 text-slate-700">
+                    <div className="rounded-[24px] border border-slate-200 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(249,247,240,0.98)_100%)] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
+                      <div className="text-xs uppercase tracking-[0.18em] text-slate-700">This helps you</div>
+                      <div className="mt-2 space-y-3 text-sm leading-6 text-slate-700">
                         <p>{stepExpectations[activeTab].prepare}</p>
-                        <p>{stepExpectations[activeTab].next}</p>
+                        <div className="rounded-2xl border border-slate-200 bg-white px-3 py-3">
+                          <div className="text-[11px] uppercase tracking-[0.16em] text-slate-500">After this step</div>
+                          <p className="mt-1">{stepExpectations[activeTab].next}</p>
+                        </div>
+                        <div className="rounded-2xl border border-primary-100 bg-primary-50/45 px-3 py-3 text-slate-700">
+                          <div className="text-[11px] uppercase tracking-[0.16em] text-primary-800/70">Action cue</div>
+                          <p className="mt-1 text-sm leading-6">
+                            The main job here is to complete one step, then keep moving. The page should always show the next decision clearly.
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -280,7 +344,7 @@ export default function DevParentPage() {
                   <div className="mb-4 grid gap-4 xl:grid-cols-[minmax(0,1.35fr)_minmax(280px,0.65fr)] 2xl:grid-cols-[minmax(0,1.42fr)_minmax(320px,0.58fr)]">
                     <div className="space-y-2.5">
                       <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Before you begin</div>
-                      <div className="rounded-[28px] border border-primary-100 bg-[#fffdf8] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
+                  <div className="rounded-[28px] border border-primary-100 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(250,247,240,0.98)_100%)] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
                         <div className="grid gap-4 md:grid-cols-[auto_minmax(0,1fr)]">
                           <div className="flex items-start gap-3 md:pt-1">
                             <div className="flex flex-col items-center gap-1">
@@ -334,7 +398,7 @@ export default function DevParentPage() {
                         </div>
                       </div>
                     </div>
-                    <div className="rounded-[24px] border border-slate-200 bg-[#fffdf8] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
+                    <div className="rounded-[24px] border border-slate-200 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(249,247,240,0.98)_100%)] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
                       <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Document readiness</div>
                       <div className="mt-2 text-sm leading-6 text-slate-700">
                         We group documents by purpose so you can see what to prepare first without a long list in the way.
@@ -366,7 +430,7 @@ export default function DevParentPage() {
                   </div>
 
                   <div className="rounded-[24px] border border-slate-200 bg-[#fffdf8] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
-                    <div className="text-xs uppercase tracking-[0.16em] text-slate-700">{stepMeta[activeTab].title}</div>
+                    <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Keep moving</div>
                     <div className="mt-2 text-sm leading-6 text-slate-700">
                       {activeTab === 'checklist' && 'This first screen helps you understand the journey before you begin. We keep it short, clear, and easy to return to.'}
                       {activeTab === 'learner' && 'Capture the learner’s details exactly as they appear on official records.'}
@@ -397,12 +461,12 @@ export default function DevParentPage() {
                       >
                         Back
                       </button>
-                      <button type="button" className="rounded-xl bg-primary-900 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(11,20,12,0.16)]">Continue</button>
+                      <button type="button" onClick={advanceStep} className="rounded-xl bg-primary-900 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_12px_26px_rgba(11,20,12,0.16)]">{stepAction.ctaLabel}</button>
                     </div>
                   </div>
                 </div>
 
-                <div className="rounded-[28px] border border-white/12 bg-white/95 p-4 text-slate-950 shadow-[0_18px_50px_rgba(11,20,12,0.10)]">
+                  <div className="rounded-[28px] border border-white/12 bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(250,247,240,0.98)_100%)] p-4 text-slate-950 shadow-[0_18px_50px_rgba(11,20,12,0.10)]">
                   <div className="text-xs uppercase tracking-[0.16em] text-primary-800/70">What this means for you</div>
                   <div className="mt-2 grid gap-3 sm:grid-cols-3">
                     <div className="rounded-2xl border border-primary-100 bg-primary-50/45 p-3">
@@ -421,67 +485,16 @@ export default function DevParentPage() {
                 </div>
               </div>
 
-              <div className="space-y-3">
-                <SurfaceCard className="border border-white/12 bg-white/92 p-4 text-slate-950 xl:min-h-[280px]">
-                  <div className="text-xs uppercase tracking-[0.16em] text-primary-800/70">Guidance & Tips</div>
-                  <div className="mt-2 rounded-2xl border border-primary-100 bg-[#fffdf8] p-3 shadow-[0_8px_18px_rgba(11,20,12,0.03)]">
-                    <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Expectation panel</div>
-                    <div className="mt-2 space-y-1.5 text-sm leading-6 text-slate-700">
-                      <p>{stepExpectations[activeTab].purpose}</p>
-                      <p>{stepExpectations[activeTab].next}</p>
-                    </div>
-                  </div>
-                  <div className="mt-3.5 space-y-2.5">
-                    {guidanceItems.map((item) => (
-                      <details key={item.title} className="group rounded-2xl border border-slate-200 bg-white p-4 transition group-open:border-accent-200">
-                        <summary className="cursor-pointer list-none text-sm font-semibold text-slate-950">{item.title}</summary>
-                        <p className="mt-2 text-sm leading-6 text-slate-700">{item.body}</p>
-                      </details>
-                    ))}
-                  </div>
-                </SurfaceCard>
-
-                <SurfaceCard className="border border-white/12 bg-white/92 p-4 text-slate-950 xl:min-h-[236px]">
-                  <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Application Summary</div>
-                  <div className="mt-3.5 grid gap-2.5 text-sm">
-                    <SummaryRow label="Application ID" value={featuredApplication.ref} />
-                    <SummaryRow label="Started" value="22 May 2026" />
-                    <SummaryRow label="Last saved" value={`22 May 2026, ${workflow.blockers.length > 0 ? '14:35' : '14:10'}`} />
-                    <SummaryRow label="Status" value={<StatusBadge status={featuredApplication.status} />} />
-                  </div>
-                  <button className="mt-4 w-full rounded-2xl bg-primary-900 px-4 py-3 text-sm font-semibold text-white shadow-[0_16px_30px_rgba(11,20,12,0.16)]">
-                    Save & continue
-                  </button>
-                </SurfaceCard>
-
-                <SurfaceCard className={`border p-4 text-slate-950 xl:min-h-[160px] ${
-                  readinessTone === 'rose'
-                    ? 'border-rose-200 bg-rose-50/80'
-                    : readinessTone === 'amber'
-                      ? 'border-amber-200 bg-amber-50/80'
-                      : 'border-emerald-200 bg-emerald-50/80'
-                }`}>
-                  <div className={`text-xs uppercase tracking-[0.16em] ${
-                    readinessTone === 'rose'
-                      ? 'text-rose-800'
-                      : readinessTone === 'amber'
-                        ? 'text-amber-800'
-                        : 'text-emerald-800'
-                  }`}>Progress</div>
-                  <div className="mt-3.5 flex items-center gap-4">
-                    <div className={`flex h-20 w-20 items-center justify-center rounded-full border bg-white text-2xl font-semibold ${
-                      readinessTone === 'rose'
-                        ? 'border-rose-200 text-rose-800'
-                        : readinessTone === 'amber'
-                          ? 'border-amber-200 text-amber-900'
-                          : 'border-emerald-200 text-emerald-800'
-                    }`}>{progress}%</div>
-                    <div className="text-sm leading-6 text-slate-700">
-                      Your application is moving forward. Keep documents ready so the admissions team can review it faster.
-                    </div>
-                  </div>
-                </SurfaceCard>
-              </div>
+              <ParentWorkflowSidebar
+                featuredApplication={featuredApplication}
+                guidanceItems={guidanceItems}
+                primaryActionLabel={stepAction.ctaLabel}
+                progress={progress}
+                readinessTone={readinessTone}
+                stepActionSummary={stepAction.summary}
+                stepNext={stepExpectations[activeTab].next}
+                workflow={workflow}
+              />
             </div>
           </SurfaceCard>
         </main>

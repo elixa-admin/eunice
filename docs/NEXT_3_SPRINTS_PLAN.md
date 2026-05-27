@@ -10,6 +10,7 @@ Sequence the next three sprints so Eunice finishes the current foundation work, 
 
 - Keep Sprint K as the current cleanup sprint and finish its `P0/P1` before opening new product scope.
 - Treat `src/` as the canonical app and `dev/` as the preview/prototyping surface.
+- Keep the next passes centered on `dev/` surfaces and defer assessment-specific UI work unless it blocks shared infrastructure.
 - Use Node 20 as the known-good runtime and check [docs/QUICKFIX_KB.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/QUICKFIX_KB.md) before repeating Node, Supabase, CodeGraph, or Git recovery paths.
 - Use CodeGraph with explicit `projectPath: "/Users/brandondienar/Documents/Codex/Projects/Eunice"` for structural refactor planning.
 - Do not rely on live Supabase behavior until `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are present and `/api/ping` confirms the integration is configured.
@@ -18,7 +19,7 @@ Sequence the next three sprints so Eunice finishes the current foundation work, 
 
 **Goal**
 
-Complete the remaining Sprint K `P1` work so both workspaces are easier to maintain and the next sprint can focus on integration proof rather than cleanup.
+Complete the remaining Sprint K `P1` work so the `dev/` preview surfaces are easier to maintain and the next sprint can focus on integration proof rather than cleanup.
 
 ### Task 1 — Extract large `dev/` route surfaces
 
@@ -41,7 +42,7 @@ Sprint K started shared-domain and integration hardening. The next planned `P1` 
 
 **Proposed approach**
 
-Use CodeGraph to identify the largest route-level symbols and repeated display logic. Extract route-local tables, status chips, metrics, and form/modal sections into named components or helper modules. Keep visual and behavioral changes minimal.
+Use CodeGraph to identify the largest `dev/` route-level symbols and repeated display logic. Extract route-local tables, status chips, metrics, and form/modal sections into named components or helper modules. Keep visual and behavioral changes minimal.
 
 **Acceptance criteria**
 
@@ -58,7 +59,7 @@ Use CodeGraph to identify the largest route-level symbols and repeated display l
 
 **Goal**
 
-Make the repo entry path obvious for future sessions.
+Make the repo entry path obvious for future sessions and make the `/dev` focus explicit.
 
 **Context**
 
@@ -73,7 +74,7 @@ Sprint K added `.nvmrc`, CodeGraph, shared Supabase contracts, and new quick-fix
 
 **Proposed approach**
 
-Update active docs to point to the Sprint K/L state, record the Node 20 bootstrap path, and decide whether `.cursor/rules/codegraph.mdc` should be committed or ignored.
+Update active docs to point to the Sprint K/L state, record the Node 20 bootstrap path, call out the `/dev` priority, and decide whether `.cursor/rules/codegraph.mdc` should be committed or ignored.
 
 **Acceptance criteria**
 
@@ -91,7 +92,7 @@ Update active docs to point to the Sprint K/L state, record the Node 20 bootstra
 
 **Goal**
 
-Turn the hardened integration code into verified behavior by proving Supabase auth, storage, and health checks in realistic local and deploy-like conditions.
+Turn the hardened integration code into verified behavior by proving Supabase auth, storage, and health checks in realistic local and deploy-like conditions while keeping the `/dev` preview experience in sync.
 
 ### Task 1 — Configure and verify Supabase health
 

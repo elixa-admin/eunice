@@ -8,24 +8,18 @@ import supabase, { getSupabaseIntegrationStatus } from '@/lib/supabase';
  */
 export async function GET() {
   const integrationStatus = getSupabaseIntegrationStatus();
-  if (!integrationStatus.configured) {
-    return NextResponse.json(
-      {
-        ok: false,
-        integration: 'supabase',
-        configured: false,
-        missingKeys: integrationStatus.missingKeys,
-      },
-      { status: 503 },
-    );
-  }
-
   try {
     const { error } = await supabase.from('schools').select('count').limit(1);
 
     if (error) {
       return NextResponse.json(
-        { ok: false, error: error.message },
+        {
+          ok: false,
+          integration: 'supabase',
+          configured: integrationStatus.configured,
+          missingKeys: integrationStatus.missingKeys,
+          error: error.message,
+        },
         { status: 500 }
       );
     }

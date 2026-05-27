@@ -38,7 +38,7 @@ export default function DevIndexPage() {
       )}
     >
       <div className="mb-6 grid gap-4 xl:grid-cols-[minmax(0,1.42fr)_minmax(360px,0.58fr)]">
-        <SurfaceCard className="overflow-hidden border border-primary-100 bg-[#fffdf8] p-7 xl:min-h-[320px]">
+        <SurfaceCard className="overflow-hidden border border-primary-100 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(255,248,231,0.96)_100%)] p-7 xl:min-h-[320px]">
           <div className="-mx-7 -mt-7 mb-6 h-1 bg-[#b88907]" />
           <div className="mb-5 flex items-start justify-between gap-4">
             <div>
@@ -88,7 +88,7 @@ export default function DevIndexPage() {
           </div>
         </SurfaceCard>
 
-        <SurfaceCard className="overflow-hidden p-7 xl:min-h-[320px]">
+        <SurfaceCard className="overflow-hidden bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(247,243,232,0.98)_100%)] p-7 xl:min-h-[320px]">
           <p className="text-xs uppercase tracking-[0.18em] text-primary-700/75">Site cues</p>
           <div className="mt-4 grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
             <div className="rounded-2xl border border-primary-100 bg-primary-50/55 px-4 py-3">
@@ -110,7 +110,7 @@ export default function DevIndexPage() {
       <div className="grid gap-5 lg:grid-cols-3">
         {previewLinks.map((link) => (
           <Link key={link.href} href={link.href} className="block transition hover:-translate-y-1">
-            <SurfaceCard className="h-full p-6 transition hover:border-primary-200 hover:shadow-[0_24px_60px_rgba(22,163,74,0.12)]">
+            <SurfaceCard className="h-full border border-primary-100 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(255,248,231,0.96)_100%)] p-6 transition hover:border-primary-200 hover:shadow-[0_24px_60px_rgba(22,163,74,0.12)]">
               <div className="mb-3 text-xs uppercase tracking-[0.18em] text-primary-700/65">Preview route</div>
               <div className="mb-3 text-lg font-semibold text-slate-950">{link.title}</div>
               <p className="text-sm leading-6 text-slate-600">{link.description}</p>

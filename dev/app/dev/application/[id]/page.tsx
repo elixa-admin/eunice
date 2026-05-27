@@ -32,6 +32,7 @@ export default async function DevApplicationDetailPage({
   const counts = getPreviewDocumentCounts(application);
   const blockingDocuments = application.documents.filter((document) => isDocumentStateBlocking(document.status));
   const reviewDocuments = application.documents.filter((document) => isDocumentStateReviewOnly(document.status));
+  const nextAction = getPreviewNextAction(application);
   const readinessTone =
     counts.blocking > 0 ? 'rose' : counts.reviewOnly > 0 ? 'amber' : 'emerald';
 
@@ -49,34 +50,47 @@ export default async function DevApplicationDetailPage({
           <div className="h-1 w-full bg-[#b88907]" />
           <div className="p-5">
             <div className="flex flex-col gap-3.5 sm:flex-row sm:items-start sm:justify-between">
-            <div>
-              <div className="text-xs uppercase tracking-[0.18em] text-white/70">Current status</div>
-              <div className="mt-2">
-                <StatusBadge status={application.status} />
+              <div>
+                <div className="text-xs uppercase tracking-[0.18em] text-[#e8dcae]">Current status</div>
+                <div className="mt-2">
+                  <StatusBadge status={application.status} />
+                </div>
+                <h2 className="display-serif mt-4 text-3xl font-semibold text-white">{application.learnerName}</h2>
+                <p className="mt-2 text-sm text-white/80">{application.parentName} · {application.ref}</p>
               </div>
-              <h2 className="display-serif mt-4 text-3xl font-semibold text-white">{application.learnerName}</h2>
-              <p className="mt-2 text-sm text-white/80">{application.parentName} · {application.ref}</p>
+              <div className="rounded-3xl border border-[#e7d39a]/25 bg-[linear-gradient(180deg,rgba(17,73,47,0.99)_0%,rgba(8,58,36,0.99)_100%)] p-4 text-sm text-white shadow-[0_18px_45px_rgba(184,137,7,0.10)] ring-1 ring-white/5">
+                <div className="text-xs uppercase tracking-[0.16em] text-[#e8dcae]">For reviewers</div>
+                <div className="mt-2 text-lg font-semibold text-white">
+                  {counts.blocking > 0 ? 'Needs immediate repair' : counts.reviewOnly > 0 ? 'Needs reviewer judgement' : 'Ready for progression'}
+                </div>
+                <div className="mt-3 text-sm leading-6 text-white/90">{nextAction}</div>
+                <div className="mt-3 rounded-2xl border border-white/12 bg-white/8 px-3 py-2 text-xs leading-5 text-white/78">
+                  The page should make the next decision obvious: fix, review, or move forward. Everything else is supporting detail.
+                </div>
+              </div>
             </div>
-            <div className="rounded-3xl border border-white/18 bg-white/12 p-4 text-sm text-white shadow-[0_18px_45px_rgba(184,137,7,0.10)] backdrop-blur-md">
-              <div className="text-xs uppercase tracking-[0.16em] text-white/75">Grade</div>
-              <div className="mt-2 text-2xl font-semibold text-white">{application.grade}</div>
-              <div className="mt-3 text-sm leading-6 text-white/90">Review-ready profile for the admissions team.</div>
+            <div className="mt-5 grid gap-2.5 sm:grid-cols-4">
+              <div className="rounded-2xl border border-[#e7d39a]/25 bg-[#11492f] px-4 py-3 shadow-sm">
+                <div className="text-[11px] uppercase tracking-[0.18em] text-[#e8dcae]">Grade</div>
+                <div className="mt-2 text-base font-semibold text-white">{application.grade}</div>
+                <div className="mt-1 text-xs text-white/72">{application.schoolYear}</div>
+              </div>
+              <div className="rounded-2xl border border-[#e7d39a]/25 bg-[#11492f] px-4 py-3 shadow-sm">
+                <div className="text-[11px] uppercase tracking-[0.18em] text-[#e8dcae]">Blocking</div>
+                <div className="mt-2 text-base font-semibold text-white">{counts.blocking}</div>
+                <div className="mt-1 text-xs text-white/72">Must be cleared first</div>
+              </div>
+              <div className="rounded-2xl border border-[#e7d39a]/25 bg-[#11492f] px-4 py-3 shadow-sm">
+                <div className="text-[11px] uppercase tracking-[0.18em] text-[#e8dcae]">Flagged</div>
+                <div className="mt-2 text-base font-semibold text-white">{counts.reviewOnly}</div>
+                <div className="mt-1 text-xs text-white/72">Waiting on staff decision</div>
+              </div>
+              <div className="rounded-2xl border border-[#e7d39a]/25 bg-[#11492f] px-4 py-3 shadow-sm">
+                <div className="text-[11px] uppercase tracking-[0.18em] text-[#e8dcae]">Ready</div>
+                <div className="mt-2 text-base font-semibold text-white">{counts.ready}</div>
+                <div className="mt-1 text-xs text-white/72">Usable in current review</div>
+              </div>
             </div>
-          </div>
-          <div className="mt-5 grid gap-2.5 sm:grid-cols-3">
-            <div className="rounded-2xl border border-white/15 bg-white/12 px-4 py-3 shadow-sm backdrop-blur-md">
-              <div className="text-xs uppercase tracking-[0.16em] text-white/65">Application form</div>
-              <div className="mt-2 text-sm font-semibold text-white">Learner record summary</div>
-            </div>
-            <div className="rounded-2xl border border-white/15 bg-white/12 px-4 py-3 shadow-sm backdrop-blur-md">
-              <div className="text-xs uppercase tracking-[0.16em] text-white/65">Review focus</div>
-              <div className="mt-2 text-sm font-semibold text-white">{counts.blocking > 0 ? 'Resolve blockers' : 'Confirm readiness'}</div>
-            </div>
-            <div className="rounded-2xl border border-white/15 bg-white/12 px-4 py-3 shadow-sm backdrop-blur-md">
-              <div className="text-xs uppercase tracking-[0.16em] text-white/65">Next action</div>
-              <div className="mt-2 text-sm font-semibold text-white">School review and document check</div>
-            </div>
-          </div>
           </div>
         </SurfaceCard>
 
@@ -88,14 +102,17 @@ export default async function DevApplicationDetailPage({
             <div className="rounded-2xl border border-accent-100 bg-[#fffdf8] p-3.5 shadow-sm">
               <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Parent</div>
               <div className="mt-2 text-sm font-semibold text-slate-950">{application.parentName}</div>
+              <div className="mt-1 text-xs text-slate-600">{application.parentEmail}</div>
             </div>
             <div className="rounded-2xl border border-accent-100 bg-[#fffdf8] p-3.5 shadow-sm">
-              <div className="text-xs uppercase tracking-[0.16em] text-slate-700">School year</div>
-              <div className="mt-2 text-sm font-semibold text-slate-950">{application.schoolYear}</div>
+              <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Previous school</div>
+              <div className="mt-2 text-sm font-semibold text-slate-950">{application.previousSchool}</div>
+              <div className="mt-1 text-xs text-slate-600">{application.schoolYear}</div>
             </div>
             <div className="rounded-2xl border border-accent-100 bg-[#fffdf8] p-3.5 shadow-sm">
               <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Reviewer</div>
               <div className="mt-2 text-sm font-semibold text-slate-950">{application.assignedTo}</div>
+              <div className="mt-1 text-xs text-slate-600">{application.submittedAt} submitted</div>
             </div>
           </div>
           <div className={`mt-3.5 rounded-2xl border p-3.5 text-sm leading-6 ${
@@ -105,8 +122,8 @@ export default async function DevApplicationDetailPage({
                 ? 'border-amber-200 bg-amber-50 text-amber-900'
                 : 'border-emerald-200 bg-emerald-50 text-emerald-900'
           }`}>
-            <div className="text-xs uppercase tracking-[0.16em] opacity-80">Next step</div>
-            <div className="mt-1">{getPreviewNextAction(application)}</div>
+            <div className="text-xs uppercase tracking-[0.16em] opacity-80">Recommended move</div>
+            <div className="mt-1">{nextAction}</div>
           </div>
         </SurfaceCard>
       </div>
@@ -157,7 +174,10 @@ export default async function DevApplicationDetailPage({
                 </div>
               </div>
             </div>
-            <p className="mt-3 text-sm leading-6 text-slate-700">{getPreviewNextAction(application)}</p>
+            <p className="mt-3 text-sm leading-6 text-slate-700">{nextAction}</p>
+            <div className="mt-3 rounded-2xl border border-slate-200 bg-[#fbf8f0] px-3 py-2 text-sm leading-6 text-slate-700">
+              This record view should support a quick decision. Status comes first, evidence sits below, and the action should be visible without hunting.
+            </div>
           </div>
 
           <SectionHeading
@@ -194,8 +214,8 @@ export default async function DevApplicationDetailPage({
         </SurfaceCard>
 
         <aside className="space-y-5">
-          <SurfaceCard className="p-5">
-            <h2 className="text-lg font-semibold text-slate-950">Review notes</h2>
+          <SurfaceCard className="bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(250,247,240,0.98)_100%)] p-5">
+            <h2 className="text-lg font-semibold text-slate-950">Decision notes</h2>
             <p className="mt-2.5 text-sm leading-6 text-slate-700">{application.note}</p>
             {application.missingItems.length > 0 ? (
               <div className="mt-3.5 rounded-2xl border border-accent-200 bg-accent-50 p-3.5">
@@ -203,9 +223,12 @@ export default async function DevApplicationDetailPage({
                 <div className="mt-2 text-sm text-[#3a2b07]">{application.missingItems.join(' · ')}</div>
               </div>
             ) : null}
+            <div className="mt-3.5 rounded-2xl border border-primary-100 bg-[#fffdf8] p-3.5 text-sm leading-6 text-slate-700">
+              Keep this panel focused on the human decision, not on repeating the same status wording from above.
+            </div>
           </SurfaceCard>
 
-          <SurfaceCard className="p-5">
+          <SurfaceCard className="bg-[linear-gradient(180deg,rgba(255,251,243,0.99)_0%,rgba(250,246,236,0.98)_100%)] p-5">
             <h2 className="text-lg font-semibold text-slate-950">Triage actions</h2>
             <div className="mt-3.5 space-y-2.5 text-sm">
               <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-rose-800">
@@ -226,12 +249,15 @@ export default async function DevApplicationDetailPage({
               </div>
               <div className="rounded-2xl border border-primary-100 bg-[#fffdf8] px-4 py-3 text-slate-700">
                 <div className="font-semibold text-slate-950">Recommended next step</div>
-                <div className="mt-1 text-slate-700">{getPreviewNextAction(application)}</div>
+                <div className="mt-1 text-slate-700">{nextAction}</div>
               </div>
+            </div>
+            <div className="mt-3.5 rounded-2xl border border-slate-200 bg-[#fbf8f0] px-4 py-3 text-sm leading-6 text-slate-700">
+              The triage panel should answer one question fast: what stops the file, and what can move right now?
             </div>
           </SurfaceCard>
 
-          <SurfaceCard className="p-5">
+          <SurfaceCard className="bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(249,247,240,0.98)_100%)] p-5">
             <h2 className="text-lg font-semibold text-slate-950">Activity</h2>
             <div className="mt-3.5 space-y-2.5">
               {application.timeline.map((entry) => (
@@ -252,6 +278,9 @@ export default async function DevApplicationDetailPage({
                   <div className="mt-1 text-sm text-slate-700">{entry.detail}</div>
                 </div>
               ))}
+            </div>
+            <div className="mt-3.5 rounded-2xl border border-slate-200 bg-[#fbf8f0] px-4 py-3 text-sm leading-6 text-slate-700">
+              Recent activity is there for context, but the action panels above should stay more prominent than the log.
             </div>
           </SurfaceCard>
         </aside>

@@ -20,7 +20,7 @@
     ],
     "paths": {
       "@/*": ["./*"],
-      "@eunice-shared/*": ["../shared/*"]
+      "@eunice-shared/*": ["./eunice-shared/*"]
     }
   },
   "include": [

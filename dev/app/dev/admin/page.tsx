@@ -60,6 +60,7 @@ export default function DevAdminPage() {
   const featured = previewApplications.find((app) => app.id === selectedAppId) ?? previewApplications[0];
   const reviewState = getPreviewReviewState(featured);
   const counts = getPreviewDocumentCounts(featured);
+  const nextAction = getPreviewNextAction(featured);
   const laneCounts = previewApplications.reduce(
     (acc, app) => {
       acc[getAdminQueueLane(app)] += 1;
@@ -128,8 +129,8 @@ export default function DevAdminPage() {
             <div className="grid gap-3 px-5 py-4 xl:grid-cols-[minmax(0,1.42fr)_minmax(340px,0.58fr)] 2xl:grid-cols-[minmax(0,1.55fr)_minmax(380px,0.45fr)]">
               <div className="space-y-3.5">
                 <div className="grid gap-3 sm:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-                  <div className="rounded-[24px] border border-white/15 bg-[#0c4b2b] p-4 shadow-[0_14px_32px_rgba(0,0,0,0.14)]">
-                    <div className="text-xs uppercase tracking-[0.18em] text-white/70">Selected application</div>
+                  <div className="rounded-[24px] border border-[#e7d39a]/25 bg-[linear-gradient(180deg,rgba(12,75,43,0.98)_0%,rgba(7,56,32,0.98)_100%)] p-4 shadow-[0_16px_34px_rgba(0,0,0,0.16)] ring-1 ring-white/6">
+                    <div className="text-xs uppercase tracking-[0.18em] text-[#e8dcae]">Selected application</div>
                     <div className="mt-3 flex flex-wrap items-center gap-3">
                       <div className="flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-white/95 text-[#073820]">
                         <span className="text-lg font-semibold">{featured.learnerName.charAt(0)}</span>
@@ -142,11 +143,24 @@ export default function DevAdminPage() {
                         </div>
                       </div>
                     </div>
+                    <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                      <div className="rounded-2xl border border-white/12 bg-white/8 px-3 py-3">
+                        <div className="text-[11px] uppercase tracking-[0.18em] text-white/68">Parent contact</div>
+                        <div className="mt-1 text-sm font-medium text-white">{featured.parentName}</div>
+                        <div className="mt-1 text-xs text-white/72">{featured.parentEmail}</div>
+                      </div>
+                      <div className="rounded-2xl border border-white/12 bg-white/8 px-3 py-3">
+                        <div className="text-[11px] uppercase tracking-[0.18em] text-white/68">Immediate focus</div>
+                        <div className="mt-1 text-sm font-medium text-white">{counts.blocking > 0 ? 'Replace blocking document' : counts.reviewOnly > 0 ? 'Clear flagged review item' : 'Prepare decision step'}</div>
+                        <div className="mt-1 text-xs text-white/72">{nextAction}</div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="grid gap-2.5">
-                    <MetricCard label="Assigned reviewer" value={featured.assignedTo} />
-                    <MetricCard label="Grade applying for" value={featured.grade} />
-                    <MetricCard label="Application submitted" value={featured.submittedAt} />
+                  <div className="grid gap-2.5 sm:grid-cols-2">
+                    <MetricCard label="Assigned reviewer" value={featured.assignedTo} detail="Current record owner" />
+                    <MetricCard label="Grade applying for" value={featured.grade} detail={featured.schoolYear} />
+                    <MetricCard label="Application submitted" value={featured.submittedAt} detail="Initial handoff into queue" />
+                    <MetricCard label="Document health" value={`${counts.ready}/${counts.total} ready`} detail={counts.blocking > 0 ? `${counts.blocking} blocking issue(s)` : counts.reviewOnly > 0 ? `${counts.reviewOnly} flagged for review` : 'No blockers on file'} />
                   </div>
                 </div>
 
@@ -158,20 +172,34 @@ export default function DevAdminPage() {
               </div>
 
               <div className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-1">
-                <div className="rounded-[24px] border border-white/15 bg-white/12 p-3.5 backdrop-blur-md">
-                  <div className="text-xs uppercase tracking-[0.16em] text-white/70">Queue health</div>
+                <div className="rounded-[24px] border border-[#e7d39a]/25 bg-[linear-gradient(180deg,rgba(17,73,47,0.99)_0%,rgba(9,62,37,0.99)_100%)] p-3.5 shadow-[0_14px_30px_rgba(0,0,0,0.16)] ring-1 ring-white/6">
+                  <div className="text-xs uppercase tracking-[0.16em] text-[#e8dcae]">For reviewers</div>
                   <div className="mt-2.5 grid gap-2">
                     {(['blocking', 'review', 'ready', 'decision'] as const).map((key) => (
-                      <div key={key} className="flex items-center justify-between rounded-xl border border-white/10 bg-white/10 px-3 py-2 text-sm text-white">
-                        <span>{laneMeta[key].label}</span>
-                        <span className="font-semibold">{laneCounts[key]}</span>
+                      <div
+                        key={key}
+                        className="flex items-center justify-between rounded-xl border border-white/12 bg-white/8 px-3 py-2 text-sm text-white"
+                      >
+                        <div>
+                          <div className="font-medium">{laneMeta[key].label}</div>
+                          <div className="text-[11px] text-white/64">{laneMeta[key].helper}</div>
+                        </div>
+                        <span className="rounded-full border border-white/18 bg-white px-2.5 py-1 text-xs font-semibold text-slate-900">{laneCounts[key]}</span>
                       </div>
                     ))}
                   </div>
+                  <div className="mt-3 rounded-2xl border border-white/12 bg-white/8 px-3 py-2 text-xs leading-5 text-white/74">
+                    Read this top to bottom: blockers first, then reviewed items, then ready-to-move records. It is a quick triage map, not a full report.
+                  </div>
                 </div>
-                <div className="rounded-[24px] border border-white/15 bg-white/12 p-3.5 backdrop-blur-md">
-                  <div className="text-xs uppercase tracking-[0.16em] text-white/70">Next action</div>
-                  <p className="mt-2 text-sm leading-6 text-white/90">{getPreviewNextAction(featured)}</p>
+                <div className="rounded-[24px] border border-amber-200/35 bg-[linear-gradient(180deg,rgba(255,243,207,0.98)_0%,rgba(255,237,184,0.98)_100%)] p-3.5 text-slate-950 shadow-[0_14px_30px_rgba(0,0,0,0.10)]">
+                  <div className="text-xs uppercase tracking-[0.16em] text-amber-900/70">Next action</div>
+                  <p className="mt-2 text-sm leading-6 text-slate-800">{nextAction}</p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <span className="rounded-full border border-amber-300 bg-white px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-amber-900">
+                      {counts.blocking > 0 ? 'Clear blocker first' : counts.reviewOnly > 0 ? 'Review flagged document' : 'Advance decision'}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -230,16 +258,19 @@ export default function DevAdminPage() {
             </SurfaceCard>
 
             <div className="space-y-4">
-              <SurfaceCard className="border border-slate-100 bg-white/92 p-4">
+              <SurfaceCard className="border border-slate-100 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(249,247,240,0.98)_100%)] p-4">
                 <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Risk indicators</div>
                 <div className="mt-3.5 space-y-2.5 text-sm">
                   <RiskRow label="Incomplete documents" value={counts.blocking} tone="rose" />
                   <RiskRow label="Document issues" value={counts.reviewOnly} tone="amber" />
                   <RiskRow label="Ready for decision" value={counts.ready} tone="emerald" />
                 </div>
+                <div className="mt-4 rounded-2xl border border-slate-200 bg-[#fbf8f0] px-3 py-3 text-sm leading-6 text-slate-700">
+                  The status area should tell the story instantly, not leave blank space where the next decision should be.
+                </div>
               </SurfaceCard>
 
-              <SurfaceCard className="border border-slate-100 bg-white/92 p-4">
+              <SurfaceCard className="border border-slate-100 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(249,247,240,0.98)_100%)] p-4">
                 <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Document checklist</div>
                 <div className="mt-3.5 space-y-2.5">
                   {featured.documents.map((document) => (
@@ -259,7 +290,7 @@ export default function DevAdminPage() {
                 </div>
               </SurfaceCard>
 
-              <SurfaceCard className="border border-amber-200 bg-amber-50/80 p-4">
+              <SurfaceCard className="border border-amber-200 bg-[linear-gradient(180deg,rgba(255,250,240,0.99)_0%,rgba(255,245,220,0.98)_100%)] p-4">
                 <div className="text-xs uppercase tracking-[0.16em] text-amber-800">Recommended next action</div>
                 <p className="mt-2.5 text-sm leading-6 text-slate-700">{getPreviewNextAction(featured)}</p>
                 <div className="mt-3.5 flex gap-3">

@@ -165,6 +165,12 @@ export default function DevParentPage() {
   const readinessTone =
     workflow.blockers.length > 0 ? 'rose' : workflow.reviewOnlyWarnings.length > 0 ? 'amber' : 'emerald';
   const stepAction = stepActionMeta[activeTab];
+  const momentumLabel =
+    workflow.blockers.length > 0
+      ? 'Resolve blockers'
+      : workflow.reviewOnlyWarnings.length > 0
+        ? 'Finish remaining checks'
+        : 'Ready to submit';
   const advanceStep = () => {
     const nextStep = stepOrder[Math.min(stepOrder.length - 1, activeIndex + 1)];
     setActiveTab(nextStep);
@@ -239,6 +245,41 @@ export default function DevParentPage() {
 
             <div className="grid gap-3 px-5 py-4 xl:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.55fr)] 2xl:grid-cols-[minmax(0,1.56fr)_minmax(360px,0.44fr)]">
               <div className="space-y-4">
+                <div className="grid gap-3 sm:grid-cols-3">
+                  <div className="rounded-[24px] border border-white/12 bg-white/8 p-4 shadow-[0_14px_28px_rgba(0,0,0,0.10)]">
+                    <div className="text-[11px] uppercase tracking-[0.18em] text-[#e8dcae]">Journey status</div>
+                    <div className="mt-2 text-base font-semibold text-white">{momentumLabel}</div>
+                    <p className="mt-1 text-sm leading-6 text-white/72">
+                      The page should always tell parents whether they are preparing, progressing, or ready to send.
+                    </p>
+                  </div>
+                  <SurfaceCard className={`border p-4 ${readinessTone === 'rose' ? 'border-rose-200 bg-rose-50/90' : readinessTone === 'amber' ? 'border-amber-200 bg-amber-50/90' : 'border-emerald-200 bg-emerald-50/90'}`}>
+                    <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Progress</div>
+                    <div className="mt-3 flex items-center gap-4">
+                      <div className={`flex h-16 w-16 items-center justify-center rounded-full border bg-white text-lg font-semibold ${
+                        readinessTone === 'rose'
+                          ? 'border-rose-200 text-rose-800'
+                          : readinessTone === 'amber'
+                            ? 'border-amber-200 text-amber-900'
+                            : 'border-emerald-200 text-emerald-800'
+                      }`}>{progress}%</div>
+                      <div className="space-y-1 text-sm leading-6 text-slate-600">
+                        <p className="font-medium text-slate-800">{workflow.canSubmit ? 'Ready to review and send.' : 'Work through the current step before moving on.'}</p>
+                        <p className="text-slate-700">
+                          {workflow.readyRequiredDocuments} of {workflow.totalRequiredDocuments} required documents are ready.
+                        </p>
+                      </div>
+                    </div>
+                  </SurfaceCard>
+                  <div className="rounded-[24px] border border-white/12 bg-white/8 p-4 shadow-[0_14px_28px_rgba(0,0,0,0.10)]">
+                    <div className="text-[11px] uppercase tracking-[0.18em] text-[#e8dcae]">Next step</div>
+                    <div className="mt-2 text-base font-semibold text-white">{stepAction.ctaLabel}</div>
+                    <p className="mt-1 text-sm leading-6 text-white/72">
+                      Keep one task in view, complete it, then move on with confidence.
+                    </p>
+                  </div>
+                </div>
+
                 <ParentWorkflowStepper
                   activeIndex={activeIndex}
                   activeTab={activeTab}
@@ -248,54 +289,26 @@ export default function DevParentPage() {
                 />
 
                 <div className="rounded-[28px] border border-white/12 bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(251,248,240,0.98)_100%)] p-4 text-slate-950 shadow-[0_18px_50px_rgba(11,20,12,0.10)]">
-                  <div className="mb-4 grid gap-3 xl:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)]">
+                <div className="mb-4 grid gap-3 xl:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)]">
                   <div className="rounded-[24px] border border-primary-100 bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(255,248,231,0.95)_100%)] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.05)]">
                     <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Current step</div>
                     <div className="mt-2 text-lg font-semibold text-slate-950">{stepHighlights[activeTab].title}</div>
                     <div className="mt-1 text-sm leading-6 text-slate-600">{stepHighlights[activeTab].detail}</div>
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        {stepOrder.map((step, index) => (
-                          <span
-                            key={step}
-                            className={`rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] ${
-                              step === activeTab
-                                ? 'bg-primary-900 text-white'
-                                : index < activeIndex
-                                  ? 'bg-primary-50 text-primary-800'
-                                  : 'bg-slate-100 text-slate-600'
-                            }`}
-                          >
-                            {stepMeta[step].label}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    <div className={`rounded-[24px] border p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)] ${
-                      readinessTone === 'rose'
-                        ? 'border-rose-200 bg-rose-50'
-                        : readinessTone === 'amber'
-                          ? 'border-amber-200 bg-amber-50'
-                          : 'border-emerald-200 bg-emerald-50'
-                    }`}>
-                      <div className="text-xs uppercase tracking-[0.18em] text-primary-800/70">Progress</div>
-                      <div className="mt-3 flex items-center gap-4">
-                        <div className={`flex h-16 w-16 items-center justify-center rounded-full border bg-white text-lg font-semibold ${
-                          readinessTone === 'rose'
-                            ? 'border-rose-200 text-rose-800'
-                            : readinessTone === 'amber'
-                              ? 'border-amber-200 text-amber-900'
-                              : 'border-emerald-200 text-emerald-800'
-                        }`}>{progress}%</div>
-                        <div className="space-y-1 text-sm leading-6 text-slate-600">
-                          <p className="font-medium text-slate-800">{workflow.canSubmit ? 'Ready to review and send.' : 'Work through the current step before moving on.'}</p>
-                          <p className="text-slate-700">
-                            {workflow.readyRequiredDocuments} of {workflow.totalRequiredDocuments} required documents are ready.
-                          </p>
-                        </div>
-                      </div>
-                      <div className="mt-3 rounded-2xl border border-white/70 bg-white/75 px-3 py-2 text-xs leading-5 text-slate-700">
-                        This panel keeps the next decision visible so you always know whether to continue, upload, or review.
-                      </div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {stepOrder.map((step, index) => (
+                        <span
+                          key={step}
+                          className={`rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] ${
+                            step === activeTab
+                              ? 'bg-primary-900 text-white'
+                              : index < activeIndex
+                                ? 'bg-primary-50 text-primary-800'
+                                : 'bg-slate-100 text-slate-600'
+                          }`}
+                        >
+                          {stepMeta[step].label}
+                        </span>
+                      ))}
                     </div>
                   </div>
 
@@ -481,6 +494,9 @@ export default function DevParentPage() {
                       <div className="text-sm font-semibold text-slate-950">Better submissions</div>
                       <div className="mt-1 text-sm leading-6 text-slate-600">Clear guidance helps the school receive cleaner, more complete information.</div>
                     </div>
+                  </div>
+                  <div className="mt-4 rounded-2xl border border-primary-100 bg-white px-4 py-3 text-sm leading-6 text-slate-700">
+                    The cue cards should now read like useful prompts that turn into action, not just extra explanation.
                   </div>
                 </div>
               </div>

@@ -65,6 +65,9 @@ export default async function DevApplicationDetailPage({
                 </div>
                 <div className="mt-3 text-sm leading-6 text-white/90">{nextAction}</div>
                 <div className="mt-3 rounded-2xl border border-white/12 bg-white/8 px-3 py-2 text-xs leading-5 text-white/78">
+                  Decision first: identify the blocker, review the evidence, then move the record forward.
+                </div>
+                <div className="mt-3 rounded-2xl border border-white/12 bg-white/8 px-3 py-2 text-xs leading-5 text-white/78">
                   The page should make the next decision obvious: fix, review, or move forward. Everything else is supporting detail.
                 </div>
               </div>
@@ -130,6 +133,19 @@ export default async function DevApplicationDetailPage({
 
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
         <SurfaceCard className="p-5">
+          <div className={`mb-4 rounded-2xl border px-4 py-3 text-sm leading-6 ${
+            readinessTone === 'rose'
+              ? 'border-rose-200 bg-rose-50 text-rose-800'
+              : readinessTone === 'amber'
+                ? 'border-amber-200 bg-amber-50 text-amber-900'
+                : 'border-emerald-200 bg-emerald-50 text-emerald-900'
+          }`}>
+            <div className="text-xs uppercase tracking-[0.16em] opacity-80">Decision lens</div>
+            <div className="mt-1 font-medium">
+              {counts.blocking > 0 ? 'Fix blockers before anything else.' : counts.reviewOnly > 0 ? 'Read the flagged items and make a call.' : 'The file is ready to move forward.'}
+            </div>
+          </div>
+
           <div className="mb-5 grid gap-3 md:grid-cols-3">
             <div className="rounded-2xl border border-accent-100 bg-[#fffdf8] p-3.5">
               <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Parent</div>
@@ -182,7 +198,7 @@ export default async function DevApplicationDetailPage({
 
           <SectionHeading
             title="Document checklist"
-            description="This view should support fast verification decisions without overwhelming staff."
+            description="This view supports fast verification decisions without overwhelming staff."
           />
           <div className="space-y-2.5">
             {application.documents.map((document) => (
@@ -230,6 +246,9 @@ export default async function DevApplicationDetailPage({
 
           <SurfaceCard className="bg-[linear-gradient(180deg,rgba(255,251,243,0.99)_0%,rgba(250,246,236,0.98)_100%)] p-5">
             <h2 className="text-lg font-semibold text-slate-950">Triage actions</h2>
+            <div className="mt-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm leading-6 text-slate-700">
+              The record should feel like a working case file: status at the top, evidence in the middle, and actions at the bottom.
+            </div>
             <div className="mt-3.5 space-y-2.5 text-sm">
               <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-rose-800">
                 <div className="font-semibold">{blockingDocuments.length} blocking document{blockingDocuments.length === 1 ? '' : 's'}</div>

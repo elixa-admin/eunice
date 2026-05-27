@@ -61,6 +61,8 @@ export default function DevAdminPage() {
   const reviewState = getPreviewReviewState(featured);
   const counts = getPreviewDocumentCounts(featured);
   const nextAction = getPreviewNextAction(featured);
+  const queuePriority =
+    counts.blocking > 0 ? 'Clear blockers first' : counts.reviewOnly > 0 ? 'Resolve reviewer items next' : 'Move to decision';
   const laneCounts = previewApplications.reduce(
     (acc, app) => {
       acc[getAdminQueueLane(app)] += 1;
@@ -128,6 +130,22 @@ export default function DevAdminPage() {
             </div>
             <div className="grid gap-3 px-5 py-4 xl:grid-cols-[minmax(0,1.42fr)_minmax(340px,0.58fr)] 2xl:grid-cols-[minmax(0,1.55fr)_minmax(380px,0.45fr)]">
               <div className="space-y-3.5">
+                <div className="grid gap-3 sm:grid-cols-3">
+                  <div className="rounded-[24px] border border-white/12 bg-white/8 p-4 shadow-[0_14px_28px_rgba(0,0,0,0.10)]">
+                    <div className="text-[11px] uppercase tracking-[0.18em] text-[#e8dcae]">Triage rule</div>
+                    <div className="mt-2 text-base font-semibold text-white">Blockers, then review, then ready</div>
+                    <p className="mt-1 text-sm leading-6 text-white/72">
+                      The queue should read from most urgent to least urgent without needing a second pass.
+                    </p>
+                  </div>
+                  <MetricCard label="Queue priority" value={queuePriority} detail="What the reviewer should do next" />
+                  <MetricCard
+                    label="Document health"
+                    value={`${counts.ready}/${counts.total} ready`}
+                    detail={counts.blocking > 0 ? `${counts.blocking} blocking issue(s)` : counts.reviewOnly > 0 ? `${counts.reviewOnly} items need a decision` : 'No blockers on file'}
+                  />
+                </div>
+
                 <div className="grid gap-3 sm:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
                   <div className="rounded-[24px] border border-[#e7d39a]/25 bg-[linear-gradient(180deg,rgba(12,75,43,0.98)_0%,rgba(7,56,32,0.98)_100%)] p-4 shadow-[0_16px_34px_rgba(0,0,0,0.16)] ring-1 ring-white/6">
                     <div className="text-xs uppercase tracking-[0.18em] text-[#e8dcae]">Selected application</div>
@@ -266,12 +284,13 @@ export default function DevAdminPage() {
                   <RiskRow label="Ready for decision" value={counts.ready} tone="emerald" />
                 </div>
                 <div className="mt-4 rounded-2xl border border-slate-200 bg-[#fbf8f0] px-3 py-3 text-sm leading-6 text-slate-700">
-                  The status area should tell the story instantly, not leave blank space where the next decision should be.
+                  {queuePriority}. Use this panel as the quick read, then open the record if a decision needs evidence.
                 </div>
               </SurfaceCard>
 
               <SurfaceCard className="border border-slate-100 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(249,247,240,0.98)_100%)] p-4">
                 <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Document checklist</div>
+                <div className="mt-1 text-sm leading-6 text-slate-600">Group the evidence by status so the reviewer can see what is safe, what is blocked, and what needs judgement.</div>
                 <div className="mt-3.5 space-y-2.5">
                   {featured.documents.map((document) => (
                     <div key={`${document.type}-${document.uploadedAt ?? 'missing'}`} className="flex items-center justify-between rounded-2xl border border-slate-200 bg-[#fbf8f0] px-4 py-3">
@@ -292,7 +311,10 @@ export default function DevAdminPage() {
 
               <SurfaceCard className="border border-amber-200 bg-[linear-gradient(180deg,rgba(255,250,240,0.99)_0%,rgba(255,245,220,0.98)_100%)] p-4">
                 <div className="text-xs uppercase tracking-[0.16em] text-amber-800">Recommended next action</div>
-                <p className="mt-2.5 text-sm leading-6 text-slate-700">{getPreviewNextAction(featured)}</p>
+                <p className="mt-2.5 text-sm leading-6 text-slate-700">{nextAction}</p>
+                <div className="mt-3 rounded-2xl border border-amber-200 bg-white/80 px-3 py-3 text-sm leading-6 text-slate-700">
+                  The record should feel like a decision workspace, not a static report.
+                </div>
                 <div className="mt-3.5 flex gap-3">
                   <Link href={`/dev/application/${featured.id}`} className="inline-flex items-center rounded-xl bg-primary-900 px-4 py-2.5 text-sm font-semibold text-white">
                     Open record

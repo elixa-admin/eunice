@@ -1,4 +1,4 @@
-# Compact Handoff — Sprint R Delivered
+# Compact Handoff — Sprint S/T/U Delivered
 
 ## Date
 2026-05-27
@@ -21,6 +21,10 @@
   - Sprint S: parent capture and calm upload flow
   - Sprint T: admin decision acceleration
   - Sprint U: lightweight automation and school foundation
+- Sprint S/T/U implementation is now pushed at `f14f3a5`:
+  - parent POPIA consent, WebP compression, capture cue, and intake metadata
+  - admin speed triage mode and zone tags
+  - shared notification-plan helpers for later workflow wiring
 
 ## What Landed Most Recently
 1. Parent calm-flow and document grouping in the real and preview parent surfaces.
@@ -51,7 +55,7 @@
 - [docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md)
 
 ## Next Sprint
-Start with Sprint S. The parent experience still has the biggest leverage for lowering friction, and the roadmap now sequences the next three sprints as parent calm flow, admin decision acceleration, and lightweight automation/foundation work.
+Review the Sprint S/T/U preview first. The next build phase should tighten anything that feels visually heavy, then move into real status-transition wiring and lightweight `n8n` readiness only where the workflow is already clear.
 
 ## Notes
 - Keep the parent side calm and the admin side operationally denser.

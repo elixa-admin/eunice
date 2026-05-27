@@ -17,7 +17,7 @@ Keep Eunice moving toward a lightweight admissions operating system by sequencin
 
 ## Sprint S — Parent Capture and Calm Upload Flow
 
-**Status:** Planned
+**Status:** Implemented
 
 **Goal**
 
@@ -41,7 +41,7 @@ Reduce parent-side friction by making capture, consent, and upload feel calmer a
 
 ## Sprint T — Admin Decision Acceleration
 
-**Status:** Planned
+**Status:** Implemented
 
 **Goal**
 
@@ -62,7 +62,7 @@ Make the admin workspace faster to scan and easier to act on by increasing decis
 
 ## Sprint U — Lightweight Automation and School Foundation
 
-**Status:** Planned
+**Status:** Implemented
 
 **Goal**
 
@@ -83,9 +83,9 @@ Make the core workflow operationally complete with lightweight automation hooks 
 
 ## Recommended Order
 
-1. Start Sprint S by making parent capture and upload feel calmer on mobile.
-2. Move into Sprint T once the parent flow feels less crowded and more reassuring.
-3. Use Sprint U to make the workflow operationally complete without adding heavy infrastructure.
+1. Review the Sprint S/T/U preview in browser, focusing on parent consent/capture, admin speed triage, and notification plan consistency.
+2. Tighten anything that feels too heavy or visually noisy before adding deeper workflow logic.
+3. Move into the next phase only after the parent and admin surfaces still feel calm and usable with the new controls.
 
 ## Non-Goals For This Window
 

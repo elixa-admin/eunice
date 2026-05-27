@@ -219,18 +219,18 @@ export default function DevParentPage() {
         </aside>
 
         <main className="min-w-0 space-y-3">
-          <SurfaceCard className="overflow-hidden border border-[#0f3c28]/35 bg-[#073820] p-0 text-white shadow-[0_22px_58px_rgba(11,20,12,0.16)]">
+          <SurfaceCard className="overflow-hidden border border-primary-100 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(250,247,240,0.98)_100%)] p-0 text-slate-950 shadow-[0_22px_58px_rgba(11,20,12,0.10)]">
             <div className="h-1 w-full bg-[#b88907]" />
-            <div className="border-b border-white/12 px-5 py-3">
+            <div className="border-b border-slate-200 px-5 py-3">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <div className="text-[10px] uppercase tracking-[0.18em] text-white/70">Step {stepMeta[activeTab].label}</div>
-                  <h2 className="mt-2 text-3xl font-semibold text-white">{stepMeta[activeTab].title}</h2>
-                  <p className="mt-1 text-sm text-white/80">{stepMeta[activeTab].subtitle}</p>
+                  <div className="text-[10px] uppercase tracking-[0.18em] text-slate-500">Step {stepMeta[activeTab].label}</div>
+                  <h2 className="mt-2 text-3xl font-semibold text-slate-950">{stepMeta[activeTab].title}</h2>
+                  <p className="mt-1 text-sm text-slate-600">{stepMeta[activeTab].subtitle}</p>
                 </div>
                 <div className="flex flex-col items-end gap-2">
-                  <div className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white">Estimated time: 25-35 minutes</div>
-                  <button className="inline-flex items-center rounded-full border border-white/25 bg-white/10 px-4 py-2 text-sm font-semibold text-white">
+                  <div className="rounded-full border border-primary-100 bg-white px-4 py-2 text-sm text-slate-700">Estimated time: 25-35 minutes</div>
+                  <button className="inline-flex items-center rounded-full border border-primary-100 bg-white px-4 py-2 text-sm font-semibold text-slate-700">
                     Save & exit
                   </button>
                 </div>
@@ -352,9 +352,9 @@ export default function DevParentPage() {
                   </div>
                 </div>
 
-                <div className="rounded-[24px] border border-slate-200 bg-[#fffdf8] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
-                  <div className="text-xs uppercase tracking-[0.16em] text-slate-700">Stay on track</div>
-                  <div className="mt-2 text-sm leading-6 text-slate-700">
+                <details className="rounded-[24px] border border-slate-200 bg-[#fffdf8] p-4 shadow-[0_10px_26px_rgba(11,20,12,0.04)]">
+                  <summary className="cursor-pointer list-none text-xs uppercase tracking-[0.16em] text-slate-700">Stay on track</summary>
+                  <div className="mt-3 text-sm leading-6 text-slate-700">
                     {activeTab === 'checklist' && 'This first screen helps you understand the journey before you begin. We keep it short, clear, and easy to return to.'}
                     {activeTab === 'learner' && 'Capture the learner’s details exactly as they appear on official records.'}
                     {activeTab === 'household' && 'Add the parent or guardian details that admissions staff will use to contact you.'}
@@ -392,7 +392,7 @@ export default function DevParentPage() {
                       {stepAction.ctaLabel}
                     </button>
                   </div>
-                </div>
+                </details>
               </div>
 
               <ParentWorkflowSidebar

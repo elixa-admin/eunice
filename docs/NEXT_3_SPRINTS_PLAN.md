@@ -89,7 +89,7 @@ Make the core workflow operationally complete with lightweight automation hooks 
 
 ## Sprint W - Parent Portal Confidence Lift
 
-**Status:** Planned
+**Status:** In progress
 
 **Goal**
 
@@ -109,7 +109,7 @@ Make the parent experience feel calmer, safer, and more obviously guided on mobi
 
 ## Sprint X - Admin Portal Decision Clarity
 
-**Status:** Planned
+**Status:** In progress
 
 **Goal**
 

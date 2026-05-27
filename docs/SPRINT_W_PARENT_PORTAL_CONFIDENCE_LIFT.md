@@ -1,6 +1,6 @@
 # Sprint W - Parent Portal Confidence Lift
 
-**Status:** Planned
+**Status:** In progress
 
 ## Sprint Goal
 
@@ -75,4 +75,3 @@ Confirm the calmer parent flow in the browser and trim anything that still feels
 
 - Visual review of the `/dev/parent` experience
 - `cd dev && npm run check`
-

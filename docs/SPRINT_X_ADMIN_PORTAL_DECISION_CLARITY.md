@@ -1,6 +1,6 @@
 # Sprint X - Admin Portal Decision Clarity
 
-**Status:** Planned
+**Status:** In progress
 
 ## Sprint Goal
 
@@ -72,4 +72,3 @@ Confirm the admin readability reset in browser and freeze the winning visual rul
 
 - Visual review of the `/dev/admin` experience
 - `cd dev && npm run check`
-

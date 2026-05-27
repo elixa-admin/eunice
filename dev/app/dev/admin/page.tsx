@@ -124,6 +124,7 @@ export default function DevAdminPage() {
     { blocking: 0, review: 0, ready: 0, decision: 0 } as Record<QueueLane, number>,
   );
   const primaryEvidence = groupedDocuments.blocking[0] ?? groupedDocuments.review[0] ?? groupedDocuments.ready[0] ?? groupedDocuments.other[0];
+  const latestCommunication = featured.communication.at(-1);
 
   function toggleTriageSelection(applicationId: string) {
     setSelectedTriageIds((current) =>
@@ -257,18 +258,21 @@ export default function DevAdminPage() {
                         <div className="mt-1 text-sm font-medium text-slate-950">{featured.zoneTag}</div>
                         <div className="mt-1 text-xs text-slate-500">Routing and catchment context</div>
                       </div>
-                      <div className="rounded-2xl border border-primary-100 bg-white px-3 py-3 shadow-sm">
-                        <div className="text-[11px] uppercase tracking-[0.18em] text-primary-700/72">Evidence</div>
-                        <div className="mt-1 text-sm font-medium text-slate-950">{counts.ready}/{counts.total} usable now</div>
-                        <div className="mt-1 text-xs text-slate-500">{counts.blocking} blocking · {counts.reviewOnly} flagged</div>
-                      </div>
                       <div className="rounded-2xl border border-primary-100 bg-white px-3 py-3 sm:col-span-3 shadow-sm">
-                        <div className="text-[11px] uppercase tracking-[0.18em] text-primary-700/72">Latest communication</div>
-                        <div className="mt-1 text-sm font-medium text-slate-950">
-                          {featured.communication.at(-1)?.channel ?? 'No messages'} · {featured.communication.at(-1)?.subject ?? 'No communication yet'}
-                        </div>
-                        <div className="mt-1 text-xs text-slate-500">
-                          {featured.communication.at(-1)?.status ?? 'draft'} · {featured.communication.at(-1)?.at ?? 'No date available'}
+                        <div className="text-[11px] uppercase tracking-[0.18em] text-primary-700/72">Evidence & latest communication</div>
+                        <div className="mt-2 grid gap-3 md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
+                          <div>
+                            <div className="text-sm font-medium text-slate-950">{counts.ready}/{counts.total} usable now</div>
+                            <div className="mt-1 text-xs text-slate-500">{counts.blocking} blocking · {counts.reviewOnly} flagged</div>
+                          </div>
+                          <div>
+                            <div className="text-sm font-medium text-slate-950">
+                              {latestCommunication?.channel ?? 'No messages'} · {latestCommunication?.subject ?? 'No communication yet'}
+                            </div>
+                            <div className="mt-1 text-xs text-slate-500">
+                              {latestCommunication?.status ?? 'draft'} · {latestCommunication?.at ?? 'No date available'}
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -405,42 +409,46 @@ export default function DevAdminPage() {
                 </div>
 
                 <div className="rounded-[24px] border border-[#e7d39a]/25 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(249,247,240,0.98)_100%)] p-4 shadow-[0_14px_28px_rgba(0,0,0,0.08)]">
-                  <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Communication trail</div>
-                  <div className="mt-3 space-y-2.5">
-                    {featured.communication.slice(-3).map((entry) => (
-                      <div key={`${entry.channel}-${entry.at}-${entry.subject}`} className="rounded-2xl border border-slate-200 bg-white/80 px-3 py-2.5">
-                        <div className="flex items-center justify-between gap-3">
-                          <div className="text-sm font-semibold text-slate-950">{entry.subject}</div>
-                          <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-600">
-                            {entry.channel}
-                          </span>
-                        </div>
-                        <div className="mt-1 text-xs text-slate-600">{entry.status} · {entry.at}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="rounded-[24px] border border-[#e7d39a]/25 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(249,247,240,0.98)_100%)] p-4 shadow-[0_14px_28px_rgba(0,0,0,0.08)]">
-                  <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Notification plan</div>
+                  <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Workflow trail</div>
                   <div className="mt-2 text-sm font-semibold text-slate-950">{notificationPlan.label}</div>
-                  {notificationPlan.templates.length > 0 ? (
-                    <div className="mt-3 space-y-2.5">
-                      {notificationPlan.templates.map((template) => (
-                        <div key={`${template.channel}-${template.subject}`} className="rounded-2xl border border-slate-200 bg-white/80 px-3 py-2.5">
-                          <div className="flex items-center justify-between gap-3">
-                            <div className="text-sm font-semibold text-slate-950">{template.subject}</div>
-                            <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-600">
-                              {template.channel}
-                            </span>
+                  <div className="mt-3 grid gap-3">
+                    <div className="rounded-2xl border border-slate-200 bg-white/80 px-3 py-2.5">
+                      <div className="text-xs uppercase tracking-[0.12em] text-slate-500">Communication trail</div>
+                      <div className="mt-2 space-y-2">
+                        {featured.communication.slice(-2).map((entry) => (
+                          <div key={`${entry.channel}-${entry.at}-${entry.subject}`} className="rounded-xl border border-slate-200 bg-white px-3 py-2">
+                            <div className="flex items-center justify-between gap-3">
+                              <div className="text-sm font-semibold text-slate-950">{entry.subject}</div>
+                              <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-600">
+                                {entry.channel}
+                              </span>
+                            </div>
+                            <div className="mt-1 text-xs text-slate-600">{entry.status} · {entry.at}</div>
                           </div>
-                          <div className="mt-1 text-xs leading-5 text-slate-600">{template.body}</div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  ) : (
-                    <div className="mt-2 text-sm text-slate-600">No automatic message is scheduled for this state yet.</div>
-                  )}
+                    <div className="rounded-2xl border border-slate-200 bg-white/80 px-3 py-2.5">
+                      <div className="text-xs uppercase tracking-[0.12em] text-slate-500">Notification plan</div>
+                      {notificationPlan.templates.length > 0 ? (
+                        <div className="mt-2 space-y-2">
+                          {notificationPlan.templates.slice(0, 2).map((template) => (
+                            <div key={`${template.channel}-${template.subject}`} className="rounded-xl border border-slate-200 bg-white px-3 py-2">
+                              <div className="flex items-center justify-between gap-3">
+                                <div className="text-sm font-semibold text-slate-950">{template.subject}</div>
+                                <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-600">
+                                  {template.channel}
+                                </span>
+                              </div>
+                              <div className="mt-1 text-xs leading-5 text-slate-600">{template.body}</div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="mt-2 text-sm text-slate-600">No automatic message is scheduled for this state yet.</div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

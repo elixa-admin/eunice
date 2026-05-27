@@ -86,13 +86,20 @@ export function ParentWorkflowSidebar({
 
       <details className="group rounded-[24px] border border-slate-200 bg-[linear-gradient(180deg,rgba(255,255,255,0.98)_0%,rgba(249,247,240,0.98)_100%)] p-4 shadow-[0_12px_28px_rgba(11,20,12,0.06)]">
         <summary className="cursor-pointer list-none text-sm font-semibold text-slate-950">Need a little help?</summary>
-        <div className="mt-3 space-y-2.5">
-          {guidanceItems.map((item) => (
-            <div key={item.title} className="rounded-2xl border border-slate-200 bg-white/85 px-3 py-3">
-              <div className="text-sm font-semibold text-slate-950">{item.title}</div>
-              <p className="mt-1 text-sm leading-6 text-slate-700">{item.body}</p>
-            </div>
-          ))}
+        <div className="mt-3 space-y-2 rounded-2xl border border-slate-200 bg-white/85 px-3 py-3">
+          <p className="text-sm leading-6 text-slate-700">
+            Keep the flow calm: start with the right adult, keep the essentials nearby, and save whenever you need a pause.
+          </p>
+          <div className="space-y-2 border-t border-slate-100 pt-2">
+            {guidanceItems.map((item) => (
+              <div key={item.title} className="flex items-start gap-2 text-sm leading-6 text-slate-700">
+                <span className="mt-2 h-1.5 w-1.5 rounded-full bg-primary-800" />
+                <span>
+                  <span className="font-semibold text-slate-950">{item.title}:</span> {item.body}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </details>
     </div>

@@ -14,8 +14,10 @@
 - The root deployment failure was not a code regression; it was a project-settings mismatch.
 - Latest verified root preview after the fix:
   - `https://eunice-freqr38r7-elixa-admins-projects.vercel.app`
-- The next sprint is now `Sprint V - Admin Readability Reset`.
-- The admin dashboard should stay on a light, readable surface while keeping the school's green/gold brand identity in accents and emphasis.
+- Sprint V - Admin Readability Reset is complete.
+- Latest verified `/dev` preview:
+  - `https://dev-26rs37xxp-elixa-admins-projects.vercel.app`
+- The admin dashboard now stays on a light, readable surface while keeping the school's green/gold brand identity in accents and emphasis.
 - `/dev` remains the active product-shaping lane.
 - Sprint O is complete: parent calm-flow simplification landed.
 - Sprint P is now implemented locally: admin decision-engine simplification for `/dev/admin` and `/dev/application/[id]`.
@@ -61,7 +63,7 @@
 - [docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md)
 
 ## Next Sprint
-Start Sprint V with the admin readability reset. Focus on contrast, light-mode surfaces, and keeping the dashboard instantly legible for staff.
+Start the next sprint from the admin readability reset baseline. Focus on whichever of the planned output sprints gives the most value now: parent confidence, workflow automation, or document intelligence.
 
 ## Notes
 - Keep the parent side calm and the admin side operationally denser.

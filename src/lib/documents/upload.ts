@@ -1,5 +1,4 @@
 import {
-  getDocumentValidationGuidance,
   type DocumentType,
   type DocumentValidationState,
 } from '@/lib/documents/contracts';
@@ -66,7 +65,7 @@ export async function uploadDocumentDraft({
     return {
       fileName: file.name,
       validationState: validation.state,
-      message: getDocumentValidationGuidance(validation.state),
+      message: validation.message,
       storagePath: result.path,
       uploadedAt: new Date().toISOString(),
       uploadStatus: 'saved',

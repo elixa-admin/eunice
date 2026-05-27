@@ -56,7 +56,7 @@ Add the lightest useful operational workflow support so communication and follow
 
 ## Sprint R — Document Intake Intelligence
 
-**Status:** Planned
+**Status:** In progress
 
 **Goal**
 

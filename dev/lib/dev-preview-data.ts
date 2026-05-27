@@ -91,7 +91,7 @@ export const previewApplications: PreviewApplication[] = [
     documents: [
       { type: 'birth_cert', status: 'verified', uploadedAt: '2026-05-14', note: 'Certified copy received.' },
       { type: 'school_report', status: 'verified', uploadedAt: '2026-05-14', note: 'Term 1 report accepted.' },
-      { type: 'proof_residence', status: 'manual_review', uploadedAt: '2026-05-15', note: 'Utility bill visible but address needs confirmation.' },
+      { type: 'proof_residence', status: 'low_confidence_ocr', uploadedAt: '2026-05-15', note: 'Utility bill is readable, but the text needs a sharper capture.' },
       { type: 'id_copy', status: 'verified', uploadedAt: '2026-05-14', note: 'ID number captured.' },
     ],
     note: 'Proof of residence uploaded, waiting for final verification.',
@@ -124,7 +124,7 @@ export const previewApplications: PreviewApplication[] = [
     missingItems: ['Previous school report needs re-upload'],
     documents: [
       { type: 'birth_cert', status: 'verified', uploadedAt: '2026-05-12', note: 'Accepted.' },
-      { type: 'school_report', status: 'needs_reupload', note: 'Parent said report will follow after term close.' },
+      { type: 'school_report', status: 'blurry', note: 'Camera photo is usable, but the file should be retaken more clearly.' },
       { type: 'proof_residence', status: 'verified', uploadedAt: '2026-05-12', note: 'Municipal statement accepted.' },
       { type: 'id_copy', status: 'verified', uploadedAt: '2026-05-12', note: 'Readable copy received.' },
     ],
@@ -191,7 +191,7 @@ export const previewApplications: PreviewApplication[] = [
     completion: 86,
     missingItems: ['Queue assignment', 'Document review'],
     documents: [
-      { type: 'birth_cert', status: 'accepted', uploadedAt: '2026-05-20', note: 'Awaiting reviewer check.' },
+      { type: 'birth_cert', status: 'manual_review', uploadedAt: '2026-05-20', note: 'Possible repeat upload; staff should confirm the newest copy.' },
       { type: 'school_report', status: 'accepted', uploadedAt: '2026-05-20', note: 'Awaiting reviewer check.' },
       { type: 'proof_residence', status: 'accepted', uploadedAt: '2026-05-20', note: 'Awaiting reviewer check.' },
       { type: 'id_copy', status: 'accepted', uploadedAt: '2026-05-20', note: 'Awaiting reviewer check.' },

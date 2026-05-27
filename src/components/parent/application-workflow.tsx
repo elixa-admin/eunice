@@ -1144,6 +1144,9 @@ export default function ParentApplicationWorkflow() {
                                   <p className="mt-1 text-xs leading-5 text-slate-500">
                                     {getDocumentQualityCue(document.validationState)}
                                   </p>
+                                  {document.uploadStatus !== 'idle' ? (
+                                    <p className="mt-1 text-xs leading-5 text-slate-500">{document.message}</p>
+                                  ) : null}
                                   {document.fileName ? (
                                     <p className="mt-2 text-xs font-medium text-slate-600">Saved: {document.fileName}</p>
                                   ) : null}
@@ -1230,6 +1233,9 @@ export default function ParentApplicationWorkflow() {
                                     <p className="mt-1 text-xs leading-5 text-slate-500">
                                       {getDocumentQualityCue(document.validationState)}
                                     </p>
+                                    {document.uploadStatus !== 'idle' ? (
+                                      <p className="mt-1 text-xs leading-5 text-slate-500">{document.message}</p>
+                                    ) : null}
                                     {document.fileName ? (
                                       <p className="mt-2 text-xs font-medium text-slate-600">Saved: {document.fileName}</p>
                                     ) : null}

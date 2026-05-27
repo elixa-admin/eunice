@@ -100,6 +100,7 @@ Sprint R is successful if:
 ## Current Progress
 
 - P0 upload-quality guidance has been added to the parent workflow.
+- The preview lane now shows `blurry`, `low_confidence_ocr`, and manual-review-style repeat uploads so the states are visible in-browser.
 - The `src` route health issue on `/app/dev/admin` has been cleaned up so the verifier passes again.
 - The sprint is still intentionally lightweight; no heavy OCR or AI pipeline has been introduced yet.
 

@@ -14,6 +14,7 @@
 - Sprint O is complete: parent calm-flow simplification landed.
 - Sprint P is now implemented locally: admin decision-engine simplification for `/dev/admin` and `/dev/application/[id]`.
 - Sprint Q is implemented and deployed: communication trail, notification plan, and re-upload scaffolds are live in the latest `/dev` preview.
+- Sprint R is now underway and focused on document intake intelligence plus upload-quality guidance.
 - A quick health sweep removed obvious duplicate local artifacts and added ignore rules for local numbered copies and `.cursor/`.
 - Focused `dev` checks are green.
 

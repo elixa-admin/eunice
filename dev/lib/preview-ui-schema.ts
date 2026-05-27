@@ -22,7 +22,7 @@ export const previewSurfaceSchema: Record<PreviewSurface, PreviewSurfaceSchema> 
   },
   admin: {
     label: 'Admin workspace',
-    lead: 'A denser control surface for admissions staff, with more operational energy.',
+    lead: 'A bright control surface for admissions staff, with clear queue reading and fast decisions.',
     chips: ['Queue review', 'Document triage', 'Fast decisions'],
     accent: 'Review console',
   },

@@ -25,6 +25,7 @@ export function PreviewShell({
   meta,
 }: PreviewShellProps) {
   const surfaceInfo = previewSurfaceSchema[surface];
+  const isAdminSurface = surface === 'admin';
 
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,#f8f4e8_0%,#f6f1e4_28%,#f8f6ef_100%)] text-slate-950">
@@ -33,18 +34,36 @@ export function PreviewShell({
         className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-[linear-gradient(90deg,rgba(17,54,36,0.06)_1px,transparent_1px),linear-gradient(rgba(17,54,36,0.06)_1px,transparent_1px)] bg-[size:58px_58px] opacity-55"
       />
       <div className="relative w-full px-4 py-5 sm:px-5 lg:px-6 2xl:px-8">
-        <div className="mb-5 overflow-hidden rounded-[26px] border border-[#0f3c28]/35 bg-[#073820] px-5 py-5 shadow-[0_20px_48px_rgba(11,20,12,0.18)] lg:px-6 lg:py-5">
-          <div className="mb-5 h-1 w-full rounded-full bg-[#b88907]" />
-          <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-white/16 pb-3">
+        <div
+          className={`mb-5 overflow-hidden rounded-[26px] px-5 py-5 shadow-[0_20px_48px_rgba(11,20,12,0.14)] lg:px-6 lg:py-5 ${
+            isAdminSurface
+              ? 'border border-primary-100 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(247,243,232,0.98)_100%)]'
+              : 'border border-[#0f3c28]/35 bg-[#073820] text-white'
+          }`}
+        >
+          <div className={`mb-5 h-1 w-full rounded-full ${isAdminSurface ? 'bg-[#b88907]' : 'bg-[#b88907]'}`} />
+          <div className={`mb-5 flex flex-wrap items-center justify-between gap-3 border-b pb-3 ${isAdminSurface ? 'border-primary-100' : 'border-white/16'}`}>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-full border border-white/40 bg-white/12 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white">
+              <span
+                className={`rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${
+                  isAdminSurface ? 'border-primary-100 bg-white text-slate-900' : 'border-white/40 bg-white/12 text-white'
+                }`}
+              >
                 Eunice Admissions
               </span>
-              <span className="rounded-full border border-white/35 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white">
+              <span
+                className={`rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${
+                  isAdminSurface ? 'border-primary-100 bg-primary-50 text-primary-800' : 'border-white/35 bg-white/10 text-white'
+                }`}
+              >
                 {surfaceInfo.accent}
               </span>
             </div>
-            <div className="rounded-full border border-white/35 bg-white/10 px-3 py-1 text-xs font-medium text-white">
+            <div
+              className={`rounded-full border px-3 py-1 text-xs font-medium ${
+                isAdminSurface ? 'border-primary-100 bg-white text-slate-700' : 'border-white/35 bg-white/10 text-white'
+              }`}
+            >
               Live dev preview
             </div>
           </div>
@@ -53,20 +72,25 @@ export function PreviewShell({
             <div className="space-y-4">
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl border border-white/20 bg-white/95 shadow-[0_10px_24px_rgba(11,20,12,0.12)]">
+                  <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl border border-primary-100 bg-white shadow-[0_10px_24px_rgba(11,20,12,0.12)]">
                     <Image src="/eunice-school-logo.svg" alt="Eunice Girls School logo" width={32} height={32} className="h-8 w-8 object-contain" />
                   </div>
-                  <div className="text-sm uppercase tracking-[0.22em] text-white/75">Eunice Primary School</div>
+                  <div className={`text-sm uppercase tracking-[0.22em] ${isAdminSurface ? 'text-slate-600' : 'text-white/75'}`}>Eunice Primary School</div>
                 </div>
-                <p className="type-label text-white/80">{eyebrow}</p>
-                <h1 className="display-serif type-display-lg max-w-4xl text-white">
+                <p className={`type-label ${isAdminSurface ? 'text-primary-700/75' : 'text-white/80'}`}>{eyebrow}</p>
+                <h1 className={`display-serif type-display-lg max-w-4xl ${isAdminSurface ? 'text-slate-950' : 'text-white'}`}>
                   {title}
                 </h1>
-                <p className="type-body max-w-3xl text-white/90">{description}</p>
+                <p className={`type-body max-w-3xl ${isAdminSurface ? 'text-slate-600' : 'text-white/90'}`}>{description}</p>
               </div>
               <div className="flex flex-wrap gap-2">
                 {surfaceInfo.chips.map((chip) => (
-                  <span key={chip} className="rounded-full border border-white/30 bg-white/10 px-3 py-1 text-xs font-medium text-white">
+                  <span
+                    key={chip}
+                    className={`rounded-full border px-3 py-1 text-xs font-medium ${
+                      isAdminSurface ? 'border-primary-100 bg-white text-slate-700' : 'border-white/30 bg-white/10 text-white'
+                    }`}
+                  >
                     {chip}
                   </span>
                 ))}
@@ -74,15 +98,23 @@ export function PreviewShell({
             </div>
 
             <div className="flex flex-col gap-3">
-              <div className="rounded-[24px] border border-white/22 bg-white/12 p-5 shadow-[0_18px_40px_rgba(0,0,0,0.10)] backdrop-blur-md">
-                <div className="type-label text-white/80">Preview frame</div>
-                <p className="type-body mt-2 text-white/95">{surfaceInfo.lead}</p>
+              <div
+                className={`rounded-[24px] p-5 shadow-[0_18px_40px_rgba(0,0,0,0.10)] backdrop-blur-md ${
+                  isAdminSurface ? 'border border-primary-100 bg-white/95' : 'border border-white/22 bg-white/12'
+                }`}
+              >
+                <div className={`type-label ${isAdminSurface ? 'text-primary-700/75' : 'text-white/80'}`}>Preview frame</div>
+                <p className={`type-body mt-2 ${isAdminSurface ? 'text-slate-600' : 'text-white/95'}`}>{surfaceInfo.lead}</p>
               </div>
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 {meta}
                 <Link
                   href={backHref}
-                  className="inline-flex items-center justify-center rounded-full border border-white/40 bg-white/12 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/20"
+                  className={`inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-medium transition ${
+                    isAdminSurface
+                      ? 'border border-primary-100 bg-white text-slate-700 hover:bg-primary-50'
+                      : 'border border-white/40 bg-white/12 text-white hover:bg-white/20'
+                  }`}
                 >
                   {backLabel}
                 </Link>

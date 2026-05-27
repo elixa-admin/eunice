@@ -182,24 +182,24 @@ export default function DevAdminPage() {
         </aside>
 
         <main className="min-w-0 space-y-3">
-          <SurfaceCard className="overflow-hidden border border-[#0f3c28]/35 bg-[#073820] p-0 text-white shadow-[0_22px_58px_rgba(11,20,12,0.16)]">
+          <SurfaceCard className="overflow-hidden border border-primary-100 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(247,243,232,0.98)_100%)] p-0 text-slate-950 shadow-[0_22px_58px_rgba(11,20,12,0.08)]">
             <div className="h-1 w-full bg-[#b88907]" />
-            <div className="border-b border-white/12 px-5 py-3">
-              <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-white/80">
+            <div className="border-b border-primary-100 px-5 py-3">
+              <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-slate-600">
                 <div className="flex flex-wrap items-center gap-2">
                   <span>Queue Review</span>
                   <span>›</span>
                   <span>{laneMeta[getAdminQueueLane(featured)].label}</span>
                   <span>›</span>
-                  <span className="text-white">{featured.ref}</span>
+                  <span className="text-slate-950">{featured.ref}</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="rounded-full border border-white/12 bg-white/8 p-1">
+                  <div className="rounded-full border border-primary-100 bg-white p-1 shadow-sm">
                     <button
                       type="button"
                       onClick={() => setViewMode('decision')}
                       className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
-                        viewMode === 'decision' ? 'bg-white text-[#073820]' : 'text-white/70 hover:text-white'
+                        viewMode === 'decision' ? 'bg-primary-900 text-white' : 'text-slate-600 hover:bg-primary-50 hover:text-slate-950'
                       }`}
                     >
                       Decision view
@@ -208,85 +208,85 @@ export default function DevAdminPage() {
                       type="button"
                       onClick={() => setViewMode('triage')}
                       className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
-                        viewMode === 'triage' ? 'bg-white text-[#073820]' : 'text-white/70 hover:text-white'
+                        viewMode === 'triage' ? 'bg-primary-900 text-white' : 'text-slate-600 hover:bg-primary-50 hover:text-slate-950'
                       }`}
                     >
                       Speed triage
                     </button>
                   </div>
-                  <button className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white">Queue overview</button>
-                  <Link href={`/dev/application/${featured.id}`} className="rounded-full border border-[#e7d39a]/35 bg-[#b88907] px-4 py-2 text-sm font-semibold text-[#052716]">
+                  <button className="rounded-full border border-primary-100 bg-white px-4 py-2 text-sm text-slate-700 shadow-sm">Queue overview</button>
+                  <Link href={`/dev/application/${featured.id}`} className="rounded-full border border-[#e7d39a]/60 bg-[#b88907] px-4 py-2 text-sm font-semibold text-[#052716] shadow-sm">
                     Open full record
                   </Link>
                 </div>
               </div>
             </div>
             <div className="grid gap-3 px-5 py-4 xl:grid-cols-[minmax(0,1.55fr)_minmax(320px,0.45fr)]">
-              <div className="rounded-[24px] border border-[#e7d39a]/25 bg-[linear-gradient(180deg,rgba(12,75,43,0.98)_0%,rgba(7,56,32,0.98)_100%)] p-4 shadow-[0_16px_34px_rgba(0,0,0,0.16)] ring-1 ring-white/6">
+              <div className="rounded-[24px] border border-primary-100 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(247,243,232,0.98)_100%)] p-4 shadow-[0_16px_34px_rgba(11,20,12,0.08)] ring-1 ring-white/60">
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                   <div className="min-w-0">
-                    <div className="text-xs uppercase tracking-[0.18em] text-[#e8dcae]">Selected application</div>
+                    <div className="text-xs uppercase tracking-[0.18em] text-primary-700/72">Selected application</div>
                     <div className="mt-3 flex flex-wrap items-center gap-3">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-full border border-white/20 bg-white/95 text-[#073820]">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-full border border-primary-100 bg-white text-primary-900 shadow-sm">
                         <span className="text-lg font-semibold">{featured.learnerName.charAt(0)}</span>
                       </div>
                       <div className="min-w-0">
-                        <h2 className="truncate text-3xl font-semibold text-white">{featured.learnerName}</h2>
-                        <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-white/85">
+                        <h2 className="truncate text-3xl font-semibold text-slate-950">{featured.learnerName}</h2>
+                        <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-slate-600">
                           <span>{featured.ref}</span>
-                          <span className="rounded-full border border-white/20 bg-white/12 px-2.5 py-1 text-xs font-semibold">
+                          <span className="rounded-full border border-primary-100 bg-white px-2.5 py-1 text-xs font-semibold text-slate-700">
                             {reviewState === 'blocked' ? 'Blocked' : reviewState === 'review' ? 'Needs review' : reviewState === 'ready' ? 'Ready' : 'Finalised'}
                           </span>
-                          <span className="rounded-full border border-white/20 bg-white/12 px-2.5 py-1 text-xs font-semibold">{featured.grade}</span>
+                          <span className="rounded-full border border-primary-100 bg-white px-2.5 py-1 text-xs font-semibold text-slate-700">{featured.grade}</span>
                         </div>
                       </div>
                     </div>
                     <div className="mt-4 grid gap-2.5 sm:grid-cols-3">
-                      <div className="rounded-2xl border border-white/12 bg-white/8 px-3 py-3">
-                        <div className="text-[11px] uppercase tracking-[0.18em] text-white/68">Parent</div>
-                        <div className="mt-1 text-sm font-medium text-white">{featured.parentName}</div>
-                        <div className="mt-1 text-xs text-white/72">{featured.parentEmail}</div>
+                      <div className="rounded-2xl border border-primary-100 bg-white px-3 py-3 shadow-sm">
+                        <div className="text-[11px] uppercase tracking-[0.18em] text-primary-700/72">Parent</div>
+                        <div className="mt-1 text-sm font-medium text-slate-950">{featured.parentName}</div>
+                        <div className="mt-1 text-xs text-slate-500">{featured.parentEmail}</div>
                       </div>
-                      <div className="rounded-2xl border border-white/12 bg-white/8 px-3 py-3">
-                        <div className="text-[11px] uppercase tracking-[0.18em] text-white/68">Owner</div>
-                        <div className="mt-1 text-sm font-medium text-white">{featured.assignedTo}</div>
-                        <div className="mt-1 text-xs text-white/72">Updated {featured.updatedAt}</div>
+                      <div className="rounded-2xl border border-primary-100 bg-white px-3 py-3 shadow-sm">
+                        <div className="text-[11px] uppercase tracking-[0.18em] text-primary-700/72">Owner</div>
+                        <div className="mt-1 text-sm font-medium text-slate-950">{featured.assignedTo}</div>
+                        <div className="mt-1 text-xs text-slate-500">Updated {featured.updatedAt}</div>
                       </div>
-                      <div className="rounded-2xl border border-white/12 bg-white/8 px-3 py-3">
-                        <div className="text-[11px] uppercase tracking-[0.18em] text-white/68">Zone</div>
-                        <div className="mt-1 text-sm font-medium text-white">{featured.zoneTag}</div>
-                        <div className="mt-1 text-xs text-white/72">Routing and catchment context</div>
+                      <div className="rounded-2xl border border-primary-100 bg-white px-3 py-3 shadow-sm">
+                        <div className="text-[11px] uppercase tracking-[0.18em] text-primary-700/72">Zone</div>
+                        <div className="mt-1 text-sm font-medium text-slate-950">{featured.zoneTag}</div>
+                        <div className="mt-1 text-xs text-slate-500">Routing and catchment context</div>
                       </div>
-                      <div className="rounded-2xl border border-white/12 bg-white/8 px-3 py-3">
-                        <div className="text-[11px] uppercase tracking-[0.18em] text-white/68">Evidence</div>
-                        <div className="mt-1 text-sm font-medium text-white">{counts.ready}/{counts.total} usable now</div>
-                        <div className="mt-1 text-xs text-white/72">{counts.blocking} blocking · {counts.reviewOnly} flagged</div>
+                      <div className="rounded-2xl border border-primary-100 bg-white px-3 py-3 shadow-sm">
+                        <div className="text-[11px] uppercase tracking-[0.18em] text-primary-700/72">Evidence</div>
+                        <div className="mt-1 text-sm font-medium text-slate-950">{counts.ready}/{counts.total} usable now</div>
+                        <div className="mt-1 text-xs text-slate-500">{counts.blocking} blocking · {counts.reviewOnly} flagged</div>
                       </div>
-                      <div className="rounded-2xl border border-white/12 bg-white/8 px-3 py-3 sm:col-span-3">
-                        <div className="text-[11px] uppercase tracking-[0.18em] text-white/68">Latest communication</div>
-                        <div className="mt-1 text-sm font-medium text-white">
+                      <div className="rounded-2xl border border-primary-100 bg-white px-3 py-3 sm:col-span-3 shadow-sm">
+                        <div className="text-[11px] uppercase tracking-[0.18em] text-primary-700/72">Latest communication</div>
+                        <div className="mt-1 text-sm font-medium text-slate-950">
                           {featured.communication.at(-1)?.channel ?? 'No messages'} · {featured.communication.at(-1)?.subject ?? 'No communication yet'}
                         </div>
-                        <div className="mt-1 text-xs text-white/72">
+                        <div className="mt-1 text-xs text-slate-500">
                           {featured.communication.at(-1)?.status ?? 'draft'} · {featured.communication.at(-1)?.at ?? 'No date available'}
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="w-full max-w-[360px] rounded-[24px] border border-amber-200/20 bg-amber-100/10 p-4 text-sm shadow-[0_12px_26px_rgba(0,0,0,0.12)]">
-                    <div className="text-[11px] uppercase tracking-[0.16em] text-[#e8dcae]">Work this file next</div>
-                    <div className="mt-2 text-lg font-semibold text-white">{queuePriority}</div>
-                    <p className="mt-2 leading-6 text-white/86">{nextAction}</p>
+                  <div className="w-full max-w-[360px] rounded-[24px] border border-[#ead284]/60 bg-[linear-gradient(180deg,rgba(255,251,238,0.99)_0%,rgba(255,245,214,0.96)_100%)] p-4 text-sm shadow-[0_12px_26px_rgba(11,20,12,0.08)]">
+                    <div className="text-[11px] uppercase tracking-[0.16em] text-primary-700/72">Work this file next</div>
+                    <div className="mt-2 text-lg font-semibold text-slate-950">{queuePriority}</div>
+                    <p className="mt-2 leading-6 text-slate-600">{nextAction}</p>
                     <div className="mt-4 space-y-2.5">
                       {[
                         { label: '1. Clear blockers', active: counts.blocking > 0, helper: counts.blocking > 0 ? `${counts.blocking} issue${counts.blocking === 1 ? '' : 's'} preventing progress` : 'Nothing blocking this file' },
                         { label: '2. Review exceptions', active: counts.blocking === 0 && counts.reviewOnly > 0, helper: counts.reviewOnly > 0 ? `${counts.reviewOnly} flagged item${counts.reviewOnly === 1 ? '' : 's'} waiting on a call` : 'No flagged evidence right now' },
                         { label: '3. Advance outcome', active: counts.blocking === 0 && counts.reviewOnly === 0, helper: counts.blocking === 0 && counts.reviewOnly === 0 ? 'The file can move forward' : 'Hold until the evidence is clean' },
                       ].map((step) => (
-                        <div key={step.label} className={`rounded-2xl border px-3 py-3 ${step.active ? 'border-[#e7d39a]/45 bg-white/12' : 'border-white/10 bg-white/6'}`}>
-                          <div className="text-sm font-semibold text-white">{step.label}</div>
-                          <div className="mt-1 text-xs leading-5 text-white/72">{step.helper}</div>
+                        <div key={step.label} className={`rounded-2xl border px-3 py-3 ${step.active ? 'border-[#e7d39a]/55 bg-white' : 'border-primary-100 bg-white/80'}`}>
+                          <div className="text-sm font-semibold text-slate-950">{step.label}</div>
+                          <div className="mt-1 text-xs leading-5 text-slate-600">{step.helper}</div>
                         </div>
                       ))}
                     </div>
@@ -366,33 +366,33 @@ export default function DevAdminPage() {
               ) : null}
 
               <div className="space-y-3">
-                <div className="rounded-[24px] border border-[#e7d39a]/25 bg-[linear-gradient(180deg,rgba(17,73,47,0.99)_0%,rgba(9,62,37,0.99)_100%)] p-3.5 shadow-[0_14px_30px_rgba(0,0,0,0.16)] ring-1 ring-white/6">
-                  <div className="text-xs uppercase tracking-[0.16em] text-[#e8dcae]">Queue at a glance</div>
+                <div className="rounded-[24px] border border-primary-100 bg-[linear-gradient(180deg,rgba(255,253,248,0.99)_0%,rgba(247,243,232,0.98)_100%)] p-3.5 shadow-[0_14px_30px_rgba(11,20,12,0.08)] ring-1 ring-white/60">
+                  <div className="text-xs uppercase tracking-[0.16em] text-primary-700/72">Queue at a glance</div>
                   <div className="mt-2.5 grid gap-2">
                     {(['blocking', 'review', 'ready', 'decision'] as const).map((key) => (
-                      <div key={key} className="flex items-center justify-between rounded-xl border border-white/12 bg-white/8 px-3 py-2 text-sm text-white">
+                      <div key={key} className="flex items-center justify-between rounded-xl border border-primary-100 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm">
                         <div>
                           <div className="font-medium">{laneMeta[key].label}</div>
-                          <div className="text-[11px] text-white/64">{laneMeta[key].helper}</div>
+                          <div className="text-[11px] text-slate-500">{laneMeta[key].helper}</div>
                         </div>
-                        <span className="rounded-full border border-white/18 bg-white px-2.5 py-1 text-xs font-semibold text-slate-900">{laneCounts[key]}</span>
+                        <span className="rounded-full border border-primary-100 bg-primary-50 px-2.5 py-1 text-xs font-semibold text-primary-800">{laneCounts[key]}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="rounded-[24px] border border-white/12 bg-white/8 p-4 shadow-[0_14px_28px_rgba(0,0,0,0.10)]">
-                  <div className="text-[11px] uppercase tracking-[0.18em] text-[#e8dcae]">Primary evidence</div>
+                <div className="rounded-[24px] border border-primary-100 bg-white p-4 shadow-[0_14px_28px_rgba(11,20,12,0.06)]">
+                  <div className="text-[11px] uppercase tracking-[0.18em] text-primary-700/72">Primary evidence</div>
                   {primaryEvidence ? (
                     <>
-                      <div className="mt-2 text-base font-semibold text-white">{getPreviewDocumentLabel(primaryEvidence.type)}</div>
-                      <div className="mt-1 text-sm text-white/76">{primaryEvidence.note ?? 'No note added yet.'}</div>
+                      <div className="mt-2 text-base font-semibold text-slate-950">{getPreviewDocumentLabel(primaryEvidence.type)}</div>
+                      <div className="mt-1 text-sm text-slate-600">{primaryEvidence.note ?? 'No note added yet.'}</div>
                       {primaryEvidence.intake ? (
-                        <div className="mt-1 text-xs text-white/68">
+                        <div className="mt-1 text-xs text-slate-500">
                           {DOCUMENT_PROCESSING_STATUS_LABELS[primaryEvidence.intake.processingStatus]}
                         </div>
                       ) : null}
-                      <div className="mt-3 flex items-center justify-between gap-3 text-xs text-white/70">
+                      <div className="mt-3 flex items-center justify-between gap-3 text-xs text-slate-500">
                         <span className={`inline-flex rounded-full px-2.5 py-1 font-semibold capitalize ${previewDocumentClasses[primaryEvidence.status]}`}>
                           {getPreviewDocumentStatusLabel(primaryEvidence.status)}
                         </span>
@@ -400,7 +400,7 @@ export default function DevAdminPage() {
                       </div>
                     </>
                   ) : (
-                    <div className="mt-2 text-sm text-white/76">No evidence on file yet.</div>
+                    <div className="mt-2 text-sm text-slate-600">No evidence on file yet.</div>
                   )}
                 </div>
 

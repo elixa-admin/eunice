@@ -1,6 +1,6 @@
 # Sprint V - Admin Readability Reset
 
-**Status:** Planned
+**Status:** In progress
 
 ## Sprint Goal
 

@@ -20,9 +20,9 @@ export function StatusBarometer({ label, value, tone, detail }: StatusBarometerP
         : 'bg-emerald-500';
   const surface =
     tone === 'rose'
-      ? 'border-rose-200 bg-[linear-gradient(180deg,rgba(255,246,247,0.98)_0%,rgba(255,240,242,0.98)_100%)]'
+      ? 'border-rose-200 bg-[linear-gradient(180deg,rgba(255,250,251,0.99)_0%,rgba(255,243,245,0.98)_100%)]'
       : tone === 'amber'
-        ? 'border-amber-200 bg-[linear-gradient(180deg,rgba(255,250,240,0.98)_0%,rgba(255,246,232,0.98)_100%)]'
+        ? 'border-amber-200 bg-[linear-gradient(180deg,rgba(255,252,245,0.99)_0%,rgba(255,248,236,0.98)_100%)]'
         : 'border-emerald-200 bg-[linear-gradient(180deg,rgba(244,253,248,0.98)_0%,rgba(236,250,242,0.98)_100%)]';
 
   return (

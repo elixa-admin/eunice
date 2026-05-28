@@ -367,6 +367,7 @@ export default function ParentApplicationWorkflow() {
       (draft.feePayerSameAsParent || draft.roles.feePayer.fullName.trim()),
   );
   const requirementInput = {
+    schoolId,
     citizenshipStatus: draft.citizenshipStatus,
     boardingStatus: draft.boardingStatus,
     coParentContext: draft.coParentContext,

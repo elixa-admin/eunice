@@ -2,6 +2,7 @@ import './globals.css';
 import { Cormorant_Garamond, Inter } from 'next/font/google';
 import type { Metadata } from 'next';
 import { NavBar } from '@/components/nav';
+import { getDefaultTenantConfig } from '@/lib/domain/tenant-config';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -16,11 +17,13 @@ const cormorant = Cormorant_Garamond({
   display: 'swap',
 });
 
+const tenant = getDefaultTenantConfig();
+
 export const metadata: Metadata = {
-  title: 'Eunice Admissions Platform',
+  title: `${tenant.shortName} Admissions Platform`,
   description:
     'Digital school admissions for South African schools. Apply, track, and manage learner applications in one place.',
-  keywords: ['school admissions', 'South Africa', 'Eunice Primary School', 'parent portal'],
+  keywords: ['school admissions', 'South Africa', tenant.name, 'parent portal'],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

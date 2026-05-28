@@ -102,3 +102,16 @@ Prepare lightweight extension points for later multi-school rollout while keepin
 - Verification passed:
   - `npm run verify:src`
   - `cd dev && npm run check`
+
+## P1 Progress
+
+- Activated school configuration labels in key shells and entry surfaces:
+  - [src/app/layout.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/src/app/layout.tsx)
+  - [dev/app/layout.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/app/layout.tsx)
+  - [src/app/page.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/src/app/page.tsx)
+  - [dev/components/preview-shell.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/components/preview-shell.tsx)
+- Added requirement-profile plumbing in [src/lib/domain/application-requirements.ts](/Users/brandondienar/Documents/Codex/Projects/Eunice/src/lib/domain/application-requirements.ts) and wired parent workflow input:
+  - [src/components/parent/application-workflow.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/src/components/parent/application-workflow.tsx)
+- Replaced remaining hardcoded school-id fallback usage in `/dev` runtime paths:
+  - [dev/app/admin/page.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/app/admin/page.tsx)
+  - [dev/app/parent/page.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/app/parent/page.tsx)

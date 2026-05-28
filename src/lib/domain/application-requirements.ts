@@ -1,6 +1,8 @@
 import { DOCUMENT_TYPE_LABELS, type DocumentType } from '@/lib/documents/contracts';
+import { getTenantConfig, getDefaultTenantId } from '@/lib/domain/tenant-config';
 
 export type ApplicationRequirementInput = {
+  schoolId?: string | null;
   citizenshipStatus?: string;
   boardingStatus?: string;
   coParentContext?: string;
@@ -119,6 +121,10 @@ function isSelfEmployed(value?: string) {
 export function getApplicationDocumentRequirements(
   input: ApplicationRequirementInput = {},
 ): ApplicationDocumentRequirement[] {
+  const tenant = getTenantConfig(input.schoolId ?? getDefaultTenantId());
+  // P1 plumbing: this key lets us switch requirement profiles per school later
+  // without changing calling sites again.
+  const requirementProfileKey = tenant.requirementProfileKey;
   const requirements = [...BASE_REQUIRED_DOCUMENTS];
   const conditionalReasons: string[] = [];
 
@@ -161,6 +167,10 @@ export function getApplicationDocumentRequirements(
       reason: conditionalReasons.join(' '),
       category: 'supporting',
     });
+  }
+
+  if (requirementProfileKey === 'royal_blue_default') {
+    return requirements;
   }
 
   return requirements;

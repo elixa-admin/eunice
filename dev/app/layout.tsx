@@ -2,6 +2,7 @@ import './globals.css';
 import { IBM_Plex_Sans, IBM_Plex_Sans_Condensed } from 'next/font/google';
 import type { Metadata } from 'next';
 import { NavBar } from '@/components/nav';
+import { getDefaultTenantConfig } from '@eunice-shared/domain/tenant-config';
 
 const plexSans = IBM_Plex_Sans({
   subsets: ['latin'],
@@ -17,11 +18,13 @@ const plexSansCondensed = IBM_Plex_Sans_Condensed({
   display: 'swap',
 });
 
+const tenant = getDefaultTenantConfig();
+
 export const metadata: Metadata = {
-  title: 'Eunice Admissions Platform',
+  title: `${tenant.shortName} Admissions Platform`,
   description:
     'Digital school admissions for South African schools. Apply, track, and manage learner applications in one place.',
-  keywords: ['school admissions', 'South Africa', 'Eunice Primary School', 'parent portal'],
+  keywords: ['school admissions', 'South Africa', tenant.name, 'parent portal'],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { previewSurfaceSchema, type PreviewSurface } from '@/lib/preview-ui-schema';
+import { getDefaultTenantConfig } from '@eunice-shared/domain/tenant-config';
 
 type PreviewShellProps = {
   eyebrow: string;
@@ -26,6 +27,7 @@ export function PreviewShell({
 }: PreviewShellProps) {
   const surfaceInfo = previewSurfaceSchema[surface];
   const isAdminSurface = surface === 'admin';
+  const tenant = getDefaultTenantConfig();
 
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,#f8f4e8_0%,#f6f1e4_28%,#f8f6ef_100%)] text-slate-950">
@@ -73,9 +75,9 @@ export function PreviewShell({
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
                   <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl border border-primary-100 bg-white shadow-[0_10px_24px_rgba(11,20,12,0.12)]">
-                    <Image src="/eunice-school-logo.svg" alt="Eunice Girls School logo" width={32} height={32} className="h-8 w-8 object-contain" />
+                    <Image src="/eunice-school-logo.svg" alt={`${tenant.name} logo`} width={32} height={32} className="h-8 w-8 object-contain" />
                   </div>
-                  <div className={`text-sm uppercase tracking-[0.22em] ${isAdminSurface ? 'text-slate-600' : 'text-white/75'}`}>Eunice Primary School</div>
+                  <div className={`text-sm uppercase tracking-[0.22em] ${isAdminSurface ? 'text-slate-600' : 'text-white/75'}`}>{tenant.name}</div>
                 </div>
                 <p className={`type-label ${isAdminSurface ? 'text-primary-700/75' : 'text-white/80'}`}>{eyebrow}</p>
                 <h1 className={`display-serif type-display-lg max-w-4xl ${isAdminSurface ? 'text-slate-950' : 'text-white'}`}>

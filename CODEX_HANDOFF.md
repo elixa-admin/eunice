@@ -31,6 +31,7 @@
 - Sprint AA is complete: parent upload-quality quick-fix guidance and admin confidence cues are implemented and verified.
 - Sprint AB is in progress: browser QA and pattern lockdown has started with shared confidence-chip UI patterns.
 - Sprint AC is in progress: P0 configuration contract is delivered and verified.
+- Sprint AC P1 activation is in progress: core shell labels and requirement-profile plumbing are now wired through school config defaults.
 - Latest verified `/dev` preview:
   - `https://dev-fy353oec0-elixa-admins-projects.vercel.app`
 - A quick health sweep removed obvious duplicate local artifacts and added ignore rules for local numbered copies and `.cursor/`.

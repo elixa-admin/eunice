@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { SURFACE_CARD_CLASS_NAME } from '@/lib/ui-classes';
+import { getDefaultTenantConfig } from '@/lib/domain/tenant-config';
 
 const portalCards = [
   {
@@ -51,6 +52,7 @@ const processSteps = [
 ];
 
 export default function Home() {
+  const tenant = getDefaultTenantConfig();
   return (
     <div className="relative min-h-[calc(100vh-4rem)] overflow-hidden bg-[linear-gradient(180deg,#f5f0e3_0%,#efe7d3_100%)]">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(22,163,74,0.13),_transparent_28%),radial-gradient(circle_at_top_right,_rgba(202,138,4,0.10),_transparent_26%),radial-gradient(circle_at_bottom_right,_rgba(34,197,94,0.08),_transparent_24%)]" />
@@ -59,7 +61,7 @@ export default function Home() {
           <div className="grid gap-0 lg:grid-cols-[1.02fr_0.98fr]">
             <div className="p-8 sm:p-10 lg:p-12">
               <div className="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-emerald-950">
-                Eunice Admissions Platform
+                {tenant.shortName} Admissions Platform
               </div>
 
               <h1 className="display-serif mt-6 max-w-2xl text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl lg:text-6xl text-balance">
@@ -67,7 +69,7 @@ export default function Home() {
               </h1>
 
               <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
-                This is the public entry point for Eunice Admissions. It introduces the platform, explains the two portals,
+                This is the public entry point for {tenant.shortName} Admissions. It introduces the platform, explains the two portals,
                 and helps each person get to the right experience without friction.
               </p>
 

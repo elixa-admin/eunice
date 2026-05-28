@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { PreviewShell } from '@/components/preview-shell';
 import { SurfaceCard } from '@/components/surface-card';
-import { getApplicationNotificationPlan } from '@eunice-shared/domain/applications';
+import { getApplicationNotificationPlanForTemplateSet } from '@eunice-shared/domain/applications';
+import { getDefaultTenantConfig } from '@eunice-shared/domain/tenant-config';
 
 type ReuploadPageProps = {
   params: Promise<{ token: string }>;
@@ -10,7 +11,11 @@ type ReuploadPageProps = {
 export default async function DevParentReuploadPage({ params }: ReuploadPageProps) {
   const { token } = await params;
   const reuploadStatus = 'awaiting_documents' as const;
-  const notificationPlan = getApplicationNotificationPlan(reuploadStatus);
+  const tenant = getDefaultTenantConfig();
+  const notificationPlan = getApplicationNotificationPlanForTemplateSet(
+    reuploadStatus,
+    tenant.communicationTemplateSetKey,
+  );
 
   return (
     <PreviewShell

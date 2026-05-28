@@ -84,8 +84,8 @@ Make the core workflow operationally complete with lightweight automation hooks 
 ## Recommended Order
 
 1. Sprint AB - Browser QA and Pattern Lockdown
-2. Sprint AC - Multi-School Foundation Kickoff
-3. Sprint AD - School Configuration Activation
+2. Sprint AD - School Configuration Activation
+3. Sprint AE - School Rollout Hardening
 
 ## Sprint Y - Parent Upload Confidence and Admin Decision Speed
 
@@ -165,7 +165,7 @@ Verify the parent and admin changes in browser, then capture the winning visual 
 
 ## Sprint AC - Multi-School Foundation Kickoff
 
-**Status:** In progress
+**Status:** Complete
 
 **Goal**
 
@@ -200,6 +200,24 @@ Activate the school configuration layer in product flows so branding, document r
 **Primary doc**
 
 - [docs/SPRINT_AC_MULTI_SCHOOL_FOUNDATION_KICKOFF.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_AC_MULTI_SCHOOL_FOUNDATION_KICKOFF.md)
+
+## Sprint AE - School Rollout Hardening
+
+**Status:** Planned
+
+**Goal**
+
+Harden the first multi-school activation path with migration safety checks, template validation, and runtime fallback telemetry.
+
+**Focus**
+
+- school config validation hooks
+- runtime fallback visibility
+- rollout checklist validation in CI/docs
+
+**Primary doc**
+
+- [docs/MULTI_SCHOOL_ONBOARDING_CHECKLIST.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/MULTI_SCHOOL_ONBOARDING_CHECKLIST.md)
 
 ## Non-Goals For This Window
 

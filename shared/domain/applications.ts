@@ -45,6 +45,8 @@ export type ApplicationNotificationPlan = {
   templates: ApplicationNotificationTemplate[];
 };
 
+export type NotificationTemplateSetKey = 'eunice_primary_default' | 'royal_blue_default';
+
 export const APPLICATION_NOTIFICATION_PLAN: Record<ApplicationStatus, ApplicationNotificationPlan> = {
   draft: {
     trigger: 'draft',
@@ -144,8 +146,23 @@ export function getApplicationNotificationPlan(status: ApplicationStatus) {
   return APPLICATION_NOTIFICATION_PLAN[status];
 }
 
+export function getApplicationNotificationPlanForTemplateSet(
+  status: ApplicationStatus,
+  _templateSetKey: NotificationTemplateSetKey,
+) {
+  // P2 hook point: keep one output contract now; swap template set later per school.
+  return getApplicationNotificationPlan(status);
+}
+
 export function getApplicationNotificationTemplates(status: ApplicationStatus) {
   return getApplicationNotificationPlan(status).templates;
+}
+
+export function getApplicationNotificationTemplatesForTemplateSet(
+  status: ApplicationStatus,
+  templateSetKey: NotificationTemplateSetKey,
+) {
+  return getApplicationNotificationPlanForTemplateSet(status, templateSetKey).templates;
 }
 
 export const APPLICATION_STATUS_TRANSITIONS: Record<ApplicationStatus, ApplicationStatus[]> = {

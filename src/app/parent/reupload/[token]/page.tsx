@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getApplicationNotificationPlan } from '@/lib/domain/applications';
+import { getApplicationNotificationPlanForTemplateSet } from '@/lib/domain/applications';
+import { getDefaultTenantConfig } from '@/lib/domain/tenant-config';
 
 type ReuploadPageProps = {
   params: Promise<{ token: string }>;
@@ -9,7 +10,11 @@ type ReuploadPageProps = {
 export default async function ParentReuploadPage({ params }: ReuploadPageProps) {
   const { token } = await params;
   const reuploadStatus = 'awaiting_documents' as const;
-  const notificationPlan = getApplicationNotificationPlan(reuploadStatus);
+  const tenant = getDefaultTenantConfig();
+  const notificationPlan = getApplicationNotificationPlanForTemplateSet(
+    reuploadStatus,
+    tenant.communicationTemplateSetKey,
+  );
 
   if (!token) {
     notFound();

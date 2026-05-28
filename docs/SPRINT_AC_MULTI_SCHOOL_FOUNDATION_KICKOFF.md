@@ -1,6 +1,6 @@
 # Sprint AC - Multi-School Foundation Kickoff
 
-**Status:** In progress
+**Status:** Complete
 
 ## Goal
 
@@ -115,3 +115,17 @@ Prepare lightweight extension points for later multi-school rollout while keepin
 - Replaced remaining hardcoded school-id fallback usage in `/dev` runtime paths:
   - [dev/app/admin/page.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/app/admin/page.tsx)
   - [dev/app/parent/page.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/app/parent/page.tsx)
+
+## P2 Delivered
+
+- Added explicit role-boundary guardrail helpers in:
+  - [src/lib/domain/tenant-config.ts](/Users/brandondienar/Documents/Codex/Projects/Eunice/src/lib/domain/tenant-config.ts)
+  - [dev/eunice-shared/domain/tenant-config.ts](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/eunice-shared/domain/tenant-config.ts)
+- Added school template-set aware notification helper hooks in:
+  - [shared/domain/applications.ts](/Users/brandondienar/Documents/Codex/Projects/Eunice/shared/domain/applications.ts)
+  - [dev/eunice-shared/domain/applications.ts](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/eunice-shared/domain/applications.ts)
+- Routed re-upload template selection through tenant template-set keys:
+  - [src/app/parent/reupload/[token]/page.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/src/app/parent/reupload/[token]/page.tsx)
+  - [dev/app/dev/parent/reupload/[token]/page.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/app/dev/parent/reupload/[token]/page.tsx)
+- Added operational onboarding checklist:
+  - [docs/MULTI_SCHOOL_ONBOARDING_CHECKLIST.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/MULTI_SCHOOL_ONBOARDING_CHECKLIST.md)

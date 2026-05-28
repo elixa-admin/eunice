@@ -30,16 +30,15 @@
 - Sprint Z is complete: workflow automation triggers, communication history visibility, and re-upload link messaging are now visible in the latest `/dev` preview.
 - Sprint AA is complete: parent upload-quality quick-fix guidance and admin confidence cues are implemented and verified.
 - Sprint AB is in progress: browser QA and pattern lockdown has started with shared confidence-chip UI patterns.
-- Sprint AC is in progress: P0 configuration contract is delivered and verified.
-- Sprint AC P1 activation is in progress: core shell labels and requirement-profile plumbing are now wired through school config defaults.
+- Sprint AC is complete: P0, P1, and P2 are delivered with configuration contract, activation wiring, and multi-school guardrails.
 - Latest verified `/dev` preview:
   - `https://dev-fy353oec0-elixa-admins-projects.vercel.app`
 - A quick health sweep removed obvious duplicate local artifacts and added ignore rules for local numbered copies and `.cursor/`.
 - Focused `dev` checks are green.
 - The next three-sprint roadmap now points to:
   - Sprint AB: browser QA and pattern lockdown
-  - Sprint AC: multi-school foundation kickoff
   - Sprint AD: school configuration activation
+  - Sprint AE: school rollout hardening
 - Sprint S/T/U implementation is now pushed at `f14f3a5`:
   - parent POPIA consent, WebP compression, capture cue, and intake metadata
   - admin speed triage mode and zone tags
@@ -79,7 +78,8 @@ Continue Sprint AB with browser QA and pattern locking, then move to Sprint AC.
 Sprint AC now has a concrete `P0-P2` execution plan in:
 - [docs/SPRINT_AC_MULTI_SCHOOL_FOUNDATION_KICKOFF.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_AC_MULTI_SCHOOL_FOUNDATION_KICKOFF.md)
 
-P0 is complete; next AC work should start at P1 activation in core surfaces.
+Sprint AC closeout checklist is captured in:
+- [docs/MULTI_SCHOOL_ONBOARDING_CHECKLIST.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/MULTI_SCHOOL_ONBOARDING_CHECKLIST.md)
 
 ## Notes
 - Keep the parent side calm and the admin side operationally denser.

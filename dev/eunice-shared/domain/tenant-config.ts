@@ -1,4 +1,5 @@
 export type SchoolKey = 'eunice_primary' | 'royal_blue_academy';
+export type SchoolUserRole = 'parent' | 'admin' | 'superadmin';
 
 export interface SchoolTenantConfig {
   key: SchoolKey;
@@ -18,6 +19,12 @@ export interface SchoolTenantConfig {
   };
   admissionsRequirementNote: string;
 }
+
+export type SchoolRoleBoundary = {
+  role: SchoolUserRole;
+  allowedWorkspaces: Array<'public' | 'parent_portal' | 'admin_dashboard'>;
+  note: string;
+};
 
 export const EUNICE_CONFIG: SchoolTenantConfig = {
   key: 'eunice_primary',
@@ -95,3 +102,24 @@ export function getDefaultTenantConfig() {
   return EUNICE_CONFIG;
 }
 
+export const SCHOOL_ROLE_BOUNDARIES: Record<SchoolUserRole, SchoolRoleBoundary> = {
+  parent: {
+    role: 'parent',
+    allowedWorkspaces: ['public', 'parent_portal'],
+    note: 'Parents can access only public and parent workflow surfaces for their own applications.',
+  },
+  admin: {
+    role: 'admin',
+    allowedWorkspaces: ['public', 'admin_dashboard'],
+    note: 'Admins can access school-limited admissions operations and review workflows.',
+  },
+  superadmin: {
+    role: 'superadmin',
+    allowedWorkspaces: ['public', 'admin_dashboard'],
+    note: 'Superadmins can access cross-school operations when explicitly enabled by policy.',
+  },
+};
+
+export function getSchoolRoleBoundary(role: SchoolUserRole) {
+  return SCHOOL_ROLE_BOUNDARIES[role];
+}

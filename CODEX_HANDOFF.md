@@ -1,4 +1,4 @@
-# Compact Handoff — Sprint Z Complete, Sprint AA Next
+# Compact Handoff — Sprint AA Complete, Sprint AB In Progress
 
 ## Date
 2026-05-28
@@ -28,15 +28,16 @@
 - Sprint Q is implemented and deployed: communication trail, notification plan, and re-upload scaffolds are live in the latest `/dev` preview.
 - Sprint R is complete: upload-quality guidance, lightweight validation signals, and OCR-ready intake metadata are now in place.
 - Sprint Z is complete: workflow automation triggers, communication history visibility, and re-upload link messaging are now visible in the latest `/dev` preview.
-- Sprint AA is in progress: parent upload-quality quick-fix guidance and admin confidence chips are now implemented.
+- Sprint AA is complete: parent upload-quality quick-fix guidance and admin confidence cues are implemented and verified.
+- Sprint AB is in progress: browser QA and pattern lockdown has started with shared confidence-chip UI patterns.
 - Latest verified `/dev` preview:
   - `https://dev-fy353oec0-elixa-admins-projects.vercel.app`
 - A quick health sweep removed obvious duplicate local artifacts and added ignore rules for local numbered copies and `.cursor/`.
 - Focused `dev` checks are green.
 - The next three-sprint roadmap now points to:
-  - Sprint AA: document intelligence lite
   - Sprint AB: browser QA and pattern lockdown
   - Sprint AC: multi-school foundation kickoff
+  - Sprint AD: school configuration activation
 - Sprint S/T/U implementation is now pushed at `f14f3a5`:
   - parent POPIA consent, WebP compression, capture cue, and intake metadata
   - admin speed triage mode and zone tags
@@ -71,7 +72,7 @@
 - [docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md)
 
 ## Next Sprint
-Continue Sprint AA from the first delivered pass, then run browser QA in `/dev` before moving to Sprint AB pattern lockdown.
+Continue Sprint AB with browser QA and pattern locking, then move to Sprint AC.
 
 ## Notes
 - Keep the parent side calm and the admin side operationally denser.

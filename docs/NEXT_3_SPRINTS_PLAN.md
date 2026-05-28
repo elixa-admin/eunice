@@ -83,9 +83,9 @@ Make the core workflow operationally complete with lightweight automation hooks 
 
 ## Recommended Order
 
-1. Sprint AA - Document Intelligence Lite
-2. Sprint AB - Browser QA and Pattern Lockdown
-3. Sprint AC - Multi-School Foundation Kickoff
+1. Sprint AB - Browser QA and Pattern Lockdown
+2. Sprint AC - Multi-School Foundation Kickoff
+3. Sprint AD - School Configuration Activation
 
 ## Sprint Y - Parent Upload Confidence and Admin Decision Speed
 
@@ -127,7 +127,7 @@ Reduce follow-up friction and make status transitions feel operationally complet
 
 ## Sprint AA - Document Intelligence Lite
 
-**Status:** Next
+**Status:** Complete
 
 **Goal**
 
@@ -146,7 +146,7 @@ Keep document quality checks lightweight, useful, and cheap to run so parents ge
 
 ## Sprint AB - Browser QA and Pattern Lockdown
 
-**Status:** Planned
+**Status:** In progress
 
 **Goal**
 
@@ -160,6 +160,7 @@ Verify the parent and admin changes in browser, then capture the winning visual 
 
 **Primary doc**
 
+- [docs/SPRINT_AB_BROWSER_QA_AND_PATTERN_LOCKDOWN.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_AB_BROWSER_QA_AND_PATTERN_LOCKDOWN.md)
 - [docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md)
 
 ## Sprint AC - Multi-School Foundation Kickoff
@@ -177,6 +178,24 @@ Prepare the platform for a clean multi-school expansion without adding unnecessa
 - role and permission boundaries
 - document requirement profiles
 - lightweight path for future school onboarding
+
+**Primary doc**
+
+- [docs/SPRINT_AC_MULTI_SCHOOL_FOUNDATION_KICKOFF.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_AC_MULTI_SCHOOL_FOUNDATION_KICKOFF.md)
+
+## Sprint AD - School Configuration Activation
+
+**Status:** Planned
+
+**Goal**
+
+Activate the school configuration layer in product flows so branding, document requirements, and communication templates can switch per school without major rewrites.
+
+**Focus**
+
+- wire school config into portal shell and key labels
+- route document requirement profiles through school config
+- validate permission and template boundaries stay simple
 
 **Primary doc**
 

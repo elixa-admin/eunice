@@ -6,6 +6,7 @@ import { PreviewShell } from '@/components/preview-shell';
 import { SectionHeading } from '@/components/section-heading';
 import { SurfaceCard } from '@/components/surface-card';
 import { StatusBadge } from '@/components/status-badge';
+import { UploadConfidenceChip } from '@/components/upload-confidence-chip';
 import { getApplicationNotificationPlan } from '@eunice-shared/domain/applications';
 import {
   getAdminQueueLane,
@@ -15,7 +16,6 @@ import {
   getPreviewNextAction,
   getPreviewReviewState,
   getPreviewUploadConfidence,
-  PREVIEW_UPLOAD_CONFIDENCE_CHIP,
   previewApplications,
   previewDocumentClasses,
   type PreviewApplication,
@@ -367,9 +367,7 @@ export default function DevAdminPage() {
                             </div>
                             <div className="mt-1 text-xs text-slate-600">{app.ref} · {app.assignedTo} · {formatQueueIssue(app)}</div>
                             <div className="mt-1">
-                              <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] ${PREVIEW_UPLOAD_CONFIDENCE_CHIP[queueConfidence.level]}`}>
-                                {queueConfidence.label}
-                              </span>
+                              <UploadConfidenceChip tone={queueConfidence.level} label={queueConfidence.label} compact />
                             </div>
                           </div>
                           <div className="text-right text-xs text-slate-500">
@@ -503,9 +501,7 @@ export default function DevAdminPage() {
                             <div className="font-semibold text-slate-950">{app.learnerName}</div>
                             <div className="mt-1 text-xs text-slate-500">{app.ref} · {app.grade}</div>
                             <div className="mt-1">
-                              <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] ${PREVIEW_UPLOAD_CONFIDENCE_CHIP[queueConfidence.level]}`}>
-                                {queueConfidence.label}
-                              </span>
+                              <UploadConfidenceChip tone={queueConfidence.level} label={queueConfidence.label} compact />
                             </div>
                           </td>
                           <td className="px-6 py-3.5 align-top">

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { PreviewShell } from '@/components/preview-shell';
 import { SurfaceCard } from '@/components/surface-card';
+import { UploadConfidenceChip } from '@/components/upload-confidence-chip';
 import { StatusBadge } from '@/components/status-badge';
 import { ParentWorkflowSidebar } from '@/components/parent-workflow-sidebar';
 import {
@@ -318,15 +319,9 @@ export default function DevParentPage() {
                     <div className="mt-1 text-sm font-semibold text-slate-950">{uploadConfidence.label}</div>
                     <div className="mt-1 text-sm leading-6 text-slate-700">{uploadConfidence.summary}</div>
                     <div className="mt-3 flex flex-wrap gap-2 text-[11px] font-semibold uppercase tracking-[0.12em]">
-                      <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-emerald-800">
-                        {uploadConfidence.readyCount} clear
-                      </span>
-                      <span className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-amber-800">
-                        {uploadConfidence.reviewCount} review
-                      </span>
-                      <span className="rounded-full border border-rose-200 bg-rose-50 px-2.5 py-1 text-rose-800">
-                        {uploadConfidence.blockingCount} blocked
-                      </span>
+                      <UploadConfidenceChip tone="ready" label={`${uploadConfidence.readyCount} clear`} />
+                      <UploadConfidenceChip tone="mixed" label={`${uploadConfidence.reviewCount} review`} />
+                      <UploadConfidenceChip tone="needs_attention" label={`${uploadConfidence.blockingCount} blocked`} />
                     </div>
                   </div>
                   <div className="mt-3 grid gap-3 sm:grid-cols-3">

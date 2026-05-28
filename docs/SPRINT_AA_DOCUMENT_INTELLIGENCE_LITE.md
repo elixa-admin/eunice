@@ -1,6 +1,6 @@
 # Sprint AA - Document Intelligence Lite
 
-**Status:** In progress
+**Status:** Complete
 
 ## Sprint Goal
 
@@ -88,3 +88,9 @@ Check the new cues in browser and trim anything that feels too technical or verb
 - Verification passed:
   - `npm run verify:src`
   - `cd dev && npm run check`
+
+## Sprint Outcome
+
+- Parent uploads now provide clearer fix guidance for blur, orientation risk, and partial-capture risk.
+- Admin queue rows now surface upload confidence directly, reducing reviewer scan time.
+- Document-quality signaling stayed lightweight and low-cost, with no added heavy pipeline dependencies.

@@ -8,6 +8,7 @@ import {
   APPLICATION_STATUS_LABELS,
   type ApplicationStatus,
 } from '@eunice-shared/domain/applications';
+import { getDefaultTenantId } from '@eunice-shared/domain/tenant-config';
 import type { Database } from '@eunice-shared/integrations/supabase';
 
 type Profile = Pick<
@@ -88,7 +89,7 @@ export default function ParentDashboard() {
 
       // We need a valid school_id. If parent has no school_id, default to a general register or ask them.
       // For Eunice platform, we fall back to a default school or the parent's registered school.
-      const defaultSchoolId = profile.school_id || '00000000-0000-0000-0000-000000000000';
+      const defaultSchoolId = profile.school_id || getDefaultTenantId();
 
       const { data: newApp, error: createError } = await supabase
         .from('applications')

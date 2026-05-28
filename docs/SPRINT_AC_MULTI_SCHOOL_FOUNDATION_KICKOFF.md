@@ -1,6 +1,6 @@
 # Sprint AC - Multi-School Foundation Kickoff
 
-**Status:** Planned
+**Status:** In progress
 
 ## Goal
 
@@ -18,6 +18,60 @@ The core parent, admin, and workflow experience is now stable enough to begin sh
 - document requirement profiles
 - lightweight school onboarding path
 
+## P0 - Configuration Contract
+
+### Goal
+
+Define one clean school-configuration contract that can drive branding, labels, and requirement profiles without touching heavy infrastructure.
+
+### Focus
+
+- typed school config object and defaults
+- school key resolution strategy
+- fallback behavior when school config is missing
+
+### Acceptance Criteria
+
+- one source of truth can describe a school
+- defaults remain safe and readable
+- no regressions in existing Eunice flows
+
+## P1 - Activation In Core Surfaces
+
+### Goal
+
+Activate school configuration in high-visibility parent/admin shell areas and requirement wiring.
+
+### Focus
+
+- shell/title/brand label binding through config
+- document requirement profile binding through config
+- basic template label switching by school key
+
+### Acceptance Criteria
+
+- parent and admin routes read school values from config
+- requirement set can be switched without code duplication
+- copy remains calm and consistent
+
+## P2 - Guardrails And Future Hook Points
+
+### Goal
+
+Prepare lightweight extension points for later multi-school rollout while keeping today’s complexity low.
+
+### Focus
+
+- simple permission boundary notes in code/docs
+- communication-template key mapping surface
+- onboarding checklist for adding one new school
+
+### Acceptance Criteria
+
+- adding a second school is a config task, not a rewrite
+- no heavy tenant orchestration introduced
+- docs clearly describe how to extend safely
+
 ## Not In Scope
 
 - heavy multi-tenant orchestration
@@ -32,3 +86,19 @@ The core parent, admin, and workflow experience is now stable enough to begin sh
 - permissions remain simple and explicit
 - the architecture stays easy to ship and low-cost to run
 
+## Verify
+
+- `npm run verify:src`
+- `cd dev && npm run check`
+- browser review of `/`, `/parent`, `/admin`, `/dev/parent`, `/dev/admin`
+
+## P0 Delivered
+
+- Introduced a typed school configuration contract with explicit defaults and fallback resolution in [src/lib/domain/tenant-config.ts](/Users/brandondienar/Documents/Codex/Projects/Eunice/src/lib/domain/tenant-config.ts).
+- Added the same contract surface for the `/dev` app in [dev/eunice-shared/domain/tenant-config.ts](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/eunice-shared/domain/tenant-config.ts).
+- Removed hardcoded fallback school IDs in `/dev` runtime paths and now resolve through config:
+  - [dev/app/admin/page.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/app/admin/page.tsx)
+  - [dev/app/parent/page.tsx](/Users/brandondienar/Documents/Codex/Projects/Eunice/dev/app/parent/page.tsx)
+- Verification passed:
+  - `npm run verify:src`
+  - `cd dev && npm run check`

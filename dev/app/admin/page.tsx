@@ -7,6 +7,7 @@ import {
   APPLICATION_STATUS_LABELS,
   type ApplicationStatus,
 } from '@eunice-shared/domain/applications';
+import { getDefaultTenantId } from '@eunice-shared/domain/tenant-config';
 import type { Database } from '@eunice-shared/integrations/supabase';
 
 type Profile = Pick<
@@ -60,7 +61,7 @@ export default function AdminDashboard() {
         setProfile(profileData);
 
         // 3. Load all applications for the admin's school
-        const defaultSchoolId = profileData.school_id || '00000000-0000-0000-0000-000000000000';
+        const defaultSchoolId = profileData.school_id || getDefaultTenantId();
 
         // We fetch applications, and use parent_id to fetch parent details.
         // We can load applications and then map/join profiles.

@@ -165,7 +165,7 @@ Verify the parent and admin changes in browser, then capture the winning visual 
 
 ## Sprint AC - Multi-School Foundation Kickoff
 
-**Status:** Planned
+**Status:** In progress
 
 **Goal**
 

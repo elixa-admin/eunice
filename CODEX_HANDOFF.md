@@ -30,6 +30,7 @@
 - Sprint Z is complete: workflow automation triggers, communication history visibility, and re-upload link messaging are now visible in the latest `/dev` preview.
 - Sprint AA is complete: parent upload-quality quick-fix guidance and admin confidence cues are implemented and verified.
 - Sprint AB is in progress: browser QA and pattern lockdown has started with shared confidence-chip UI patterns.
+- Sprint AC is in progress: P0 configuration contract is delivered and verified.
 - Latest verified `/dev` preview:
   - `https://dev-fy353oec0-elixa-admins-projects.vercel.app`
 - A quick health sweep removed obvious duplicate local artifacts and added ignore rules for local numbered copies and `.cursor/`.
@@ -73,6 +74,11 @@
 
 ## Next Sprint
 Continue Sprint AB with browser QA and pattern locking, then move to Sprint AC.
+
+Sprint AC now has a concrete `P0-P2` execution plan in:
+- [docs/SPRINT_AC_MULTI_SCHOOL_FOUNDATION_KICKOFF.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/SPRINT_AC_MULTI_SCHOOL_FOUNDATION_KICKOFF.md)
+
+P0 is complete; next AC work should start at P1 activation in core surfaces.
 
 ## Notes
 - Keep the parent side calm and the admin side operationally denser.

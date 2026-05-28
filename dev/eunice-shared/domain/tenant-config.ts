@@ -10,9 +10,9 @@ export interface SchoolTenantConfig {
   requirementProfileKey: string;
   communicationTemplateSetKey: string;
   colors: {
-    primaryLight: string; // Tailwind tint
-    primaryDark: string;  // Tailwind dark forest / primary background
-    accent: string;       // Accent brand color (gold, silver, etc)
+    primaryLight: string;
+    primaryDark: string;
+    accent: string;
     gradientFrom: string;
     gradientTo: string;
   };
@@ -21,7 +21,7 @@ export interface SchoolTenantConfig {
 
 export const EUNICE_CONFIG: SchoolTenantConfig = {
   key: 'eunice_primary',
-  id: '00000000-0000-0000-0000-000000000000', // Default UUID
+  id: '00000000-0000-0000-0000-000000000000',
   name: 'Eunice Primary School',
   shortName: 'Eunice',
   crestPath: '/crest_eunice.png',
@@ -35,7 +35,7 @@ export const EUNICE_CONFIG: SchoolTenantConfig = {
     gradientFrom: 'rgba(22, 163, 74, 0.09)',
     gradientTo: 'rgba(202, 138, 4, 0.06)',
   },
-  admissionsRequirementNote: 'We guide families upfront on required documents to ensure a seamless admissions process.'
+  admissionsRequirementNote: 'We guide families upfront on required documents to ensure a seamless admissions process.',
 };
 
 export const ROYAL_BLUE_CONFIG: SchoolTenantConfig = {
@@ -54,7 +54,7 @@ export const ROYAL_BLUE_CONFIG: SchoolTenantConfig = {
     gradientFrom: 'rgba(30, 58, 138, 0.09)',
     gradientTo: 'rgba(59, 130, 246, 0.06)',
   },
-  admissionsRequirementNote: 'Welcome to the Royal Blue Academy. Please upload all verified records to complete enrollment.'
+  admissionsRequirementNote: 'Welcome to the Royal Blue Academy. Please upload all verified records to complete enrollment.',
 };
 
 export const SCHOOL_CONFIGS: SchoolTenantConfig[] = [EUNICE_CONFIG, ROYAL_BLUE_CONFIG];
@@ -94,3 +94,4 @@ export function getDefaultTenantId() {
 export function getDefaultTenantConfig() {
   return EUNICE_CONFIG;
 }
+

@@ -127,7 +127,7 @@ Reduce follow-up friction and make status transitions feel operationally complet
 
 ## Sprint AA - Document Intelligence Lite
 
-**Status:** Planned
+**Status:** Next
 
 **Goal**
 

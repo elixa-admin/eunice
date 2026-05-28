@@ -47,6 +47,7 @@ import {
   getDocumentStateGuidance,
   getDocumentQualityCue,
   getDocumentIntakeCue,
+  getDocumentActionChecklist,
   getStepIndex,
   getUploadActionLabel,
   getValidationTone,
@@ -1205,6 +1206,7 @@ export default function ParentApplicationWorkflow() {
                           const documentType = requirement.documentType;
                           const document = draft.documents[documentType];
                           const isPrimary = visibleRequiredDocs.some((doc) => doc.id === requirement.id);
+                          const actionChecklist = getDocumentActionChecklist(document);
 
                           return (
                             <div
@@ -1234,6 +1236,14 @@ export default function ParentApplicationWorkflow() {
                                   <p className="mt-1 text-xs leading-5 text-slate-500">
                                     {getDocumentQualityCue(document.validationState)}
                                   </p>
+                                  {actionChecklist.length > 0 ? (
+                                    <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50/70 px-3 py-2">
+                                      <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-amber-900">Quick fix</div>
+                                      <div className="mt-1 text-xs leading-5 text-amber-900/85">
+                                        {actionChecklist.join(' ')}
+                                      </div>
+                                    </div>
+                                  ) : null}
                                   {document.uploadStatus !== 'idle' ? (
                                     <p className="mt-1 text-xs leading-5 text-slate-500">{document.message}</p>
                                   ) : null}
@@ -1321,6 +1331,7 @@ export default function ParentApplicationWorkflow() {
                           {contextDocumentRequirements.map((requirement) => {
                             const documentType = requirement.documentType;
                             const document = draft.documents[documentType];
+                            const actionChecklist = getDocumentActionChecklist(document);
 
                             return (
                               <div key={requirement.id} className="rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-sm">
@@ -1343,6 +1354,14 @@ export default function ParentApplicationWorkflow() {
                                     <p className="mt-1 text-xs leading-5 text-slate-500">
                                       {getDocumentQualityCue(document.validationState)}
                                     </p>
+                                    {actionChecklist.length > 0 ? (
+                                      <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50/70 px-3 py-2">
+                                        <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-amber-900">Quick fix</div>
+                                        <div className="mt-1 text-xs leading-5 text-amber-900/85">
+                                          {actionChecklist.join(' ')}
+                                        </div>
+                                      </div>
+                                    ) : null}
                                     {document.uploadStatus !== 'idle' ? (
                                       <p className="mt-1 text-xs leading-5 text-slate-500">{document.message}</p>
                                     ) : null}

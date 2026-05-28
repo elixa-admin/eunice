@@ -1,6 +1,6 @@
 # Sprint AA - Document Intelligence Lite
 
-**Status:** Planned
+**Status:** In progress
 
 ## Sprint Goal
 
@@ -73,3 +73,18 @@ Check the new cues in browser and trim anything that feels too technical or verb
 - Visual review of the document upload surfaces in `/dev`
 - `cd dev && npm run check`
 
+## First Pass Plan
+
+1. Add calm parent-facing quality cards for blurry, partial, and orientation issues.
+2. Expose a compact confidence cue in admin queue rows and selected-application context.
+3. Keep the copy action-oriented and short; avoid technical jargon.
+4. Run `src` and `dev` checks, then deploy `/dev` and browser-review parent and admin routes.
+
+## First Pass Delivered
+
+- Added clearer upload-quality guidance in the parent workflow for blurry, low-confidence, manual-review, and format/size issues.
+- Added compact confidence chips in admin queue rows so reviewers can triage quality at a glance.
+- Extended lightweight validation heuristics to catch orientation and partial-capture naming cues while staying in the existing low-cost signal model.
+- Verification passed:
+  - `npm run verify:src`
+  - `cd dev && npm run check`

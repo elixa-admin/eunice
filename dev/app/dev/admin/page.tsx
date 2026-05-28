@@ -15,6 +15,7 @@ import {
   getPreviewNextAction,
   getPreviewReviewState,
   getPreviewUploadConfidence,
+  PREVIEW_UPLOAD_CONFIDENCE_CHIP,
   previewApplications,
   previewDocumentClasses,
   type PreviewApplication,
@@ -339,6 +340,7 @@ export default function DevAdminPage() {
                   <div className="mt-4 grid gap-2">
                     {previewApplications.map((app) => {
                       const appLane = getAdminQueueLane(app);
+                      const queueConfidence = getPreviewUploadConfidence(app);
                       const isSelected = selectedTriageIds.includes(app.id);
                       return (
                         <label
@@ -364,6 +366,11 @@ export default function DevAdminPage() {
                               </span>
                             </div>
                             <div className="mt-1 text-xs text-slate-600">{app.ref} · {app.assignedTo} · {formatQueueIssue(app)}</div>
+                            <div className="mt-1">
+                              <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] ${PREVIEW_UPLOAD_CONFIDENCE_CHIP[queueConfidence.level]}`}>
+                                {queueConfidence.label}
+                              </span>
+                            </div>
                           </div>
                           <div className="text-right text-xs text-slate-500">
                             <div>Updated {app.updatedAt}</div>
@@ -480,6 +487,7 @@ export default function DevAdminPage() {
                   <tbody className="divide-y divide-slate-100 bg-white">
                     {previewApplications.map((app) => {
                       const appLane = getAdminQueueLane(app);
+                      const queueConfidence = getPreviewUploadConfidence(app);
                       const isSelected = app.id === selectedAppId;
                       return (
                         <tr
@@ -494,6 +502,11 @@ export default function DevAdminPage() {
                           <td className="px-6 py-3.5 align-top">
                             <div className="font-semibold text-slate-950">{app.learnerName}</div>
                             <div className="mt-1 text-xs text-slate-500">{app.ref} · {app.grade}</div>
+                            <div className="mt-1">
+                              <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] ${PREVIEW_UPLOAD_CONFIDENCE_CHIP[queueConfidence.level]}`}>
+                                {queueConfidence.label}
+                              </span>
+                            </div>
                           </td>
                           <td className="px-6 py-3.5 align-top">
                             <div className="font-medium text-slate-950">{formatQueueIssue(app)}</div>

@@ -1,7 +1,7 @@
-# Compact Handoff — Sprint S/T/U Delivered
+# Compact Handoff — Sprint Z Complete, Sprint AA Next
 
 ## Date
-2026-05-27
+2026-05-28
 
 ## Canonical Workspace
 `/Users/brandondienar/Documents/Codex/Projects/Eunice`
@@ -21,13 +21,14 @@
   - `https://dev-kp2d24u8n-elixa-admins-projects.vercel.app`
 - The admin dashboard now stays on a light, readable surface while keeping the school's green/gold brand identity in accents and emphasis.
 - The parent portal now feels calmer and less operational, with the main workflow kept on a light surface.
-- Sprint Y has started with upload-confidence cues for parents and a quicker scan signal for admins.
+- Sprint Y is complete with upload-confidence cues for parents and quicker scan signals for admins.
 - `/dev` remains the active product-shaping lane.
 - Sprint O is complete: parent calm-flow simplification landed.
 - Sprint P is now implemented locally: admin decision-engine simplification for `/dev/admin` and `/dev/application/[id]`.
 - Sprint Q is implemented and deployed: communication trail, notification plan, and re-upload scaffolds are live in the latest `/dev` preview.
 - Sprint R is complete: upload-quality guidance, lightweight validation signals, and OCR-ready intake metadata are now in place.
 - Sprint Z is complete: workflow automation triggers, communication history visibility, and re-upload link messaging are now visible in the latest `/dev` preview.
+- Sprint AA is in progress: parent upload-quality quick-fix guidance and admin confidence chips are now implemented.
 - Latest verified `/dev` preview:
   - `https://dev-fy353oec0-elixa-admins-projects.vercel.app`
 - A quick health sweep removed obvious duplicate local artifacts and added ignore rules for local numbered copies and `.cursor/`.
@@ -70,7 +71,7 @@
 - [docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md](/Users/brandondienar/Documents/Codex/Projects/Eunice/docs/LIGHTWEIGHT_PLATFORM_DIRECTION.md)
 
 ## Next Sprint
-Start Sprint AA from the current preview baseline. Keep the first pass focused on document intelligence lite, then move to browser QA and pattern lockdown, and only then the multi-school foundation kickoff.
+Continue Sprint AA from the first delivered pass, then run browser QA in `/dev` before moving to Sprint AB pattern lockdown.
 
 ## Notes
 - Keep the parent side calm and the admin side operationally denser.

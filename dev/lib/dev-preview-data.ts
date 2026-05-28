@@ -358,6 +358,12 @@ export function getPreviewNextAction(application: PreviewApplication) {
 
 export type PreviewUploadConfidenceLevel = 'ready' | 'mixed' | 'needs_attention';
 
+export const PREVIEW_UPLOAD_CONFIDENCE_CHIP: Record<PreviewUploadConfidenceLevel, string> = {
+  ready: 'border border-emerald-200 bg-emerald-50 text-emerald-700',
+  mixed: 'border border-amber-200 bg-amber-50 text-amber-800',
+  needs_attention: 'border border-rose-200 bg-rose-50 text-rose-700',
+};
+
 export function getPreviewUploadConfidence(application: PreviewApplication) {
   const counts = getPreviewDocumentCounts(application);
 

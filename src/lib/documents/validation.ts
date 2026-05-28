@@ -27,25 +27,46 @@ type ValidateDocumentInput = {
 function inferQualitySignals(fileName: string) {
   const normalized = fileName.toLowerCase();
   const signals: DocumentQualitySignal[] = [];
+  const hints = {
+    isBlurry: /(blur|blurry|dark|dim|fuzzy|camera)/.test(normalized),
+    isLowConfidence: /(ocr|scan|unclear|faint|lowres|text)/.test(normalized),
+    isDuplicate: /(duplicate|dup|copy|repeat|again|resubmit)/.test(normalized),
+    hasRotationRisk: /(rotate|sideways|tilt|landscape|portrait)/.test(normalized),
+    hasPartialCaptureRisk: /(crop|cutoff|partial|corner|edge|half)/.test(normalized),
+  };
 
-  if (/(blur|blurry|dark|dim|fuzzy|camera)/.test(normalized)) {
+  if (hints.isBlurry || hints.hasPartialCaptureRisk) {
     signals.push('blurry');
   }
 
-  if (/(ocr|scan|unclear|faint|lowres|text)/.test(normalized)) {
+  if (hints.isLowConfidence || hints.hasRotationRisk) {
     signals.push('low_confidence_ocr');
   }
 
-  if (/(duplicate|dup|copy|repeat|again|resubmit)/.test(normalized)) {
+  if (hints.isDuplicate) {
     signals.push('possible_duplicate');
   }
 
-  return signals;
+  return { signals, hints };
 }
 
-function buildQualityMessage(signals: DocumentQualitySignal[]) {
+function buildQualityMessage(
+  signals: DocumentQualitySignal[],
+  hints: {
+    hasRotationRisk: boolean;
+    hasPartialCaptureRisk: boolean;
+  },
+) {
   if (signals.includes('possible_duplicate')) {
     return 'This may be a repeat upload. Admissions can still review it, but please make sure it is the latest version.';
+  }
+
+  if (hints.hasPartialCaptureRisk) {
+    return 'Part of the page may be cut off. Please retake with all four corners visible.';
+  }
+
+  if (hints.hasRotationRisk) {
+    return 'This file may be rotated. Keep the page upright so text is easier to review.';
   }
 
   if (signals.includes('blurry') && signals.includes('low_confidence_ocr')) {
@@ -71,7 +92,7 @@ export function validateDocumentUpload({
 }: ValidateDocumentInput): DocumentValidationResult {
   const contract = DOCUMENT_CONTRACTS[documentType];
   const extension = fileName.includes('.') ? `.${fileName.split('.').pop()?.toLowerCase()}` : '';
-  const qualitySignals = inferQualitySignals(fileName);
+  const { signals: qualitySignals, hints } = inferQualitySignals(fileName);
 
   if (!contract.acceptedExtensions.includes(extension)) {
     return {
@@ -104,7 +125,7 @@ export function validateDocumentUpload({
     return {
       ok: true,
       state: 'manual_review',
-      message: buildQualityMessage(qualitySignals),
+      message: buildQualityMessage(qualitySignals, hints),
       qualitySignals,
     };
   }
@@ -113,7 +134,7 @@ export function validateDocumentUpload({
     return {
       ok: true,
       state: 'blurry',
-      message: buildQualityMessage(qualitySignals),
+      message: buildQualityMessage(qualitySignals, hints),
       qualitySignals,
     };
   }
@@ -122,7 +143,7 @@ export function validateDocumentUpload({
     return {
       ok: true,
       state: 'low_confidence_ocr',
-      message: buildQualityMessage(qualitySignals),
+      message: buildQualityMessage(qualitySignals, hints),
       qualitySignals,
     };
   }
@@ -130,7 +151,7 @@ export function validateDocumentUpload({
   return {
     ok: true,
     state: 'accepted',
-    message: buildQualityMessage(qualitySignals),
+    message: buildQualityMessage(qualitySignals, hints),
     qualitySignals,
   };
 }

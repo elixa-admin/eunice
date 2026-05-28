@@ -487,3 +487,39 @@ export function getDocumentIntakeCue(document: DocumentDraft) {
 
   return `${processingLabel}. Please replace this file before continuing.`;
 }
+
+export function getDocumentActionChecklist(document: DocumentDraft) {
+  if (document.validationState === 'blurry') {
+    return [
+      'Retake in brighter light.',
+      'Keep the full page inside the camera frame.',
+      'Hold your phone steady before capturing.',
+    ];
+  }
+
+  if (document.validationState === 'low_confidence_ocr') {
+    return [
+      'Keep the page upright (not rotated).',
+      'Avoid shadows over important text.',
+      'Use a clearer scan or a sharper photo.',
+    ];
+  }
+
+  if (document.validationState === 'manual_review') {
+    return [
+      'This file can stay for now.',
+      'If you have a clearer copy, replace it now.',
+      'Otherwise the school will verify it manually.',
+    ];
+  }
+
+  if (document.validationState === 'wrong_format' || document.validationState === 'too_large') {
+    return [
+      'Use PDF, JPG, or PNG.',
+      'Keep files small enough for mobile upload.',
+      'Try exporting again before uploading.',
+    ];
+  }
+
+  return [];
+}
